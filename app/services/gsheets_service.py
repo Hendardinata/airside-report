@@ -1,6 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import os
+import json
 from datetime import datetime
 
 SCOPES = [
@@ -44,7 +45,6 @@ def write_daily_report(sheet_url, form_data):
     
     # Jika Baris 1 kosong, KITA AUTO-GENERATE HEADERS dari schema!
     if is_header_empty:
-        import json
         schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
         new_headers = ['TIMESTAMP']
         try:
@@ -228,7 +228,6 @@ def write_daily_report(sheet_url, form_data):
             
             # --- FASE 4: DYNAMIC DAILY SHEET MAPPING ---
             # Cari field baru yang dibuat melalui Form Builder yang tidak ada di template standar
-            import json, os
             schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
             with open(schema_path, 'r') as f:
                 schema = json.load(f)
@@ -306,7 +305,6 @@ def write_daily_report(sheet_url, form_data):
     return True
 
 def get_daily_summary(date_str):
-    import json
     from app.models.config_store import CONFIG_FILE
     
     with open(CONFIG_FILE, 'r') as f:
@@ -428,7 +426,6 @@ def get_daily_summary(date_str):
                 if header_row and len(row_data) > 57:
                     # Load schema on demand to get nice labels & sections
                     try:
-                        import json, os
                         schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
                         with open(schema_path, 'r') as f:
                             schema = json.load(f)
@@ -470,7 +467,6 @@ def sync_sheets_to_rekap(sheet_url):
     client = get_client()
     sheet = client.open_by_url(sheet_url)
     
-    import json, os
     schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
     schema = {}
     try:
