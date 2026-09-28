@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, render_template, session, redirect, url_for, request, jsonify
+from flask import Blueprint, render_template, session, redirect, url_for, request, jsonify
 from app.models.airport_profiles import USERS
 from app.models.config_store import update_airport_config, get_airport_config
 from app.services.drive_service import create_monthly_sheet
@@ -63,7 +63,9 @@ def update_config():
             import gspread
             from google.oauth2.service_account import Credentials
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-            credentials = Credentials.from_service_account_file("credentials.json", scopes=SCOPES)
+            import os
+            cred_path = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.json')
+            credentials = Credentials.from_service_account_file(cred_path, scopes=SCOPES)
             client = gspread.authorize(credentials)
             sheet = client.open_by_url(sheet_url)
             return jsonify({"status": "success", "message": "Konfigurasi tersimpan. Link Valid dan Terkoneksi (✅)."})
@@ -154,7 +156,9 @@ def api_create_sheet():
             import gspread
             from google.oauth2.service_account import Credentials
             SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-            credentials = Credentials.from_service_account_file("credentials.json", scopes=SCOPES)
+            import os
+            cred_path = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.json')
+            credentials = Credentials.from_service_account_file(cred_path, scopes=SCOPES)
             client = gspread.authorize(credentials)
             sheet = client.open_by_url(new_url)
             

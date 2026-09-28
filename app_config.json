@@ -1,9 +1,9 @@
 {
     "airports": {
         "LOP": {
-            "sheet_url": "https://docs.google.com/spreadsheets/d/1dfUmYpGJwXlaZfn3nO_PEw-F50anDe_zWt4nnMZdDmM/edit?usp=drivesdk",
+            "sheet_url": "https://docs.google.com/spreadsheets/d/1t-IJQ0PXun8dj6rcW1uk9539e4PX4Qmt6ejFGopRNHs/edit?usp=drivesdk",
             "drive_folder": "1tV1DW7a1H74cSF5DgX2Uf4Jj1F5hdhXj",
-            "template_id": "1-NfvG7t8uhp7NPKygxv_oSDsmzP1GlajIRvkGXKjwuk",
+            "template_id": "",
             "pic_phone": "6281326488542"
         },
         "DPS": {
