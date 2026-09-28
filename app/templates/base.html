@@ -2,12 +2,188 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>{% block title %}Sistem Rekapitulasi Airside{% endblock %} - InJourney Regional II</title>
     
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <!-- Google Fonts: Plus Jakarta Sans, Outfit, Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS with Cache Buster -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v=20260928_v2">
     
+    <!-- Navbar Essential & Bulletproof Mobile Styling -->
+    <style>
+        .navbar {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 0.75rem 1.5rem !important;
+            background-color: #ffffff !important;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.85) !important;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .navbar-brand-modern,
+        .navbar-brand-modern:hover,
+        .navbar-brand-modern:visited,
+        .navbar-brand-modern:active,
+        .navbar-brand-modern:focus {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 0.65rem !important;
+            text-decoration: none !important;
+            color: #002b49 !important;
+            flex-shrink: 0 !important;
+            outline: none !important;
+        }
+
+        .brand-icon-tile {
+            width: 36px !important;
+            height: 36px !important;
+            min-width: 36px !important;
+            border-radius: 10px !important;
+            background: linear-gradient(135deg, #003366 0%, #0284c7 100%) !important;
+            color: #ffffff !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1rem !important;
+            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;
+            flex-shrink: 0 !important;
+        }
+
+        .brand-text-block {
+            display: flex !important;
+            flex-direction: column !important;
+            line-height: 1.15 !important;
+        }
+
+        .brand-name {
+            font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 800 !important;
+            font-size: 1.2rem !important;
+            color: #002b49 !important;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+            letter-spacing: -0.3px !important;
+        }
+
+        .brand-name-accent {
+            color: #0284c7 !important;
+            font-weight: 700 !important;
+        }
+
+        .brand-sub {
+            font-size: 0.65rem !important;
+            font-weight: 600 !important;
+            color: #64748b !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.4px !important;
+            white-space: nowrap !important;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .nav-user {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.65rem !important;
+            flex-shrink: 0 !important;
+        }
+
+        .user-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.45rem !important;
+            background-color: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            padding: 0.35rem 0.75rem !important;
+            border-radius: 9999px !important;
+            white-space: nowrap !important;
+        }
+
+        .user-avatar-mini {
+            color: #0284c7 !important;
+            font-size: 1.05rem !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .user-name {
+            font-size: 0.825rem !important;
+            font-weight: 600 !important;
+            color: #334155 !important;
+            white-space: nowrap !important;
+        }
+
+        .btn-logout-modern,
+        .btn-logout-modern:visited {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.4rem !important;
+            padding: 0.38rem 0.75rem !important;
+            border-radius: 8px !important;
+            font-size: 0.825rem !important;
+            font-weight: 600 !important;
+            color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            border: 1px solid #fecaca !important;
+            text-decoration: none !important;
+            cursor: pointer !important;
+            white-space: nowrap !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .btn-logout-modern:hover {
+            background-color: #ef4444 !important;
+            color: #ffffff !important;
+            border-color: #ef4444 !important;
+        }
+
+        /* Mobile navbar rules: prevent ANY horizontal cramped wrapping */
+        @media (max-width: 640px) {
+            .navbar {
+                padding: 0.6rem 0.85rem !important;
+            }
+            .brand-icon-tile {
+                width: 32px !important;
+                height: 32px !important;
+                min-width: 32px !important;
+                font-size: 0.9rem !important;
+            }
+            .brand-name {
+                font-size: 1.05rem !important;
+            }
+            .brand-sub {
+                display: none !important; /* Hide subtext on phone to keep top app bar clean and single-row */
+            }
+            .user-pill {
+                padding: 0.25rem 0.45rem !important;
+                background-color: transparent !important;
+                border-color: transparent !important;
+            }
+            .user-name {
+                display: none !important; /* Hide user name string on phone, keep avatar icon */
+            }
+            .btn-logout-modern .logout-text {
+                display: none !important; /* Hide 'Keluar' text, keep icon */
+            }
+            .btn-logout-modern {
+                padding: 0.38rem 0.55rem !important;
+            }
+        }
+    </style>
+
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -49,23 +225,27 @@
     
     {% if not hide_navbar %}
     <nav class="navbar">
-        <div class="d-flex align-items-center" style="gap: 0.75rem;">
-            <a href="/" class="navbar-brand">
+        <a href="/" class="navbar-brand-modern">
+            <div class="brand-icon-tile">
                 <i class="fa-solid fa-plane-departure"></i>
-                <span>Airside Report</span>
-            </a>
-            <span style="font-size: 0.75rem; font-weight: 600; background-color: #f1f5f9; color: #003366; padding: 0.2rem 0.6rem; border-radius: 6px; border: 1px solid #e2e8f0; letter-spacing: 0.2px;">
-                InJourney Regional II
-            </span>
-        </div>
+            </div>
+            <div class="brand-text-block">
+                <span class="brand-name">Airside<span class="brand-name-accent">Report</span></span>
+                <span class="brand-sub">InJourney Regional II</span>
+            </div>
+        </a>
+
         <div class="nav-user">
             {% if current_user %}
-            <div class="user-badge" style="font-size: 0.875rem; color: #475569;">
-                <i class="fa-solid fa-circle-user" style="color: #0284c7; font-size: 1.15rem;"></i>
-                <span>{{ current_user.name | default('Admin') }}</span>
+            <div class="user-pill" title="{{ current_user.name | default('Admin') }}">
+                <div class="user-avatar-mini">
+                    <i class="fa-solid fa-circle-user"></i>
+                </div>
+                <span class="user-name">{{ current_user.name | default('Admin') }}</span>
             </div>
-            <a href="/api/auth/logout" class="btn btn-outline btn-sm">
-                <i class="fa-solid fa-right-from-bracket"></i> Keluar
+            <a href="/api/auth/logout" class="btn-logout-modern" title="Keluar dari Sistem">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span class="logout-text">Keluar</span>
             </a>
             {% endif %}
         </div>

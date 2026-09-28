@@ -4,16 +4,16 @@
 {% block head %}
 <style>
     /* ==========================================================================
-       STAFF DASHBOARD - CLEAN & PROFESSIONAL ENTERPRISE STYLES
-       (No Glassmorphism, Solid Crisp Surfaces, Aeronautical Corporate Theme)
+       STAFF DASHBOARD - MODERN ENTERPRISE AVIATION THEME
+       Harmonized with Regional II Corporate Design System
        ========================================================================== */
 
     :root {
-        --staff-primary: #003366;
+        --staff-primary: #002b49;
         --staff-secondary: #0284c7;
         --staff-surface: #ffffff;
         --staff-bg-subtle: #f8fafc;
-        --staff-border: #e2e8f0;
+        --staff-border: rgba(226, 232, 240, 0.9);
         --staff-border-hover: #cbd5e1;
         --staff-text: #0f172a;
         --staff-text-muted: #64748b;
@@ -39,16 +39,16 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.35rem 0.85rem;
-        background-color: #f1f5f9;
-        border: 1px solid #e2e8f0;
+        padding: 0.32rem 0.85rem;
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
         border-radius: 9999px;
-        font-size: 0.75rem;
+        font-size: 0.725rem;
         font-weight: 700;
-        color: var(--staff-primary);
+        color: #1d4ed8;
         letter-spacing: 0.5px;
         text-transform: uppercase;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.45rem;
     }
 
     .status-pulse-dot {
@@ -56,110 +56,198 @@
         height: 8px;
         border-radius: 50%;
         background-color: #10b981;
-        box-shadow: 0 0 0 2px #d1fae5;
+        box-shadow: 0 0 0 2.5px #d1fae5;
+        animation: pulseGreenLive 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGreenLive {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.75;
+        }
     }
 
     .header-title {
         font-size: 1.75rem;
-        font-weight: 700;
+        font-weight: 800;
         color: var(--staff-primary);
         letter-spacing: -0.5px;
         margin-bottom: 0.25rem;
         line-height: 1.25;
+        font-family: var(--font-heading);
     }
 
     .header-subtitle {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         color: var(--staff-text-muted);
         margin: 0;
+        line-height: 1.4;
     }
 
-    /* Quick Info Strip (Cabang & Cloud Status) */
+    /* Operational Quick Status Summary Card */
+    .branch-status-card {
+        display: inline-flex;
+        align-items: center;
+        gap: 1.1rem;
+        background-color: #ffffff;
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 14px;
+        padding: 0.6rem 1.15rem;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        margin-top: 0.25rem;
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    .status-icon-box {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+
+    .status-icon-box.branch-icon {
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        color: #ffffff;
+        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    }
+
+    .status-icon-box.success-icon {
+        background-color: #ecfdf5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+    }
+
+    .status-icon-box.warning-icon {
+        background-color: #fffbeb;
+        color: #d97706;
+        border: 1px solid #fde68a;
+    }
+
+    .status-icon-box.month-icon {
+        background-color: #f0f9ff;
+        color: #0284c7;
+        border: 1px solid #bae6fd;
+    }
+
+    .status-text-box {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .status-kicker {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        line-height: 1.15;
+    }
+
+    .status-title {
+        font-size: 0.925rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.25;
+        font-family: var(--font-heading);
+    }
+
+    .status-title.text-success {
+        color: #059669;
+    }
+
+    .status-title.text-warning {
+        color: #d97706;
+    }
+
+    .status-divider {
+        width: 1px;
+        height: 28px;
+        background-color: #e2e8f0;
+        flex-shrink: 0;
+    }
+
+    /* Backward compatibility fallback */
     .branch-info-strip {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.65rem;
         flex-wrap: wrap;
     }
 
     .info-pill {
         display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
-        padding: 0.4rem 0.85rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
+        gap: 0.5rem;
+        padding: 0.45rem 0.95rem;
+        border-radius: 9999px;
+        font-size: 0.825rem;
         font-weight: 600;
         background-color: #ffffff;
         border: 1px solid var(--staff-border);
         color: var(--staff-text);
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
-    }
-
-    .info-pill-branch {
-        background-color: #003366;
-        color: #ffffff;
-        border-color: #003366;
-    }
-
-    .info-pill.success {
-        background-color: var(--staff-success-bg);
-        color: var(--staff-success);
-        border-color: var(--staff-success-border);
-    }
-
-    .info-pill.warning {
-        background-color: var(--staff-warning-bg);
-        color: var(--staff-warning);
-        border-color: var(--staff-warning-border);
     }
 
     /* Warning Alert Banner (Solid & Crisp) */
     .alert-banner {
         background-color: #fffbeb;
-        border: 1px solid #fde68a;
-        border-radius: 10px;
+        border: 1.5px solid #fde68a;
+        border-radius: 12px;
         padding: 1rem 1.25rem;
         margin-bottom: 1.75rem;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 0.85rem;
         color: #92400e;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
+        box-shadow: 0 2px 6px rgba(217, 119, 6, 0.06);
     }
 
     .alert-banner i {
         font-size: 1.25rem;
         color: #d97706;
+        margin-top: 0.15rem;
     }
 
-    /* Stepper Navigation (Modern Crisp Segmented Bar) */
+    /* Stepper Navigation (Segmented Modern Pill Bar) */
     .wizard-progress {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        gap: 0.5rem;
+        gap: 6px;
         background-color: #ffffff;
-        border: 1px solid var(--staff-border);
-        border-radius: 12px;
-        padding: 0.5rem;
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 14px;
+        padding: 6px;
         margin-bottom: 2rem;
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
 
     .step {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
+        gap: 0.55rem;
         padding: 0.75rem 0.85rem;
         font-family: var(--font-heading);
-        font-size: 0.875rem;
+        font-size: 0.86rem;
         font-weight: 600;
-        color: var(--staff-text-muted);
+        color: #64748b;
         background-color: transparent;
-        border-radius: 8px;
+        border-radius: 9px;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         border: 1px solid transparent;
         white-space: nowrap;
         user-select: none;
@@ -171,9 +259,9 @@
     }
 
     .step.active {
-        background-color: var(--staff-primary);
-        color: #ffffff;
-        box-shadow: 0 2px 4px rgba(0, 51, 102, 0.15);
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
     }
 
     .step-number {
@@ -183,9 +271,14 @@
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.2);
         font-size: 0.75rem;
         font-weight: 700;
+        transition: all 0.2s ease;
+    }
+
+    .step.active .step-number {
+        background-color: rgba(255, 255, 255, 0.25);
+        color: #ffffff;
     }
 
     .step:not(.active) .step-number {
@@ -196,11 +289,12 @@
     /* Main Form Card */
     .form-main-card {
         background-color: #ffffff;
-        border: 1px solid var(--staff-border);
-        border-radius: 14px;
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        border-radius: 18px;
         padding: 2.25rem;
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        box-shadow: 0 16px 36px -8px rgba(0, 43, 73, 0.06), 0 2px 8px -2px rgba(0, 0, 0, 0.02);
         margin-bottom: 2.5rem;
+        position: relative;
     }
 
     /* Step Header inside Card */
@@ -210,7 +304,7 @@
         align-items: center;
         padding-bottom: 1.25rem;
         margin-bottom: 1.75rem;
-        border-bottom: 1px solid var(--staff-border);
+        border-bottom: 1px solid #e2e8f0;
         flex-wrap: wrap;
         gap: 1rem;
     }
@@ -218,28 +312,30 @@
     .step-title-group {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.85rem;
     }
 
     .step-icon-badge {
-        width: 42px;
-        height: 42px;
-        border-radius: 10px;
-        background-color: #f0f9ff;
-        border: 1px solid #bae6fd;
+        width: 48px;
+        height: 48px;
+        border-radius: 13px;
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
-        color: var(--staff-secondary);
+        font-size: 1.35rem;
+        color: #ffffff;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+        flex-shrink: 0;
     }
 
     .step-title {
-        font-size: 1.25rem;
+        font-size: 1.35rem;
         font-weight: 700;
         color: var(--staff-primary);
         margin: 0;
-        line-height: 1.2;
+        line-height: 1.25;
+        font-family: var(--font-heading);
     }
 
     .step-subtitle {
@@ -249,34 +345,45 @@
     }
 
     .step-badge-indicator {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--staff-secondary);
-        background-color: #eff6ff;
-        border: 1px solid #bfdbfe;
-        padding: 0.35rem 0.75rem;
-        border-radius: 6px;
+        font-size: 0.775rem;
+        font-weight: 700;
+        color: #0284c7;
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        padding: 0.35rem 0.85rem;
+        border-radius: 9999px;
     }
 
     /* Structured Section Boxes */
     .section-box {
         background-color: #f8fafc;
         border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        padding: 1.5rem;
+        border-radius: 14px;
+        padding: 1.5rem 1.75rem;
         margin-bottom: 1.5rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .section-box:hover {
+        border-color: #cbd5e1;
     }
 
     .section-title {
-        font-size: 0.95rem;
+        font-size: 0.975rem;
         font-weight: 700;
         color: var(--staff-primary);
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.6rem;
         margin: 0 0 1.25rem 0;
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.65rem;
         border-bottom: 1px solid #e2e8f0;
+        font-family: var(--font-heading);
+    }
+
+    .section-title i {
+        color: var(--staff-secondary);
+        font-size: 0.95rem;
     }
 
     /* Grid Layouts */
@@ -299,38 +406,45 @@
 
     .form-label {
         display: block;
-        font-size: 0.85rem;
+        font-size: 0.835rem;
         font-weight: 600;
         color: #334155;
-        margin-bottom: 0.35rem;
+        margin-bottom: 0.4rem;
+        letter-spacing: 0.1px;
     }
 
     .form-control {
         width: 100%;
-        padding: 0.65rem 0.9rem;
+        height: 44px;
+        padding: 0.65rem 0.95rem;
         font-family: var(--font-body);
         font-size: 0.9rem;
         color: var(--staff-text);
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
         background-color: #ffffff;
         transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+    }
+
+    .form-control:hover {
+        border-color: #94a3b8;
     }
 
     .form-control:focus {
         outline: none;
         border-color: var(--staff-secondary);
         background-color: #ffffff;
-        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        box-shadow: 0 0 0 3.5px rgba(2, 132, 199, 0.15);
     }
 
     select.form-control {
         appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: right 0.85rem center;
-        background-size: 1.1rem;
-        padding-right: 2.25rem;
+        background-size: 1.05rem;
+        padding-right: 2.4rem;
     }
 
     /* Wizard Action Navigation Footer */
@@ -341,57 +455,122 @@
         gap: 1rem;
         margin-top: 2rem;
         padding-top: 1.5rem;
-        border-top: 1px solid var(--staff-border);
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .wizard-footer .btn-next:only-child,
+    .wizard-footer .btn-submit:only-child {
+        margin-left: auto;
     }
 
     .btn-stepper {
-        padding: 0.7rem 1.35rem;
+        padding: 0.75rem 1.6rem;
+        font-family: var(--font-heading);
         font-size: 0.925rem;
-        font-weight: 600;
-        border-radius: 8px;
+        font-weight: 700;
+        border-radius: 10px;
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
+        justify-content: center;
+        gap: 0.55rem;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        letter-spacing: 0.2px;
+    }
+
+    .btn-stepper.btn-outline {
+        background-color: #ffffff !important;
+        border: 1.5px solid #cbd5e1 !important;
+        color: #475569 !important;
+    }
+
+    .btn-stepper.btn-outline:hover {
+        background-color: #f1f5f9 !important;
+        color: var(--staff-primary) !important;
+        border-color: #94a3b8 !important;
+        transform: translateY(-1px);
+    }
+
+    /* Primary & Submit Button - Signature InJourney Blue Gradient */
+    .btn-stepper.btn-primary,
+    .btn-stepper.btn-secondary {
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%) !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28) !important;
+    }
+
+    .btn-stepper.btn-primary:hover,
+    .btn-stepper.btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 20px rgba(2, 132, 199, 0.4) !important;
+        filter: brightness(1.03);
+    }
+
+    .btn-stepper:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 7px rgba(2, 132, 199, 0.28) !important;
     }
 
     /* Verification Summary Box on Step 5 */
     .verify-box {
         background-color: #f0fdf4;
-        border: 1px solid #bbf7d0;
-        border-radius: 10px;
-        padding: 1.25rem 1.5rem;
-        margin-top: 1.5rem;
+        border: 1.5px solid #bbf7d0;
+        border-radius: 14px;
+        padding: 1.35rem 1.65rem;
+        margin-top: 1.75rem;
         display: flex;
         align-items: flex-start;
-        gap: 1rem;
+        gap: 1.15rem;
     }
 
-    .verify-icon {
-        font-size: 1.5rem;
-        color: #16a34a;
-        margin-top: 0.15rem;
+    .verify-icon-tile {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        background-color: #16a34a;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        flex-shrink: 0;
+        box-shadow: 0 3px 10px rgba(22, 163, 74, 0.25);
     }
 
     .verify-title {
-        font-size: 0.95rem;
+        font-size: 1rem;
         font-weight: 700;
-        color: #166534;
+        color: #14532d;
         margin: 0 0 0.25rem 0;
+        font-family: var(--font-heading);
     }
 
     .verify-desc {
-        font-size: 0.85rem;
+        font-size: 0.865rem;
         color: #15803d;
         margin: 0;
         line-height: 1.5;
     }
 
+    /* Desktop vs Mobile Step Labels */
+    .step-text-desk {
+        display: inline;
+    }
+
+    .step-text-mob {
+        display: none;
+    }
+
+    .d-desk-only {
+        display: inline;
+    }
+
     /* Responsive */
     @media (max-width: 1024px) {
         .wizard-progress {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
         }
         .grid-3 {
             grid-template-columns: repeat(2, 1fr);
@@ -399,23 +578,194 @@
     }
 
     @media (max-width: 768px) {
+        .d-desk-only {
+            display: none !important;
+        }
+
+        .step-text-desk {
+            display: none !important;
+        }
+
+        .step-text-mob {
+            display: inline !important;
+            font-size: 0.65rem !important;
+            font-weight: 700 !important;
+            line-height: 1 !important;
+        }
+
         .staff-header {
             flex-direction: column;
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
         }
+
+        .header-title {
+            font-size: 1.35rem;
+            line-height: 1.25;
+        }
+
+        .header-subtitle {
+            font-size: 0.825rem;
+        }
+
+        /* Unified 3-Column Status Grid on Mobile (Zero Wrapping, Perfectly Balanced) */
+        .branch-status-card {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 0.45rem !important;
+            padding: 0.55rem 0.45rem !important;
+            width: 100% !important;
+            border-radius: 13px !important;
+            background-color: #ffffff !important;
+            border: 1px solid rgba(226, 232, 240, 0.95) !important;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+            margin-top: 0 !important;
+        }
+
+        .status-divider {
+            display: none !important;
+        }
+
+        .status-item {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            gap: 0.25rem !important;
+            padding: 0.45rem 0.2rem !important;
+            background-color: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 9px !important;
+            min-width: 0 !important;
+        }
+
+        .status-icon-box {
+            width: 28px !important;
+            height: 28px !important;
+            font-size: 0.8rem !important;
+            border-radius: 7px !important;
+        }
+
+        .status-text-box {
+            align-items: center !important;
+            min-width: 0 !important;
+            width: 100% !important;
+        }
+
+        .status-kicker {
+            font-size: 0.58rem !important;
+            letter-spacing: 0.3px !important;
+            margin-bottom: 1px !important;
+            line-height: 1 !important;
+        }
+
+        .status-title {
+            font-size: 0.775rem !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            width: 100% !important;
+            line-height: 1.15 !important;
+        }
+
+        .branch-info-strip {
+            display: none !important;
+        }
+
+        /* 5-Column Grid Stepper on Mobile (Zero Scroll, No Clipping!) */
         .wizard-progress {
-            grid-template-columns: 1fr;
+            display: grid !important;
+            grid-template-columns: repeat(5, 1fr) !important;
+            gap: 4px !important;
+            padding: 5px !important;
+            border-radius: 12px !important;
+            margin-bottom: 1.25rem !important;
+            overflow: visible !important;
         }
+
+        .step {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0.45rem 0.15rem !important;
+            gap: 3px !important;
+            border-radius: 8px !important;
+            min-width: 0 !important;
+            text-align: center !important;
+        }
+
+        .step-number {
+            width: 22px !important;
+            height: 22px !important;
+            font-size: 0.72rem !important;
+        }
+
         .grid-2, .grid-3 {
             grid-template-columns: 1fr;
+            gap: 0.95rem;
         }
+
         .form-main-card {
-            padding: 1.5rem 1.25rem;
+            padding: 1.25rem 1rem !important;
+            border-radius: 16px !important;
+            margin-bottom: 1.5rem !important;
         }
+
+        .section-box {
+            padding: 1.15rem 0.95rem !important;
+            border-radius: 12px !important;
+            margin-bottom: 1rem !important;
+        }
+
+        .section-title {
+            font-size: 0.9rem !important;
+            margin-bottom: 1rem !important;
+        }
+
+        /* Wizard Footer: Buttons Side-by-Side (Kiri dan Kanan) */
         .wizard-footer {
-            flex-direction: column-reverse;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 0.65rem !important;
+            margin-top: 1.5rem !important;
+            padding-top: 1.25rem !important;
+            width: 100% !important;
         }
-        .wizard-footer .btn {
-            width: 100%;
+
+        .wizard-footer .btn-stepper {
+            flex: 1 1 0 !important;
+            min-width: 0 !important;
+            height: 46px !important;
+            padding: 0 0.65rem !important;
+            font-size: 0.88rem !important;
+            white-space: nowrap !important;
+            justify-content: center !important;
+        }
+
+        .wizard-footer .btn-stepper.btn-outline {
+            order: 1 !important; /* Left: Kembali */
+        }
+
+        .wizard-footer .btn-stepper.btn-primary,
+        .wizard-footer .btn-stepper.btn-secondary {
+            order: 2 !important; /* Right: Selanjutnya / Kirim */
+        }
+
+        /* Step 1 single button takes full width on mobile */
+        .wizard-footer .btn-stepper:only-child {
+            flex: 1 1 100% !important;
+            width: 100% !important;
+            margin-left: 0 !important;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .container {
+            padding: 0.85rem 0.75rem !important;
         }
     }
 </style>
@@ -437,28 +787,42 @@
         </p>
     </div>
 
-    <!-- Quick Info Strip -->
-    <div class="branch-info-strip">
-        <div class="info-pill info-pill-branch">
-            <i class="fas fa-plane-departure"></i>
-            <span>Cabang: <strong>{{ current_user.airport | default('LOP') }}</strong></span>
+    <!-- Operational Quick Status Summary Card -->
+    <div class="branch-status-card">
+        <div class="status-item status-item-branch">
+            <div class="status-icon-box branch-icon">
+                <i class="fas fa-plane-departure"></i>
+            </div>
+            <div class="status-text-box">
+                <span class="status-kicker">Cabang</span>
+                <span class="status-title">{{ current_user.airport | default('LOP') }}</span>
+            </div>
         </div>
 
-        {% if has_sheet_url %}
-        <div class="info-pill success">
-            <i class="fas fa-circle-check"></i>
-            <span>Spreadsheet Aktif</span>
-        </div>
-        {% else %}
-        <div class="info-pill warning">
-            <i class="fas fa-triangle-exclamation"></i>
-            <span>Sheet Belum Diatur</span>
-        </div>
-        {% endif %}
+        <div class="status-divider"></div>
 
-        <div class="info-pill" id="activeMonthBadge">
-            <i class="far fa-calendar-check text-secondary"></i>
-            <span id="activeMonthText">Memeriksa periode...</span>
+        <div class="status-item status-item-sheet">
+            <div class="status-icon-box {% if has_sheet_url %}success-icon{% else %}warning-icon{% endif %}">
+                <i class="fas {% if has_sheet_url %}fa-circle-check{% else %}fa-triangle-exclamation{% endif %}"></i>
+            </div>
+            <div class="status-text-box">
+                <span class="status-kicker">Spreadsheet</span>
+                <span class="status-title {% if has_sheet_url %}text-success{% else %}text-warning{% endif %}">
+                    {% if has_sheet_url %}Aktif{% else %}Belum Diatur{% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="status-divider"></div>
+
+        <div class="status-item status-item-month" id="activeMonthBadge">
+            <div class="status-icon-box month-icon">
+                <i class="far fa-calendar-check"></i>
+            </div>
+            <div class="status-text-box">
+                <span class="status-kicker">Bulan Aktif</span>
+                <span class="status-title" id="activeMonthText">Memuat...</span>
+            </div>
         </div>
     </div>
 </div>
@@ -480,7 +844,8 @@
     {% for step in schema.steps %}
     <div class="step {% if loop.first %}active{% endif %}" id="step-nav-{{ loop.index }}" onclick="nextStep({{ loop.index }})">
         <span class="step-number">{{ loop.index }}</span>
-        <span>{{ step.title.split(':')[0] }}</span>
+        <span class="step-text-desk">{{ step.title.split(':')[0] }}</span>
+        <span class="step-text-mob">Step {{ loop.index }}</span>
     </div>
     {% endfor %}
 </div>
@@ -534,11 +899,13 @@
             
             {% if loop.last %}
             <div class="verify-box">
-                <i class="fas fa-shield-check verify-icon"></i>
+                <div class="verify-icon-tile">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
                 <div>
-                    <h4 class="verify-title">Verifikasi Final</h4>
+                    <h4 class="verify-title">Verifikasi Final Pengisian Data</h4>
                     <p class="verify-desc">
-                        Pastikan seluruh data telah sesuai sebelum mengirim laporan ke Google Sheets.
+                        Pastikan seluruh data inspeksi telah valid dan lengkap sebelum mengirim laporan ke Google Spreadsheet Regional II.
                     </p>
                 </div>
             </div>
@@ -546,29 +913,27 @@
 
             <div class="wizard-footer">
                 {% if not loop.first %}
-                <button type="button" class="btn btn-outline btn-stepper" onclick="prevStep({{ loop.index - 1 }})">
+                <button type="button" class="btn btn-outline btn-stepper btn-prev" onclick="prevStep({{ loop.index - 1 }})">
                     <i class="fas fa-arrow-left"></i>
                     <span>Kembali</span>
                 </button>
-                {% else %}
-                <div></div>
                 {% endif %}
                 
                 {% if not loop.last %}
-                <button type="button" class="btn btn-primary btn-stepper" onclick="nextStep({{ loop.index + 1 }})">
+                <button type="button" class="btn btn-primary btn-stepper btn-next" onclick="nextStep({{ loop.index + 1 }})">
                     <span>Selanjutnya</span>
                     <i class="fas fa-arrow-right"></i>
                 </button>
                 {% else %}
                     {% if has_sheet_url %}
-                    <button type="submit" class="btn btn-secondary btn-stepper" id="btnSubmitReport">
+                    <button type="submit" class="btn btn-secondary btn-stepper btn-submit" id="btnSubmitReport">
                         <i class="fas fa-paper-plane"></i>
-                        <span>Kirim Laporan ke Spreadsheet</span>
+                        <span>Kirim Laporan <span class="d-desk-only">ke Spreadsheet</span></span>
                     </button>
                     {% else %}
-                    <button type="button" class="btn btn-outline btn-stepper" onclick="Swal.fire('Peringatan', 'Link Google Spreadsheet belum diatur oleh admin. Laporan tidak dapat dikirim.', 'warning')">
+                    <button type="button" class="btn btn-outline btn-stepper btn-submit" onclick="Swal.fire('Peringatan', 'Link Google Spreadsheet belum diatur oleh admin. Laporan tidak dapat dikirim.', 'warning')">
                         <i class="fas fa-paper-plane text-warning"></i>
-                        <span>Kirim Laporan (Belum Terkoneksi)</span>
+                        <span>Kirim Laporan <span class="d-desk-only">(Belum Terkoneksi)</span></span>
                     </button>
                     {% endif %}
                 {% endif %}
@@ -604,7 +969,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Update badge text in header
                 const monthText = document.getElementById('activeMonthText');
                 if (monthText) {
-                    monthText.textContent = `Bulan Aktif: ${res.month_name}`;
+                    monthText.textContent = res.month_name;
                 }
                 
                 // Cari tanggal terawal yang belum diisi di bulan ini
