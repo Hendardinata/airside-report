@@ -1663,7 +1663,7 @@
 
         Swal.fire({
             title: 'Menarik Rekapitulasi...',
-            text: 'Membaca seluruh lembar database spreadsheet 4 bandara cabang...',
+            text: 'Membaca seluruh lembar database spreadsheet ke 4 bandara cabang...',
             allowOutsideClick: false,
             didOpen: () => { Swal.showLoading(); }
         });
@@ -1679,25 +1679,64 @@
                     let validPciSum = 0;
                     let validPciCount = 0;
 
-                    function safeGet(arr, idx) {
-                        if (!arr || arr.length <= idx) return "-";
-                        const val = arr[idx];
-                        return (val !== undefined && val !== null && val !== "") ? val : "-";
+                    function vClean(val) {
+                        if (val === undefined || val === null) return "-";
+                        const s = String(val).trim();
+                        return (s && s !== "-" && s !== "null" && s !== "undefined") ? s : "-";
                     }
 
-                    let sapaan = "";
-                    let penerima = [];
-                    let tanggalFull = "";
+                    function fPercent(val) {
+                        let c = vClean(val);
+                        if (c === "-") return "-";
+                        c = c.replace(/%/g, '').trim();
+                        if (!c) return "-";
+                        return `${c}%`;
+                    }
+
+                    function fTitik(val) {
+                        const c = vClean(val);
+                        if (c === "-") return "-";
+                        if (c.toLowerCase() === "nihil") return "Nihil";
+                        if (c.toLowerCase().endsWith("titik")) return c;
+                        return `${c} titik`;
+                    }
+
+                    function formatLabel(label) {
+                        if (!label) return "";
+                        let cleaned = String(label).replace(/_/g, ' ').trim();
+                        if (cleaned === cleaned.toUpperCase()) {
+                            cleaned = cleaned.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+                        }
+                        return cleaned;
+                    }
+
+                    function formatTanggalIndo(dateStr) {
+                        if (!dateStr) return "-";
+                        try {
+                            const parts = dateStr.split("-");
+                            if (parts.length === 3) {
+                                const months = [
+                                    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                                ];
+                                const d = parseInt(parts[2], 10);
+                                const m = months[parseInt(parts[1], 10) - 1] || parts[1];
+                                const y = parts[0];
+                                return `${d} ${m} ${y}`;
+                            }
+                        } catch (e) {}
+                        return dateStr;
+                    }
+
                     let branchText = "";
 
-                    ['LOP', 'DPS', 'BWX', 'KOE'].forEach((code, index) => {
+                    ['DPS', 'LOP', 'KOE', 'BWX'].forEach((code, index) => {
                         const info = data[code] || { is_submitted: false, pci: "-", pic_phone: "" };
                         const badge = document.getElementById(`badge-${code}`);
                         const pciNumEl = document.getElementById(`pci-val-${code}`);
                         const pciTagEl = document.getElementById(`pci-tag-${code}`);
                         const pciTextEl = document.getElementById(`pci-${code}`);
                         const actionDiv = document.getElementById(`action-${code}`);
-                        const cardEl = document.getElementById(`card-${code}`);
 
                         const branchCity = AIRPORT_NAMES[code]?.city || code;
 
@@ -1729,93 +1768,123 @@
 
                             if (info.raw_data) {
                                 const rd = info.raw_data;
-                                if (!sapaan && rd[3] && rd[3] !== "-") {
-                                    sapaan = rd[3];
-                                    if (rd[4]) penerima.push(rd[4]);
-                                    if (rd[5]) penerima.push(rd[5]);
-                                    if (rd[6]) penerima.push(rd[6]);
-                                    if (rd[7]) penerima.push(rd[7]);
-                                    tanggalFull = rd[2];
+
+                                branchText += `${index + 1}. ${code}\n`;
+                                branchText += `*A. RUNWAY*\n`;
+                                branchText += `•  Kondisi keseluruhan runway : ${vClean(rd[8])}\n`;
+                                branchText += `•  Performance pavement : ${fPercent(rd[9])}\n`;
+                                branchText += `Jml Titik Rusak : ${fTitik(rd[10])}\n`;
+                                if (vClean(rd[12]) !== "-") {
+                                    branchText += `Jenis kerusakan : \n- ${vClean(rd[12])}\n`;
                                 }
+                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[11])}\n`;
+                                branchText += `Jml titik yang belum diperbaiki : ${fTitik(rd[13])}\n`;
+                                if (vClean(rd[14]) !== "-") {
+                                    branchText += `- Jenis kerusakan : ${vClean(rd[14])}\n`;
+                                }
+                                branchText += `Jml titik rusak berulang > 1x : ${fTitik(rd[15])}\n`;
+                                branchText += `•  Marka :\n`;
+                                branchText += `       Standar : ${vClean(rd[16])}\n`;
+                                branchText += `       Realisasi : ${vClean(rd[17])}\n`;
+                                branchText += `       Performance : ${fPercent(rd[18])}\n`;
+                                branchText += `•  Standing Water :\n`;
+                                branchText += `       Pengukuran : ${vClean(rd[19])}\n`;
+                                branchText += `       Performance : ${fPercent(rd[20])}\n`;
+                                branchText += `•  Rubber Removal :  \n`;
+                                branchText += `       Standar ketentuan : ${vClean(rd[21])}\n`;
+                                branchText += `       Realisasi : ${vClean(rd[22])}\n`;
+                                branchText += `       Nilai Skid : ${vClean(rd[23])}\n\n`;
 
-                                branchText += `${index + 1}. ${code}\n*A. RUNWAY*\n`;
-                                branchText += `•  Kondisi keseluruhan runway : ${safeGet(rd, 8)}\n`;
-                                branchText += `•  Performance pavement : ${safeGet(rd, 9)}%\n`;
-                                branchText += `    Jml Titik Rusak : ${safeGet(rd, 10)} titik\n`;
-                                branchText += `    Jml titik yang sudah diperbaiki : ${safeGet(rd, 11)} titik\n`;
-                                branchText += `- Jenis kerusakan : ${safeGet(rd, 12)}\n`;
-                                branchText += `    Jml titik yang belum diperbaiki : ${safeGet(rd, 13)} Titik\n`;
-                                branchText += `- Jenis kerusakan : ${safeGet(rd, 14)}\n`;
-                                branchText += `    Jml titik rusak berulang > 1x : ${safeGet(rd, 15)} titik\n`;
-                                branchText += `•  Marka :\n    Standar : ${safeGet(rd, 16)}\n    Realisasi : ${safeGet(rd, 17)}\n    Performance marka: ${safeGet(rd, 18)}\n`;
-                                branchText += `•  Standing Water :\n       Pengukuran : ${safeGet(rd, 19)}\n       Performance : ${safeGet(rd, 20)}\n`;
-                                branchText += `•  Rubber Removal :\n       Standar ketentuan : ${safeGet(rd, 21)}\n       Realisasi : ${safeGet(rd, 22)}\n       Nilai Skid : ${safeGet(rd, 23)}\n \n`;
-
+                                const twyNama = vClean(rd[24]);
+                                const twyKet = (twyNama !== "-") ? ` ${twyNama}` : "";
                                 branchText += `*B. TAXIWAY*\n`;
-                                branchText += `•  Kondisi keseluruhan Taxiway ${safeGet(rd, 24)} : ${safeGet(rd, 25)}\n`;
-                                branchText += `•  Performance pavement : ${safeGet(rd, 26)}%\n`;
-                                branchText += `    Jml Titik Rusak : ${safeGet(rd, 27)} titik\n`;
-                                branchText += `    Jml titik yang sudah diperbaiki : ${safeGet(rd, 28)}\n`;
-                                branchText += `- Jenis kerusakan : ${safeGet(rd, 29)}\n`;
-                                branchText += `    Jml titik yang belum diperbaiki : ${safeGet(rd, 30)} titik\n`;
-                                branchText += `- Jenis kerusakan : ${safeGet(rd, 31)}\n`;
-                                branchText += `    Jml titik rusak berulang > 1x : ${safeGet(rd, 32)}\n`;
-                                branchText += `•  Marka :\n      Standard : ${safeGet(rd, 33)}\n      Realisasi : ${safeGet(rd, 34)}\n      Performance marka: ${safeGet(rd, 35)}\n`;
-                                branchText += `•  Standing Water :\n      Pengukuran : ${safeGet(rd, 36)}\n      Performance : 100%\n \n`;
+                                branchText += `•  Kondisi keseluruhan Taxiway${twyKet} : ${vClean(rd[25])}\n`;
+                                branchText += `•  Performance pavement : ${fPercent(rd[26])}\n`;
+                                branchText += `Jml Titik Rusak : ${fTitik(rd[27])}\n`;
+                                if (vClean(rd[29]) !== "-") {
+                                    branchText += `Jenis kerusakan : \n- ${vClean(rd[29])}\n`;
+                                }
+                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[28])}\n`;
+                                branchText += `Jml titik yang belum diperbaiki : ${fTitik(rd[30])}\n`;
+                                if (vClean(rd[31]) !== "-") {
+                                    branchText += `- Jenis kerusakan : ${vClean(rd[31])}\n`;
+                                }
+                                branchText += `Jml titik rusak berulang > 1x : ${fTitik(rd[32])}\n`;
+                                branchText += `•  Marka :\n`;
+                                branchText += `      Standar : ${vClean(rd[33])}\n`;
+                                branchText += `      Realisasi : ${vClean(rd[34])}\n`;
+                                branchText += `      Performance : ${fPercent(rd[35])}\n`;
+                                branchText += `•  Standing Water : \n`;
+                                branchText += `      Pengukuran : ${vClean(rd[36])}\n\n`;
 
                                 branchText += `*C. APRON*\n`;
-                                branchText += `•  Kondisi keseluruhan Apron : ${safeGet(rd, 37)}\n`;
-                                branchText += `•  Performance pavement: ${safeGet(rd, 38)}%\n`;
-                                branchText += `    Jml Titik Rusak : ${safeGet(rd, 39)} titik\n`;
-                                branchText += `    Jml titik yang sudah diperbaiki : ${safeGet(rd, 40)} titik\n`;
-                                branchText += `- Jenis kerusakan : ${safeGet(rd, 41)}\n`;
-                                branchText += `    Jml titik yang belum diperbaiki : ${safeGet(rd, 42)} Titik\n`;
-                                branchText += `- Jenis kerusakan : ${safeGet(rd, 43)}\n`;
-                                branchText += `    Jml titik rusak berulang > 1x : ${safeGet(rd, 44)} titik\n`;
-                                branchText += `•  Marka :\n      Standard : ${safeGet(rd, 45)}\n      Realisasi : ${safeGet(rd, 46)}\n      Performance marka : ${safeGet(rd, 47)}\n`;
-                                branchText += `•  Standing Water :\n      Pengukuran : ${safeGet(rd, 48)}\n      Performance : 100%\n \n`;
+                                branchText += `•  Kondisi keseluruhan. Apron : ${vClean(rd[37])}\n`;
+                                branchText += `•  Performance pavement : ${fPercent(rd[38])}\n`;
+                                branchText += `Jml Titik Rusak : ${fTitik(rd[39])}\n`;
+                                if (vClean(rd[41]) !== "-") {
+                                    branchText += `Jenis kerusakan : \n- ${vClean(rd[41])}\n`;
+                                }
+                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[40])}\n`;
+                                branchText += `Jml titik yang belum diperbaiki : ${fTitik(rd[42])}\n`;
+                                if (vClean(rd[43]) !== "-") {
+                                    branchText += `- Jenis kerusakan : ${vClean(rd[43])}\n`;
+                                }
+                                branchText += `Jml titik rusak berulang > 1x : ${fTitik(rd[44])}\n`;
+                                branchText += `•  Marka :\n`;
+                                branchText += `      Standar : ${vClean(rd[45])}\n`;
+                                branchText += `      Realisasi : ${vClean(rd[46])}\n`;
+                                branchText += `      Performance : ${fPercent(rd[47])}\n`;
+                                branchText += `•  Standing Water :\n`;
+                                branchText += `      Pengukuran : ${vClean(rd[48])}\n\n`;
 
-                                branchText += `*D. Pemeliharaan Potong Rumput*\n`;
-                                branchText += `      Standard : ${safeGet(rd, 49)}\n`;
-                                branchText += `      Realisasi : ${safeGet(rd, 50)}\n`;
-                                branchText += `      Performance : ${safeGet(rd, 51)}%\n \n`;
+                                branchText += `d. Pemotongan Rumput\n`;
+                                branchText += `      Standar : ${vClean(rd[49])}\n`;
+                                branchText += `      Realisasi : ${vClean(rd[50])}\n`;
+                                branchText += `      Performance : ${fPercent(rd[51])}\n\n`;
 
-                                let catText = `Catatan Khusus :\n`;
-                                let hasCatatan = false;
-                                let catIdx = 1;
+                                let catList = [];
                                 for (let i = 52; i <= 56; i++) {
-                                    if (rd[i] && rd[i] !== "-" && String(rd[i]).trim() !== "") {
-                                        catText += `${catIdx}. ${rd[i]}\n`;
-                                        hasCatatan = true;
-                                        catIdx++;
+                                    const c = vClean(rd[i]);
+                                    if (c !== "-" && c.toLowerCase() !== "nihil") {
+                                        catList.push(c);
                                     }
                                 }
-                                if (hasCatatan) branchText += catText;
-                                else branchText += catText + "-\n";
 
-                                // FASE 5: Tambahkan Data Ekstra (Form Builder)
+                                // Data Ekstra (Form Builder) - Gabungkan field catatan ke dalam nomor Catatan Khusus
+                                let otherExtra = [];
                                 if (info.extra_data && info.extra_data.length > 0) {
-                                    // Kelompokkan berdasarkan section (sub bab)
-                                    let groupedExtra = {};
                                     info.extra_data.forEach(item => {
-                                        if (!groupedExtra[item.section]) {
-                                            groupedExtra[item.section] = [];
+                                        const val = vClean(item.value);
+                                        if (val !== "-" && val.toLowerCase() !== "nihil") {
+                                            const sec = (item.section || '').toLowerCase();
+                                            const lbl = (item.label || '').toLowerCase();
+                                            if (sec.includes("catatan") || lbl.includes("catatan")) {
+                                                catList.push(val);
+                                            } else {
+                                                otherExtra.push({
+                                                    label: formatLabel(item.label),
+                                                    value: val
+                                                });
+                                            }
                                         }
-                                        groupedExtra[item.section].push(item);
                                     });
+                                }
 
-                                    // Cetak per kelompok section
-                                    Object.keys(groupedExtra).forEach(secTitle => {
-                                        // Ubah teks section menjadi huruf besar sesuai standar
-                                        branchText += `*${secTitle.toUpperCase()}*\n`;
-                                        groupedExtra[secTitle].forEach(item => {
-                                            branchText += `• ${item.label} : ${item.value}\n`;
-                                        });
-                                        branchText += `\n`;
+                                branchText += `Catatan Khusus : \n`;
+                                if (catList.length > 0) {
+                                    catList.forEach((c, cIdx) => {
+                                        branchText += `${cIdx + 1}. ${c}\n`;
                                     });
                                 } else {
-                                    branchText += `\n`;
+                                    branchText += `- (Nihil)\n`;
                                 }
+
+                                if (otherExtra.length > 0) {
+                                    otherExtra.forEach(item => {
+                                        branchText += `•  ${item.label} : ${item.value}\n`;
+                                    });
+                                }
+                                branchText += `\n\n`;
                             }
                         } else {
                             badge.className = "status-pill warning";
@@ -1826,6 +1895,9 @@
                             pciTagEl.textContent = "Menunggu";
                             pciTagEl.style.color = "#64748b";
                             pciTagEl.style.backgroundColor = "#f1f5f9";
+
+                            branchText += `${index + 1}. ${code}\n`;
+                            branchText += `⚠️ Laporan belum diterima (Belum mengirim data)\n\n\n`;
 
                             if (info.pic_phone) {
                                 const waMsg = `Halo tim Fasilitas Sisi Udara ${code} - ${branchCity}, mohon segera mengisi laporan harian Airside untuk tanggal *${res.date}* melalui Dashboard Petugas. Terima kasih.`;
@@ -1885,31 +1957,33 @@
                     const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
                     document.getElementById('kpiLastSync').textContent = `Pukul ${timeStr}`;
 
-                    // Compile message text
-                    let kompilasi = "";
-                    if (!sapaan) sapaan = "*Assalamu'alaikum Wr. Wb*\n*Selamat Pagi*";
-                    if (penerima.length === 0) penerima = ["Direktur Teknik Angkasa Pura Indonesia", "Airport Facility Management Group Head", "Deputy Regional Airport Facility, Equipment & Technology Readiness Region II"];
-                    if (!tanggalFull) tanggalFull = res.date;
+                    // Compile message text KHUSUS KEPADA DEPUTY (Sesuai Standar Resmi PT Angkasa Pura Indonesia)
+                    const hr = (new Date()).getHours();
+                    let salamWaktu = "Selamat Pagi";
+                    if (hr >= 11 && hr < 15) salamWaktu = "Selamat Siang";
+                    else if (hr >= 15 && hr < 18) salamWaktu = "Selamat Sore";
+                    else if (hr >= 18 || hr < 5) salamWaktu = "Selamat Malam";
 
-                    kompilasi = `${sapaan}\n \nKepada Yth. :\n`;
-                    penerima.forEach((p, idx) => {
-                        if (p && String(p).trim() !== "") {
-                            kompilasi += `${idx + 1}. ${p}\n`;
-                        }
-                    });
+                    const tglIndo = formatTanggalIndo(res.date);
 
-                    kompilasi += `\nMohon izin, menyampaikan Laporan Harian Kondisi Fasilitas Sisi Udara di PT Angkasa Pura Indonesia\nTanggal : *${tanggalFull}*\n \nKantor Regional II\n`;
+                    let kompilasi = `Assalamu’alaikum Wr. Wb
+${salamWaktu}
 
-                    if (branchText) {
-                        kompilasi += branchText;
-                    } else {
-                        kompilasi = `*REKAPITULASI LAPORAN HARIAN FASILITAS SISI UDARA REGIONAL II*\n*PT ANGKASA PURA INDONESIA*\nTanggal: ${res.date}\n\n`;
-                        kompilasi += `Status Kelengkapan Laporan Cabang: (0/4 Bandara Terisi)\n`;
-                        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
-                            kompilasi += `• ${code} : ⚠️ BELUM MENGIRIM DATA\n`;
-                        });
-                        kompilasi += `\nLaporan ini dibuat otomatis melalui Sistem Rekapitulasi Airside Regional II.`;
-                    }
+Kepada Yth. :
+1. Pak DT API
+2. Pak GH API
+
+Mohon izin,  menyampaikan Laporan Harian Kondisi Fasilitas Sisi Udara di PT Angkasa Pura Indonesia 
+Tanggal : *${tglIndo}*
+
+Region II
+${branchText.trim()}
+
+Demikian disampaikan, atas perhatiannya diucapkan terima kasih
+
+Ttd
+REGION II`;
+
 
                     const textarea = document.getElementById('kompilasiText');
                     textarea.value = kompilasi;
