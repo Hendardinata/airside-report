@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, jsonify
 from app.models.airport_profiles import USERS
-from app.models.config_store import update_airport_config, get_airport_config
+from app.models.config_store import update_airport_config, get_airport_config, get_admin_config, update_admin_config
 from app.services.drive_service import create_monthly_sheet
 from app.services.gsheets_service import get_daily_summary
 from datetime import datetime
@@ -9,20 +9,22 @@ bp = Blueprint('admin', __name__)
 
 @bp.before_request
 def require_login():
-    if request.endpoint == 'admin.empty_trash':
-        return # Allow empty trash without login for debugging
-    if 'user_id' not in session or USERS.get(session['user_id'])['role'] != 'admin':
+    user_id = session.get('user_id')
+    user = USERS.get(user_id) if user_id else None
+    if not user or user.get('role') != 'admin':
+        if request.path.startswith('/admin/api/') or request.is_json:
+            return jsonify({"success": False, "error": "Unauthorized. Sesi login admin diperlukan."}), 401
         return redirect(url_for('auth.index'))
 
-@bp.route('/empty-trash')
+@bp.route('/empty-trash', methods=['POST'])
 def empty_trash():
     from app.services.drive_service import get_drive_service
     try:
         service = get_drive_service()
         service.files().emptyTrash().execute()
-        return "Trash dikosongkan! Silakan kembali dan coba Buat Sheet lagi."
+        return jsonify({"success": True, "message": "Trash Google Drive berhasil dikosongkan."})
     except Exception as e:
-        return f"Gagal: {str(e)}"
+        return jsonify({"success": False, "error": f"Gagal mengosongkan trash: {str(e)}"}), 500
 
 @bp.route('/dashboard')
 def dashboard():
@@ -47,16 +49,32 @@ def update_config():
     template_id = request.form.get('templateId')
     target_month_str = request.form.get('targetMonth')
     pic_phone = request.form.get('picPhone', '')
+    deputy_phone = request.form.get('deputyPhone')
+    admin_phone = request.form.get('adminPhone')
     
     # Bersihkan nomor HP jika ada awalan 0 atau +62
     pic_phone = ''.join(filter(str.isdigit, pic_phone))
     if pic_phone.startswith('0'):
         pic_phone = '62' + pic_phone[1:]
         
+    if deputy_phone is not None:
+        deputy_phone = ''.join(filter(str.isdigit, deputy_phone))
+        if deputy_phone.startswith('0'):
+            deputy_phone = '62' + deputy_phone[1:]
+            
+    if admin_phone is not None:
+        admin_phone = ''.join(filter(str.isdigit, admin_phone))
+        if admin_phone.startswith('0'):
+            admin_phone = '62' + admin_phone[1:]
+        
     drive_folder = extract_drive_id(drive_folder)
     template_id = extract_drive_id(template_id)
     
-    update_airport_config(airport_code, sheet_url, drive_folder, template_id, pic_phone)
+    if airport_code:
+        update_airport_config(airport_code, sheet_url, drive_folder, template_id, pic_phone)
+        
+    if deputy_phone is not None or admin_phone is not None:
+        update_admin_config(deputy_phone=deputy_phone, admin_phone=admin_phone)
     
     if sheet_url:
         try:
@@ -68,12 +86,12 @@ def update_config():
             credentials = Credentials.from_service_account_file(cred_path, scopes=SCOPES)
             client = gspread.authorize(credentials)
             sheet = client.open_by_url(sheet_url)
-            return jsonify({"status": "success", "message": "Konfigurasi tersimpan. Link Valid dan Terkoneksi (✅)."})
+            return jsonify({"status": "success", "message": "Konfigurasi tersimpan. Link Valid dan Terkoneksi."})
         except Exception as e:
             error_details = getattr(e, 'response', repr(e))
             if hasattr(e, 'response') and hasattr(e.response, 'text'):
                 error_details = e.response.text
-            return jsonify({"status": "warning", "message": f"Konfigurasi tersimpan, TAPI link ditolak (❌). Pastikan file sudah di-Share ke email robot! Detail: {error_details}"})
+            return jsonify({"status": "warning", "message": f"Konfigurasi tersimpan, TAPI link ditolak. Pastikan file sudah di-Share ke email robot! Detail: {error_details}"})
             
     return jsonify({"status": "success", "message": "Konfigurasi tersimpan tanpa link."})
 
@@ -81,14 +99,16 @@ def update_config():
 def get_config():
     airport_code = request.args.get('airportCode')
     if not airport_code:
-        return jsonify({"success": False, "error": "Missing airportCode"}), 400
+        # Return only global admin config if no airport selected
+        return jsonify({"success": True, "data": {}, "admin_config": get_admin_config()})
     
     config = get_airport_config(airport_code)
+    admin_config = get_admin_config()
     response_data = dict(config)
     if response_data.get('template_id') == DEFAULT_TEMPLATE_ID:
         response_data['template_id'] = ""
         
-    return jsonify({"success": True, "data": response_data})
+    return jsonify({"success": True, "data": response_data, "admin_config": admin_config})
 
 @bp.route('/api/rekap', methods=['GET'])
 def api_rekap():

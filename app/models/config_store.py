@@ -11,7 +11,9 @@ DEFAULT_CONFIG = {
         "KOE": {"sheet_url": "", "drive_folder": "", "template_id": "", "pic_phone": ""}
     },
     "admin": {
-        "master_sheet_url": ""
+        "master_sheet_url": "",
+        "deputy_phone": "",
+        "admin_phone": ""
     }
 }
 
@@ -27,6 +29,18 @@ def load_config():
             if 'pic_phone' not in config['airports'][code]:
                 config['airports'][code]['pic_phone'] = ""
                 modified = True
+        
+        if 'admin' not in config:
+            config['admin'] = {"master_sheet_url": "", "deputy_phone": "", "admin_phone": ""}
+            modified = True
+        else:
+            if 'deputy_phone' not in config['admin']:
+                config['admin']['deputy_phone'] = ""
+                modified = True
+            if 'admin_phone' not in config['admin']:
+                config['admin']['admin_phone'] = ""
+                modified = True
+                
         if modified:
             save_config(config)
         return config
@@ -51,3 +65,17 @@ def update_airport_config(airport_code, sheet_url, drive_folder=None, template_i
         if pic_phone is not None:
             config['airports'][airport_code]['pic_phone'] = pic_phone
         save_config(config)
+
+def get_admin_config():
+    config = load_config()
+    return config.get('admin', {})
+
+def update_admin_config(deputy_phone=None, admin_phone=None):
+    config = load_config()
+    if 'admin' not in config:
+        config['admin'] = {}
+    if deputy_phone is not None:
+        config['admin']['deputy_phone'] = deputy_phone
+    if admin_phone is not None:
+        config['admin']['admin_phone'] = admin_phone
+    save_config(config)

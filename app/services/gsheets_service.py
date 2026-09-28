@@ -11,6 +11,24 @@ SCOPES = [
 
 CREDENTIALS_FILE = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.json')
 
+def sanitize_sheet_value(val):
+    """
+    Mitigasi Formula / CSV Injection pada Spreadsheet:
+    Jika string diawali dengan karakter '=', '+', '-', '@', '\t', '\r',
+    tambahkan tanda petik tunggal (') di awal agar Google Sheets
+    memperlakukannya sebagai teks literal murni dan tidak mengeksekusinya sebagai rumus.
+    """
+    if val is None:
+        return ''
+    if isinstance(val, (int, float, bool)):
+        return val
+    s_val = str(val)
+    stripped = s_val.strip()
+    if stripped.startswith(('=', '+', '-', '@', '\t', '\r')):
+        if not s_val.startswith("'"):
+            return "'" + s_val
+    return s_val
+
 def get_client():
     if not os.path.exists(CREDENTIALS_FILE):
         raise FileNotFoundError("File credentials.json tidak ditemukan. Harap masukkan kredensial Service Account GCP di root folder.")
@@ -128,11 +146,13 @@ def write_daily_report(sheet_url, form_data):
             
     # Append ke DATABASE_REKAP
     # Gunakan table_range="A1" agar Google Sheets tidak "bingung" dan menggeser kolom (bug insert ke BB2)
+    # Sanitasi semua nilai untuk mencegah Formula Injection
+    sanitized_row_data = [sanitize_sheet_value(x) for x in row_data]
     try:
-        rekap_sheet.append_row(row_data, table_range="A1")
+        rekap_sheet.append_row(sanitized_row_data, table_range="A1")
     except TypeError:
         # Fallback jika gspread versi sangat lama
-        rekap_sheet.append_row(row_data)
+        rekap_sheet.append_row(sanitized_row_data)
     
     # ====== LOGIKA DOUBLE ACTION (Menduplikasi Tab Harian) ======
     tanggal_str = form_data.get('TANGGAL', '')
@@ -224,7 +244,9 @@ def write_daily_report(sheet_url, form_data):
                 [form_data.get('CATATAN_5', '')] # B66
             ]
             
-            target_sheet.update(values=col_B_data, range_name='B4:B66')
+            # Sanitasi col_B_data
+            sanitized_col_B = [[sanitize_sheet_value(cell[0])] for cell in col_B_data]
+            target_sheet.update(values=sanitized_col_B, range_name='B4:B66')
             
             # --- FASE 4: DYNAMIC DAILY SHEET MAPPING ---
             # Cari field baru yang dibuat melalui Form Builder yang tidak ada di template standar
@@ -279,7 +301,7 @@ def write_daily_report(sheet_url, form_data):
                                 
                                 # Tambahkan Field Pertanyaan (Format seperti Baris 53 "Marka")
                                 label = field.get('label', field['name'])
-                                extra_data.append([label, val])
+                                extra_data.append([label, sanitize_sheet_value(val)])
                                 format_requests.append({
                                     "copyPaste": {
                                         "source": { "sheetId": target_sheet.id, "startRowIndex": 52, "endRowIndex": 53, "startColumnIndex": 0, "endColumnIndex": 2 },
@@ -583,7 +605,8 @@ def sync_sheets_to_rekap(sheet_url):
                     row_data.append(form_data.get(col_name, ''))
                     
             try:
-                rekap_sheet.append_row(row_data, table_range="A1")
+                sanitized_sync_row = [sanitize_sheet_value(x) for x in row_data]
+                rekap_sheet.append_row(sanitized_sync_row, table_range="A1")
                 existing_dates.append(tanggal_str)
                 synced_count += 1
             except Exception as e:

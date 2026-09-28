@@ -343,7 +343,22 @@
             </button>
         </div>
 
+        <!-- Flashed Security & Error Alerts -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div style="background-color: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <form id="loginForm" method="POST" action="/login">
+            <!-- CSRF Protection Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             <!-- Hidden role input synced with tabs -->
             <input type="hidden" name="role" id="roleInput" value="staff">
 
@@ -394,31 +409,31 @@
             </button>
         </form>
 
-        <!-- Quick Access Helper Chips -->
+        <!-- Quick Select Account Helper -->
         <div class="quick-access-box">
             <div class="quick-access-title">
-                <span><i class="fa-solid fa-bolt text-warning me-1"></i> Akses Cepat Demo</span>
-                <span style="font-weight: 400; text-transform: none; color: #94a3b8;">Klik untuk isi</span>
+                <span><i class="fa-solid fa-user-check text-primary me-1"></i> Pilih Akun Cepat</span>
+                <span style="font-weight: 400; text-transform: none; color: #94a3b8;">Klik untuk isi username</span>
             </div>
             <div class="quick-chips-wrapper">
-                <button type="button" class="quick-pill" onclick="quickFill('admin', '123', 'admin', '')"
-                    title="Isi form sebagai Admin Regional">
+                <button type="button" class="quick-pill" onclick="quickFill('admin', 'admin', '')"
+                    title="Pilih akun Administrator">
                     <i class="fa-solid fa-user-gear text-primary"></i> <strong>Admin</strong>
                 </button>
-                <button type="button" class="quick-pill" onclick="quickFill('lop', '123', 'staff', 'LOP')"
-                    title="Isi form sebagai Petugas LOP">
+                <button type="button" class="quick-pill" onclick="quickFill('lop', 'staff', 'LOP')"
+                    title="Pilih akun Petugas LOP">
                     <i class="fa-solid fa-plane text-secondary"></i> LOP
                 </button>
-                <button type="button" class="quick-pill" onclick="quickFill('dps', '123', 'staff', 'DPS')"
-                    title="Isi form sebagai Petugas DPS">
+                <button type="button" class="quick-pill" onclick="quickFill('dps', 'staff', 'DPS')"
+                    title="Pilih akun Petugas DPS">
                     <i class="fa-solid fa-plane text-secondary"></i> DPS
                 </button>
-                <button type="button" class="quick-pill" onclick="quickFill('bwx', '123', 'staff', 'BWX')"
-                    title="Isi form sebagai Petugas BWX">
+                <button type="button" class="quick-pill" onclick="quickFill('bwx', 'staff', 'BWX')"
+                    title="Pilih akun Petugas BWX">
                     <i class="fa-solid fa-plane text-secondary"></i> BWX
                 </button>
-                <button type="button" class="quick-pill" onclick="quickFill('koe', '123', 'staff', 'KOE')"
-                    title="Isi form sebagai Petugas KOE">
+                <button type="button" class="quick-pill" onclick="quickFill('koe', 'staff', 'KOE')"
+                    title="Pilih akun Petugas KOE">
                     <i class="fa-solid fa-plane text-secondary"></i> KOE
                 </button>
             </div>
@@ -486,17 +501,15 @@
         }
     }
 
-    function quickFill(user, pass, role, airport) {
+    function quickFill(user, role, airport) {
         selectRole(role);
         if (role === 'staff' && airport) {
             document.getElementById('airportSelect').value = airport;
         }
         document.getElementById('username').value = user;
-        document.getElementById('password').value = pass;
-
-        // Visual flash indication on the card
-        const btn = document.getElementById('btnSubmit');
-        btn.focus();
+        const passInput = document.getElementById('password');
+        passInput.value = '';
+        passInput.focus();
     }
 
     document.getElementById('loginForm').addEventListener('submit', function (e) {

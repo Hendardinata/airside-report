@@ -750,16 +750,17 @@
     </div>
 
     <div class="header-actions">
-        <button class="btn btn-outline" style="color: #0f172a; border-color: #cbd5e1; background-color: #f8fafc;" onclick="openSchemaModal()" title="Konfigurasi Form (Form Builder)">
-            <i class="fa-solid fa-file-code"></i>
+        <button class="btn btn-outline" style="color: #0f172a; border-color: #cbd5e1; background-color: #f8fafc;"
+            onclick="openSchemaModal()" title="Konfigurasi Form (Form Builder)">
+            <i class="fas fa-file-code"></i>
             <span>Form Builder</span>
         </button>
         <button class="btn btn-outline" onclick="openModal()" title="Pengaturan Spreadsheet & PIC">
-            <i class="fa-solid fa-sliders"></i>
+            <i class="fas fa-sliders"></i>
             <span>Konfigurasi Bandara</span>
         </button>
         <button class="btn btn-primary" onclick="fetchRekap()" id="btnSync">
-            <i class="fa-solid fa-arrows-rotate" id="syncSpinner"></i>
+            <i class="fas fa-arrows-rotate" id="syncSpinner"></i>
             <span>Sinkronkan Data</span>
         </button>
     </div>
@@ -774,7 +775,7 @@
         <div class="kpi-card-header">
             <span class="kpi-label">Bandara Cabang</span>
             <div class="kpi-icon-box kpi-icon-blue">
-                <i class="fa-solid fa-plane-departure"></i>
+                <i class="fas fa-plane-departure"></i>
             </div>
         </div>
         <div class="kpi-value-row">
@@ -791,7 +792,7 @@
         <div class="kpi-card-header">
             <span class="kpi-label">Status Pengiriman</span>
             <div class="kpi-icon-box kpi-icon-emerald">
-                <i class="fa-solid fa-clipboard-check"></i>
+                <i class="fas fa-clipboard-check"></i>
             </div>
         </div>
         <div class="kpi-value-row">
@@ -811,7 +812,7 @@
         <div class="kpi-card-header">
             <span class="kpi-label">PCI Runway Regional</span>
             <div class="kpi-icon-box kpi-icon-teal">
-                <i class="fa-solid fa-road"></i>
+                <i class="fas fa-road"></i>
             </div>
         </div>
         <div class="kpi-value-row">
@@ -828,14 +829,14 @@
         <div class="kpi-card-header">
             <span class="kpi-label">Status Sinkronisasi</span>
             <div class="kpi-icon-box kpi-icon-amber">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <i class="fas fa-cloud-arrow-up"></i>
             </div>
         </div>
         <div class="kpi-value-row">
             <span class="kpi-value" style="font-size: 1.25rem;" id="kpiLastSync">Memuat...</span>
         </div>
         <p class="kpi-subtext" id="kpiSyncStatus">
-            <i class="fa-solid fa-circle-check text-success"></i> Terkoneksi ke Google Drive
+            <i class="fas fa-circle-check text-success"></i> Terkoneksi ke Google Drive
         </p>
     </div>
 </div>
@@ -846,17 +847,17 @@
 <div class="filter-bar">
     <div class="filter-left">
         <label for="filterDate" class="filter-label">
-            <i class="fa-regular fa-calendar-days text-secondary"></i>
+            <i class="far fa-calendar-days text-secondary"></i>
             <span>Tanggal Laporan:</span>
         </label>
 
         <div class="date-nav-group">
             <button type="button" class="date-nav-btn" onclick="shiftDate(-1)" title="Hari Sebelumnya">
-                <i class="fa-solid fa-chevron-left"></i>
+                <i class="fas fa-chevron-left"></i>
             </button>
             <input type="date" class="date-input-field" id="filterDate" onchange="fetchRekap()">
             <button type="button" class="date-nav-btn" onclick="shiftDate(1)" title="Hari Berikutnya">
-                <i class="fa-solid fa-chevron-right"></i>
+                <i class="fas fa-chevron-right"></i>
             </button>
         </div>
 
@@ -864,15 +865,6 @@
             <button type="button" class="chip-btn" onclick="setQuickDate('today')">Hari Ini</button>
             <button type="button" class="chip-btn" onclick="setQuickDate('yesterday')">Kemarin</button>
         </div>
-    </div>
-
-    <div class="filter-right">
-        <div class="active-date-badge" id="activeDateFormatted">
-            <i class="fa-regular fa-clock"></i> Memuat tanggal...
-        </div>
-        <button class="btn btn-secondary btn-sm" onclick="fetchRekap()">
-            <i class="fa-solid fa-rotate-right me-1"></i> Refresh
-        </button>
     </div>
 </div>
 
@@ -886,7 +878,7 @@
             <div class="airport-card-header">
                 <span class="iata-badge iata-LOP">LOP</span>
                 <div class="status-pill loading" id="badge-LOP">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                    <i class="fas fa-spinner fa-spin"></i> Loading...
                 </div>
             </div>
 
@@ -914,7 +906,7 @@
             <div class="airport-card-header">
                 <span class="iata-badge iata-DPS">DPS</span>
                 <div class="status-pill loading" id="badge-DPS">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                    <i class="fas fa-spinner fa-spin"></i> Loading...
                 </div>
             </div>
 
@@ -942,7 +934,7 @@
             <div class="airport-card-header">
                 <span class="iata-badge iata-BWX">BWX</span>
                 <div class="status-pill loading" id="badge-BWX">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                    <i class="fas fa-spinner fa-spin"></i> Loading...
                 </div>
             </div>
 
@@ -970,7 +962,7 @@
             <div class="airport-card-header">
                 <span class="iata-badge iata-KOE">KOE</span>
                 <div class="status-pill loading" id="badge-KOE">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                    <i class="fas fa-spinner fa-spin"></i> Loading...
                 </div>
             </div>
 
@@ -1000,14 +992,14 @@
     <div class="console-header">
         <div class="console-title-area">
             <h2 class="console-title">
-                <i class="fa-solid fa-message text-secondary me-2"></i>Kompilasi Pesan Deputy
+                <i class="fas fa-message text-secondary me-2"></i>Kompilasi Pesan Deputy
             </h2>
             <span class="console-badge">Format WhatsApp Resmi</span>
         </div>
 
         <div class="console-tools">
             <button class="btn btn-outline btn-sm" type="button" onclick="unduhTeksRekap()" title="Download file .txt">
-                <i class="fa-solid fa-file-arrow-down me-1"></i> Unduh (.txt)
+                <i class="fas fa-file-arrow-down me-1"></i> Unduh (.txt)
             </button>
         </div>
     </div>
@@ -1019,24 +1011,24 @@
 
     <div class="console-footer">
         <div class="console-stats">
-            <span id="charCount"><i class="fa-solid fa-font me-1"></i> 0 karakter</span>
-            <span id="lineCount"><i class="fa-solid fa-bars me-1"></i> 0 baris</span>
-            <span class="text-muted"><i class="fa-solid fa-info-circle me-1"></i> Format teks otomatis sesuai standar
+            <span id="charCount"><i class="fas fa-font me-1"></i> 0 karakter</span>
+            <span id="lineCount"><i class="fas fa-bars me-1"></i> 0 baris</span>
+            <span class="text-muted"><i class="fas fa-info-circle me-1"></i> Format teks otomatis sesuai standar
                 laporan harian Regional II</span>
         </div>
 
-        <div class="console-actions" style="display: flex; gap: 0.75rem; align-items: stretch; justify-content: flex-end; flex-wrap: wrap;">
-            <div style="display: flex; align-items: stretch; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: white; flex-grow: 1; max-width: 300px;">
-                <div style="padding: 0 12px; background: #f8fafc; border-right: 1px solid #cbd5e1; display: flex; align-items: center;">
-                    <i class="fa-brands fa-whatsapp" style="color: #16a34a; font-size: 1.1rem;"></i>
-                </div>
-                <input type="text" id="waDestinations" style="border: none; outline: none; padding: 6px 12px; font-size: 0.85rem; width: 100%; background: white;" placeholder="No. WA (cth: 6281..., 6282...)" title="Masukkan nomor tujuan pengiriman (awali 62). Kosongkan jika ingin memilih manual di WA.">
-            </div>
-            <button class="btn btn-outline btn-sm" type="button" onclick="salinTeksRekap()" style="display: flex; align-items: center;">
-                <i class="fa-regular fa-copy me-1"></i> Salin Teks
+        <div class="console-actions"
+            style="display: flex; gap: 0.75rem; align-items: stretch; justify-content: flex-end; flex-wrap: wrap;">
+            <!-- waDestinations moved to config modal -->
+            <input type="hidden" id="hiddenWaDeputy" value="">
+            <input type="hidden" id="hiddenWaAdmin" value="">
+            <button class="btn btn-outline btn-sm" type="button" onclick="salinTeksRekap()"
+                style="display: flex; align-items: center;">
+                <i class="far fa-copy me-1"></i> Salin Teks
             </button>
-            <button class="btn btn-wa btn-sm" type="button" onclick="kirimWhatsAppDeputy()" style="display: flex; align-items: center;">
-                <i class="fa-solid fa-paper-plane me-1"></i> Kirim Serentak
+            <button class="btn btn-wa btn-sm" type="button" onclick="kirimWhatsAppDeputy()"
+                style="display: flex; align-items: center;">
+                <i class="fas fa-paper-plane me-1"></i> Kirim Serentak
             </button>
         </div>
     </div>
@@ -1050,7 +1042,7 @@
         <div class="modal-head">
             <div class="modal-title-group">
                 <div class="modal-icon-badge">
-                    <i class="fa-solid fa-sliders"></i>
+                    <i class="fas fa-sliders"></i>
                 </div>
                 <div>
                     <h3 class="modal-title">Konfigurasi Parameter Bandara</h3>
@@ -1059,7 +1051,7 @@
                 </div>
             </div>
             <button type="button" class="modal-close-btn" onclick="closeModal()" title="Tutup">
-                <i class="fa-solid fa-xmark"></i>
+                <i class="fas fa-xmark"></i>
             </button>
         </div>
 
@@ -1069,7 +1061,7 @@
                     <!-- Kolom 1: Profil Cabang & Spreadsheet -->
                     <div class="config-section-card">
                         <div class="config-section-title">
-                            <i class="fa-solid fa-building-user text-secondary"></i> Informasi Cabang & PIC
+                            <i class="fas fa-building-user text-secondary"></i> Informasi Cabang & PIC
                         </div>
 
                         <div class="form-group">
@@ -1088,7 +1080,7 @@
                             <label class="form-label" for="picPhoneInput">Nomor WhatsApp PIC</label>
                             <div style="position: relative;">
                                 <input type="text" class="form-control" name="picPhone" id="picPhoneInput"
-                                    placeholder="Contoh: 081234567890 atau 62812...">
+                                    placeholder="Contoh: 62812...">
                             </div>
                             <small class="text-muted mt-1" style="display: block; font-size: 0.8rem;">
                                 Digunakan otomatis pada tombol 'Ingatkan PIC'.
@@ -1101,7 +1093,7 @@
                                 <button type="button" class="btn btn-outline btn-sm" onclick="manualRefreshSheets()"
                                     style="padding: 0.2rem 0.55rem; font-size: 0.75rem;"
                                     title="Sinkronkan Ulang Daftar File dari Drive">
-                                    <i class="fa-solid fa-arrows-rotate" id="sheetRefreshIcon"></i> Refresh List
+                                    <i class="fas fa-arrows-rotate" id="sheetRefreshIcon"></i> Refresh List
                                 </button>
                             </div>
                             <div class="d-flex" style="gap: 0.5rem; align-items: stretch;">
@@ -1111,17 +1103,17 @@
                                 </select>
                                 <button class="btn btn-outline" type="button" onclick="copySheetUrl()"
                                     title="Salin URL Sheet" style="padding: 0.65rem 0.85rem;">
-                                    <i class="fa-solid fa-copy"></i>
+                                    <i class="fas fa-copy"></i>
                                 </button>
                                 <button class="btn btn-secondary" type="button" onclick="openSheetUrl()"
                                     title="Buka Spreadsheet di Tab Baru" style="padding: 0.65rem 0.85rem;">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    <i class="fas fa-arrow-up-right-from-square"></i>
                                 </button>
                                 <div id="sheetUrlStatus"
                                     style="display: flex; align-items: center; padding: 0 0.25rem;"></div>
                             </div>
                             <small class="text-muted mt-1" id="loadingSheetsText" style="display: none;">
-                                <i class="fa-solid fa-spinner fa-spin me-1"></i> Memuat daftar spreadsheet dari Drive...
+                                <i class="fas fa-spinner fa-spin me-1"></i> Memuat daftar spreadsheet dari Drive...
                             </small>
                         </div>
                     </div>
@@ -1129,7 +1121,7 @@
                     <!-- Kolom 2: Automasi Google Drive & Template -->
                     <div class="config-section-card">
                         <div class="config-section-title">
-                            <i class="fa-solid fa-cloud text-secondary"></i> Automasi & Google Drive
+                            <i class="fas fa-cloud text-secondary"></i> Automasi & Google Drive
                         </div>
 
                         <div class="form-group">
@@ -1141,7 +1133,7 @@
                                 <button type="button" class="btn btn-outline" onclick="cekDaftarSheet()"
                                     title="Cek Folder Google Drive"
                                     style="white-space: nowrap; padding: 0.65rem 0.85rem;">
-                                    <i class="fa-solid fa-folder-open me-1"></i> Cek
+                                    <i class="fas fa-folder-open me-1"></i> Cek
                                 </button>
                             </div>
                             <small class="text-muted mt-1" style="display: block; font-size: 0.8rem;">
@@ -1151,7 +1143,8 @@
 
                         <div class="form-group">
                             <label class="form-label" for="targetMonthInput">Target Bulan Laporan</label>
-                            <input type="text" class="form-control" name="targetMonth" id="targetMonthInput" onchange="onTargetMonthChanged()" placeholder="Pilih Bulan">
+                            <input type="text" class="form-control" name="targetMonth" id="targetMonthInput"
+                                onchange="onTargetMonthChanged()" placeholder="Pilih Bulan">
                             <small class="text-muted mt-1" style="display: block; font-size: 0.8rem;">
                                 Target periode pembuatan sheet baru secara otomatis.
                             </small>
@@ -1166,6 +1159,25 @@
                             </small>
                         </div>
                     </div>
+
+                    <!-- Kolom 3: Konfigurasi Nomor Tujuan -->
+                    <div class="config-section-card" style="grid-column: 1 / -1; margin-top: -0.5rem;">
+                        <div class="config-section-title">
+                            <i class="fas fa-address-book text-secondary"></i> Konfigurasi Nomor Tujuan
+                        </div>
+                        <div class="d-flex" style="gap: 1rem;">
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <label class="form-label" for="deputyPhoneInput">Form Input Deputy</label>
+                                <input type="text" class="form-control" name="deputyPhone" id="deputyPhoneInput"
+                                    placeholder="Contoh: 62812... (Nomor WA Deputy)">
+                            </div>
+                            <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                <label class="form-label" for="adminPhoneInput">Form Input Admin</label>
+                                <input type="text" class="form-control" name="adminPhone" id="adminPhoneInput"
+                                    placeholder="Contoh: 62812... (Nomor WA Admin)">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1173,10 +1185,10 @@
                 <button type="button" class="btn btn-outline" onclick="closeModal()">Batal</button>
                 <button type="button" class="btn btn-outline" onclick="buatSheetBaru()"
                     style="border-color: #0284c7; color: #0284c7;">
-                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Buat Sheet Baru
+                    <i class="fas fa-wand-magic-sparkles me-1"></i> Buat Sheet Baru
                 </button>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Konfigurasi
+                    <i class="fas fa-floppy-disk me-1"></i> Simpan Konfigurasi
                 </button>
             </div>
         </form>
@@ -1189,7 +1201,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/plugins/monthSelect/index.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         flatpickr("#targetMonthInput", {
             plugins: [
                 new monthSelectPlugin({
@@ -1200,6 +1212,16 @@
             ]
         });
     });
+
+    function escapeHtml(text) {
+        if (text === null || text === undefined) return '';
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
 
     const AIRPORT_NAMES = {
         LOP: { city: "Lombok", full: "Bandara Internasional Zainuddin Abdul Madjid" },
@@ -1217,6 +1239,10 @@
             const select = document.getElementById('configAirportSelect');
             select.value = defaultBranch;
             loadConfig(defaultBranch);
+        } else {
+            // Load admin global config if no branch is selected yet
+            const currentVal = document.getElementById('configAirportSelect').value;
+            loadConfig(currentVal);
         }
     }
 
@@ -1380,16 +1406,16 @@
                             <div style="padding: 0.75rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
                                 <div style="flex: 1; min-width: 0;">
                                     <div style="font-weight: 600; color: #003366; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        <i class="fa-solid fa-file-excel text-success me-1"></i> ${f.name}
+                                        <i class="fas fa-file-excel text-success me-1"></i> ${f.name}
                                     </div>
-                                    ${isCurrent ? '<span style="font-size: 0.75rem; color: #059669; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Sedang Aktif Dipilih</span>' : ''}
+                                    ${isCurrent ? '<span style="font-size: 0.75rem; color: #059669; font-weight: 600;"><i class="fas fa-check-circle"></i> Sedang Aktif Dipilih</span>' : ''}
                                 </div>
                                 <div style="display: flex; gap: 0.4rem;">
                                     <button type="button" class="btn btn-primary btn-sm" style="font-size: 0.75rem; padding: 0.3rem 0.65rem;" onclick="pilihSheetSebagaiAktif('${f.webViewLink}', '${f.name.replace(/'/g, "\\'")}')">
-                                        <i class="fa-solid fa-check me-1"></i> Gunakan
+                                        <i class="fas fa-check me-1"></i> Gunakan
                                     </button>
                                     <a href="${f.webViewLink}" target="_blank" class="btn btn-outline btn-sm" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" title="Buka File di Tab Baru">
-                                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                        <i class="fas fa-arrow-up-right-from-square"></i>
                                     </a>
                                 </div>
                             </div>`;
@@ -1418,42 +1444,50 @@
         const select = document.getElementById('sheetUrlSelect');
         const loadingText = document.getElementById('loadingSheetsText');
 
-        select.innerHTML = '<option value="">-- Memuat... --</option>';
-        select.disabled = true;
-        document.getElementById('driveFolderInput').value = '';
-        document.getElementById('templateIdInput').value = '';
-        document.getElementById('picPhoneInput').value = '';
-        document.getElementById('targetMonthInput').value = '';
-        document.getElementById('sheetUrlStatus').innerHTML = '';
-        loadingText.style.display = 'block';
-
-        if (!airportCode) {
-            select.innerHTML = '<option value="">-- Pilih Cabang Dulu --</option>';
-            loadingText.style.display = 'none';
-            return;
+        if (airportCode) {
+            select.innerHTML = '<option value="">-- Memuat... --</option>';
+            select.disabled = true;
+            document.getElementById('driveFolderInput').value = '';
+            document.getElementById('templateIdInput').value = '';
+            document.getElementById('picPhoneInput').value = '';
+            document.getElementById('targetMonthInput').value = '';
+            document.getElementById('sheetUrlStatus').innerHTML = '';
+            loadingText.style.display = 'block';
         }
 
         try {
-            const r = await fetch(`/admin/api/config?airportCode=${airportCode}`);
+            const r = await fetch(`/admin/api/config?airportCode=${airportCode || ''}`);
             const res = await r.json();
 
-            if (res.success && res.data) {
-                const config = res.data;
-                const activeUrl = config.sheet_url || '';
-                const driveFolder = config.drive_folder || '';
-
-                document.getElementById('driveFolderInput').value = driveFolder;
-                document.getElementById('templateIdInput').value = config.template_id || '';
-                document.getElementById('picPhoneInput').value = config.pic_phone || '';
-
-                if (!driveFolder) {
-                    select.innerHTML = '<option value="">-- Folder Drive Belum Diatur --</option>';
-                    loadingText.style.display = 'none';
-                    updateLinkStatus(activeUrl);
-                    return;
+            if (res.success) {
+                if (res.admin_config) {
+                    document.getElementById('deputyPhoneInput').value = res.admin_config.deputy_phone || '';
+                    document.getElementById('adminPhoneInput').value = res.admin_config.admin_phone || '';
+                    document.getElementById('hiddenWaDeputy').value = res.admin_config.deputy_phone || '';
+                    document.getElementById('hiddenWaAdmin').value = res.admin_config.admin_phone || '';
                 }
 
-                await refreshDropdownList(airportCode, driveFolder, activeUrl);
+                if (res.data && Object.keys(res.data).length > 0 && airportCode) {
+                    const config = res.data;
+                    const activeUrl = config.sheet_url || '';
+                    const driveFolder = config.drive_folder || '';
+
+                    document.getElementById('driveFolderInput').value = driveFolder;
+                    document.getElementById('templateIdInput').value = config.template_id || '';
+                    document.getElementById('picPhoneInput').value = config.pic_phone || '';
+
+                    if (!driveFolder) {
+                        select.innerHTML = '<option value="">-- Folder Drive Belum Diatur --</option>';
+                        loadingText.style.display = 'none';
+                        updateLinkStatus(activeUrl);
+                        return;
+                    }
+
+                    await refreshDropdownList(airportCode, driveFolder, activeUrl);
+                } else if (!airportCode) {
+                    select.innerHTML = '<option value="">-- Pilih Cabang Dulu --</option>';
+                    loadingText.style.display = 'none';
+                }
             }
         } catch (e) {
             console.error('Error loading config:', e);
@@ -1541,9 +1575,9 @@
     function updateLinkStatus(url) {
         const statusIcon = document.getElementById('sheetUrlStatus');
         if (url) {
-            statusIcon.innerHTML = '<i class="fa-solid fa-circle-check text-success" title="Link Terpasang"></i>';
+            statusIcon.innerHTML = '<i class="fas fa-circle-check text-success" title="Link Terpasang"></i>';
         } else {
-            statusIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-danger" title="Belum Ada Link"></i>';
+            statusIcon.innerHTML = '<i class="fas fa-circle-xmark text-danger" title="Belum Ada Link"></i>';
         }
     }
 
@@ -1605,8 +1639,8 @@
     function updateConsoleStats(text) {
         const chars = text ? text.length : 0;
         const lines = text ? text.split('\n').length : 0;
-        document.getElementById('charCount').innerHTML = `<i class="fa-solid fa-font me-1"></i> ${chars} karakter`;
-        document.getElementById('lineCount').innerHTML = `<i class="fa-solid fa-bars me-1"></i> ${lines} baris`;
+        document.getElementById('charCount').innerHTML = `<i class="fas fa-font me-1"></i> ${chars} karakter`;
+        document.getElementById('lineCount').innerHTML = `<i class="fas fa-bars me-1"></i> ${lines} baris`;
     }
 
     // Helper: evaluate qualitative PCI rating
@@ -1623,10 +1657,6 @@
     function fetchRekap() {
         const dateStr = document.getElementById('filterDate').value;
         if (!dateStr) return;
-
-        // Update active date display banner
-        document.getElementById('activeDateFormatted').innerHTML =
-            `<i class="fa-regular fa-calendar-check text-secondary me-1"></i> ${formatDateIndonesian(dateStr)}`;
 
         const spinner = document.getElementById('syncSpinner');
         if (spinner) spinner.classList.add('fa-spin');
@@ -1659,7 +1689,7 @@
                     let penerima = [];
                     let tanggalFull = "";
                     let branchText = "";
-                    
+
                     ['LOP', 'DPS', 'BWX', 'KOE'].forEach((code, index) => {
                         const info = data[code] || { is_submitted: false, pci: "-", pic_phone: "" };
                         const badge = document.getElementById(`badge-${code}`);
@@ -1674,10 +1704,10 @@
                         if (info.is_submitted) {
                             submittedCount++;
                             badge.className = "status-pill success";
-                            badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Sudah Mengirim`;
+                            badge.innerHTML = `<i class="fas fa-circle-check"></i> Sudah Mengirim`;
 
                             pciNumEl.textContent = info.pci || "-";
-                            pciTextEl.innerHTML = `PCI Runway: <strong>${info.pci}</strong>`;
+                            pciTextEl.innerHTML = `PCI Runway: <strong>${escapeHtml(info.pci)}</strong>`;
 
                             const scale = getPciScaleTag(info.pci);
                             pciTagEl.textContent = scale.label;
@@ -1692,7 +1722,7 @@
 
                             actionDiv.innerHTML = `
                             <div class="submitted-check">
-                                <i class="fa-solid fa-circle-check"></i>
+                                <i class="fas fa-circle-check"></i>
                                 <span>Laporan Terverifikasi Masuk</span>
                             </div>
                         `;
@@ -1707,7 +1737,7 @@
                                     if (rd[7]) penerima.push(rd[7]);
                                     tanggalFull = rd[2];
                                 }
-                                
+
                                 branchText += `${index + 1}. ${code}\n*A. RUNWAY*\n`;
                                 branchText += `•  Kondisi keseluruhan runway : ${safeGet(rd, 8)}\n`;
                                 branchText += `•  Performance pavement : ${safeGet(rd, 9)}%\n`;
@@ -1762,7 +1792,7 @@
                                 }
                                 if (hasCatatan) branchText += catText;
                                 else branchText += catText + "-\n";
-                                
+
                                 // FASE 5: Tambahkan Data Ekstra (Form Builder)
                                 if (info.extra_data && info.extra_data.length > 0) {
                                     // Kelompokkan berdasarkan section (sub bab)
@@ -1773,7 +1803,7 @@
                                         }
                                         groupedExtra[item.section].push(item);
                                     });
-                                    
+
                                     // Cetak per kelompok section
                                     Object.keys(groupedExtra).forEach(secTitle => {
                                         // Ubah teks section menjadi huruf besar sesuai standar
@@ -1789,7 +1819,7 @@
                             }
                         } else {
                             badge.className = "status-pill warning";
-                            badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Belum Mengirim`;
+                            badge.innerHTML = `<i class="fas fa-circle-exclamation"></i> Belum Mengirim`;
 
                             pciNumEl.textContent = "-";
                             pciTextEl.innerHTML = `PCI Runway: <em>Belum Ada Data</em>`;
@@ -1803,10 +1833,10 @@
                                 actionDiv.innerHTML = `
                                 <div class="d-flex flex-column gap-2">
                                     <a href="${waUrl}" target="_blank" class="btn btn-outline btn-sm w-100" style="border-color: #16a34a; color: #166534;" title="Kirim Pengingat WhatsApp ke PIC ${code}">
-                                        <i class="fa-brands fa-whatsapp text-success me-1"></i> Ingatkan PIC
+                                        <i class="fab fa-whatsapp text-success me-1"></i> Ingatkan PIC
                                     </a>
                                     <button class="btn btn-outline btn-sm w-100" style="color: #475569; border-color: #cbd5e1;" onclick="syncRekap('${code}')" title="Tarik data dari tab harian yang dibuat manual di Excel">
-                                        <i class="fa-solid fa-cloud-arrow-down me-1"></i> Tarik Data (Sheets)
+                                        <i class="fas fa-cloud-arrow-down me-1"></i> Tarik Data (Sheets)
                                     </button>
                                 </div>
                             `;
@@ -1814,10 +1844,10 @@
                                 actionDiv.innerHTML = `
                                 <div class="d-flex flex-column gap-2">
                                     <button class="btn btn-outline btn-sm w-100" onclick="openModal('${code}')" title="Atur Nomor PIC di Konfigurasi">
-                                        <i class="fa-solid fa-phone me-1"></i> Atur Kontak PIC
+                                        <i class="fas fa-phone me-1"></i> Atur Kontak PIC
                                     </button>
                                     <button class="btn btn-outline btn-sm w-100" style="color: #475569; border-color: #cbd5e1;" onclick="syncRekap('${code}')" title="Tarik data dari tab harian yang dibuat manual di Excel">
-                                        <i class="fa-solid fa-cloud-arrow-down me-1"></i> Tarik Data (Sheets)
+                                        <i class="fas fa-cloud-arrow-down me-1"></i> Tarik Data (Sheets)
                                     </button>
                                 </div>
                             `;
@@ -1831,7 +1861,7 @@
                     document.getElementById('kpiProgressBar').style.width = `${pct}%`;
 
                     if (submittedCount === 4) {
-                        document.getElementById('kpiProgressText').innerHTML = `<span class="text-success"><i class="fa-solid fa-check-double me-1"></i> Lengkap 100% (Siap Dikirim)</span>`;
+                        document.getElementById('kpiProgressText').innerHTML = `<span class="text-success"><i class="fas fa-check-double me-1"></i> Lengkap 100% (Siap Dikirim)</span>`;
                     } else {
                         document.getElementById('kpiProgressText').innerHTML = `<span>${4 - submittedCount} bandara belum melaporkan</span>`;
                     }
@@ -1863,11 +1893,11 @@
 
                     kompilasi = `${sapaan}\n \nKepada Yth. :\n`;
                     penerima.forEach((p, idx) => {
-                        if(p && String(p).trim() !== "") {
+                        if (p && String(p).trim() !== "") {
                             kompilasi += `${idx + 1}. ${p}\n`;
                         }
                     });
-                    
+
                     kompilasi += `\nMohon izin, menyampaikan Laporan Harian Kondisi Fasilitas Sisi Udara di PT Angkasa Pura Indonesia\nTanggal : *${tanggalFull}*\n \nKantor Regional II\n`;
 
                     if (branchText) {
@@ -1910,6 +1940,9 @@
         });
 
         fetchRekap();
+
+        // Load initial admin config to get hidden phones
+        loadConfig('');
     });
 
     // Copy compilation text
@@ -1936,48 +1969,48 @@
     // Send compilation text to Deputy via WhatsApp
     function kirimWhatsAppDeputy() {
         const text = document.getElementById('kompilasiText').value;
-        const destInput = document.getElementById('waDestinations').value;
-        
+        const deputyPhone = document.getElementById('hiddenWaDeputy').value;
+        const adminPhone = document.getElementById('hiddenWaAdmin').value;
+
         if (!text) {
             return Swal.fire('Perhatian', 'Tidak ada pesan rekapitulasi untuk dikirim.', 'warning');
         }
 
-        if (!destInput || !destInput.trim()) {
-            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
-            return;
+        if (!deputyPhone || !deputyPhone.trim()) {
+            return Swal.fire('Nomor Deputy Kosong', 'Harap isi Nomor WA Deputy di Konfigurasi terlebih dahulu.', 'warning');
         }
 
-        const numbers = destInput.split(',').map(n => n.trim().replace(/\D/g, '')).filter(n => n.length > 5);
+        const numbers = [deputyPhone.trim().replace(/\D/g, '')].filter(n => n.length > 5);
         if (numbers.length === 0) {
-            return Swal.fire('Format Salah', 'Nomor WhatsApp tidak valid. Masukkan angka saja.', 'error');
+            return Swal.fire('Format Salah', 'Nomor WhatsApp Deputy tidak valid.', 'error');
         }
 
-        if (numbers.length > 1) {
-            Swal.fire({
-                title: 'Membuka Banyak Tab',
-                text: 'Browser Anda mungkin memblokir popup karena membuka beberapa tab WhatsApp sekaligus. Pastikan Anda mengizinkan popup (Allow Pop-ups) untuk situs ini.',
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'Lanjutkan',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    numbers.forEach((num, idx) => {
-                        setTimeout(() => {
-                            let cleanNum = num;
-                            if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
-                            const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
-                            window.open(url, '_blank');
-                        }, idx * 500); // Staggering 500ms
-                    });
-                }
-            });
-        } else {
-            let cleanNum = numbers[0];
-            if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
-            const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
+        let cleanNum = numbers[0];
+        if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
+        const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
+
+        // Buka tab WA untuk Deputy
+        window.open(url, '_blank');
+
+        // Tampilkan popup konfirmasi untuk mengirim ke admin
+        if (adminPhone && adminPhone.trim()) {
+            setTimeout(() => {
+                Swal.fire({
+                    title: 'Kirim ke Admin?',
+                    text: 'Apakah Anda juga ingin mengirim laporan ini ke nomor Admin?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Kirim ke Admin',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let cleanAdmin = adminPhone.trim().replace(/\D/g, '');
+                        if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                        const adminUrl = `https://wa.me/${cleanAdmin}?text=${encodeURIComponent(text)}`;
+                        window.open(adminUrl, '_blank');
+                    }
+                });
+            }, 1000);
         }
     }
 
@@ -2085,17 +2118,17 @@
                 Swal.fire('Error', err.message, 'error');
             });
     }
-        // --- VISUAL FORM BUILDER LOGIC ---
+    // --- VISUAL FORM BUILDER LOGIC ---
     let currentSchema = { steps: [] };
 
     function openSchemaModal() {
         document.getElementById('schemaModal').style.display = 'flex';
-        document.getElementById('visualBuilderContainer').innerHTML = '<div class="p-4 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Memuat form...</div>';
-        
+        document.getElementById('visualBuilderContainer').innerHTML = '<div class="p-4 text-center"><i class="fas fa-spinner fa-spin"></i> Memuat form...</div>';
+
         fetch('/admin/api/schema')
             .then(r => r.json())
             .then(data => {
-                if(data.success) {
+                if (data.success) {
                     currentSchema = data.data;
                     renderVisualBuilder();
                 } else {
@@ -2123,49 +2156,49 @@
         currentSchema.steps.forEach((step, sIdx) => {
             const stepDiv = document.createElement('div');
             stepDiv.className = 'builder-step';
-            
+
             let html = `
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div style="flex: 1; display: flex; gap: 0.5rem; align-items: center;">
-                        <div class="kpi-icon-box kpi-icon-blue" style="width: 32px; height: 32px;"><span class="step-number" style="font-weight:bold;">${sIdx+1}</span></div>
+                        <div class="kpi-icon-box kpi-icon-blue" style="width: 32px; height: 32px;"><span class="step-number" style="font-weight:bold;">${sIdx + 1}</span></div>
                         <input type="text" class="form-control" style="font-size: 1.1rem; font-weight: bold; width: 60%;" value="${step.title || ''}" onchange="updateSchema(${sIdx}, null, null, 'title', this.value)" placeholder="Judul Bab / Langkah (Contoh: A. Runway)">
                     </div>
-                    <button class="btn btn-outline btn-sm text-danger" onclick="removeStep(${sIdx})" title="Hapus Bab" style="border-color: transparent;"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-outline btn-sm text-danger" onclick="removeStep(${sIdx})" title="Hapus Bab" style="border-color: transparent;"><i class="fas fa-trash"></i></button>
                 </div>
                 <div class="sections-container" id="sections-${sIdx}"></div>
-                <button class="btn btn-outline btn-sm mt-2" onclick="addSection(${sIdx})"><i class="fa-solid fa-plus me-1"></i> Tambah Sub-bab (Section)</button>
+                <button class="btn btn-outline btn-sm mt-2" onclick="addSection(${sIdx})"><i class="fas fa-plus me-1"></i> Tambah Sub-bab (Section)</button>
             `;
             stepDiv.innerHTML = html;
-            
+
             const secContainer = stepDiv.querySelector(`#sections-${sIdx}`);
             if (step.sections) {
                 step.sections.forEach((sec, secIdx) => {
                     const secDiv = document.createElement('div');
                     secDiv.className = 'builder-section';
-                    
+
                     let secHtml = `
                         <div class="d-flex justify-content-between align-items-center mb-2 pb-2" style="border-bottom: 1px solid #e2e8f0;">
                             <div style="display: flex; gap: 0.5rem; align-items: center; flex: 1;">
-                                <i class="fa-solid fa-folder-open text-secondary"></i>
+                                <i class="fas fa-folder-open text-secondary"></i>
                                 <input type="text" class="form-control form-control-sm" style="font-weight: 600; width: 70%;" value="${sec.title || ''}" onchange="updateSchema(${sIdx}, ${secIdx}, null, 'secTitle', this.value)" placeholder="Judul Sub-bab (Contoh: Kondisi Fisik)">
                             </div>
-                            <button class="btn btn-outline btn-sm text-danger" onclick="removeSection(${sIdx}, ${secIdx})" style="border-color: transparent; padding: 0.2rem 0.5rem;"><i class="fa-solid fa-xmark"></i></button>
+                            <button class="btn btn-outline btn-sm text-danger" onclick="removeSection(${sIdx}, ${secIdx})" style="border-color: transparent; padding: 0.2rem 0.5rem;"><i class="fas fa-xmark"></i></button>
                         </div>
                         <div class="fields-container" id="fields-${sIdx}-${secIdx}"></div>
-                        <button class="btn btn-primary btn-sm mt-2" onclick="addField(${sIdx}, ${secIdx})"><i class="fa-solid fa-plus me-1"></i> Tambah Field Pertanyaan</button>
+                        <button class="btn btn-primary btn-sm mt-2" onclick="addField(${sIdx}, ${secIdx})"><i class="fas fa-plus me-1"></i> Tambah Field Pertanyaan</button>
                     `;
                     secDiv.innerHTML = secHtml;
-                    
+
                     const fieldContainer = secDiv.querySelector(`#fields-${sIdx}-${secIdx}`);
                     if (sec.fields) {
                         sec.fields.forEach((field, fIdx) => {
                             let typeOptions = `
-                                <option value="text" ${field.type==='text'?'selected':''}>Teks Singkat</option>
-                                <option value="select" ${field.type==='select'?'selected':''}>Dropdown (Pilihan)</option>
-                                <option value="date" ${field.type==='date'?'selected':''}>Tanggal</option>
-                                <option value="number" ${field.type==='number'?'selected':''}>Angka</option>
+                                <option value="text" ${field.type === 'text' ? 'selected' : ''}>Teks Singkat</option>
+                                <option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown (Pilihan)</option>
+                                <option value="date" ${field.type === 'date' ? 'selected' : ''}>Tanggal</option>
+                                <option value="number" ${field.type === 'number' ? 'selected' : ''}>Angka</option>
                             `;
-                            
+
                             let optionsHtml = '';
                             if (field.type === 'select') {
                                 let optStr = (field.options || []).join(', ');
@@ -2173,7 +2206,7 @@
                                     <input type="text" class="form-control form-control-sm mt-1" style="background-color: #fffbeb;" value="${optStr}" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'options', this.value)" placeholder="Pilihan (pisahkan dengan koma: Baik, Rusak, Sedang)">
                                 `;
                             }
-                            
+
                             let fieldHtml = `
                                 <div class="builder-field">
                                     <div style="flex: 2;">
@@ -2187,11 +2220,11 @@
                                             ${typeOptions}
                                         </select>
                                     </div>
-                                    <button class="btn btn-outline btn-sm text-danger" onclick="removeField(${sIdx}, ${secIdx}, ${fIdx})" style="border-color: transparent;"><i class="fa-solid fa-trash-can"></i></button>
+                                    <button class="btn btn-outline btn-sm text-danger" onclick="removeField(${sIdx}, ${secIdx}, ${fIdx})" style="border-color: transparent;"><i class="fas fa-trash-can"></i></button>
                                 </div>
                                 ${optionsHtml}
                             `;
-                            
+
                             const fDiv = document.createElement('div');
                             fDiv.style.marginBottom = "0.75rem";
                             fDiv.innerHTML = fieldHtml;
@@ -2225,7 +2258,7 @@
         } else {
             currentSchema.steps[sIdx].title = value;
         }
-        
+
         if (key === 'type') {
             renderVisualBuilder();
         }
@@ -2241,7 +2274,7 @@
     }
 
     function removeStep(sIdx) {
-        if(confirm("Hapus seluruh bab ini?")) {
+        if (confirm("Hapus seluruh bab ini?")) {
             currentSchema.steps.splice(sIdx, 1);
             renderVisualBuilder();
         }
@@ -2258,7 +2291,7 @@
     }
 
     function removeSection(sIdx, secIdx) {
-        if(confirm("Hapus sub-bab ini beserta pertanyaannya?")) {
+        if (confirm("Hapus sub-bab ini beserta pertanyaannya?")) {
             currentSchema.steps[sIdx].sections.splice(secIdx, 1);
             renderVisualBuilder();
         }
@@ -2283,21 +2316,21 @@
     function saveSchema() {
         fetch('/admin/api/schema/update', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(currentSchema)
         })
-        .then(r => r.json())
-        .then(data => {
-            if(data.success) {
-                Swal.fire('Berhasil', 'Konfigurasi form berhasil diperbarui! Tampilan form petugas akan otomatis berubah.', 'success');
-                closeSchemaModal();
-            } else {
-                Swal.fire('Gagal Menyimpan', data.error, 'error');
-            }
-        })
-        .catch(err => {
-            Swal.fire('Error', err.message, 'error');
-        });
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Berhasil', 'Konfigurasi form berhasil diperbarui! Tampilan form petugas akan otomatis berubah.', 'success');
+                    closeSchemaModal();
+                } else {
+                    Swal.fire('Gagal Menyimpan', data.error, 'error');
+                }
+            })
+            .catch(err => {
+                Swal.fire('Error', err.message, 'error');
+            });
     }
     function syncRekap(code) {
         Swal.fire({
@@ -2315,24 +2348,24 @@
                     allowOutsideClick: false,
                     didOpen: () => { Swal.showLoading(); }
                 });
-                
+
                 fetch('/admin/api/sync-rekap', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ airportCode: code })
                 })
-                .then(r => r.json())
-                .then(res => {
-                    if (res.success) {
-                        Swal.fire('Berhasil!', `Berhasil menyinkronkan ${res.synced_count} laporan harian baru ke DATABASE_REKAP!`, 'success')
-                        .then(() => fetchRekap());
-                    } else {
-                        Swal.fire('Gagal', res.error, 'error');
-                    }
-                })
-                .catch(err => {
-                    Swal.fire('Error', err.message, 'error');
-                });
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.success) {
+                            Swal.fire('Berhasil!', `Berhasil menyinkronkan ${res.synced_count} laporan harian baru ke DATABASE_REKAP!`, 'success')
+                                .then(() => fetchRekap());
+                        } else {
+                            Swal.fire('Gagal', res.error, 'error');
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error', err.message, 'error');
+                    });
             }
         });
     }
@@ -2345,8 +2378,9 @@
         border-radius: 12px;
         padding: 1.25rem;
         margin-bottom: 1.25rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
+
     .builder-section {
         border: 1px solid #e2e8f0;
         padding: 1rem;
@@ -2354,6 +2388,7 @@
         border-radius: 8px;
         background: #f8fafc;
     }
+
     .builder-field {
         display: flex;
         gap: 0.5rem;
@@ -2368,35 +2403,40 @@
 <!-- FORM SCHEMA BUILDER MODAL (VISUAL) -->
 <div class="clean-modal-overlay" id="schemaModal" style="display: none; z-index: 9999;">
     <div class="clean-modal-card" style="max-width: 950px; height: 90vh; background-color: #f1f5f9;">
-        <div class="modal-header" style="background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 1.25rem 1.5rem;">
+        <div class="modal-header"
+            style="background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 1.25rem 1.5rem;">
             <div>
-                <h3 class="modal-title"><i class="fa-solid fa-list-check text-primary me-2"></i> Visual Form Builder</h3>
-                <p class="modal-subtitle">Desain form laporan dengan mudah. Perubahan akan langsung disinkronkan ke aplikasi petugas.</p>
+                <h3 class="modal-title"><i class="fas fa-list-check text-primary me-2"></i> Visual Form Builder</h3>
+                <p class="modal-subtitle">Desain form laporan dengan mudah. Perubahan akan langsung disinkronkan ke
+                    aplikasi petugas.</p>
             </div>
             <button type="button" class="modal-close-btn" onclick="closeSchemaModal()" title="Tutup">
-                <i class="fa-solid fa-xmark"></i>
+                <i class="fas fa-xmark"></i>
             </button>
         </div>
-        
+
         <div class="modal-body" style="flex: 1; padding: 1.5rem; overflow-y: auto;">
             <div id="visualBuilderContainer">
                 <!-- Diisi via JS -->
             </div>
-            
-            <button class="btn btn-secondary w-100 mt-3" style="border-style: dashed; background: transparent; color: var(--dash-secondary); padding: 1rem;" onclick="addStep()">
-                <i class="fa-solid fa-folder-plus me-1"></i> Tambah Bab / Langkah Baru
+
+            <button class="btn btn-secondary w-100 mt-3"
+                style="border-style: dashed; background: transparent; color: var(--dash-secondary); padding: 1rem;"
+                onclick="addStep()">
+                <i class="fas fa-folder-plus me-1"></i> Tambah Bab / Langkah Baru
             </button>
-            
+
             <div class="alert-banner mt-4">
-                <i class="fa-solid fa-lightbulb text-warning"></i>
-                <div>Kolom <strong>KODE_KOLOM</strong> akan menjadi penentu nama Header di Google Sheets. Sistem memastikannya menjadi huruf besar tanpa spasi.</div>
+                <i class="fas fa-lightbulb text-warning"></i>
+                <div>Kolom <strong>KODE_KOLOM</strong> akan menjadi penentu nama Header di Google Sheets. Sistem
+                    memastikannya menjadi huruf besar tanpa spasi.</div>
             </div>
         </div>
-        
+
         <div class="modal-footer" style="background-color: #ffffff; border-top: 1px solid #e2e8f0;">
             <button type="button" class="btn btn-outline" onclick="closeSchemaModal()">Batal</button>
             <button type="button" class="btn btn-primary" onclick="saveSchema()">
-                <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Form & Sinkronisasi
+                <i class="fas fa-floppy-disk me-1"></i> Simpan Form & Sinkronisasi
             </button>
         </div>
     </div>

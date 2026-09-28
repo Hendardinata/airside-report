@@ -19,7 +19,8 @@
                 "Selamat pagi",
                 "Selamat siang",
                 "Selamat sore",
-                "Selamat malam"
+                "Selamat malam",
+                "Assalamualaikum Wr Wb"
               ],
               "required": true,
               "type": "select"
@@ -421,8 +422,8 @@
             {
               "label": "Catatn 6",
               "name": "CATATAN_6",
-              "type": "text",
-              "required": false
+              "required": false,
+              "type": "text"
             }
           ],
           "icon": "fa-pen-to-square",

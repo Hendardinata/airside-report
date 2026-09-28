@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}Dashboard Petugas Bandara - InJourney Regional II{% endblock %}
 
 {% block head %}
@@ -440,24 +440,24 @@
     <!-- Quick Info Strip -->
     <div class="branch-info-strip">
         <div class="info-pill info-pill-branch">
-            <i class="fa-solid fa-plane-departure"></i>
+            <i class="fas fa-plane-departure"></i>
             <span>Cabang: <strong>{{ current_user.airport | default('LOP') }}</strong></span>
         </div>
 
         {% if has_sheet_url %}
         <div class="info-pill success">
-            <i class="fa-solid fa-circle-check"></i>
+            <i class="fas fa-circle-check"></i>
             <span>Spreadsheet Aktif</span>
         </div>
         {% else %}
         <div class="info-pill warning">
-            <i class="fa-solid fa-triangle-exclamation"></i>
+            <i class="fas fa-triangle-exclamation"></i>
             <span>Sheet Belum Diatur</span>
         </div>
         {% endif %}
 
         <div class="info-pill" id="activeMonthBadge">
-            <i class="fa-regular fa-calendar-check text-secondary"></i>
+            <i class="far fa-calendar-check text-secondary"></i>
             <span id="activeMonthText">Memeriksa periode...</span>
         </div>
     </div>
@@ -466,7 +466,7 @@
 <!-- Warning Alert if no active sheet configured -->
 {% if not has_sheet_url %}
 <div class="alert-banner">
-    <i class="fa-solid fa-triangle-exclamation"></i>
+    <i class="fas fa-triangle-exclamation"></i>
     <div>
         <strong>Perhatian Penting:</strong> Administrator Regional II belum mengatur URL Google Spreadsheet untuk cabang <strong>{{ current_user.airport | default('LOP') }}</strong>. Laporan harian belum dapat disimpan ke cloud hingga tautan spreadsheet dikonfigurasi.
     </div>
@@ -489,13 +489,13 @@
      MAIN WIZARD FORM
      ========================================================================== -->
 <div class="form-main-card">
-    <form id="reportWizard" method="POST" action="/staff/submit">
+    <form id="reportWizard" method="POST" action="/staff/submit" novalidate>
         {% for step in schema.steps %}
         <div class="wizard-step {% if loop.first %}active{% endif %}" id="step-{{ loop.index }}" {% if not loop.first %}style="display: none;"{% endif %}>
             <div class="step-header">
                 <div class="step-title-group">
                     <div class="step-icon-badge">
-                        <i class="fa-solid {{ step.icon }}"></i>
+                        <i class="fas {{ step.icon }}"></i>
                     </div>
                     <div>
                         <h2 class="step-title">{{ step.title }}</h2>
@@ -508,7 +508,7 @@
             {% for section in step.sections %}
             <div class="section-box">
                 <div class="section-title">
-                    <i class="fa-solid {{ section.icon }} text-secondary"></i> {{ section.title }}
+                    <i class="fas {{ section.icon }} text-secondary"></i> {{ section.title }}
                 </div>
                 <div class="grid-2">
                     {% for field in section.fields %}
@@ -534,7 +534,7 @@
             
             {% if loop.last %}
             <div class="verify-box">
-                <i class="fa-solid fa-shield-check verify-icon"></i>
+                <i class="fas fa-shield-check verify-icon"></i>
                 <div>
                     <h4 class="verify-title">Verifikasi Final</h4>
                     <p class="verify-desc">
@@ -547,7 +547,7 @@
             <div class="wizard-footer">
                 {% if not loop.first %}
                 <button type="button" class="btn btn-outline btn-stepper" onclick="prevStep({{ loop.index - 1 }})">
-                    <i class="fa-solid fa-arrow-left"></i>
+                    <i class="fas fa-arrow-left"></i>
                     <span>Kembali</span>
                 </button>
                 {% else %}
@@ -557,17 +557,17 @@
                 {% if not loop.last %}
                 <button type="button" class="btn btn-primary btn-stepper" onclick="nextStep({{ loop.index + 1 }})">
                     <span>Selanjutnya</span>
-                    <i class="fa-solid fa-arrow-right"></i>
+                    <i class="fas fa-arrow-right"></i>
                 </button>
                 {% else %}
                     {% if has_sheet_url %}
                     <button type="submit" class="btn btn-secondary btn-stepper" id="btnSubmitReport">
-                        <i class="fa-solid fa-paper-plane"></i>
+                        <i class="fas fa-paper-plane"></i>
                         <span>Kirim Laporan ke Spreadsheet</span>
                     </button>
                     {% else %}
                     <button type="button" class="btn btn-outline btn-stepper" onclick="Swal.fire('Peringatan', 'Link Google Spreadsheet belum diatur oleh admin. Laporan tidak dapat dikirim.', 'warning')">
-                        <i class="fa-solid fa-paper-plane text-warning"></i>
+                        <i class="fas fa-paper-plane text-warning"></i>
                         <span>Kirim Laporan (Belum Terkoneksi)</span>
                     </button>
                     {% endif %}

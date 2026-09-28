@@ -24,17 +24,38 @@ function prevStep(step) {
 document.getElementById('reportWizard').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Validasi HTML5 manual untuk mendukung hidden steps
-    if (!this.checkValidity()) {
-        const firstInvalid = this.querySelector(':invalid');
-        if (firstInvalid) {
-            const step = firstInvalid.closest('.wizard-step');
-            if (step) {
-                const stepNum = step.id.split('-')[1];
-                nextStep(stepNum);
-                setTimeout(() => firstInvalid.reportValidity(), 100);
+    // Validasi input kosong
+    let isEmpty = false;
+    let firstEmpty = null;
+    const inputs = this.querySelectorAll('input:not([type="hidden"]), select, textarea');
+    inputs.forEach(input => {
+        if (!input.value || input.value.trim() === '') {
+            if (input.hasAttribute('required')) {
+                isEmpty = true;
+                if (!firstEmpty) firstEmpty = input;
             }
         }
+    });
+
+    if (isEmpty || !this.checkValidity()) {
+        const invalidElement = firstEmpty || this.querySelector(':invalid');
+        
+        Swal.fire({
+            icon: 'warning',
+            title: 'Form Belum Lengkap!',
+            text: 'Masih ada form inputan yang kosong. Mohon lengkapi terlebih dahulu baru kirim.',
+            confirmButtonText: 'Mengerti',
+            confirmButtonColor: '#003366'
+        }).then(() => {
+            if (invalidElement) {
+                const step = invalidElement.closest('.wizard-step');
+                if (step) {
+                    const stepNum = step.id.split('-')[1];
+                    nextStep(stepNum);
+                    setTimeout(() => invalidElement.focus(), 300);
+                }
+            }
+        });
         return;
     }
 
@@ -54,9 +75,30 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            Swal.fire('Terkirim!', 'Data telah berhasil disimpan ke Spreadsheet.', 'success')
-            .then(() => {
-                window.location.href = '/staff/dashboard';
+            Swal.fire({
+                title: 'Laporan Terkirim!', 
+                text: 'Data telah berhasil disimpan ke Spreadsheet.\n\nApakah Anda ingin mengirim notifikasi laporan ke WhatsApp Admin?', 
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Kirim ke Admin',
+                cancelButtonText: 'Tidak, Kembali ke Dashboard',
+                confirmButtonColor: '#16a34a',
+                cancelButtonColor: '#64748b'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (data.admin_phone) {
+                        let text = data.admin_message || `Halo Admin, Laporan Harian Airside baru saja dikirimkan dari cabang ${data.airport_code}. Mohon dicek di sistem.`;
+                        let cleanAdmin = data.admin_phone.replace(/\D/g, '');
+                        if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                        window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(text)}`, '_blank');
+                    } else {
+                        Swal.fire('Info', 'Nomor WA Admin belum diatur di Konfigurasi Pusat.', 'info');
+                    }
+                }
+                // Reload dashboard after interacting with the prompt
+                setTimeout(() => {
+                    window.location.href = '/staff/dashboard';
+                }, 500);
             });
         } else {
             Swal.fire('Error', data.message || 'Terjadi kesalahan sistem', 'error');

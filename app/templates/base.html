@@ -14,6 +14,35 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- CSRF Token Meta -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Transparent Fetch Interceptor for CSRF -->
+    <script>
+        (function() {
+            const originalFetch = window.fetch;
+            window.fetch = function(url, options) {
+                options = options || {};
+                const method = (options.method || 'GET').toUpperCase();
+                if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+                    const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+                    const token = tokenMeta ? tokenMeta.getAttribute('content') : '';
+                    if (token) {
+                        options.headers = options.headers || {};
+                        if (options.headers instanceof Headers) {
+                            if (!options.headers.has('X-CSRFToken')) options.headers.append('X-CSRFToken', token);
+                        } else if (Array.isArray(options.headers)) {
+                            options.headers.push(['X-CSRFToken', token]);
+                        } else {
+                            if (!options.headers['X-CSRFToken']) options.headers['X-CSRFToken'] = token;
+                        }
+                    }
+                }
+                return originalFetch(url, options);
+            };
+        })();
+    </script>
+    
     {% block head %}{% endblock %}
 </head>
 <body>
