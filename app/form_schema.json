@@ -1,0 +1,448 @@
+{
+  "steps": [
+    {
+      "icon": "fa-file-lines",
+      "id": "step_1",
+      "sections": [
+        {
+          "fields": [
+            {
+              "label": "Tanggal Laporan",
+              "name": "TANGGAL",
+              "required": true,
+              "type": "date"
+            },
+            {
+              "label": "Sapaan Pembuka",
+              "name": "SAPAAN",
+              "options": [
+                "Selamat pagi",
+                "Selamat siang",
+                "Selamat sore",
+                "Selamat malam"
+              ],
+              "required": true,
+              "type": "select"
+            },
+            {
+              "label": "Nomor & Nama Kantor Cabang",
+              "name": "KANTOR_CABANG",
+              "required": true,
+              "type": "text"
+            }
+          ],
+          "icon": "fa-calendar-days",
+          "title": "Parameter Laporan"
+        },
+        {
+          "fields": [
+            {
+              "label": "Penerima 1 (Direksi)",
+              "name": "PENERIMA_1",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "label": "Penerima 2 (Group Head)",
+              "name": "PENERIMA_2",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "label": "Penerima 3 (Deputy Regional)",
+              "name": "PENERIMA_3",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "default": "-",
+              "label": "Penerima 4 (Opsional)",
+              "name": "PENERIMA_4",
+              "required": false,
+              "type": "text"
+            }
+          ],
+          "icon": "fa-users-viewfinder",
+          "title": "Pejabat Penerima Laporan"
+        }
+      ],
+      "subtitle": "Tentukan tanggal laporan, salam pembuka, dan susunan pejabat penerima laporan.",
+      "title": "Langkah 1: Informasi Umum & Pejabat"
+    },
+    {
+      "icon": "fa-road",
+      "id": "step_2",
+      "sections": [
+        {
+          "fields": [
+            {
+              "label": "Kondisi Keseluruhan Runway",
+              "name": "RUNWAY_KONDISI",
+              "options": [
+                "Serviceable",
+                "Unserviceable"
+              ],
+              "required": true,
+              "type": "select"
+            },
+            {
+              "label": "Performance Pavement (PCI)",
+              "name": "RUNWAY_PCI",
+              "required": true,
+              "type": "text"
+            }
+          ],
+          "icon": "fa-layer-group",
+          "title": "Kondisi Umum & Perkerasan"
+        },
+        {
+          "fields": [
+            {
+              "label": "Jml Titik Rusak",
+              "name": "RUNWAY_TITIK_RUSAK",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Sudah Diperbaiki",
+              "name": "RUNWAY_TITIK_DIPERBAIKI",
+              "type": "text"
+            },
+            {
+              "label": "Jenis Kerusakan (Diperbaiki)",
+              "name": "RUNWAY_JENIS_DIPERBAIKI",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Belum Diperbaiki",
+              "name": "RUNWAY_TITIK_BELUM",
+              "type": "text"
+            },
+            {
+              "label": "Jenis Kerusakan (Belum)",
+              "name": "RUNWAY_JENIS_BELUM",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Rusak Berulang > 1x",
+              "name": "RUNWAY_TITIK_BERULANG",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-hammer",
+          "title": "Kerusakan & Perbaikan"
+        },
+        {
+          "fields": [
+            {
+              "label": "Marka - Standard",
+              "name": "RUNWAY_MARKA_STD",
+              "type": "text"
+            },
+            {
+              "label": "Marka - Realisasi",
+              "name": "RUNWAY_MARKA_REALISASI",
+              "type": "text"
+            },
+            {
+              "label": "Marka - Performance",
+              "name": "RUNWAY_MARKA_PERF",
+              "type": "text"
+            },
+            {
+              "label": "Standing Water - Pengukuran",
+              "name": "RUNWAY_STANDING_WATER",
+              "type": "text"
+            },
+            {
+              "label": "Standing Water - Performance",
+              "name": "RUNWAY_WATER_PERF",
+              "type": "text"
+            },
+            {
+              "label": "Rubber Removal - Standar",
+              "name": "RUNWAY_RUBBER_STD",
+              "type": "text"
+            },
+            {
+              "label": "Rubber Removal - Realisasi",
+              "name": "RUNWAY_RUBBER_REAL",
+              "type": "text"
+            },
+            {
+              "label": "Rubber Removal - Nilai Skid",
+              "name": "RUNWAY_RUBBER_SKID",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-droplet",
+          "title": "Marka, Genangan & Rubber"
+        }
+      ],
+      "subtitle": "Kondisi perkerasan runway, skor PCI, titik kerusakan, marka, dan rubber deposit.",
+      "title": "Langkah 2: Fasilitas Runway (A. RUNWAY)"
+    },
+    {
+      "icon": "fa-plane",
+      "id": "step_3",
+      "sections": [
+        {
+          "fields": [
+            {
+              "label": "Nama Taxiway",
+              "name": "TAXIWAY_NAMA",
+              "type": "text"
+            },
+            {
+              "label": "Status Taxiway",
+              "name": "TAXIWAY_STATUS",
+              "options": [
+                "Serviceable",
+                "Unserviceable"
+              ],
+              "type": "select"
+            },
+            {
+              "label": "Performance Pavement (PCI)",
+              "name": "TAXIWAY_PCI",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-layer-group",
+          "title": "Kondisi Umum"
+        },
+        {
+          "fields": [
+            {
+              "label": "Jml Titik Rusak",
+              "name": "TWY_TITIK_RUSAK",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Sudah Diperbaiki",
+              "name": "TWY_TITIK_DIPERBAIKI",
+              "type": "text"
+            },
+            {
+              "label": "Jenis Kerusakan (Diperbaiki)",
+              "name": "TWY_JENIS_DIPERBAIKI",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Belum Diperbaiki",
+              "name": "TWY_TITIK_BELUM",
+              "type": "text"
+            },
+            {
+              "label": "Jenis Kerusakan (Belum)",
+              "name": "TWY_JENIS_BELUM",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Rusak Berulang",
+              "name": "TWY_TITIK_BERULANG",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-hammer",
+          "title": "Kerusakan & Perbaikan"
+        },
+        {
+          "fields": [
+            {
+              "label": "Marka - Standard",
+              "name": "TWY_MARKA_STD",
+              "type": "text"
+            },
+            {
+              "label": "Marka - Realisasi",
+              "name": "TWY_MARKA_REALISASI",
+              "type": "text"
+            },
+            {
+              "label": "Marka - Performance",
+              "name": "TWY_MARKA_PERF",
+              "type": "text"
+            },
+            {
+              "label": "Standing Water",
+              "name": "TWY_STANDING_WATER",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-droplet",
+          "title": "Marka & Genangan"
+        }
+      ],
+      "subtitle": "Kondisi perkerasan taxiway, skor PCI, dan titik kerusakan.",
+      "title": "Langkah 3: Fasilitas Taxiway (B. TAXIWAY)"
+    },
+    {
+      "icon": "fa-square-parking",
+      "id": "step_4",
+      "sections": [
+        {
+          "fields": [
+            {
+              "label": "Kondisi Keseluruhan Apron",
+              "name": "APRON_KONDISI",
+              "options": [
+                "Serviceable",
+                "Unserviceable"
+              ],
+              "type": "select"
+            },
+            {
+              "label": "Performance Pavement (PCI)",
+              "name": "APRON_PCI",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-layer-group",
+          "title": "Kondisi Umum"
+        },
+        {
+          "fields": [
+            {
+              "label": "Jml Titik Rusak",
+              "name": "APN_TITIK_RUSAK",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Sudah Diperbaiki",
+              "name": "APN_TITIK_DIPERBAIKI",
+              "type": "text"
+            },
+            {
+              "label": "Jenis Kerusakan (Diperbaiki)",
+              "name": "APN_JENIS_DIPERBAIKI",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Belum Diperbaiki",
+              "name": "APN_TITIK_BELUM",
+              "type": "text"
+            },
+            {
+              "label": "Jenis Kerusakan (Belum)",
+              "name": "APN_JENIS_BELUM",
+              "type": "text"
+            },
+            {
+              "label": "Jml Titik Rusak Berulang",
+              "name": "APN_TITIK_BERULANG",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-hammer",
+          "title": "Kerusakan & Perbaikan"
+        },
+        {
+          "fields": [
+            {
+              "label": "Marka - Standard",
+              "name": "APN_MARKA_STD",
+              "type": "text"
+            },
+            {
+              "label": "Marka - Realisasi",
+              "name": "APN_MARKA_REALISASI",
+              "type": "text"
+            },
+            {
+              "label": "Marka - Performance",
+              "name": "APN_MARKA_PERF",
+              "type": "text"
+            },
+            {
+              "label": "Standing Water",
+              "name": "APN_STANDING_WATER",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-droplet",
+          "title": "Marka & Genangan"
+        }
+      ],
+      "subtitle": "Kondisi perkerasan apron, skor PCI, dan titik kerusakan.",
+      "title": "Langkah 4: Fasilitas Apron (C. APRON)"
+    },
+    {
+      "icon": "fa-clipboard-check",
+      "id": "step_5",
+      "sections": [
+        {
+          "fields": [
+            {
+              "label": "Potong Rumput - Standard",
+              "name": "RUMPUT_STD",
+              "type": "text"
+            },
+            {
+              "label": "Potong Rumput - Realisasi",
+              "name": "RUMPUT_REALISASI",
+              "type": "text"
+            },
+            {
+              "label": "Potong Rumput - Performance",
+              "name": "RUMPUT_PERF",
+              "type": "text"
+            }
+          ],
+          "icon": "fa-leaf",
+          "title": "Pemeliharaan Rumput"
+        },
+        {
+          "fields": [
+            {
+              "label": "Catatan 1",
+              "name": "CATATAN_1",
+              "type": "text"
+            },
+            {
+              "label": "Catatan 2",
+              "name": "CATATAN_2",
+              "type": "text"
+            },
+            {
+              "label": "Catatan 3",
+              "name": "CATATAN_3",
+              "type": "text"
+            },
+            {
+              "label": "Catatan 4",
+              "name": "CATATAN_4",
+              "type": "text"
+            },
+            {
+              "label": "Catatan 5",
+              "name": "CATATAN_5",
+              "type": "text"
+            },
+            {
+              "label": "Catatn 6",
+              "name": "CATATAN_6",
+              "type": "text",
+              "required": false
+            }
+          ],
+          "icon": "fa-pen-to-square",
+          "title": "Catatan Khusus"
+        },
+        {
+          "fields": [
+            {
+              "label": "apakah jalan bagus",
+              "name": "JALAN_BAGUS",
+              "required": false,
+              "type": "text"
+            }
+          ],
+          "icon": "fa-folder",
+          "title": "Uji Kelayakan"
+        }
+      ],
+      "subtitle": "Rumput, catatan tambahan, dan pengiriman laporan.",
+      "title": "Langkah 5: Catatan Khusus & Kirim"
+    }
+  ]
+}

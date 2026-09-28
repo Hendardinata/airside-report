@@ -1,0 +1,661 @@
+﻿{% extends "base.html" %}
+{% block title %}Dashboard Petugas Bandara - InJourney Regional II{% endblock %}
+
+{% block head %}
+<style>
+    /* ==========================================================================
+       STAFF DASHBOARD - CLEAN & PROFESSIONAL ENTERPRISE STYLES
+       (No Glassmorphism, Solid Crisp Surfaces, Aeronautical Corporate Theme)
+       ========================================================================== */
+
+    :root {
+        --staff-primary: #003366;
+        --staff-secondary: #0284c7;
+        --staff-surface: #ffffff;
+        --staff-bg-subtle: #f8fafc;
+        --staff-border: #e2e8f0;
+        --staff-border-hover: #cbd5e1;
+        --staff-text: #0f172a;
+        --staff-text-muted: #64748b;
+        --staff-success: #059669;
+        --staff-success-bg: #ecfdf5;
+        --staff-success-border: #a7f3d0;
+        --staff-warning: #d97706;
+        --staff-warning-bg: #fffbeb;
+        --staff-warning-border: #fde68a;
+    }
+
+    /* Page Header */
+    .staff-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 1.75rem;
+        flex-wrap: wrap;
+    }
+
+    .header-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
+        background-color: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--staff-primary);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+
+    .status-pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #10b981;
+        box-shadow: 0 0 0 2px #d1fae5;
+    }
+
+    .header-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--staff-primary);
+        letter-spacing: -0.5px;
+        margin-bottom: 0.25rem;
+        line-height: 1.25;
+    }
+
+    .header-subtitle {
+        font-size: 0.95rem;
+        color: var(--staff-text-muted);
+        margin: 0;
+    }
+
+    /* Quick Info Strip (Cabang & Cloud Status) */
+    .branch-info-strip {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .info-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.4rem 0.85rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background-color: #ffffff;
+        border: 1px solid var(--staff-border);
+        color: var(--staff-text);
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    }
+
+    .info-pill-branch {
+        background-color: #003366;
+        color: #ffffff;
+        border-color: #003366;
+    }
+
+    .info-pill.success {
+        background-color: var(--staff-success-bg);
+        color: var(--staff-success);
+        border-color: var(--staff-success-border);
+    }
+
+    .info-pill.warning {
+        background-color: var(--staff-warning-bg);
+        color: var(--staff-warning);
+        border-color: var(--staff-warning-border);
+    }
+
+    /* Warning Alert Banner (Solid & Crisp) */
+    .alert-banner {
+        background-color: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        color: #92400e;
+        font-size: 0.9rem;
+    }
+
+    .alert-banner i {
+        font-size: 1.25rem;
+        color: #d97706;
+    }
+
+    /* Stepper Navigation (Modern Crisp Segmented Bar) */
+    .wizard-progress {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+        background-color: #ffffff;
+        border: 1px solid var(--staff-border);
+        border-radius: 12px;
+        padding: 0.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 0.85rem;
+        font-family: var(--font-heading);
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--staff-text-muted);
+        background-color: transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        user-select: none;
+    }
+
+    .step:hover:not(.active) {
+        background-color: #f8fafc;
+        color: var(--staff-primary);
+    }
+
+    .step.active {
+        background-color: var(--staff-primary);
+        color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 51, 102, 0.15);
+    }
+
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.2);
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .step:not(.active) .step-number {
+        background-color: #e2e8f0;
+        color: #475569;
+    }
+
+    /* Main Form Card */
+    .form-main-card {
+        background-color: #ffffff;
+        border: 1px solid var(--staff-border);
+        border-radius: 14px;
+        padding: 2.25rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        margin-bottom: 2.5rem;
+    }
+
+    /* Step Header inside Card */
+    .step-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1.25rem;
+        margin-bottom: 1.75rem;
+        border-bottom: 1px solid var(--staff-border);
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .step-title-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .step-icon-badge {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: var(--staff-secondary);
+    }
+
+    .step-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--staff-primary);
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .step-subtitle {
+        font-size: 0.85rem;
+        color: var(--staff-text-muted);
+        margin: 0.2rem 0 0 0;
+    }
+
+    .step-badge-indicator {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--staff-secondary);
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+    }
+
+    /* Structured Section Boxes */
+    .section-box {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--staff-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0 0 1.25rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+
+    .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+
+    /* Form Inputs & Controls */
+    .form-group {
+        margin-bottom: 1.15rem;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.35rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.65rem 0.9rem;
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        color: var(--staff-text);
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        background-color: #ffffff;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--staff-secondary);
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.85rem center;
+        background-size: 1.1rem;
+        padding-right: 2.25rem;
+    }
+
+    /* Wizard Action Navigation Footer */
+    .wizard-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--staff-border);
+    }
+
+    .btn-stepper {
+        padding: 0.7rem 1.35rem;
+        font-size: 0.925rem;
+        font-weight: 600;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    /* Verification Summary Box on Step 5 */
+    .verify-box {
+        background-color: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 10px;
+        padding: 1.25rem 1.5rem;
+        margin-top: 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .verify-icon {
+        font-size: 1.5rem;
+        color: #16a34a;
+        margin-top: 0.15rem;
+    }
+
+    .verify-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #166534;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .verify-desc {
+        font-size: 0.85rem;
+        color: #15803d;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .wizard-progress {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .grid-3 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .staff-header {
+            flex-direction: column;
+        }
+        .wizard-progress {
+            grid-template-columns: 1fr;
+        }
+        .grid-2, .grid-3 {
+            grid-template-columns: 1fr;
+        }
+        .form-main-card {
+            padding: 1.5rem 1.25rem;
+        }
+        .wizard-footer {
+            flex-direction: column-reverse;
+        }
+        .wizard-footer .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ==========================================================================
+     PAGE HEADER & BRANCH IDENTITY STRIP
+     ========================================================================== -->
+<div class="staff-header">
+    <div>
+        <div class="header-badge">
+            <span class="status-pulse-dot"></span>
+            <span>Unit Fasilitas Sisi Udara • Regional II</span>
+        </div>
+        <h1 class="header-title">Input Laporan Harian Airside</h1>
+        <p class="header-subtitle">
+            Pencatatan data inspeksi runway, taxiway, apron, dan pemeliharaan fasilitas harian cabang.
+        </p>
+    </div>
+
+    <!-- Quick Info Strip -->
+    <div class="branch-info-strip">
+        <div class="info-pill info-pill-branch">
+            <i class="fa-solid fa-plane-departure"></i>
+            <span>Cabang: <strong>{{ current_user.airport | default('LOP') }}</strong></span>
+        </div>
+
+        {% if has_sheet_url %}
+        <div class="info-pill success">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Spreadsheet Aktif</span>
+        </div>
+        {% else %}
+        <div class="info-pill warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Sheet Belum Diatur</span>
+        </div>
+        {% endif %}
+
+        <div class="info-pill" id="activeMonthBadge">
+            <i class="fa-regular fa-calendar-check text-secondary"></i>
+            <span id="activeMonthText">Memeriksa periode...</span>
+        </div>
+    </div>
+</div>
+
+<!-- Warning Alert if no active sheet configured -->
+{% if not has_sheet_url %}
+<div class="alert-banner">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <div>
+        <strong>Perhatian Penting:</strong> Administrator Regional II belum mengatur URL Google Spreadsheet untuk cabang <strong>{{ current_user.airport | default('LOP') }}</strong>. Laporan harian belum dapat disimpan ke cloud hingga tautan spreadsheet dikonfigurasi.
+    </div>
+</div>
+{% endif %}
+
+<!-- ==========================================================================
+     MODERN STEPPER PROGRESS NAVIGATION
+     ========================================================================== -->
+<div class="wizard-progress">
+    {% for step in schema.steps %}
+    <div class="step {% if loop.first %}active{% endif %}" id="step-nav-{{ loop.index }}" onclick="nextStep({{ loop.index }})">
+        <span class="step-number">{{ loop.index }}</span>
+        <span>{{ step.title.split(':')[0] }}</span>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ==========================================================================
+     MAIN WIZARD FORM
+     ========================================================================== -->
+<div class="form-main-card">
+    <form id="reportWizard" method="POST" action="/staff/submit">
+        {% for step in schema.steps %}
+        <div class="wizard-step {% if loop.first %}active{% endif %}" id="step-{{ loop.index }}" {% if not loop.first %}style="display: none;"{% endif %}>
+            <div class="step-header">
+                <div class="step-title-group">
+                    <div class="step-icon-badge">
+                        <i class="fa-solid {{ step.icon }}"></i>
+                    </div>
+                    <div>
+                        <h2 class="step-title">{{ step.title }}</h2>
+                        <p class="step-subtitle">{{ step.subtitle }}</p>
+                    </div>
+                </div>
+                <span class="step-badge-indicator">Bagian {{ loop.index }} dari {{ schema.steps|length }}</span>
+            </div>
+
+            {% for section in step.sections %}
+            <div class="section-box">
+                <div class="section-title">
+                    <i class="fa-solid {{ section.icon }} text-secondary"></i> {{ section.title }}
+                </div>
+                <div class="grid-2">
+                    {% for field in section.fields %}
+                    <div class="form-group">
+                        <label class="form-label" for="input-{{ field.name }}">{{ field.label }}</label>
+                        {% if field.type == 'select' %}
+                        <select class="form-control" name="{{ field.name }}" id="input-{{ field.name }}" {% if field.required %}required{% endif %}>
+                            {% for opt in field.options %}
+                            <option value="{{ opt }}">{{ opt }}</option>
+                            {% endfor %}
+                        </select>
+                        {% elif field.type == 'date' %}
+                        <input type="date" class="form-control" name="{{ field.name }}" id="input-{{ field.name }}" {% if field.required %}required{% endif %}>
+                        {% else %}
+                        <input type="{{ field.type }}" class="form-control" name="{{ field.name }}" id="input-{{ field.name }}" {% if field.required %}required{% endif %} 
+                               value="{% if field.name == 'KANTOR_CABANG' %}{% if current_user.airport == 'LOP' %}1. Kantor Cabang LOP{% elif current_user.airport == 'DPS' %}2. Kantor Cabang DPS{% elif current_user.airport == 'BWX' %}3. Kantor Cabang BWX{% elif current_user.airport == 'KOE' %}4. Kantor Cabang KOE{% else %}1. Kantor Cabang LOP{% endif %}{% else %}{{ field.default | default('') }}{% endif %}">
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            
+            {% if loop.last %}
+            <div class="verify-box">
+                <i class="fa-solid fa-shield-check verify-icon"></i>
+                <div>
+                    <h4 class="verify-title">Verifikasi Final</h4>
+                    <p class="verify-desc">
+                        Pastikan seluruh data telah sesuai sebelum mengirim laporan ke Google Sheets.
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="wizard-footer">
+                {% if not loop.first %}
+                <button type="button" class="btn btn-outline btn-stepper" onclick="prevStep({{ loop.index - 1 }})">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Kembali</span>
+                </button>
+                {% else %}
+                <div></div>
+                {% endif %}
+                
+                {% if not loop.last %}
+                <button type="button" class="btn btn-primary btn-stepper" onclick="nextStep({{ loop.index + 1 }})">
+                    <span>Selanjutnya</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                {% else %}
+                    {% if has_sheet_url %}
+                    <button type="submit" class="btn btn-secondary btn-stepper" id="btnSubmitReport">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Kirim Laporan ke Spreadsheet</span>
+                    </button>
+                    {% else %}
+                    <button type="button" class="btn btn-outline btn-stepper" onclick="Swal.fire('Peringatan', 'Link Google Spreadsheet belum diatur oleh admin. Laporan tidak dapat dikirim.', 'warning')">
+                        <i class="fa-solid fa-paper-plane text-warning"></i>
+                        <span>Kirim Laporan (Belum Terkoneksi)</span>
+                    </button>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/wizard.js') }}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const dateInput = document.querySelector('input[name="TANGGAL"]');
+    if (!dateInput) return;
+    
+    // Disable momentarily while checking active month constraints
+    dateInput.disabled = true;
+    const originalPlaceholder = dateInput.placeholder;
+    dateInput.placeholder = "Memeriksa kalender...";
+    
+    fetch('/staff/api/active-month')
+        .then(r => r.json())
+        .then(res => {
+            dateInput.disabled = false;
+            dateInput.placeholder = originalPlaceholder;
+            
+            if (res.success) {
+                dateInput.min = res.min;
+                dateInput.max = res.max;
+                
+                // Update badge text in header
+                const monthText = document.getElementById('activeMonthText');
+                if (monthText) {
+                    monthText.textContent = `Bulan Aktif: ${res.month_name}`;
+                }
+                
+                // Cari tanggal terawal yang belum diisi di bulan ini
+                let nextAvailableDate = '';
+                let current = new Date(res.min);
+                const maxDate = new Date(res.max);
+                
+                while (current <= maxDate) {
+                    const y = current.getFullYear();
+                    const m = String(current.getMonth() + 1).padStart(2, '0');
+                    const d = String(current.getDate()).padStart(2, '0');
+                    const dateStr = `${y}-${m}-${d}`;
+                    
+                    if (!res.filled_dates.includes(dateStr)) {
+                        nextAvailableDate = dateStr;
+                        break;
+                    }
+                    current.setDate(current.getDate() + 1);
+                }
+                
+                if (nextAvailableDate) {
+                    dateInput.value = nextAvailableDate;
+                } else {
+                    dateInput.value = '';
+                    Swal.fire('Bulan Penuh', `Semua laporan untuk bulan ${res.month_name} sudah terisi!`, 'info');
+                }
+                
+                // Prevent selecting already filled dates
+                if (res.filled_dates && res.filled_dates.length > 0) {
+                    dateInput.addEventListener('change', function(e) {
+                        if (res.filled_dates.includes(e.target.value)) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Tanggal Sudah Terisi',
+                                text: `Laporan untuk tanggal ${e.target.value} SUDAH PERNAH DIBUAT. Silakan pilih tanggal lain!`,
+                                confirmButtonColor: '#003366'
+                            });
+                            e.target.value = nextAvailableDate;
+                        }
+                    });
+                }
+            } else {
+                console.log("No active month constraints:", res.error);
+                const monthText = document.getElementById('activeMonthText');
+                if (monthText) monthText.textContent = "Kalender Standar";
+            }
+        })
+        .catch(err => {
+            dateInput.disabled = false;
+            dateInput.placeholder = originalPlaceholder;
+        });
+});
+</script>
+{% endblock %}

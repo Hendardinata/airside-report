@@ -1,0 +1,2388 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Administrator - InJourney Regional II{% endblock %}
+
+{% block head %}
+<style>
+    /* ==========================================================================
+       ADMIN DASHBOARD - CLEAN & PROFESSIONAL ENTERPRISE STYLES
+       (No Glassmorphism, Solid Crisp Surfaces, Aeronautical Corporate Theme)
+       ========================================================================== */
+
+    :root {
+        --dash-primary: #003366;
+        --dash-secondary: #0284c7;
+        --dash-accent: #0f172a;
+        --dash-bg: #f8fafc;
+        --dash-surface: #ffffff;
+        --dash-border: #e2e8f0;
+        --dash-border-hover: #cbd5e1;
+        --dash-text: #0f172a;
+        --dash-text-muted: #64748b;
+        --dash-success: #059669;
+        --dash-success-bg: #ecfdf5;
+        --dash-success-border: #a7f3d0;
+        --dash-warning: #d97706;
+        --dash-warning-bg: #fffbeb;
+        --dash-warning-border: #fde68a;
+        --dash-info: #0284c7;
+        --dash-info-bg: #f0f9ff;
+        --dash-info-border: #bae6fd;
+    }
+
+    /* Page Header */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 1.75rem;
+        flex-wrap: wrap;
+    }
+
+    .header-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.3rem 0.75rem;
+        background-color: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--dash-primary);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+
+    .status-pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--dash-success);
+        box-shadow: 0 0 0 2px var(--dash-success-border);
+    }
+
+    .header-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--dash-primary);
+        letter-spacing: -0.5px;
+        margin-bottom: 0.25rem;
+        line-height: 1.25;
+    }
+
+    .header-subtitle {
+        font-size: 0.95rem;
+        color: var(--dash-text-muted);
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    /* KPI Summary Cards Grid */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .kpi-card {
+        background-color: var(--dash-surface);
+        border: 1px solid var(--dash-border);
+        border-radius: 12px;
+        padding: 1.25rem 1.35rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    .kpi-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+    }
+
+    .kpi-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--dash-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+
+    .kpi-icon-box {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .kpi-icon-blue {
+        background-color: #eff6ff;
+        color: #1d4ed8;
+    }
+
+    .kpi-icon-teal {
+        background-color: #ecfeff;
+        color: #0e7490;
+    }
+
+    .kpi-icon-amber {
+        background-color: #fffbeb;
+        color: #b45309;
+    }
+
+    .kpi-icon-emerald {
+        background-color: #ecfdf5;
+        color: #047857;
+    }
+
+    .kpi-value-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .kpi-value {
+        font-size: 1.65rem;
+        font-weight: 700;
+        color: var(--dash-text);
+        font-family: var(--font-heading);
+        line-height: 1;
+    }
+
+    .kpi-subtext {
+        font-size: 0.825rem;
+        color: var(--dash-text-muted);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .kpi-progress {
+        height: 6px;
+        background-color: #e2e8f0;
+        border-radius: 9999px;
+        overflow: hidden;
+        margin-top: 0.5rem;
+    }
+
+    .kpi-progress-bar {
+        height: 100%;
+        background-color: var(--dash-primary);
+        border-radius: 9999px;
+        transition: width 0.4s ease;
+    }
+
+    /* Date Filter Control Bar */
+    .filter-bar {
+        background-color: var(--dash-surface);
+        border: 1px solid var(--dash-border);
+        border-radius: 12px;
+        padding: 0.9rem 1.25rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.25rem;
+        margin-bottom: 1.75rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-left {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--dash-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0;
+    }
+
+    .date-nav-group {
+        display: inline-flex;
+        align-items: center;
+        background-color: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .date-nav-btn {
+        background: transparent;
+        border: none;
+        padding: 0.55rem 0.75rem;
+        color: var(--dash-text-muted);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .date-nav-btn:hover {
+        background-color: #f1f5f9;
+        color: var(--dash-primary);
+    }
+
+    .date-input-field {
+        border: none;
+        border-left: 1px solid #e2e8f0;
+        border-right: 1px solid #e2e8f0;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        font-family: var(--font-body);
+        font-weight: 500;
+        color: var(--dash-text);
+        outline: none;
+        background-color: #ffffff;
+    }
+
+    .date-input-field:focus {
+        background-color: #f8fafc;
+    }
+
+    .quick-chips {
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    .chip-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        color: var(--dash-text-muted);
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .chip-btn:hover {
+        background-color: #e2e8f0;
+        color: var(--dash-text);
+    }
+
+    .filter-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .active-date-badge {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--dash-text-muted);
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 0.4rem 0.85rem;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Airport Cards Grid */
+    .airports-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .airport-card {
+        background-color: var(--dash-surface);
+        border: 1px solid var(--dash-border);
+        border-radius: 12px;
+        padding: 1.35rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .airport-card:hover {
+        border-color: var(--dash-border-hover);
+        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+        transform: translateY(-2px);
+    }
+
+    .airport-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .iata-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        font-family: var(--font-heading);
+        letter-spacing: 0.5px;
+    }
+
+    .iata-LOP {
+        background-color: #003366;
+        color: #ffffff;
+    }
+
+    .iata-DPS {
+        background-color: #0369a1;
+        color: #ffffff;
+    }
+
+    .iata-BWX {
+        background-color: #047857;
+        color: #ffffff;
+    }
+
+    .iata-KOE {
+        background-color: #4338ca;
+        color: #ffffff;
+    }
+
+    .airport-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--dash-text);
+        margin: 0.5rem 0 0.15rem 0;
+        line-height: 1.3;
+    }
+
+    .airport-fullname {
+        font-size: 0.785rem;
+        color: var(--dash-text-muted);
+        margin: 0 0 1rem 0;
+        line-height: 1.3;
+    }
+
+    /* Status Pill (Solid & Crisp) */
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-pill.success {
+        background-color: var(--dash-success-bg);
+        color: var(--dash-success);
+        border: 1px solid var(--dash-success-border);
+    }
+
+    .status-pill.warning {
+        background-color: var(--dash-warning-bg);
+        color: var(--dash-warning);
+        border: 1px solid var(--dash-warning-border);
+    }
+
+    .status-pill.loading {
+        background-color: #f1f5f9;
+        color: var(--dash-text-muted);
+        border: 1px solid #e2e8f0;
+    }
+
+    /* Metric Display Box inside Card */
+    .pci-box {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.85rem 1rem;
+        margin-bottom: 1.15rem;
+    }
+
+    .pci-box-label {
+        font-size: 0.725rem;
+        font-weight: 600;
+        color: var(--dash-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.35rem;
+    }
+
+    .pci-box-value {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: var(--dash-text);
+        font-family: var(--font-heading);
+        line-height: 1.1;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    .pci-scale-tag {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        background-color: #e2e8f0;
+        color: #475569;
+    }
+
+    .airport-action-area {
+        min-height: 38px;
+        display: flex;
+        align-items: center;
+    }
+
+    .submitted-check {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        color: var(--dash-success);
+        font-size: 0.825rem;
+        font-weight: 600;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background-color: #f0fdf4;
+        border: 1px solid #dcfce7;
+        border-radius: 6px;
+    }
+
+    /* Deputy Message Console Panel */
+    .console-card {
+        background-color: var(--dash-surface);
+        border: 1px solid var(--dash-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        margin-bottom: 2rem;
+    }
+
+    .console-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .console-title-area {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .console-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--dash-primary);
+        margin: 0;
+    }
+
+    .console-badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        background-color: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+    }
+
+    .console-tools {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    .textarea-wrapper {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .console-textarea {
+        width: 100%;
+        min-height: 240px;
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 1rem 1.15rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: #1e293b;
+        resize: vertical;
+        transition: all 0.2s ease;
+    }
+
+    .console-textarea:focus {
+        outline: none;
+        border-color: var(--dash-secondary);
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    .console-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #f1f5f9;
+        flex-wrap: wrap;
+    }
+
+    .console-stats {
+        font-size: 0.8rem;
+        color: var(--dash-text-muted);
+        display: flex;
+        gap: 1.25rem;
+    }
+
+    .console-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    /* Modal Configuration (Solid, Non-Glassmorphic) */
+    .clean-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(15, 23, 42, 0.65);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 1.5rem;
+    }
+
+    .clean-modal-card {
+        background-color: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 14px;
+        width: 100%;
+        max-width: 820px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 1.75rem;
+        border-bottom: 1px solid #e2e8f0;
+        background-color: #ffffff;
+    }
+
+    .modal-title-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .modal-icon-badge {
+        width: 38px;
+        height: 38px;
+        background-color: #f0f9ff;
+        color: var(--dash-secondary);
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .modal-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--dash-primary);
+        margin: 0;
+    }
+
+    .modal-subtitle {
+        font-size: 0.825rem;
+        color: var(--dash-text-muted);
+        margin: 0;
+    }
+
+    .modal-close-btn {
+        background: transparent;
+        border: none;
+        font-size: 1.25rem;
+        color: var(--dash-text-muted);
+        cursor: pointer;
+        padding: 0.4rem;
+        border-radius: 6px;
+        transition: all 0.15s ease;
+    }
+
+    .modal-close-btn:hover {
+        background-color: #f1f5f9;
+        color: var(--dash-text);
+    }
+
+    .modal-body {
+        padding: 1.5rem 1.75rem;
+    }
+
+    .config-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .config-section-card {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1.25rem;
+    }
+
+    .config-section-title {
+        font-size: 0.925rem;
+        font-weight: 700;
+        color: var(--dash-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .modal-footer {
+        padding: 1.25rem 1.75rem;
+        border-top: 1px solid #e2e8f0;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 1024px) {
+        .kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .airports-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .kpi-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .airports-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .config-columns {
+            grid-template-columns: 1fr;
+        }
+
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .dashboard-header {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ==========================================================================
+     PAGE HEADER
+     ========================================================================== -->
+<div class="dashboard-header">
+    <div>
+        <div class="header-tag">
+            <span class="status-pulse-dot"></span>
+            <span>Regional II • InJourney Airports</span>
+        </div>
+        <h1 class="header-title">Rekapitulasi Fasilitas Sisi Udara</h1>
+        <p class="header-subtitle">
+            Pemantauan real-time status pelaporan fasilitas runway, taxiway, dan apron dari 4 bandara cabang.
+        </p>
+    </div>
+
+    <div class="header-actions">
+        <button class="btn btn-outline" style="color: #0f172a; border-color: #cbd5e1; background-color: #f8fafc;" onclick="openSchemaModal()" title="Konfigurasi Form (Form Builder)">
+            <i class="fa-solid fa-file-code"></i>
+            <span>Form Builder</span>
+        </button>
+        <button class="btn btn-outline" onclick="openModal()" title="Pengaturan Spreadsheet & PIC">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Konfigurasi Bandara</span>
+        </button>
+        <button class="btn btn-primary" onclick="fetchRekap()" id="btnSync">
+            <i class="fa-solid fa-arrows-rotate" id="syncSpinner"></i>
+            <span>Sinkronkan Data</span>
+        </button>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     EXECUTIVE KPI METRICS STRIP
+     ========================================================================== -->
+<div class="kpi-grid">
+    <!-- Card 1: Total Bandara Cabang -->
+    <div class="kpi-card">
+        <div class="kpi-card-header">
+            <span class="kpi-label">Bandara Cabang</span>
+            <div class="kpi-icon-box kpi-icon-blue">
+                <i class="fa-solid fa-plane-departure"></i>
+            </div>
+        </div>
+        <div class="kpi-value-row">
+            <span class="kpi-value">4</span>
+            <span class="text-light" style="font-size: 0.9rem;">Cabang Aktif</span>
+        </div>
+        <p class="kpi-subtext">
+            <span>LOP • DPS • BWX • KOE</span>
+        </p>
+    </div>
+
+    <!-- Card 2: Kelengkapan Laporan -->
+    <div class="kpi-card">
+        <div class="kpi-card-header">
+            <span class="kpi-label">Status Pengiriman</span>
+            <div class="kpi-icon-box kpi-icon-emerald">
+                <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+        </div>
+        <div class="kpi-value-row">
+            <span class="kpi-value" id="kpiSubmittedNum">0 / 4</span>
+            <span class="text-light" style="font-size: 0.9rem;">Terkirim</span>
+        </div>
+        <div class="kpi-progress">
+            <div class="kpi-progress-bar" id="kpiProgressBar" style="width: 0%;"></div>
+        </div>
+        <p class="kpi-subtext mt-1">
+            <span id="kpiProgressText">Menunggu data...</span>
+        </p>
+    </div>
+
+    <!-- Card 3: Rata-Rata PCI Runway -->
+    <div class="kpi-card">
+        <div class="kpi-card-header">
+            <span class="kpi-label">PCI Runway Regional</span>
+            <div class="kpi-icon-box kpi-icon-teal">
+                <i class="fa-solid fa-road"></i>
+            </div>
+        </div>
+        <div class="kpi-value-row">
+            <span class="kpi-value" id="kpiAvgPci">-</span>
+            <span id="kpiPciRating" class="pci-scale-tag">Menunggu</span>
+        </div>
+        <p class="kpi-subtext">
+            <span>Pavement Condition Index</span>
+        </p>
+    </div>
+
+    <!-- Card 4: Status Sinkronisasi -->
+    <div class="kpi-card">
+        <div class="kpi-card-header">
+            <span class="kpi-label">Status Sinkronisasi</span>
+            <div class="kpi-icon-box kpi-icon-amber">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+        </div>
+        <div class="kpi-value-row">
+            <span class="kpi-value" style="font-size: 1.25rem;" id="kpiLastSync">Memuat...</span>
+        </div>
+        <p class="kpi-subtext" id="kpiSyncStatus">
+            <i class="fa-solid fa-circle-check text-success"></i> Terkoneksi ke Google Drive
+        </p>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     INTERACTIVE DATE CONTROL BAR
+     ========================================================================== -->
+<div class="filter-bar">
+    <div class="filter-left">
+        <label for="filterDate" class="filter-label">
+            <i class="fa-regular fa-calendar-days text-secondary"></i>
+            <span>Tanggal Laporan:</span>
+        </label>
+
+        <div class="date-nav-group">
+            <button type="button" class="date-nav-btn" onclick="shiftDate(-1)" title="Hari Sebelumnya">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <input type="date" class="date-input-field" id="filterDate" onchange="fetchRekap()">
+            <button type="button" class="date-nav-btn" onclick="shiftDate(1)" title="Hari Berikutnya">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="quick-chips">
+            <button type="button" class="chip-btn" onclick="setQuickDate('today')">Hari Ini</button>
+            <button type="button" class="chip-btn" onclick="setQuickDate('yesterday')">Kemarin</button>
+        </div>
+    </div>
+
+    <div class="filter-right">
+        <div class="active-date-badge" id="activeDateFormatted">
+            <i class="fa-regular fa-clock"></i> Memuat tanggal...
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="fetchRekap()">
+            <i class="fa-solid fa-rotate-right me-1"></i> Refresh
+        </button>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     4 AIRPORT STATUS CARDS (CABANG BANDARA)
+     ========================================================================== -->
+<div class="airports-grid">
+    <!-- 1. LOP (Lombok) -->
+    <div class="airport-card" id="card-LOP">
+        <div>
+            <div class="airport-card-header">
+                <span class="iata-badge iata-LOP">LOP</span>
+                <div class="status-pill loading" id="badge-LOP">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </div>
+            </div>
+
+            <h3 class="airport-title">Lombok</h3>
+            <p class="airport-fullname">Bandara Internasional Zainuddin Abdul Madjid</p>
+
+            <div class="pci-box">
+                <div class="pci-box-label">PCI Runway Terlapor</div>
+                <div class="pci-box-value">
+                    <span id="pci-val-LOP">-</span>
+                    <span class="pci-scale-tag" id="pci-tag-LOP">-</span>
+                </div>
+                <p class="text-light mb-0 mt-1" style="font-size: 0.775rem;" id="pci-LOP">PCI Runway: -</p>
+            </div>
+        </div>
+
+        <div class="airport-action-area" id="action-LOP">
+            <!-- Dynamic button populated via JS -->
+        </div>
+    </div>
+
+    <!-- 2. DPS (Bali) -->
+    <div class="airport-card" id="card-DPS">
+        <div>
+            <div class="airport-card-header">
+                <span class="iata-badge iata-DPS">DPS</span>
+                <div class="status-pill loading" id="badge-DPS">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </div>
+            </div>
+
+            <h3 class="airport-title">Bali</h3>
+            <p class="airport-fullname">Bandara Internasional I Gusti Ngurah Rai</p>
+
+            <div class="pci-box">
+                <div class="pci-box-label">PCI Runway Terlapor</div>
+                <div class="pci-box-value">
+                    <span id="pci-val-DPS">-</span>
+                    <span class="pci-scale-tag" id="pci-tag-DPS">-</span>
+                </div>
+                <p class="text-light mb-0 mt-1" style="font-size: 0.775rem;" id="pci-DPS">PCI Runway: -</p>
+            </div>
+        </div>
+
+        <div class="airport-action-area" id="action-DPS">
+            <!-- Dynamic button populated via JS -->
+        </div>
+    </div>
+
+    <!-- 3. BWX (Banyuwangi) -->
+    <div class="airport-card" id="card-BWX">
+        <div>
+            <div class="airport-card-header">
+                <span class="iata-badge iata-BWX">BWX</span>
+                <div class="status-pill loading" id="badge-BWX">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </div>
+            </div>
+
+            <h3 class="airport-title">Banyuwangi</h3>
+            <p class="airport-fullname">Bandara Internasional Banyuwangi</p>
+
+            <div class="pci-box">
+                <div class="pci-box-label">PCI Runway Terlapor</div>
+                <div class="pci-box-value">
+                    <span id="pci-val-BWX">-</span>
+                    <span class="pci-scale-tag" id="pci-tag-BWX">-</span>
+                </div>
+                <p class="text-light mb-0 mt-1" style="font-size: 0.775rem;" id="pci-BWX">PCI Runway: -</p>
+            </div>
+        </div>
+
+        <div class="airport-action-area" id="action-BWX">
+            <!-- Dynamic button populated via JS -->
+        </div>
+    </div>
+
+    <!-- 4. KOE (Kupang) -->
+    <div class="airport-card" id="card-KOE">
+        <div>
+            <div class="airport-card-header">
+                <span class="iata-badge iata-KOE">KOE</span>
+                <div class="status-pill loading" id="badge-KOE">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </div>
+            </div>
+
+            <h3 class="airport-title">Kupang</h3>
+            <p class="airport-fullname">Bandara Internasional El Tari</p>
+
+            <div class="pci-box">
+                <div class="pci-box-label">PCI Runway Terlapor</div>
+                <div class="pci-box-value">
+                    <span id="pci-val-KOE">-</span>
+                    <span class="pci-scale-tag" id="pci-tag-KOE">-</span>
+                </div>
+                <p class="text-light mb-0 mt-1" style="font-size: 0.775rem;" id="pci-KOE">PCI Runway: -</p>
+            </div>
+        </div>
+
+        <div class="airport-action-area" id="action-KOE">
+            <!-- Dynamic button populated via JS -->
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     KOMPILASI PESAN DEPUTY (REKAPITULASI WHATSAPP)
+     ========================================================================== -->
+<div class="console-card">
+    <div class="console-header">
+        <div class="console-title-area">
+            <h2 class="console-title">
+                <i class="fa-solid fa-message text-secondary me-2"></i>Kompilasi Pesan Deputy
+            </h2>
+            <span class="console-badge">Format WhatsApp Resmi</span>
+        </div>
+
+        <div class="console-tools">
+            <button class="btn btn-outline btn-sm" type="button" onclick="unduhTeksRekap()" title="Download file .txt">
+                <i class="fa-solid fa-file-arrow-down me-1"></i> Unduh (.txt)
+            </button>
+        </div>
+    </div>
+
+    <div class="textarea-wrapper">
+        <textarea class="console-textarea" id="kompilasiText" rows="12"
+            placeholder="Menarik data dari server..."></textarea>
+    </div>
+
+    <div class="console-footer">
+        <div class="console-stats">
+            <span id="charCount"><i class="fa-solid fa-font me-1"></i> 0 karakter</span>
+            <span id="lineCount"><i class="fa-solid fa-bars me-1"></i> 0 baris</span>
+            <span class="text-muted"><i class="fa-solid fa-info-circle me-1"></i> Format teks otomatis sesuai standar
+                laporan harian Regional II</span>
+        </div>
+
+        <div class="console-actions" style="display: flex; gap: 0.75rem; align-items: stretch; justify-content: flex-end; flex-wrap: wrap;">
+            <div style="display: flex; align-items: stretch; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: white; flex-grow: 1; max-width: 300px;">
+                <div style="padding: 0 12px; background: #f8fafc; border-right: 1px solid #cbd5e1; display: flex; align-items: center;">
+                    <i class="fa-brands fa-whatsapp" style="color: #16a34a; font-size: 1.1rem;"></i>
+                </div>
+                <input type="text" id="waDestinations" style="border: none; outline: none; padding: 6px 12px; font-size: 0.85rem; width: 100%; background: white;" placeholder="No. WA (cth: 6281..., 6282...)" title="Masukkan nomor tujuan pengiriman (awali 62). Kosongkan jika ingin memilih manual di WA.">
+            </div>
+            <button class="btn btn-outline btn-sm" type="button" onclick="salinTeksRekap()" style="display: flex; align-items: center;">
+                <i class="fa-regular fa-copy me-1"></i> Salin Teks
+            </button>
+            <button class="btn btn-wa btn-sm" type="button" onclick="kirimWhatsAppDeputy()" style="display: flex; align-items: center;">
+                <i class="fa-solid fa-paper-plane me-1"></i> Kirim Serentak
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     MODAL KONFIGURASI BANDARA (SOLID, CLEAN & PROFESSIONAL)
+     ========================================================================== -->
+<div id="configModal" class="clean-modal-overlay" style="display: none;">
+    <div class="clean-modal-card">
+        <div class="modal-head">
+            <div class="modal-title-group">
+                <div class="modal-icon-badge">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div>
+                    <h3 class="modal-title">Konfigurasi Parameter Bandara</h3>
+                    <p class="modal-subtitle">Kelola integrasi Google Drive, spreadsheet aktif, dan kontak PIC tiap
+                        cabang.</p>
+                </div>
+            </div>
+            <button type="button" class="modal-close-btn" onclick="closeModal()" title="Tutup">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="configForm" onsubmit="submitConfig(event)">
+            <div class="modal-body">
+                <div class="config-columns">
+                    <!-- Kolom 1: Profil Cabang & Spreadsheet -->
+                    <div class="config-section-card">
+                        <div class="config-section-title">
+                            <i class="fa-solid fa-building-user text-secondary"></i> Informasi Cabang & PIC
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="configAirportSelect">Pilih Cabang Bandara</label>
+                            <select class="form-control" name="airportCode" id="configAirportSelect"
+                                onchange="loadConfig(this.value)" required>
+                                <option value="">-- Pilih Cabang --</option>
+                                <option value="LOP">LOP - Lombok (Zainuddin Abdul Madjid)</option>
+                                <option value="DPS">DPS - Bali (I Gusti Ngurah Rai)</option>
+                                <option value="BWX">BWX - Banyuwangi</option>
+                                <option value="KOE">KOE - Kupang (El Tari)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="picPhoneInput">Nomor WhatsApp PIC</label>
+                            <div style="position: relative;">
+                                <input type="text" class="form-control" name="picPhone" id="picPhoneInput"
+                                    placeholder="Contoh: 081234567890 atau 62812...">
+                            </div>
+                            <small class="text-muted mt-1" style="display: block; font-size: 0.8rem;">
+                                Digunakan otomatis pada tombol 'Ingatkan PIC'.
+                            </small>
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label mb-0" for="sheetUrlSelect">Spreadsheet Aktif Saat Ini</label>
+                                <button type="button" class="btn btn-outline btn-sm" onclick="manualRefreshSheets()"
+                                    style="padding: 0.2rem 0.55rem; font-size: 0.75rem;"
+                                    title="Sinkronkan Ulang Daftar File dari Drive">
+                                    <i class="fa-solid fa-arrows-rotate" id="sheetRefreshIcon"></i> Refresh List
+                                </button>
+                            </div>
+                            <div class="d-flex" style="gap: 0.5rem; align-items: stretch;">
+                                <select class="form-control" name="sheetUrl" id="sheetUrlSelect" style="flex: 1;"
+                                    disabled onchange="updateLinkStatus(this.value)">
+                                    <option value="">-- Pilih Cabang Dulu --</option>
+                                </select>
+                                <button class="btn btn-outline" type="button" onclick="copySheetUrl()"
+                                    title="Salin URL Sheet" style="padding: 0.65rem 0.85rem;">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button class="btn btn-secondary" type="button" onclick="openSheetUrl()"
+                                    title="Buka Spreadsheet di Tab Baru" style="padding: 0.65rem 0.85rem;">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </button>
+                                <div id="sheetUrlStatus"
+                                    style="display: flex; align-items: center; padding: 0 0.25rem;"></div>
+                            </div>
+                            <small class="text-muted mt-1" id="loadingSheetsText" style="display: none;">
+                                <i class="fa-solid fa-spinner fa-spin me-1"></i> Memuat daftar spreadsheet dari Drive...
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Kolom 2: Automasi Google Drive & Template -->
+                    <div class="config-section-card">
+                        <div class="config-section-title">
+                            <i class="fa-solid fa-cloud text-secondary"></i> Automasi & Google Drive
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="driveFolderInput">Folder ID Google Drive</label>
+                            <div class="d-flex" style="gap: 0.5rem;">
+                                <input type="text" class="form-control" name="driveFolder" id="driveFolderInput"
+                                    placeholder="Paste ID Folder atau link Drive..." oninput="onDriveFolderInput()"
+                                    onchange="onDriveFolderChanged()">
+                                <button type="button" class="btn btn-outline" onclick="cekDaftarSheet()"
+                                    title="Cek Folder Google Drive"
+                                    style="white-space: nowrap; padding: 0.65rem 0.85rem;">
+                                    <i class="fa-solid fa-folder-open me-1"></i> Cek
+                                </button>
+                            </div>
+                            <small class="text-muted mt-1" style="display: block; font-size: 0.8rem;">
+                                Folder penyimpanan file spreadsheet bulanan cabang.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="targetMonthInput">Target Bulan Laporan</label>
+                            <input type="month" class="form-control" name="targetMonth" id="targetMonthInput" onchange="onTargetMonthChanged()">
+                            <small class="text-muted mt-1" style="display: block; font-size: 0.8rem;">
+                                Target periode pembuatan sheet baru secara otomatis.
+                            </small>
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label class="form-label" for="templateIdInput">Template ID Master</label>
+                            <input type="text" class="form-control" name="templateId" id="templateIdInput"
+                                placeholder="Opsional (Kosongkan jika default)">
+                            <small class="text-muted mt-1" style="display: block; font-size: 0.8rem;">
+                                ID file template master format rekapitulasi airside.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal()">Batal</button>
+                <button type="button" class="btn btn-outline" onclick="buatSheetBaru()"
+                    style="border-color: #0284c7; color: #0284c7;">
+                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Buat Sheet Baru
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Konfigurasi
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     DASHBOARD JAVASCRIPT LOGIC
+     ========================================================================== -->
+<script>
+    const AIRPORT_NAMES = {
+        LOP: { city: "Lombok", full: "Bandara Internasional Zainuddin Abdul Madjid" },
+        DPS: { city: "Bali", full: "Bandara Internasional I Gusti Ngurah Rai" },
+        BWX: { city: "Banyuwangi", full: "Bandara Internasional Banyuwangi" },
+        KOE: { city: "Kupang", full: "Bandara Internasional El Tari" }
+    };
+
+    // Modal Handlers
+    function openModal(defaultBranch) {
+        const modal = document.getElementById('configModal');
+        modal.style.display = 'flex';
+        document.getElementById('targetMonthInput').value = '';
+        if (defaultBranch) {
+            const select = document.getElementById('configAirportSelect');
+            select.value = defaultBranch;
+            loadConfig(defaultBranch);
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('configModal').style.display = 'none';
+    }
+
+    // Close modal on backdrop click or Escape key
+    window.addEventListener('click', function (e) {
+        const modal = document.getElementById('configModal');
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // Copy & Open active sheet URL
+    function copySheetUrl() {
+        const select = document.getElementById('sheetUrlSelect');
+        if (select.value) {
+            navigator.clipboard.writeText(select.value).then(() => {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    icon: 'success',
+                    title: 'Link Sheet disalin!'
+                });
+            });
+        } else {
+            Swal.fire('Info', 'Belum ada link yang dipilih.', 'info');
+        }
+    }
+
+    function openSheetUrl() {
+        const select = document.getElementById('sheetUrlSelect');
+        if (select.value) {
+            window.open(select.value, '_blank');
+        } else {
+            Swal.fire('Info', 'Tidak ada link yang terpasang pada cabang ini.', 'info');
+        }
+    }
+
+    function extractDriveIdFromText(text) {
+        if (!text) return "";
+        const match = text.match(/[-\w]{25,}/);
+        return match ? match[0] : text.trim();
+    }
+
+    let folderInputTimer = null;
+    function onDriveFolderInput() {
+        clearTimeout(folderInputTimer);
+        folderInputTimer = setTimeout(() => {
+            onDriveFolderChanged();
+        }, 500);
+    }
+
+    function onDriveFolderChanged() {
+        const input = document.getElementById('driveFolderInput');
+        if (!input) return;
+        const raw = input.value.trim();
+        const extracted = extractDriveIdFromText(raw);
+        if (extracted && extracted !== raw && raw.includes('drive.google.com')) {
+            input.value = extracted;
+        }
+        const airportCode = document.getElementById('configAirportSelect').value;
+        if (airportCode && extracted) {
+            refreshDropdownList(airportCode, extracted, document.getElementById('sheetUrlSelect').value);
+        }
+    }
+
+    function manualRefreshSheets() {
+        const airportCode = document.getElementById('configAirportSelect').value;
+        const rawFolder = document.getElementById('driveFolderInput').value;
+        const driveFolder = extractDriveIdFromText(rawFolder);
+
+        if (!airportCode) {
+            return Swal.fire('Pilih Cabang', 'Harap pilih cabang bandara terlebih dahulu!', 'info');
+        }
+        if (!driveFolder) {
+            return Swal.fire('Folder Kosong', 'Harap isi Folder ID Google Drive terlebih dahulu!', 'warning');
+        }
+
+        const icon = document.getElementById('sheetRefreshIcon');
+        if (icon) icon.classList.add('fa-spin');
+
+        refreshDropdownList(airportCode, driveFolder, document.getElementById('sheetUrlSelect').value).then(() => {
+            if (icon) icon.classList.remove('fa-spin');
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                icon: 'success',
+                title: 'Daftar Spreadsheet diperbarui!'
+            });
+        });
+    }
+
+    function pilihSheetSebagaiAktif(url, name) {
+        const select = document.getElementById('sheetUrlSelect');
+        if (!select) return;
+
+        let match = Array.from(select.options).find(o => o.value === url || (url.includes('/d/') && o.value.includes(url.split('/d/')[1])));
+        if (!match) {
+            const option = document.createElement('option');
+            option.value = url;
+            option.textContent = name || "Sheet Terpilih";
+            select.appendChild(option);
+        }
+        select.value = url;
+        select.disabled = false;
+        updateLinkStatus(url);
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            icon: 'success',
+            title: `Spreadsheet "${name || ''}" aktif dipilih!`
+        });
+    }
+
+    // Check Drive folder content
+    async function cekDaftarSheet() {
+        const airportCode = document.getElementById('configAirportSelect').value;
+        const rawFolder = document.getElementById('driveFolderInput').value;
+        const driveFolder = extractDriveIdFromText(rawFolder);
+        if (!airportCode) return Swal.fire('Error', 'Harap pilih cabang terlebih dahulu!', 'error');
+        if (!driveFolder) return Swal.fire('Error', 'Harap isi Folder ID terlebih dahulu!', 'error');
+
+        Swal.fire({
+            title: 'Memeriksa Google Drive...',
+            text: 'Membaca daftar file spreadsheet...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading() }
+        });
+
+        try {
+            const response = await fetch(`/admin/api/list-sheets?airportCode=${airportCode}&driveFolder=${encodeURIComponent(driveFolder)}`);
+            const result = await response.json();
+
+            if (result.success) {
+                // SINKRONKAN LANGSUNG KE DROPDOWN 'Spreadsheet Aktif Saat Ini'
+                await refreshDropdownList(airportCode, driveFolder, document.getElementById('sheetUrlSelect').value);
+
+                if (result.files.length === 0) {
+                    Swal.fire('Drive Kosong', `Tidak ditemukan file spreadsheet untuk cabang ${airportCode} di folder tersebut. Anda dapat membuat sheet secara manual atau menggunakan tombol <b>Buat Sheet Baru</b> di bawah.`, 'info');
+                } else {
+                    let htmlList = '<div class="text-start mt-2" style="max-height: 280px; overflow-y: auto; font-size: 0.9rem;">';
+                    result.files.forEach(f => {
+                        const isCurrent = document.getElementById('sheetUrlSelect').value === f.webViewLink;
+                        htmlList += `
+                            <div style="padding: 0.75rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 600; color: #003366; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        <i class="fa-solid fa-file-excel text-success me-1"></i> ${f.name}
+                                    </div>
+                                    ${isCurrent ? '<span style="font-size: 0.75rem; color: #059669; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Sedang Aktif Dipilih</span>' : ''}
+                                </div>
+                                <div style="display: flex; gap: 0.4rem;">
+                                    <button type="button" class="btn btn-primary btn-sm" style="font-size: 0.75rem; padding: 0.3rem 0.65rem;" onclick="pilihSheetSebagaiAktif('${f.webViewLink}', '${f.name.replace(/'/g, "\\'")}')">
+                                        <i class="fa-solid fa-check me-1"></i> Gunakan
+                                    </button>
+                                    <a href="${f.webViewLink}" target="_blank" class="btn btn-outline btn-sm" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" title="Buka File di Tab Baru">
+                                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    </a>
+                                </div>
+                            </div>`;
+                    });
+                    htmlList += '</div>';
+
+                    Swal.fire({
+                        title: `Daftar File (${airportCode})`,
+                        html: htmlList,
+                        icon: 'info',
+                        width: '640px',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Tutup'
+                    });
+                }
+            } else {
+                Swal.fire('Gagal', result.error, 'error');
+            }
+        } catch (e) {
+            Swal.fire('Error', e.message, 'error');
+        }
+    }
+
+    // Load branch configuration into modal
+    async function loadConfig(airportCode) {
+        const select = document.getElementById('sheetUrlSelect');
+        const loadingText = document.getElementById('loadingSheetsText');
+
+        select.innerHTML = '<option value="">-- Memuat... --</option>';
+        select.disabled = true;
+        document.getElementById('driveFolderInput').value = '';
+        document.getElementById('templateIdInput').value = '';
+        document.getElementById('picPhoneInput').value = '';
+        document.getElementById('targetMonthInput').value = '';
+        document.getElementById('sheetUrlStatus').innerHTML = '';
+        loadingText.style.display = 'block';
+
+        if (!airportCode) {
+            select.innerHTML = '<option value="">-- Pilih Cabang Dulu --</option>';
+            loadingText.style.display = 'none';
+            return;
+        }
+
+        try {
+            const r = await fetch(`/admin/api/config?airportCode=${airportCode}`);
+            const res = await r.json();
+
+            if (res.success && res.data) {
+                const config = res.data;
+                const activeUrl = config.sheet_url || '';
+                const driveFolder = config.drive_folder || '';
+
+                document.getElementById('driveFolderInput').value = driveFolder;
+                document.getElementById('templateIdInput').value = config.template_id || '';
+                document.getElementById('picPhoneInput').value = config.pic_phone || '';
+
+                if (!driveFolder) {
+                    select.innerHTML = '<option value="">-- Folder Drive Belum Diatur --</option>';
+                    loadingText.style.display = 'none';
+                    updateLinkStatus(activeUrl);
+                    return;
+                }
+
+                await refreshDropdownList(airportCode, driveFolder, activeUrl);
+            }
+        } catch (e) {
+            console.error('Error loading config:', e);
+            loadingText.style.display = 'none';
+        }
+    }
+
+    async function refreshDropdownList(airportCode, driveFolder, urlToSelect) {
+        const select = document.getElementById('sheetUrlSelect');
+        const loadingText = document.getElementById('loadingSheetsText');
+        const cleanFolder = extractDriveIdFromText(driveFolder);
+
+        if (!airportCode || !cleanFolder) {
+            select.innerHTML = '<option value="">-- Belum ada / Folder belum diatur --</option>';
+            select.disabled = true;
+            updateLinkStatus('');
+            return;
+        }
+
+        loadingText.style.display = 'block';
+
+        try {
+            const listReq = await fetch(`/admin/api/list-sheets?airportCode=${airportCode}&driveFolder=${encodeURIComponent(cleanFolder)}`);
+            const listRes = await listReq.json();
+
+            select.innerHTML = '';
+
+            if (listRes.success && listRes.files && listRes.files.length > 0) {
+                const defaultOpt = document.createElement('option');
+                defaultOpt.value = '';
+                defaultOpt.textContent = `-- Pilih dari ${listRes.files.length} Spreadsheet di Drive --`;
+                select.appendChild(defaultOpt);
+
+                listRes.files.forEach(f => {
+                    const option = document.createElement('option');
+                    option.value = f.webViewLink;
+                    let prettyName = f.name.replace(/_/g, ' ');
+                    option.textContent = prettyName;
+                    select.appendChild(option);
+                });
+                select.disabled = false;
+
+                // Selection Logic
+                let selectedVal = '';
+                if (urlToSelect) {
+                    const optionsArray = Array.from(select.options);
+                    const match = optionsArray.find(o => o.value === urlToSelect || (urlToSelect.includes('/d/') && o.value.includes(urlToSelect.split('/d/')[1])));
+                    if (match) {
+                        selectedVal = match.value;
+                    } else {
+                        const option = document.createElement('option');
+                        option.value = urlToSelect;
+                        option.textContent = "Sheet Eksternal / Manual (Active)";
+                        select.appendChild(option);
+                        selectedVal = urlToSelect;
+                    }
+                } else {
+                    // Coba cocokkan dengan target month jika ada, jika tidak pilih file terbaru pertama
+                    const targetMonth = document.getElementById('targetMonthInput')?.value; // e.g. "2026-10"
+                    let monthMatch = null;
+                    if (targetMonth && targetMonth.includes('-')) {
+                        const [y, m] = targetMonth.split('-');
+                        const indonesianMonths = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGS", "SEP", "OKT", "NOV", "DES"];
+                        const mStr = indonesianMonths[parseInt(m) - 1];
+                        monthMatch = listRes.files.find(f => f.name.toUpperCase().includes(mStr) && f.name.includes(y));
+                    }
+                    selectedVal = monthMatch ? monthMatch.webViewLink : listRes.files[0].webViewLink;
+                }
+
+                select.value = selectedVal;
+                updateLinkStatus(select.value);
+            } else {
+                select.innerHTML = '<option value="">-- Belum ada spreadsheet di folder ini --</option>';
+                select.disabled = false;
+                updateLinkStatus('');
+            }
+        } catch (e) {
+            console.error('Error fetching drive files:', e);
+            select.innerHTML = `<option value="">Error fetching Drive</option>`;
+            updateLinkStatus('');
+        }
+        loadingText.style.display = 'none';
+    }
+
+    function updateLinkStatus(url) {
+        const statusIcon = document.getElementById('sheetUrlStatus');
+        if (url) {
+            statusIcon.innerHTML = '<i class="fa-solid fa-circle-check text-success" title="Link Terpasang"></i>';
+        } else {
+            statusIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-danger" title="Belum Ada Link"></i>';
+        }
+    }
+
+    function onTargetMonthChanged() {
+        const targetMonth = document.getElementById('targetMonthInput')?.value;
+        const select = document.getElementById('sheetUrlSelect');
+        if (!targetMonth || !select || select.options.length <= 1) return;
+
+        if (targetMonth.includes('-')) {
+            const [y, m] = targetMonth.split('-');
+            const indonesianMonths = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGS", "SEP", "OKT", "NOV", "DES"];
+            const mStr = indonesianMonths[parseInt(m) - 1];
+
+            for (let i = 0; i < select.options.length; i++) {
+                const opt = select.options[i];
+                const text = opt.textContent.toUpperCase();
+                if (text.includes(mStr) && text.includes(y)) {
+                    select.selectedIndex = i;
+                    updateLinkStatus(select.value);
+                    break;
+                }
+            }
+        }
+    }
+
+    // Date Navigation Utilities
+    function formatDateIndonesian(dateStr) {
+        if (!dateStr) return "-";
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        const dayName = days[d.getDay()];
+        const monthName = months[d.getMonth()];
+        return `${dayName}, ${parts[2]} ${monthName} ${parts[0]}`;
+    }
+
+    function shiftDate(deltaDays) {
+        const input = document.getElementById('filterDate');
+        if (!input.value) return;
+        const current = new Date(input.value);
+        current.setDate(current.getDate() + deltaDays);
+        input.value = current.toISOString().split('T')[0];
+        fetchRekap();
+    }
+
+    function setQuickDate(type) {
+        const today = new Date();
+        if (type === 'yesterday') {
+            today.setDate(today.getDate() - 1);
+        }
+        document.getElementById('filterDate').value = today.toISOString().split('T')[0];
+        fetchRekap();
+    }
+
+    function updateConsoleStats(text) {
+        const chars = text ? text.length : 0;
+        const lines = text ? text.split('\n').length : 0;
+        document.getElementById('charCount').innerHTML = `<i class="fa-solid fa-font me-1"></i> ${chars} karakter`;
+        document.getElementById('lineCount').innerHTML = `<i class="fa-solid fa-bars me-1"></i> ${lines} baris`;
+    }
+
+    // Helper: evaluate qualitative PCI rating
+    function getPciScaleTag(pciStr) {
+        const val = parseFloat(pciStr);
+        if (isNaN(val)) return { label: "Menunggu", color: "#64748b", bg: "#f1f5f9" };
+        if (val >= 85) return { label: "Sangat Baik", color: "#059669", bg: "#ecfdf5" };
+        if (val >= 70) return { label: "Baik", color: "#0284c7", bg: "#f0f9ff" };
+        if (val >= 55) return { label: "Cukup", color: "#d97706", bg: "#fffbeb" };
+        return { label: "Perlu Perhatian", color: "#dc2626", bg: "#fef2f2" };
+    }
+
+    // Main Fetch Rekapitulasi Data
+    function fetchRekap() {
+        const dateStr = document.getElementById('filterDate').value;
+        if (!dateStr) return;
+
+        // Update active date display banner
+        document.getElementById('activeDateFormatted').innerHTML =
+            `<i class="fa-regular fa-calendar-check text-secondary me-1"></i> ${formatDateIndonesian(dateStr)}`;
+
+        const spinner = document.getElementById('syncSpinner');
+        if (spinner) spinner.classList.add('fa-spin');
+
+        Swal.fire({
+            title: 'Menarik Rekapitulasi...',
+            text: 'Membaca seluruh lembar database spreadsheet 4 bandara cabang...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        fetch(`/admin/api/rekap?date=${dateStr}`)
+            .then(r => r.json())
+            .then(res => {
+                if (spinner) spinner.classList.remove('fa-spin');
+
+                if (res.success) {
+                    const data = res.data;
+                    let submittedCount = 0;
+                    let validPciSum = 0;
+                    let validPciCount = 0;
+
+                    function safeGet(arr, idx) {
+                        if (!arr || arr.length <= idx) return "-";
+                        const val = arr[idx];
+                        return (val !== undefined && val !== null && val !== "") ? val : "-";
+                    }
+
+                    let sapaan = "";
+                    let penerima = [];
+                    let tanggalFull = "";
+                    let branchText = "";
+                    
+                    ['LOP', 'DPS', 'BWX', 'KOE'].forEach((code, index) => {
+                        const info = data[code] || { is_submitted: false, pci: "-", pic_phone: "" };
+                        const badge = document.getElementById(`badge-${code}`);
+                        const pciNumEl = document.getElementById(`pci-val-${code}`);
+                        const pciTagEl = document.getElementById(`pci-tag-${code}`);
+                        const pciTextEl = document.getElementById(`pci-${code}`);
+                        const actionDiv = document.getElementById(`action-${code}`);
+                        const cardEl = document.getElementById(`card-${code}`);
+
+                        const branchCity = AIRPORT_NAMES[code]?.city || code;
+
+                        if (info.is_submitted) {
+                            submittedCount++;
+                            badge.className = "status-pill success";
+                            badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Sudah Mengirim`;
+
+                            pciNumEl.textContent = info.pci || "-";
+                            pciTextEl.innerHTML = `PCI Runway: <strong>${info.pci}</strong>`;
+
+                            const scale = getPciScaleTag(info.pci);
+                            pciTagEl.textContent = scale.label;
+                            pciTagEl.style.color = scale.color;
+                            pciTagEl.style.backgroundColor = scale.bg;
+
+                            const numPci = parseFloat(info.pci);
+                            if (!isNaN(numPci)) {
+                                validPciSum += numPci;
+                                validPciCount++;
+                            }
+
+                            actionDiv.innerHTML = `
+                            <div class="submitted-check">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Laporan Terverifikasi Masuk</span>
+                            </div>
+                        `;
+
+                            if (info.raw_data) {
+                                const rd = info.raw_data;
+                                if (!sapaan && rd[3] && rd[3] !== "-") {
+                                    sapaan = rd[3];
+                                    if (rd[4]) penerima.push(rd[4]);
+                                    if (rd[5]) penerima.push(rd[5]);
+                                    if (rd[6]) penerima.push(rd[6]);
+                                    if (rd[7]) penerima.push(rd[7]);
+                                    tanggalFull = rd[2];
+                                }
+                                
+                                branchText += `${index + 1}. ${code}\n*A. RUNWAY*\n`;
+                                branchText += `•  Kondisi keseluruhan runway : ${safeGet(rd, 8)}\n`;
+                                branchText += `•  Performance pavement : ${safeGet(rd, 9)}%\n`;
+                                branchText += `    Jml Titik Rusak : ${safeGet(rd, 10)} titik\n`;
+                                branchText += `    Jml titik yang sudah diperbaiki : ${safeGet(rd, 11)} titik\n`;
+                                branchText += `- Jenis kerusakan : ${safeGet(rd, 12)}\n`;
+                                branchText += `    Jml titik yang belum diperbaiki : ${safeGet(rd, 13)} Titik\n`;
+                                branchText += `- Jenis kerusakan : ${safeGet(rd, 14)}\n`;
+                                branchText += `    Jml titik rusak berulang > 1x : ${safeGet(rd, 15)} titik\n`;
+                                branchText += `•  Marka :\n    Standar : ${safeGet(rd, 16)}\n    Realisasi : ${safeGet(rd, 17)}\n    Performance marka: ${safeGet(rd, 18)}\n`;
+                                branchText += `•  Standing Water :\n       Pengukuran : ${safeGet(rd, 19)}\n       Performance : ${safeGet(rd, 20)}\n`;
+                                branchText += `•  Rubber Removal :\n       Standar ketentuan : ${safeGet(rd, 21)}\n       Realisasi : ${safeGet(rd, 22)}\n       Nilai Skid : ${safeGet(rd, 23)}\n \n`;
+
+                                branchText += `*B. TAXIWAY*\n`;
+                                branchText += `•  Kondisi keseluruhan Taxiway ${safeGet(rd, 24)} : ${safeGet(rd, 25)}\n`;
+                                branchText += `•  Performance pavement : ${safeGet(rd, 26)}%\n`;
+                                branchText += `    Jml Titik Rusak : ${safeGet(rd, 27)} titik\n`;
+                                branchText += `    Jml titik yang sudah diperbaiki : ${safeGet(rd, 28)}\n`;
+                                branchText += `- Jenis kerusakan : ${safeGet(rd, 29)}\n`;
+                                branchText += `    Jml titik yang belum diperbaiki : ${safeGet(rd, 30)} titik\n`;
+                                branchText += `- Jenis kerusakan : ${safeGet(rd, 31)}\n`;
+                                branchText += `    Jml titik rusak berulang > 1x : ${safeGet(rd, 32)}\n`;
+                                branchText += `•  Marka :\n      Standard : ${safeGet(rd, 33)}\n      Realisasi : ${safeGet(rd, 34)}\n      Performance marka: ${safeGet(rd, 35)}\n`;
+                                branchText += `•  Standing Water :\n      Pengukuran : ${safeGet(rd, 36)}\n      Performance : 100%\n \n`;
+
+                                branchText += `*C. APRON*\n`;
+                                branchText += `•  Kondisi keseluruhan Apron : ${safeGet(rd, 37)}\n`;
+                                branchText += `•  Performance pavement: ${safeGet(rd, 38)}%\n`;
+                                branchText += `    Jml Titik Rusak : ${safeGet(rd, 39)} titik\n`;
+                                branchText += `    Jml titik yang sudah diperbaiki : ${safeGet(rd, 40)} titik\n`;
+                                branchText += `- Jenis kerusakan : ${safeGet(rd, 41)}\n`;
+                                branchText += `    Jml titik yang belum diperbaiki : ${safeGet(rd, 42)} Titik\n`;
+                                branchText += `- Jenis kerusakan : ${safeGet(rd, 43)}\n`;
+                                branchText += `    Jml titik rusak berulang > 1x : ${safeGet(rd, 44)} titik\n`;
+                                branchText += `•  Marka :\n      Standard : ${safeGet(rd, 45)}\n      Realisasi : ${safeGet(rd, 46)}\n      Performance marka : ${safeGet(rd, 47)}\n`;
+                                branchText += `•  Standing Water :\n      Pengukuran : ${safeGet(rd, 48)}\n      Performance : 100%\n \n`;
+
+                                branchText += `*D. Pemeliharaan Potong Rumput*\n`;
+                                branchText += `      Standard : ${safeGet(rd, 49)}\n`;
+                                branchText += `      Realisasi : ${safeGet(rd, 50)}\n`;
+                                branchText += `      Performance : ${safeGet(rd, 51)}%\n \n`;
+
+                                let catText = `Catatan Khusus :\n`;
+                                let hasCatatan = false;
+                                let catIdx = 1;
+                                for (let i = 52; i <= 56; i++) {
+                                    if (rd[i] && rd[i] !== "-" && String(rd[i]).trim() !== "") {
+                                        catText += `${catIdx}. ${rd[i]}\n`;
+                                        hasCatatan = true;
+                                        catIdx++;
+                                    }
+                                }
+                                if (hasCatatan) branchText += catText;
+                                else branchText += catText + "-\n";
+                                
+                                // FASE 5: Tambahkan Data Ekstra (Form Builder)
+                                if (info.extra_data && info.extra_data.length > 0) {
+                                    // Kelompokkan berdasarkan section (sub bab)
+                                    let groupedExtra = {};
+                                    info.extra_data.forEach(item => {
+                                        if (!groupedExtra[item.section]) {
+                                            groupedExtra[item.section] = [];
+                                        }
+                                        groupedExtra[item.section].push(item);
+                                    });
+                                    
+                                    // Cetak per kelompok section
+                                    Object.keys(groupedExtra).forEach(secTitle => {
+                                        // Ubah teks section menjadi huruf besar sesuai standar
+                                        branchText += `*${secTitle.toUpperCase()}*\n`;
+                                        groupedExtra[secTitle].forEach(item => {
+                                            branchText += `• ${item.label} : ${item.value}\n`;
+                                        });
+                                        branchText += `\n`;
+                                    });
+                                } else {
+                                    branchText += `\n`;
+                                }
+                            }
+                        } else {
+                            badge.className = "status-pill warning";
+                            badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Belum Mengirim`;
+
+                            pciNumEl.textContent = "-";
+                            pciTextEl.innerHTML = `PCI Runway: <em>Belum Ada Data</em>`;
+                            pciTagEl.textContent = "Menunggu";
+                            pciTagEl.style.color = "#64748b";
+                            pciTagEl.style.backgroundColor = "#f1f5f9";
+
+                            if (info.pic_phone) {
+                                const waMsg = `Halo tim Fasilitas Sisi Udara ${code} - ${branchCity}, mohon segera mengisi laporan harian Airside untuk tanggal *${res.date}* melalui Dashboard Petugas. Terima kasih.`;
+                                const waUrl = `https://wa.me/${info.pic_phone}?text=${encodeURIComponent(waMsg)}`;
+                                actionDiv.innerHTML = `
+                                <div class="d-flex flex-column gap-2">
+                                    <a href="${waUrl}" target="_blank" class="btn btn-outline btn-sm w-100" style="border-color: #16a34a; color: #166534;" title="Kirim Pengingat WhatsApp ke PIC ${code}">
+                                        <i class="fa-brands fa-whatsapp text-success me-1"></i> Ingatkan PIC
+                                    </a>
+                                    <button class="btn btn-outline btn-sm w-100" style="color: #475569; border-color: #cbd5e1;" onclick="syncRekap('${code}')" title="Tarik data dari tab harian yang dibuat manual di Excel">
+                                        <i class="fa-solid fa-cloud-arrow-down me-1"></i> Tarik Data (Sheets)
+                                    </button>
+                                </div>
+                            `;
+                            } else {
+                                actionDiv.innerHTML = `
+                                <div class="d-flex flex-column gap-2">
+                                    <button class="btn btn-outline btn-sm w-100" onclick="openModal('${code}')" title="Atur Nomor PIC di Konfigurasi">
+                                        <i class="fa-solid fa-phone me-1"></i> Atur Kontak PIC
+                                    </button>
+                                    <button class="btn btn-outline btn-sm w-100" style="color: #475569; border-color: #cbd5e1;" onclick="syncRekap('${code}')" title="Tarik data dari tab harian yang dibuat manual di Excel">
+                                        <i class="fa-solid fa-cloud-arrow-down me-1"></i> Tarik Data (Sheets)
+                                    </button>
+                                </div>
+                            `;
+                            }
+                        }
+                    });
+
+                    // Update KPI Cards
+                    document.getElementById('kpiSubmittedNum').textContent = `${submittedCount} / 4`;
+                    const pct = (submittedCount / 4) * 100;
+                    document.getElementById('kpiProgressBar').style.width = `${pct}%`;
+
+                    if (submittedCount === 4) {
+                        document.getElementById('kpiProgressText').innerHTML = `<span class="text-success"><i class="fa-solid fa-check-double me-1"></i> Lengkap 100% (Siap Dikirim)</span>`;
+                    } else {
+                        document.getElementById('kpiProgressText').innerHTML = `<span>${4 - submittedCount} bandara belum melaporkan</span>`;
+                    }
+
+                    // Average PCI Calculation
+                    if (validPciCount > 0) {
+                        const avg = (validPciSum / validPciCount).toFixed(1);
+                        document.getElementById('kpiAvgPci').textContent = avg;
+                        const avgScale = getPciScaleTag(avg);
+                        const ratingBadge = document.getElementById('kpiPciRating');
+                        ratingBadge.textContent = avgScale.label;
+                        ratingBadge.style.color = avgScale.color;
+                        ratingBadge.style.backgroundColor = avgScale.bg;
+                    } else {
+                        document.getElementById('kpiAvgPci').textContent = "-";
+                        document.getElementById('kpiPciRating').textContent = "Menunggu";
+                    }
+
+                    // Last sync time
+                    const now = new Date();
+                    const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    document.getElementById('kpiLastSync').textContent = `Pukul ${timeStr}`;
+
+                    // Compile message text
+                    let kompilasi = "";
+                    if (!sapaan) sapaan = "*Assalamu'alaikum Wr. Wb*\n*Selamat Pagi*";
+                    if (penerima.length === 0) penerima = ["Direktur Teknik Angkasa Pura Indonesia", "Airport Facility Management Group Head", "Deputy Regional Airport Facility, Equipment & Technology Readiness Region II"];
+                    if (!tanggalFull) tanggalFull = res.date;
+
+                    kompilasi = `${sapaan}\n \nKepada Yth. :\n`;
+                    penerima.forEach((p, idx) => {
+                        if(p && String(p).trim() !== "") {
+                            kompilasi += `${idx + 1}. ${p}\n`;
+                        }
+                    });
+                    
+                    kompilasi += `\nMohon izin, menyampaikan Laporan Harian Kondisi Fasilitas Sisi Udara di PT Angkasa Pura Indonesia\nTanggal : *${tanggalFull}*\n \nKantor Regional II\n`;
+
+                    if (branchText) {
+                        kompilasi += branchText;
+                    } else {
+                        kompilasi = `*REKAPITULASI LAPORAN HARIAN FASILITAS SISI UDARA REGIONAL II*\n*PT ANGKASA PURA INDONESIA*\nTanggal: ${res.date}\n\n`;
+                        kompilasi += `Status Kelengkapan Laporan Cabang: (0/4 Bandara Terisi)\n`;
+                        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+                            kompilasi += `• ${code} : ⚠️ BELUM MENGIRIM DATA\n`;
+                        });
+                        kompilasi += `\nLaporan ini dibuat otomatis melalui Sistem Rekapitulasi Airside Regional II.`;
+                    }
+
+                    const textarea = document.getElementById('kompilasiText');
+                    textarea.value = kompilasi;
+                    updateConsoleStats(kompilasi);
+
+                    Swal.close();
+                } else {
+                    Swal.fire('Error', res.error || 'Gagal menarik data rekapitulasi', 'error');
+                }
+            })
+            .catch(err => {
+                if (spinner) spinner.classList.remove('fa-spin');
+                console.error('Fetch error:', err);
+                Swal.fire('Koneksi Gagal', 'Tidak dapat menghubungi server lokal.', 'error');
+            });
+    }
+
+    // Textarea stats listener
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        document.getElementById('filterDate').value = todayStr;
+        document.getElementById('targetMonthInput').value = '';
+
+        const textarea = document.getElementById('kompilasiText');
+        textarea.addEventListener('input', function () {
+            updateConsoleStats(this.value);
+        });
+
+        fetchRekap();
+    });
+
+    // Copy compilation text
+    function salinTeksRekap() {
+        const text = document.getElementById('kompilasiText').value;
+        if (!text) {
+            return Swal.fire('Perhatian', 'Tidak ada teks untuk disalin.', 'warning');
+        }
+
+        navigator.clipboard.writeText(text).then(() => {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                icon: 'success',
+                title: 'Teks Rekap berhasil disalin!'
+            });
+        }).catch(() => {
+            Swal.fire('Info', 'Silakan pilih dan salin manual teks dari kotak editor.', 'info');
+        });
+    }
+
+    // Send compilation text to Deputy via WhatsApp
+    function kirimWhatsAppDeputy() {
+        const text = document.getElementById('kompilasiText').value;
+        const destInput = document.getElementById('waDestinations').value;
+        
+        if (!text) {
+            return Swal.fire('Perhatian', 'Tidak ada pesan rekapitulasi untuk dikirim.', 'warning');
+        }
+
+        if (!destInput || !destInput.trim()) {
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+            return;
+        }
+
+        const numbers = destInput.split(',').map(n => n.trim().replace(/\D/g, '')).filter(n => n.length > 5);
+        if (numbers.length === 0) {
+            return Swal.fire('Format Salah', 'Nomor WhatsApp tidak valid. Masukkan angka saja.', 'error');
+        }
+
+        if (numbers.length > 1) {
+            Swal.fire({
+                title: 'Membuka Banyak Tab',
+                text: 'Browser Anda mungkin memblokir popup karena membuka beberapa tab WhatsApp sekaligus. Pastikan Anda mengizinkan popup (Allow Pop-ups) untuk situs ini.',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Lanjutkan',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    numbers.forEach((num, idx) => {
+                        setTimeout(() => {
+                            let cleanNum = num;
+                            if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
+                            const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
+                            window.open(url, '_blank');
+                        }, idx * 500); // Staggering 500ms
+                    });
+                }
+            });
+        } else {
+            let cleanNum = numbers[0];
+            if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
+            const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+    }
+
+    // Download compilation as .txt file
+    function unduhTeksRekap() {
+        const text = document.getElementById('kompilasiText').value;
+        const dateStr = document.getElementById('filterDate').value || 'rekap';
+        if (!text) {
+            return Swal.fire('Perhatian', 'Belum ada data rekap untuk diunduh.', 'warning');
+        }
+
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Rekap_Airside_Regional_II_${dateStr}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    // Submit Configuration
+    function submitConfig(e) {
+        e.preventDefault();
+        const form = document.getElementById('configForm');
+        const formData = new FormData(form);
+
+        Swal.fire({
+            title: 'Mengecek Koneksi...',
+            text: 'Menyimpan konfigurasi dan mengetes akses ke spreadsheet...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        fetch('/admin/config/update', {
+            method: 'POST',
+            body: formData
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire('Berhasil!', data.message, 'success').then(() => {
+                        closeModal();
+                        fetchRekap();
+                    });
+                } else {
+                    Swal.fire('Perhatian', data.message, 'warning');
+                }
+            })
+            .catch(err => {
+                Swal.fire('Gagal Menyimpan', err.message, 'error');
+            });
+    }
+
+    // Create New Monthly Sheet
+    function buatSheetBaru() {
+        const airportCode = document.getElementById('configAirportSelect').value;
+        const targetMonth = document.getElementById('targetMonthInput').value;
+        const driveFolder = document.getElementById('driveFolderInput').value;
+        const templateId = document.getElementById('templateIdInput').value;
+
+        if (!airportCode) {
+            return Swal.fire('Error', 'Pilih Cabang Bandara terlebih dahulu di atas!', 'error');
+        }
+        if (!driveFolder) {
+            return Swal.fire('Error', 'Silakan isi Alamat / Folder ID Google Drive Tujuan terlebih dahulu!', 'error');
+        }
+        if (!targetMonth) {
+            return Swal.fire({
+                title: 'Bulan Belum Dipilih',
+                text: 'Silakan tentukan Target Bulan Laporan terlebih dahulu sebelum membuat sheet baru!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                document.getElementById('targetMonthInput').focus();
+            });
+        }
+
+        Swal.fire({
+            title: 'Membuat Spreadsheet...',
+            text: 'Menyalin template Google Drive ke folder target...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        fetch('/admin/api/create-sheet', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                airportCode: airportCode,
+                targetMonth: targetMonth,
+                driveFolder: driveFolder,
+                templateId: templateId
+            })
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Berhasil!', 'Sheet baru berhasil dicetak! Daftar otomatis diperbarui.', 'success');
+                    refreshDropdownList(airportCode, driveFolder, data.url);
+                } else {
+                    Swal.fire('Gagal Membuat Sheet', data.error, 'error');
+                }
+            })
+            .catch(err => {
+                Swal.fire('Error', err.message, 'error');
+            });
+    }
+        // --- VISUAL FORM BUILDER LOGIC ---
+    let currentSchema = { steps: [] };
+
+    function openSchemaModal() {
+        document.getElementById('schemaModal').style.display = 'flex';
+        document.getElementById('visualBuilderContainer').innerHTML = '<div class="p-4 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Memuat form...</div>';
+        
+        fetch('/admin/api/schema')
+            .then(r => r.json())
+            .then(data => {
+                if(data.success) {
+                    currentSchema = data.data;
+                    renderVisualBuilder();
+                } else {
+                    Swal.fire('Error', 'Gagal memuat schema: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                Swal.fire('Error', err.toString(), 'error');
+            });
+    }
+
+    function closeSchemaModal() {
+        document.getElementById('schemaModal').style.display = 'none';
+    }
+
+    function renderVisualBuilder() {
+        const container = document.getElementById('visualBuilderContainer');
+        container.innerHTML = '';
+
+        if (!currentSchema.steps || currentSchema.steps.length === 0) {
+            container.innerHTML = '<p class="text-center mt-4">Belum ada struktur form.</p>';
+            return;
+        }
+
+        currentSchema.steps.forEach((step, sIdx) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = 'builder-step';
+            
+            let html = `
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div style="flex: 1; display: flex; gap: 0.5rem; align-items: center;">
+                        <div class="kpi-icon-box kpi-icon-blue" style="width: 32px; height: 32px;"><span class="step-number" style="font-weight:bold;">${sIdx+1}</span></div>
+                        <input type="text" class="form-control" style="font-size: 1.1rem; font-weight: bold; width: 60%;" value="${step.title || ''}" onchange="updateSchema(${sIdx}, null, null, 'title', this.value)" placeholder="Judul Bab / Langkah (Contoh: A. Runway)">
+                    </div>
+                    <button class="btn btn-outline btn-sm text-danger" onclick="removeStep(${sIdx})" title="Hapus Bab" style="border-color: transparent;"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <div class="sections-container" id="sections-${sIdx}"></div>
+                <button class="btn btn-outline btn-sm mt-2" onclick="addSection(${sIdx})"><i class="fa-solid fa-plus me-1"></i> Tambah Sub-bab (Section)</button>
+            `;
+            stepDiv.innerHTML = html;
+            
+            const secContainer = stepDiv.querySelector(`#sections-${sIdx}`);
+            if (step.sections) {
+                step.sections.forEach((sec, secIdx) => {
+                    const secDiv = document.createElement('div');
+                    secDiv.className = 'builder-section';
+                    
+                    let secHtml = `
+                        <div class="d-flex justify-content-between align-items-center mb-2 pb-2" style="border-bottom: 1px solid #e2e8f0;">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex: 1;">
+                                <i class="fa-solid fa-folder-open text-secondary"></i>
+                                <input type="text" class="form-control form-control-sm" style="font-weight: 600; width: 70%;" value="${sec.title || ''}" onchange="updateSchema(${sIdx}, ${secIdx}, null, 'secTitle', this.value)" placeholder="Judul Sub-bab (Contoh: Kondisi Fisik)">
+                            </div>
+                            <button class="btn btn-outline btn-sm text-danger" onclick="removeSection(${sIdx}, ${secIdx})" style="border-color: transparent; padding: 0.2rem 0.5rem;"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="fields-container" id="fields-${sIdx}-${secIdx}"></div>
+                        <button class="btn btn-primary btn-sm mt-2" onclick="addField(${sIdx}, ${secIdx})"><i class="fa-solid fa-plus me-1"></i> Tambah Field Pertanyaan</button>
+                    `;
+                    secDiv.innerHTML = secHtml;
+                    
+                    const fieldContainer = secDiv.querySelector(`#fields-${sIdx}-${secIdx}`);
+                    if (sec.fields) {
+                        sec.fields.forEach((field, fIdx) => {
+                            let typeOptions = `
+                                <option value="text" ${field.type==='text'?'selected':''}>Teks Singkat</option>
+                                <option value="select" ${field.type==='select'?'selected':''}>Dropdown (Pilihan)</option>
+                                <option value="date" ${field.type==='date'?'selected':''}>Tanggal</option>
+                                <option value="number" ${field.type==='number'?'selected':''}>Angka</option>
+                            `;
+                            
+                            let optionsHtml = '';
+                            if (field.type === 'select') {
+                                let optStr = (field.options || []).join(', ');
+                                optionsHtml = `
+                                    <input type="text" class="form-control form-control-sm mt-1" style="background-color: #fffbeb;" value="${optStr}" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'options', this.value)" placeholder="Pilihan (pisahkan dengan koma: Baik, Rusak, Sedang)">
+                                `;
+                            }
+                            
+                            let fieldHtml = `
+                                <div class="builder-field">
+                                    <div style="flex: 2;">
+                                        <input type="text" class="form-control form-control-sm" value="${field.label || ''}" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'label', this.value)" placeholder="Pertanyaan (Contoh: Kondisi Aspal)">
+                                    </div>
+                                    <div style="flex: 1.5;">
+                                        <input type="text" class="form-control form-control-sm" value="${field.name || ''}" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'name', this.value)" placeholder="KODE_KOLOM (Tanpa Spasi)" style="font-family: monospace; color: #003366;">
+                                    </div>
+                                    <div style="flex: 1.5;">
+                                        <select class="form-control form-control-sm" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'type', this.value)">
+                                            ${typeOptions}
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-outline btn-sm text-danger" onclick="removeField(${sIdx}, ${secIdx}, ${fIdx})" style="border-color: transparent;"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                                ${optionsHtml}
+                            `;
+                            
+                            const fDiv = document.createElement('div');
+                            fDiv.style.marginBottom = "0.75rem";
+                            fDiv.innerHTML = fieldHtml;
+                            fieldContainer.appendChild(fDiv);
+                        });
+                    }
+                    secContainer.appendChild(secDiv);
+                });
+            }
+            container.appendChild(stepDiv);
+        });
+    }
+
+    function updateSchema(sIdx, secIdx, fIdx, key, value) {
+        if (fIdx !== null) {
+            let f = currentSchema.steps[sIdx].sections[secIdx].fields[fIdx];
+            if (key === 'options') {
+                f.options = value.split(',').map(s => s.trim()).filter(s => s);
+            } else if (key === 'name') {
+                f.name = value.toUpperCase().replace(/\s+/g, '_');
+                renderVisualBuilder();
+                return;
+            } else {
+                f[key] = value;
+            }
+            if (key === 'type' && value === 'select' && !f.options) {
+                f.options = ["Opsi 1", "Opsi 2"];
+            }
+        } else if (secIdx !== null) {
+            currentSchema.steps[sIdx].sections[secIdx].title = value;
+        } else {
+            currentSchema.steps[sIdx].title = value;
+        }
+        
+        if (key === 'type') {
+            renderVisualBuilder();
+        }
+    }
+
+    function addStep() {
+        currentSchema.steps.push({
+            title: "Bab Baru",
+            icon: "fa-file",
+            sections: []
+        });
+        renderVisualBuilder();
+    }
+
+    function removeStep(sIdx) {
+        if(confirm("Hapus seluruh bab ini?")) {
+            currentSchema.steps.splice(sIdx, 1);
+            renderVisualBuilder();
+        }
+    }
+
+    function addSection(sIdx) {
+        if (!currentSchema.steps[sIdx].sections) currentSchema.steps[sIdx].sections = [];
+        currentSchema.steps[sIdx].sections.push({
+            title: "Sub-bab Baru",
+            icon: "fa-folder",
+            fields: []
+        });
+        renderVisualBuilder();
+    }
+
+    function removeSection(sIdx, secIdx) {
+        if(confirm("Hapus sub-bab ini beserta pertanyaannya?")) {
+            currentSchema.steps[sIdx].sections.splice(secIdx, 1);
+            renderVisualBuilder();
+        }
+    }
+
+    function addField(sIdx, secIdx) {
+        if (!currentSchema.steps[sIdx].sections[secIdx].fields) currentSchema.steps[sIdx].sections[secIdx].fields = [];
+        currentSchema.steps[sIdx].sections[secIdx].fields.push({
+            label: "Pertanyaan Baru",
+            name: "KOLOM_BARU",
+            type: "text",
+            required: false
+        });
+        renderVisualBuilder();
+    }
+
+    function removeField(sIdx, secIdx, fIdx) {
+        currentSchema.steps[sIdx].sections[secIdx].fields.splice(fIdx, 1);
+        renderVisualBuilder();
+    }
+
+    function saveSchema() {
+        fetch('/admin/api/schema/update', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(currentSchema)
+        })
+        .then(r => r.json())
+        .then(data => {
+            if(data.success) {
+                Swal.fire('Berhasil', 'Konfigurasi form berhasil diperbarui! Tampilan form petugas akan otomatis berubah.', 'success');
+                closeSchemaModal();
+            } else {
+                Swal.fire('Gagal Menyimpan', data.error, 'error');
+            }
+        })
+        .catch(err => {
+            Swal.fire('Error', err.message, 'error');
+        });
+    }
+    function syncRekap(code) {
+        Swal.fire({
+            title: 'Tarik Data dari Spreadsheet?',
+            text: `Apakah Anda yakin ingin menyinkronkan data untuk bandara ${code}? Sistem akan menarik seluruh tab yang Anda buat manual di spreadsheet dan memasukkannya ke DATABASE_REKAP jika belum ada.`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Sinkronkan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Menyinkronkan...',
+                    text: 'Sedang membaca seluruh tab di spreadsheet, harap tunggu.',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+                
+                fetch('/admin/api/sync-rekap', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ airportCode: code })
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        Swal.fire('Berhasil!', `Berhasil menyinkronkan ${res.synced_count} laporan harian baru ke DATABASE_REKAP!`, 'success')
+                        .then(() => fetchRekap());
+                    } else {
+                        Swal.fire('Gagal', res.error, 'error');
+                    }
+                })
+                .catch(err => {
+                    Swal.fire('Error', err.message, 'error');
+                });
+            }
+        });
+    }
+</script>
+
+<style>
+    .builder-step {
+        border: 1px solid #cbd5e1;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .builder-section {
+        border: 1px solid #e2e8f0;
+        padding: 1rem;
+        margin: 0.75rem 0;
+        border-radius: 8px;
+        background: #f8fafc;
+    }
+    .builder-field {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        background: #ffffff;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+    }
+</style>
+
+<!-- FORM SCHEMA BUILDER MODAL (VISUAL) -->
+<div class="clean-modal-overlay" id="schemaModal" style="display: none; z-index: 9999;">
+    <div class="clean-modal-card" style="max-width: 950px; height: 90vh; background-color: #f1f5f9;">
+        <div class="modal-header" style="background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 1.25rem 1.5rem;">
+            <div>
+                <h3 class="modal-title"><i class="fa-solid fa-list-check text-primary me-2"></i> Visual Form Builder</h3>
+                <p class="modal-subtitle">Desain form laporan dengan mudah. Perubahan akan langsung disinkronkan ke aplikasi petugas.</p>
+            </div>
+            <button type="button" class="modal-close-btn" onclick="closeSchemaModal()" title="Tutup">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body" style="flex: 1; padding: 1.5rem; overflow-y: auto;">
+            <div id="visualBuilderContainer">
+                <!-- Diisi via JS -->
+            </div>
+            
+            <button class="btn btn-secondary w-100 mt-3" style="border-style: dashed; background: transparent; color: var(--dash-secondary); padding: 1rem;" onclick="addStep()">
+                <i class="fa-solid fa-folder-plus me-1"></i> Tambah Bab / Langkah Baru
+            </button>
+            
+            <div class="alert-banner mt-4">
+                <i class="fa-solid fa-lightbulb text-warning"></i>
+                <div>Kolom <strong>KODE_KOLOM</strong> akan menjadi penentu nama Header di Google Sheets. Sistem memastikannya menjadi huruf besar tanpa spasi.</div>
+            </div>
+        </div>
+        
+        <div class="modal-footer" style="background-color: #ffffff; border-top: 1px solid #e2e8f0;">
+            <button type="button" class="btn btn-outline" onclick="closeSchemaModal()">Batal</button>
+            <button type="button" class="btn btn-primary" onclick="saveSchema()">
+                <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Form & Sinkronisasi
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

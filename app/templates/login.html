@@ -1,0 +1,509 @@
+{% extends "base.html" %}
+
+{% set hide_navbar = true %}
+
+{% block title %}Login Portal - InJourney Regional II{% endblock %}
+
+{% block head %}
+<style>
+    /* ==========================================================================
+       LOGIN PORTAL - CLEAN & PROFESSIONAL ENTERPRISE STYLES
+       (No Glassmorphism, Solid Crisp Surfaces, Aeronautical Corporate Theme)
+       ========================================================================== */
+
+    body {
+        background-color: #f8fafc;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem 1rem;
+        margin: 0;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .brand-top-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 9999px;
+        font-size: 0.725rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    .status-pulse-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #10b981;
+        box-shadow: 0 0 0 2px #d1fae5;
+    }
+
+    .login-card {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
+        padding: 2.5rem 2.25rem;
+        position: relative;
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .portal-icon-wrapper {
+        width: 64px;
+        height: 64px;
+        border-radius: 14px;
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        color: #0284c7;
+        font-size: 1.75rem;
+    }
+
+    .login-header h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.35rem;
+        letter-spacing: -0.5px;
+    }
+
+    .login-header p {
+        color: #64748b;
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+    /* Segmented Role Selector */
+    .role-segmented-group {
+        display: flex;
+        background-color: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 4px;
+        margin-bottom: 1.5rem;
+        gap: 4px;
+    }
+
+    .role-tab-btn {
+        flex: 1;
+        background: transparent;
+        border: none;
+        border-radius: 7px;
+        padding: 0.6rem 0.75rem;
+        font-family: var(--font-heading);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.45rem;
+    }
+
+    .role-tab-btn.active {
+        background-color: #ffffff;
+        color: var(--primary-color);
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+        border: 1px solid #cbd5e1;
+    }
+
+    .role-tab-btn:hover:not(.active) {
+        color: #0f172a;
+    }
+
+    /* Form Fields */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.4rem;
+    }
+
+    .input-field-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        color: #94a3b8;
+        font-size: 0.95rem;
+        pointer-events: none;
+        transition: color 0.2s ease;
+    }
+
+    .input-control {
+        width: 100%;
+        padding: 0.7rem 1rem 0.7rem 2.6rem;
+        font-family: var(--font-body);
+        font-size: 0.925rem;
+        color: #0f172a;
+        background-color: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .input-control:focus {
+        outline: none;
+        border-color: #0284c7;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .input-control:focus~.input-icon {
+        color: #0284c7;
+    }
+
+    .password-toggle-btn {
+        position: absolute;
+        right: 0.75rem;
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        padding: 0.4rem;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: color 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .password-toggle-btn:hover {
+        color: #334155;
+    }
+
+    select.input-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.85rem center;
+        background-size: 1.1rem;
+        padding-right: 2.4rem;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 0.8rem 1.25rem;
+        font-family: var(--font-heading);
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #ffffff;
+        background-color: var(--primary-color);
+        border: 1px solid transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .submit-btn:hover {
+        background-color: #002244;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 51, 102, 0.2);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    /* Fast Access / Demo Credentials */
+    .quick-access-box {
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .quick-access-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.65rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .quick-chips-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .quick-pill {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 0.35rem 0.65rem;
+        font-size: 0.785rem;
+        font-weight: 500;
+        color: #475569;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .quick-pill:hover {
+        background-color: #eff6ff;
+        border-color: #bfdbfe;
+        color: #1d4ed8;
+    }
+
+    .quick-pill i {
+        font-size: 0.7rem;
+    }
+
+    /* Footer Security Badge */
+    .portal-footer {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+    .security-notice {
+        font-size: 0.775rem;
+        color: #64748b;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .copyright-notice {
+        font-size: 0.725rem;
+        color: #94a3b8;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <!-- Main Solid Card -->
+    <div class="login-card">
+        <div class="login-header">
+            <div class="portal-icon-wrapper">
+                <i class="fa-solid fa-plane-departure"></i>
+            </div>
+            <h1>Airside Daily Report</h1>
+            <p>PT Angkasa Pura Indonesia • Kantor Regional II</p>
+        </div>
+
+        <!-- Segmented Role Selector -->
+        <div class="role-segmented-group">
+            <button type="button" class="role-tab-btn active" id="tabStaff" onclick="selectRole('staff')">
+                <i class="fa-solid fa-plane"></i>
+                <span>Petugas Bandara</span>
+            </button>
+            <button type="button" class="role-tab-btn" id="tabAdmin" onclick="selectRole('admin')">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Administrator</span>
+            </button>
+        </div>
+
+        <form id="loginForm" method="POST" action="/login">
+            <!-- Hidden role input synced with tabs -->
+            <input type="hidden" name="role" id="roleInput" value="staff">
+
+            <!-- Airport Selection (Shown for staff) -->
+            <div class="form-group" id="airportGroup">
+                <label class="form-label" for="airportSelect">Pilih Cabang Bandara</label>
+                <div class="input-field-wrapper">
+                    <select id="airportSelect" name="airportCode" class="input-control" required
+                        onchange="syncStaffPlaceholder()">
+                        <option value="LOP">LOP — Bandara Lombok (ZAM)</option>
+                        <option value="DPS">DPS — Bandara Bali (I Gusti Ngurah Rai)</option>
+                        <option value="BWX">BWX — Bandara Banyuwangi</option>
+                        <option value="KOE">KOE — Bandara Kupang (El Tari)</option>
+                    </select>
+                    <i class="fa-solid fa-location-dot input-icon"></i>
+                </div>
+            </div>
+
+            <!-- Username Field -->
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <div class="input-field-wrapper">
+                    <input type="text" id="username" name="username" class="input-control"
+                        placeholder="Masukkan username cabang (contoh: lop)" required autocomplete="username">
+                    <i class="fa-regular fa-user input-icon"></i>
+                </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <div class="input-field-wrapper">
+                    <input type="password" id="password" name="password" class="input-control"
+                        style="padding-right: 2.6rem;" placeholder="Masukkan password" required
+                        autocomplete="current-password">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility()"
+                        title="Lihat Password">
+                        <i class="fa-regular fa-eye" id="eyeIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn" id="btnSubmit">
+                <span>Masuk ke Sistem</span>
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+        </form>
+
+        <!-- Quick Access Helper Chips -->
+        <div class="quick-access-box">
+            <div class="quick-access-title">
+                <span><i class="fa-solid fa-bolt text-warning me-1"></i> Akses Cepat Demo</span>
+                <span style="font-weight: 400; text-transform: none; color: #94a3b8;">Klik untuk isi</span>
+            </div>
+            <div class="quick-chips-wrapper">
+                <button type="button" class="quick-pill" onclick="quickFill('admin', '123', 'admin', '')"
+                    title="Isi form sebagai Admin Regional">
+                    <i class="fa-solid fa-user-gear text-primary"></i> <strong>Admin</strong>
+                </button>
+                <button type="button" class="quick-pill" onclick="quickFill('lop', '123', 'staff', 'LOP')"
+                    title="Isi form sebagai Petugas LOP">
+                    <i class="fa-solid fa-plane text-secondary"></i> LOP
+                </button>
+                <button type="button" class="quick-pill" onclick="quickFill('dps', '123', 'staff', 'DPS')"
+                    title="Isi form sebagai Petugas DPS">
+                    <i class="fa-solid fa-plane text-secondary"></i> DPS
+                </button>
+                <button type="button" class="quick-pill" onclick="quickFill('bwx', '123', 'staff', 'BWX')"
+                    title="Isi form sebagai Petugas BWX">
+                    <i class="fa-solid fa-plane text-secondary"></i> BWX
+                </button>
+                <button type="button" class="quick-pill" onclick="quickFill('koe', '123', 'staff', 'KOE')"
+                    title="Isi form sebagai Petugas KOE">
+                    <i class="fa-solid fa-plane text-secondary"></i> KOE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security & Legal Footer -->
+    <div class="portal-footer">
+        <div class="security-notice">
+            <i class="fa-solid fa-shield-halved text-secondary"></i>
+            <span>Sesi terenkripsi & terproteksi otorisasi internal</span>
+        </div>
+        <p class="copyright-notice">
+            © 2026 PT Angkasa Pura Indonesia • Direktorat Operasi & Fasilitas Sisi Udara
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function selectRole(role) {
+        const tabStaff = document.getElementById('tabStaff');
+        const tabAdmin = document.getElementById('tabAdmin');
+        const roleInput = document.getElementById('roleInput');
+        const airportGroup = document.getElementById('airportGroup');
+        const airportSelect = document.getElementById('airportSelect');
+        const usernameInput = document.getElementById('username');
+
+        roleInput.value = role;
+
+        if (role === 'admin') {
+            tabAdmin.classList.add('active');
+            tabStaff.classList.remove('active');
+            airportGroup.style.display = 'none';
+            airportSelect.removeAttribute('required');
+            usernameInput.placeholder = 'Masukkan username administrator';
+        } else {
+            tabStaff.classList.add('active');
+            tabAdmin.classList.remove('active');
+            airportGroup.style.display = 'block';
+            airportSelect.setAttribute('required', 'required');
+            syncStaffPlaceholder();
+        }
+    }
+
+    function syncStaffPlaceholder() {
+        const airportCode = document.getElementById('airportSelect').value;
+        const usernameInput = document.getElementById('username');
+        if (document.getElementById('roleInput').value === 'staff') {
+            usernameInput.placeholder = `Username petugas (contoh: ${airportCode.toLowerCase()})`;
+        }
+    }
+
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.className = 'fa-regular fa-eye-slash';
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.className = 'fa-regular fa-eye';
+        }
+    }
+
+    function quickFill(user, pass, role, airport) {
+        selectRole(role);
+        if (role === 'staff' && airport) {
+            document.getElementById('airportSelect').value = airport;
+        }
+        document.getElementById('username').value = user;
+        document.getElementById('password').value = pass;
+
+        // Visual flash indication on the card
+        const btn = document.getElementById('btnSubmit');
+        btn.focus();
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+        const btn = document.getElementById('btnSubmit');
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Memverifikasi...';
+        btn.style.opacity = '0.85';
+        btn.style.pointerEvents = 'none';
+    });
+</script>
+{% endblock %}
