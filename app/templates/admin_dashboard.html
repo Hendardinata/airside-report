@@ -2274,10 +2274,30 @@
     }
 
     function removeStep(sIdx) {
-        if (confirm("Hapus seluruh bab ini?")) {
-            currentSchema.steps.splice(sIdx, 1);
-            renderVisualBuilder();
-        }
+        const stepTitle = (currentSchema.steps[sIdx] && currentSchema.steps[sIdx].title) || 'Bab ini';
+        Swal.fire({
+            title: 'Hapus Bab?',
+            text: `Apakah Anda yakin ingin menghapus seluruh "${stepTitle}" beserta semua sub-bab dan pertanyaannya?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: '<i class="fas fa-trash-can me-1"></i> Ya, Hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                currentSchema.steps.splice(sIdx, 1);
+                renderVisualBuilder();
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    icon: 'success',
+                    title: 'Bab berhasil dihapus'
+                });
+            }
+        });
     }
 
     function addSection(sIdx) {
@@ -2291,10 +2311,30 @@
     }
 
     function removeSection(sIdx, secIdx) {
-        if (confirm("Hapus sub-bab ini beserta pertanyaannya?")) {
-            currentSchema.steps[sIdx].sections.splice(secIdx, 1);
-            renderVisualBuilder();
-        }
+        const secTitle = (currentSchema.steps[sIdx] && currentSchema.steps[sIdx].sections && currentSchema.steps[sIdx].sections[secIdx] && currentSchema.steps[sIdx].sections[secIdx].title) || 'Sub-bab ini';
+        Swal.fire({
+            title: 'Hapus Sub-bab?',
+            text: `Apakah Anda yakin ingin menghapus "${secTitle}" beserta seluruh pertanyaan di dalamnya?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: '<i class="fas fa-trash-can me-1"></i> Ya, Hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                currentSchema.steps[sIdx].sections.splice(secIdx, 1);
+                renderVisualBuilder();
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    icon: 'success',
+                    title: 'Sub-bab berhasil dihapus'
+                });
+            }
+        });
     }
 
     function addField(sIdx, secIdx) {
@@ -2309,8 +2349,22 @@
     }
 
     function removeField(sIdx, secIdx, fIdx) {
-        currentSchema.steps[sIdx].sections[secIdx].fields.splice(fIdx, 1);
-        renderVisualBuilder();
+        const fieldLabel = (currentSchema.steps[sIdx] && currentSchema.steps[sIdx].sections && currentSchema.steps[sIdx].sections[secIdx] && currentSchema.steps[sIdx].sections[secIdx].fields && currentSchema.steps[sIdx].sections[secIdx].fields[fIdx] && currentSchema.steps[sIdx].sections[secIdx].fields[fIdx].label) || 'Pertanyaan ini';
+        Swal.fire({
+            title: 'Hapus Pertanyaan?',
+            text: `Apakah Anda yakin ingin menghapus field "${fieldLabel}"?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                currentSchema.steps[sIdx].sections[secIdx].fields.splice(fIdx, 1);
+                renderVisualBuilder();
+            }
+        });
     }
 
     function saveSchema() {
@@ -2372,6 +2426,11 @@
 </script>
 
 <style>
+    /* Pastikan SweetAlert2 selalu berada di atas modal (z-index tinggi) */
+    .swal2-container {
+        z-index: 100000 !important;
+    }
+
     .builder-step {
         border: 1px solid #cbd5e1;
         background: #ffffff;

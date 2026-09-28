@@ -428,18 +428,6 @@
           ],
           "icon": "fa-pen-to-square",
           "title": "Catatan Khusus"
-        },
-        {
-          "fields": [
-            {
-              "label": "apakah jalan bagus",
-              "name": "JALAN_BAGUS",
-              "required": false,
-              "type": "text"
-            }
-          ],
-          "icon": "fa-folder",
-          "title": "Uji Kelayakan"
         }
       ],
       "subtitle": "Rumput, catatan tambahan, dan pengiriman laporan.",
