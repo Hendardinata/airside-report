@@ -177,6 +177,14 @@ def write_daily_report(sheet_url, form_data):
                     insert_sheet_index=len(spreadsheet.worksheets())
                 )
             
+            # PEMBERSIHAN MUTLAK:
+            # Kosongkan sisa input di B4:B66 dan seluruh baris 67 ke bawah (A67:Z150)
+            # agar duplikasi tab '1' tidak pernah membawa nilai lama atau pertanyaan yang sudah dihapus
+            try:
+                target_sheet.batch_clear(["B4:B66", "A67:Z150"])
+            except Exception as clear_err:
+                print(f"Warning saat clear target sheet: {clear_err}")
+            
             # Array kolom B dari B4 sampai B66
             col_B_data = [
                 [form_data.get('SAPAAN', '')], # B4
@@ -284,32 +292,31 @@ def write_daily_report(sheet_url, form_data):
                     for field in sec.get('fields', []):
                         if field['name'] not in standard_fields:
                             val = form_data.get(field['name'], '')
-                            if val:
-                                if not sec_added and not is_standard_sec:
-                                    # Tambahkan Judul Sub-bab HANYA jika ini bab benar-benar baru
-                                    sec_title = sec.get('title', 'TAMBAHAN')
-                                    extra_data.append([sec_title.upper(), ''])
-                                    format_requests.append({
-                                        "copyPaste": {
-                                            "source": { "sheetId": target_sheet.id, "startRowIndex": 2, "endRowIndex": 3, "startColumnIndex": 0, "endColumnIndex": 2 },
-                                            "destination": { "sheetId": target_sheet.id, "startRowIndex": current_row-1, "endRowIndex": current_row, "startColumnIndex": 0, "endColumnIndex": 2 },
-                                            "pasteType": "PASTE_FORMAT"
-                                        }
-                                    })
-                                    current_row += 1
-                                    sec_added = True
-                                
-                                # Tambahkan Field Pertanyaan (Format seperti Baris 53 "Marka")
-                                label = field.get('label', field['name'])
-                                extra_data.append([label, sanitize_sheet_value(val)])
+                            if not sec_added and not is_standard_sec:
+                                # Tambahkan Judul Sub-bab HANYA jika ini bab benar-benar baru
+                                sec_title = sec.get('title', 'TAMBAHAN')
+                                extra_data.append([sec_title.upper(), ''])
                                 format_requests.append({
                                     "copyPaste": {
-                                        "source": { "sheetId": target_sheet.id, "startRowIndex": 52, "endRowIndex": 53, "startColumnIndex": 0, "endColumnIndex": 2 },
+                                        "source": { "sheetId": target_sheet.id, "startRowIndex": 2, "endRowIndex": 3, "startColumnIndex": 0, "endColumnIndex": 2 },
                                         "destination": { "sheetId": target_sheet.id, "startRowIndex": current_row-1, "endRowIndex": current_row, "startColumnIndex": 0, "endColumnIndex": 2 },
                                         "pasteType": "PASTE_FORMAT"
                                     }
                                 })
                                 current_row += 1
+                                sec_added = True
+                            
+                            # Tambahkan Field Pertanyaan (Format seperti Baris 53 "Marka")
+                            label = field.get('label', field['name'])
+                            extra_data.append([label, sanitize_sheet_value(val)])
+                            format_requests.append({
+                                "copyPaste": {
+                                    "source": { "sheetId": target_sheet.id, "startRowIndex": 52, "endRowIndex": 53, "startColumnIndex": 0, "endColumnIndex": 2 },
+                                    "destination": { "sheetId": target_sheet.id, "startRowIndex": current_row-1, "endRowIndex": current_row, "startColumnIndex": 0, "endColumnIndex": 2 },
+                                    "pasteType": "PASTE_FORMAT"
+                                }
+                            })
+                            current_row += 1
                                 
             if extra_data:
                 # Update data explicitly at row 67 downwards
@@ -318,7 +325,10 @@ def write_daily_report(sheet_url, form_data):
                 
                 # Apply Formatting
                 if format_requests:
-                    spreadsheet.batch_update({"requests": format_requests})
+                    try:
+                        spreadsheet.batch_update({"requests": format_requests})
+                    except Exception as fe:
+                        print("Warning batch update formatting:", fe)
             
         except Exception as e:
             print(f"Gagal membuat tab harian: {str(e)}")
@@ -613,3 +623,325 @@ def sync_sheets_to_rekap(sheet_url):
                 print(f"Gagal append sync untuk {tanggal_str}: {e}")
                 
     return synced_count
+
+
+# ==============================================================================
+# SINKRONISASI DUA ARAH (TWO-WAY SYNC): FORM SCHEMA <---> GOOGLE SPREADSHEET
+# ==============================================================================
+
+STANDARD_CORE_FIELDS = [
+    'SAPAAN', 'TANGGAL', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4',
+    'KANTOR_CABANG', 'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK',
+    'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI', 'RUNWAY_TITIK_BELUM',
+    'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', 'RUNWAY_MARKA_STD',
+    'RUNWAY_MARKA_REALISASI', 'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER',
+    'RUNWAY_WATER_PERF', 'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL',
+    'RUNWAY_RUBBER_SKID', 'TAXIWAY_NAMA', 'TAXIWAY_STATUS', 'TAXIWAY_PCI',
+    'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI',
+    'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', 'TWY_MARKA_STD',
+    'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER',
+    'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI',
+    'APN_JENIS_DIPERBAIKI', 'APN_TITIK_BELUM', 'APN_JENIS_BELUM', 'APN_TITIK_BERULANG',
+    'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER',
+    'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF', 'CATATAN_1', 'CATATAN_2',
+    'CATATAN_3', 'CATATAN_4', 'CATATAN_5'
+]
+
+def get_schema_field_names(schema=None):
+    """Mengambil seluruh nama field (KODE_KOLOM) dari form_schema.json secara berurutan."""
+    if schema is None:
+        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
+        with open(schema_path, 'r') as f:
+            schema = json.load(f)
+    names = []
+    for step in schema.get('steps', []):
+        for sec in step.get('sections', []):
+            for f in sec.get('fields', []):
+                fname = f.get('name', '').strip()
+                if fname and fname not in names:
+                    names.append(fname)
+    return names
+
+def sync_schema_to_sheets(sheet_url, schema=None):
+    """
+    Sinkronisasi Maju: Form Builder/Schema -> Google Sheets
+    Menyesuaikan header kolom di DATABASE_REKAP dan baris di Tab '1' (Template)
+    agar jika field/bab/sub-bab ditambah atau dihapus, spreadsheet langsung menyesuaikan.
+    """
+    if not sheet_url:
+        return {"success": False, "error": "URL Spreadsheet kosong"}
+        
+    if schema is None:
+        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
+        with open(schema_path, 'r') as f:
+            schema = json.load(f)
+            
+    client = get_client()
+    spreadsheet = client.open_by_url(sheet_url)
+    
+    # 1. Sinkronisasi DATABASE_REKAP (Header & Penyelarasan Kolom Data)
+    try:
+        rekap_sheet = spreadsheet.worksheet('DATABASE_REKAP')
+    except gspread.WorksheetNotFound:
+        return {"success": False, "error": "Tab 'DATABASE_REKAP' tidak ditemukan"}
+        
+    schema_fields = get_schema_field_names(schema)
+    new_headers = ['TIMESTAMP'] + schema_fields
+    
+    all_values = rekap_sheet.get_all_values()
+    if not all_values or len(all_values) == 0:
+        rekap_sheet.update(values=[new_headers], range_name='A1')
+    else:
+        old_headers = [str(h).strip() for h in all_values[0]]
+        old_data = all_values[1:]
+        
+        col_map = {h: idx for idx, h in enumerate(old_headers) if h}
+        
+        new_data_rows = []
+        for row in old_data:
+            new_row = []
+            for h in new_headers:
+                if h == 'TIMESTAMP':
+                    ts_idx = col_map.get('TIMESTAMP', 0 if len(row) > 0 else -1)
+                    new_row.append(row[ts_idx] if 0 <= ts_idx < len(row) else '')
+                elif h in col_map:
+                    idx = col_map[h]
+                    new_row.append(row[idx] if idx < len(row) else '')
+                else:
+                    new_row.append('')
+            new_data_rows.append([sanitize_sheet_value(x) for x in new_row])
+            
+        # Kosongkan seluruh nilai agar kolom yang dihapus tidak tertinggal di sebelah kanan
+        rekap_sheet.clear()
+        rekap_sheet.update(values=[new_headers] + new_data_rows, range_name='A1')
+        
+    # 2. Sinkronisasi Tab '1' (Master Harian untuk Template Duplikasi)
+    try:
+        ws_1 = spreadsheet.worksheet('1')
+        # Selalu bersihkan baris 67 ke bawah pada master tab '1'
+        ws_1.batch_clear(["A67:Z150"])
+        
+        extra_template = []
+        format_requests = []
+        cur_row = 67
+        
+        for step in schema.get('steps', []):
+            for sec in step.get('sections', []):
+                sec_added = False
+                is_standard_sec = any(f.get('name') in STANDARD_CORE_FIELDS for f in sec.get('fields', []))
+                
+                for field in sec.get('fields', []):
+                    if field.get('name') not in STANDARD_CORE_FIELDS:
+                        if not sec_added and not is_standard_sec:
+                            sec_title = sec.get('title', 'TAMBAHAN')
+                            extra_template.append([sec_title.upper(), ''])
+                            format_requests.append({
+                                "copyPaste": {
+                                    "source": { "sheetId": ws_1.id, "startRowIndex": 2, "endRowIndex": 3, "startColumnIndex": 0, "endColumnIndex": 2 },
+                                    "destination": { "sheetId": ws_1.id, "startRowIndex": cur_row-1, "endRowIndex": cur_row, "startColumnIndex": 0, "endColumnIndex": 2 },
+                                    "pasteType": "PASTE_FORMAT"
+                                }
+                            })
+                            cur_row += 1
+                            sec_added = True
+                            
+                        label = field.get('label', field.get('name'))
+                        extra_template.append([label, ''])
+                        format_requests.append({
+                            "copyPaste": {
+                                "source": { "sheetId": ws_1.id, "startRowIndex": 52, "endRowIndex": 53, "startColumnIndex": 0, "endColumnIndex": 2 },
+                                "destination": { "sheetId": ws_1.id, "startRowIndex": cur_row-1, "endRowIndex": cur_row, "startColumnIndex": 0, "endColumnIndex": 2 },
+                                "pasteType": "PASTE_FORMAT"
+                            }
+                        })
+                        cur_row += 1
+                        
+        if extra_template:
+            end_row = 67 + len(extra_template) - 1
+            ws_1.update(values=extra_template, range_name=f"A67:B{end_row}")
+            if format_requests:
+                try:
+                    spreadsheet.batch_update({"requests": format_requests})
+                except Exception as fe:
+                    print("Warning apply formatting tab 1:", fe)
+    except Exception as e:
+        print("Tab 1 tidak ditemukan atau gagal disinkronkan:", e)
+        
+    return {
+        "success": True, 
+        "spreadsheet": spreadsheet.title, 
+        "total_columns": len(new_headers),
+        "total_rows": len(all_values) if all_values else 1
+    }
+
+def sync_schema_to_all_sheets(schema=None):
+    """Menyinkronkan schema ke seluruh Google Spreadsheet bandara yang terdaftar di konfigurasi."""
+    from app.models.config_store import CONFIG_FILE
+    if not os.path.exists(CONFIG_FILE):
+        return {"synced": [], "failed": ["Config file not found"]}
+        
+    with open(CONFIG_FILE, 'r') as f:
+        config = json.load(f)
+        
+    airports = config.get('airports', {})
+    results = {"synced": [], "failed": []}
+    
+    for code, conf in airports.items():
+        sheet_url = conf.get('sheet_url')
+        if not sheet_url:
+            continue
+        try:
+            res = sync_schema_to_sheets(sheet_url, schema)
+            if res.get("success"):
+                results["synced"].append(f"{code} ({res.get('spreadsheet')})")
+            else:
+                results["failed"].append(f"{code}: {res.get('error')}")
+        except Exception as e:
+            results["failed"].append(f"{code}: {str(e)}")
+            
+    return results
+
+def sync_sheets_to_schema(sheet_url):
+    """
+    Sinkronisasi Balik: Google Sheets -> Form Builder / Web
+    Membaca kolom di DATABASE_REKAP dan baris di Tab '1'.
+    Jika ada penambahan atau penghapusan kolom di Spreadsheet, form_schema.json otomatis diperbarui.
+    """
+    if not sheet_url:
+        raise ValueError("URL Spreadsheet belum dikonfigurasi.")
+        
+    client = get_client()
+    spreadsheet = client.open_by_url(sheet_url)
+    
+    try:
+        rekap_sheet = spreadsheet.worksheet('DATABASE_REKAP')
+    except gspread.WorksheetNotFound:
+        raise Exception("Tab 'DATABASE_REKAP' tidak ditemukan pada Spreadsheet.")
+        
+    row_1 = rekap_sheet.row_values(1)
+    sheet_headers = [str(h).strip() for h in row_1 if str(h).strip()]
+    
+    if not sheet_headers:
+        raise Exception("Header baris 1 di DATABASE_REKAP kosong.")
+        
+    schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
+    with open(schema_path, 'r') as f:
+        schema = json.load(f)
+        
+    # Kumpulkan seluruh field yang ada di schema saat ini
+    existing_schema_fields = {} # name -> (step_idx, sec_idx, field_idx, field_dict)
+    for s_idx, step in enumerate(schema.get('steps', [])):
+        for sec_idx, sec in enumerate(step.get('sections', [])):
+            for f_idx, f in enumerate(sec.get('fields', [])):
+                fname = f.get('name', '').strip()
+                if fname:
+                    existing_schema_fields[fname] = (s_idx, sec_idx, f_idx, f)
+                    
+    # Baca info label dan section dari Tab '1' baris 67 ke bawah jika ada
+    custom_labels_map = {}
+    try:
+        ws_1 = spreadsheet.worksheet('1')
+        ws1_vals = ws_1.get_all_values()
+        curr_sec_title = "Catatan Khusus & Tambahan"
+        for r_idx in range(66, len(ws1_vals)):
+            r = ws1_vals[r_idx]
+            if not r: continue
+            col_a = str(r[0]).strip() if len(r) > 0 else ""
+            col_b = str(r[1]).strip() if len(r) > 1 else ""
+            if not col_a: continue
+            
+            if not col_b and (col_a.isupper() or len(col_a.split()) <= 4):
+                curr_sec_title = col_a.title()
+            else:
+                norm_key = col_a.upper().replace(' ', '_').replace('-', '_')
+                custom_labels_map[norm_key] = {
+                    "label": col_a,
+                    "section_title": curr_sec_title
+                }
+    except Exception as e:
+        print("Tab 1 tidak terbaca saat sync sheet to schema:", e)
+        
+    added_fields = []
+    removed_fields = []
+    
+    # 1. Deteksi field non-standar yang DIHAPUS dari spreadsheet
+    for fname in list(existing_schema_fields.keys()):
+        if fname not in STANDARD_CORE_FIELDS and fname != 'TIMESTAMP':
+            if fname not in sheet_headers:
+                s_idx, sec_idx, f_idx, _ = existing_schema_fields[fname]
+                schema['steps'][s_idx]['sections'][sec_idx]['fields'] = [
+                    f for f in schema['steps'][s_idx]['sections'][sec_idx]['fields']
+                    if f.get('name') != fname
+                ]
+                removed_fields.append(fname)
+                
+    # Bersihkan section/step yang kosong jika ada
+    for step in schema.get('steps', []):
+        step['sections'] = [sec for sec in step.get('sections', []) if len(sec.get('fields', [])) > 0]
+    schema['steps'] = [step for step in schema.get('steps', []) if len(step.get('sections', [])) > 0]
+    
+    # 2. Deteksi field baru yang DITAMBAHKAN di spreadsheet
+    current_names_now = set()
+    for step in schema.get('steps', []):
+        for sec in step.get('sections', []):
+            for f in sec.get('fields', []):
+                current_names_now.add(f.get('name'))
+                
+    for h in sheet_headers:
+        if h == 'TIMESTAMP' or h in current_names_now:
+            continue
+            
+        info = custom_labels_map.get(h)
+        if not info:
+            for k, val in custom_labels_map.items():
+                if k in h or h in k:
+                    info = val
+                    break
+                    
+        label = info['label'] if info else h.replace('_', ' ').title()
+        sec_title = info['section_title'] if info else "Field Tambahan Spreadsheet"
+        
+        if not schema.get('steps'):
+            schema['steps'] = [{
+                "title": "Langkah 1: Laporan",
+                "subtitle": "Form Laporan",
+                "icon": "fa-clipboard-list",
+                "sections": []
+            }]
+            
+        last_step = schema['steps'][-1]
+        target_sec = None
+        for sec in last_step.get('sections', []):
+            if sec.get('title', '').strip().lower() == sec_title.strip().lower():
+                target_sec = sec
+                break
+                
+        if not target_sec:
+            target_sec = {
+                "title": sec_title,
+                "icon": "fa-folder-plus",
+                "fields": []
+            }
+            last_step['sections'].append(target_sec)
+            
+        target_sec['fields'].append({
+            "label": label,
+            "name": h,
+            "type": "text",
+            "required": False
+        })
+        added_fields.append(h)
+        current_names_now.add(h)
+        
+    # Simpan ke form_schema.json jika ada penambahan / penghapusan
+    if added_fields or removed_fields:
+        with open(schema_path, 'w') as f:
+            json.dump(schema, f, indent=2)
+            
+    return {
+        "success": True,
+        "spreadsheet": spreadsheet.title,
+        "added": added_fields,
+        "removed": removed_fields,
+        "schema": schema
+    }

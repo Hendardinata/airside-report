@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- CSS with Cache Buster -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v=20260928_v2">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v=20260929_v4">
     
     <!-- Navbar Essential & Bulletproof Mobile Styling -->
     <style>
@@ -218,6 +218,121 @@
             };
         })();
     </script>
+    
+    <!-- InJourney Custom Loading Spinner (SweetAlert2 & Generic) -->
+    <style>
+        @keyframes injourney-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Override SweetAlert2 Default Loading Spinner with InJourney Kawung Motif */
+        div:where(.swal2-container) .swal2-loader,
+        .swal2-loader {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 88px !important;
+            height: 88px !important;
+            min-width: 88px !important;
+            min-height: 88px !important;
+            border: none !important;
+            border-color: transparent !important;
+            border-radius: 0 !important;
+            background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center !important;
+            background-size: contain !important;
+            animation: injourney-spin 1s linear infinite !important;
+            margin: 0 auto !important;
+            box-shadow: none !important;
+            filter: drop-shadow(0 8px 20px rgba(0, 51, 102, 0.18));
+        }
+
+        div:where(.swal2-container) .swal2-loader::before,
+        div:where(.swal2-container) .swal2-loader::after,
+        .swal2-loader::before,
+        .swal2-loader::after {
+            display: none !important;
+            content: none !important;
+            border: none !important;
+        }
+
+        /* Seamless & Professional Loading Modal: Hide white card, title, text - show ONLY spinner */
+        div:where(.swal2-container) .swal2-popup.swal2-loading,
+        .swal2-popup.swal2-loading {
+            background: transparent !important;
+            background-color: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+            overflow: visible !important;
+        }
+
+        div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-title,
+        div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-html-container,
+        div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-icon,
+        div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-close,
+        .swal2-popup.swal2-loading .swal2-title,
+        .swal2-popup.swal2-loading .swal2-html-container,
+        .swal2-popup.swal2-loading .swal2-icon,
+        .swal2-popup.swal2-loading .swal2-close {
+            display: none !important;
+        }
+
+        div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-actions,
+        .swal2-popup.swal2-loading .swal2-actions {
+            background: transparent !important;
+            background-color: transparent !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            width: auto !important;
+        }
+
+        /* Ensure loader is cleanly displayed when Swal.showLoading() is called */
+        div:where(.swal2-container) .swal2-actions.swal2-loading .swal2-loader,
+        div:where(.swal2-container).swal2-loading .swal2-loader,
+        .swal2-actions.swal2-loading .swal2-loader,
+        .swal2-loading .swal2-loader {
+            display: block !important;
+        }
+
+        /* Soft bright frosted glass backdrop for SweetAlert (not too dark) */
+        div:where(.swal2-container).swal2-backdrop-show {
+            background: rgba(255, 255, 255, 0.65) !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+        }
+
+        div:where(.swal2-container):has(.swal2-loading) {
+            background: rgba(255, 255, 255, 0.7) !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+        }
+
+        /* InJourney Mini Spinners for Badges/Cards/Buttons */
+        .injourney-spinner-sm {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            vertical-align: -2px;
+            background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center;
+            background-size: contain;
+            animation: injourney-spin 1s linear infinite;
+        }
+
+        .injourney-spinner-md {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            vertical-align: middle;
+            background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center;
+            background-size: contain;
+            animation: injourney-spin 1s linear infinite;
+        }
+    </style>
     
     {% block head %}{% endblock %}
 </head>

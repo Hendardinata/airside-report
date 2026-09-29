@@ -153,6 +153,21 @@ def submit():
     if not sheet_url:
         return jsonify({"status": "error", "message": "Admin belum mengatur URL Spreadsheet untuk bandara ini!"})
     
+    # Filter data agar hanya field yang sah di schema aktif yang diproses
+    import os, json
+    try:
+        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
+        with open(schema_path, 'r') as f:
+            schema_data = json.load(f)
+            allowed = set()
+            for step in schema_data.get('steps', []):
+                for sec in step.get('sections', []):
+                    for f_item in sec.get('fields', []):
+                        allowed.add(f_item.get('name'))
+            data = {k: v for k, v in data.items() if k in allowed}
+    except Exception as err:
+        print("Warning filter submit data:", err)
+    
     try:
         write_daily_report(sheet_url, data)
         admin_config = get_admin_config()

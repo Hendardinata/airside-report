@@ -420,8 +420,14 @@
               "type": "text"
             },
             {
-              "label": "Catatn 6",
+              "label": "Catatan 6",
               "name": "CATATAN_6",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "label": "Catatan 7",
+              "name": "CATATAN_7",
               "required": false,
               "type": "text"
             }

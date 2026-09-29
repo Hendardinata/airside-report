@@ -67,8 +67,17 @@
     }
 
     @keyframes pulseLive {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.25); opacity: 0.7; }
+
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.25);
+            opacity: 0.7;
+        }
     }
 
     .header-title {
@@ -426,10 +435,21 @@
     }
 
     /* Airport Identity Accent Bars */
-    #card-LOP { border-top: 4px solid #003366; }
-    #card-DPS { border-top: 4px solid #0284c7; }
-    #card-BWX { border-top: 4px solid #059669; }
-    #card-KOE { border-top: 4px solid #4f46e5; }
+    #card-LOP {
+        border-top: 4px solid #003366;
+    }
+
+    #card-DPS {
+        border-top: 4px solid #0284c7;
+    }
+
+    #card-BWX {
+        border-top: 4px solid #059669;
+    }
+
+    #card-KOE {
+        border-top: 4px solid #4f46e5;
+    }
 
     .airport-card-header {
         display: flex;
@@ -450,10 +470,25 @@
         letter-spacing: 0.5px;
     }
 
-    .iata-LOP { background-color: #003366; color: #ffffff; }
-    .iata-DPS { background-color: #0284c7; color: #ffffff; }
-    .iata-BWX { background-color: #059669; color: #ffffff; }
-    .iata-KOE { background-color: #4f46e5; color: #ffffff; }
+    .iata-LOP {
+        background-color: #003366;
+        color: #ffffff;
+    }
+
+    .iata-DPS {
+        background-color: #0284c7;
+        color: #ffffff;
+    }
+
+    .iata-BWX {
+        background-color: #059669;
+        color: #ffffff;
+    }
+
+    .iata-KOE {
+        background-color: #4f46e5;
+        color: #ffffff;
+    }
 
     .airport-title {
         font-size: 1.15rem;
@@ -860,9 +895,11 @@
     .config-card-1 {
         border-top: 3.5px solid #003366;
     }
+
     .config-card-2 {
         border-top: 3.5px solid #0284c7;
     }
+
     .config-card-3 {
         border-top: 3.5px solid #059669;
     }
@@ -1222,26 +1259,29 @@
             width: 100% !important;
             display: grid !important;
             grid-template-columns: 1fr 1fr !important;
-            gap: 0.65rem !important;
+            gap: 0.55rem !important;
+        }
+
+        .header-actions .btn-sync-action,
+        .header-actions .btn-header-secondary {
+            width: 100% !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0.6rem 0.35rem !important;
+            font-size: 0.78rem !important;
+            font-weight: 600 !important;
+            min-height: 42px !important;
+            border-radius: 9px !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            letter-spacing: -0.2px !important;
         }
 
         .header-actions .btn-sync-action {
-            grid-column: 1 / -1 !important;
-            order: -1 !important;
-            width: 100% !important;
-            padding: 0.75rem 1rem !important;
-            font-size: 0.95rem !important;
             font-weight: 700 !important;
-            min-height: 44px !important;
-            justify-content: center !important;
-        }
-
-        .header-actions .btn-header-secondary {
-            width: 100% !important;
-            justify-content: center !important;
-            padding: 0.6rem 0.5rem !important;
-            font-size: 0.825rem !important;
-            min-height: 42px !important;
+            grid-column: auto !important;
+            order: initial !important;
         }
 
         /* Mobile Segmented View Switcher */
@@ -1394,6 +1434,117 @@
             font-size: 0.85rem;
             justify-content: center;
             border-radius: 10px !important;
+        }
+
+        /* Batch Hub Modal Mobile Layout Polish */
+        .batch-modal-card {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 94vh !important;
+            max-height: 94vh !important;
+            border-radius: 20px 20px 0 0 !important;
+        }
+
+        .batch-modal-body {
+            padding: 0.85rem 0.75rem !important;
+        }
+
+        .hub-card {
+            padding: 0.85rem 0.85rem !important;
+            border-radius: 12px !important;
+            margin-bottom: 0.85rem !important;
+        }
+
+        .hub-card-header {
+            padding-bottom: 0.55rem !important;
+            margin-bottom: 0.65rem !important;
+            gap: 0.5rem !important;
+        }
+
+        .hub-card-title {
+            font-size: 0.95rem !important;
+            line-height: 1.25 !important;
+        }
+
+        .hub-card-desc {
+            font-size: 0.72rem !important;
+            line-height: 1.35 !important;
+        }
+
+        .hub-card-icon {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 0.95rem !important;
+            border-radius: 8px !important;
+        }
+
+        .modal-icon-badge {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 0.95rem !important;
+        }
+
+        .modal-title {
+            font-size: 0.98rem !important;
+        }
+
+        .modal-subtitle {
+            font-size: 0.72rem !important;
+        }
+
+        .branch-cards-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0.5rem !important;
+        }
+
+        .branch-select-card {
+            padding: 0.65rem 0.75rem !important;
+            border-radius: 10px !important;
+        }
+
+        .branch-code-badge {
+            font-size: 1.05rem !important;
+        }
+
+        .branch-name-text {
+            font-size: 0.7rem !important;
+        }
+
+        .batch-modal-footer {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px)) !important;
+            gap: 0.5rem !important;
+        }
+
+        .batch-footer-note {
+            font-size: 0.72rem !important;
+            text-align: center !important;
+            line-height: 1.3 !important;
+        }
+
+        .batch-footer-actions {
+            display: grid !important;
+            grid-template-columns: 1fr 2fr !important;
+            gap: 0.5rem !important;
+            width: 100% !important;
+        }
+
+        .batch-footer-actions .btn-footer-close,
+        .batch-footer-actions .btn-footer-save {
+            min-height: 42px !important;
+            justify-content: center !important;
+            font-size: 0.82rem !important;
+        }
+
+        .batch-footer-actions .btn-footer-save {
+            font-weight: 700 !important;
+            white-space: nowrap !important;
+        }
+
+        .btn-rollout-primary {
+            width: 100% !important;
+            min-height: 42px !important;
         }
     }
 
@@ -1638,6 +1789,674 @@
             grid-template-columns: 1fr;
         }
     }
+
+    /* ==========================================================================
+       BATCH OPERATIONS HUB (V2) MODAL OVERLAY & COMPONENTS
+       ========================================================================== */
+    .batch-modal-card {
+        max-width: 1260px !important;
+        width: 95% !important;
+        max-height: 90vh !important;
+        border-radius: 16px !important;
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35) !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    .batch-modal-body {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 1.25rem 1.35rem !important;
+    }
+
+    .hub-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.2rem 0.65rem;
+        border-radius: 9999px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+    }
+
+    .hub-tag-v2 {
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        color: #ffffff;
+        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    }
+
+    .hub-card {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 1.15rem 1.35rem;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+        margin-bottom: 1.25rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .hub-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding-bottom: 0.85rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+        flex-wrap: wrap;
+    }
+
+    .hub-card-title-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .hub-card-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        background: #f0f9ff;
+        color: #0284c7;
+        border: 1px solid #bae6fd;
+        flex-shrink: 0;
+    }
+
+    .hub-card-icon.green {
+        background: #f0fdf4;
+        color: #059669;
+        border-color: #bbf7d0;
+    }
+
+    .hub-card-icon.purple {
+        background: #faf5ff;
+        color: #9333ea;
+        border-color: #e9d5ff;
+    }
+
+    .hub-card-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #002b49;
+        margin: 0 0 0.15rem 0;
+    }
+
+    .hub-card-desc {
+        font-size: 0.78rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    .control-label-micro {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .batch-rollout-controls-grid {
+        display: grid;
+        grid-template-columns: 200px minmax(0, 1fr) auto;
+        gap: 0.85rem;
+        align-items: flex-end;
+        margin-bottom: 1.15rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .flatpickr-mobile {
+        display: none !important;
+    }
+
+    .modal-title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .branch-selection-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        margin-bottom: 0.65rem;
+        padding-top: 0.75rem;
+        border-top: 1px dashed #e2e8f0;
+    }
+
+    .btn-select-all {
+        height: 32px;
+        padding: 0 0.85rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        border-radius: 7px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        color: #334155;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-select-all:hover {
+        background: #f8fafc;
+        border-color: #0284c7;
+        color: #0284c7;
+    }
+
+    .batch-modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.9rem 1.5rem;
+        background: #ffffff;
+        border-top: 1px solid #e2e8f0;
+        gap: 1rem;
+        box-sizing: border-box;
+    }
+
+    .batch-footer-note {
+        font-size: 0.8rem;
+        color: #64748b;
+    }
+
+    .batch-footer-actions {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    @media (max-width: 900px) {
+        .batch-rollout-controls-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .template-box {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .template-box i {
+        position: absolute;
+        left: 0.85rem;
+        font-size: 0.95rem;
+        pointer-events: none;
+    }
+
+    .template-box input {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        height: 40px;
+        padding-left: 2.4rem;
+        padding-right: 0.85rem;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 9px;
+        font-size: 0.85rem;
+        font-family: monospace;
+        color: #002b49;
+    }
+
+    .template-box input:focus {
+        border-color: #0284c7;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .btn-rollout-primary {
+        background: linear-gradient(135deg, #002b49 0%, #0284c7 100%);
+        color: #ffffff;
+        border: none;
+        height: 40px;
+        padding: 0 1.25rem;
+        border-radius: 9px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .btn-rollout-primary:hover {
+        opacity: 0.95;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+    }
+
+    .branch-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-top: 0.85rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 1100px) {
+        .branch-cards-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .branch-cards-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    .branch-select-card {
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 0.75rem 0.85rem;
+        background: #ffffff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        min-width: 0 !important;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .branch-select-card:hover {
+        border-color: #0284c7;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
+    }
+
+    .branch-select-card.selected {
+        border-color: #0284c7;
+        background: #f0f9ff;
+    }
+
+    .branch-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .branch-code-badge {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #002b49;
+        line-height: 1;
+    }
+
+    .branch-name-text {
+        font-size: 0.72rem;
+        color: #64748b;
+        margin-top: 0.15rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .custom-check-box {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: #0284c7;
+        flex-shrink: 0;
+    }
+
+    .branch-folder-hint {
+        font-size: 0.68rem;
+        color: #475569;
+        font-family: monospace;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: rgba(226, 232, 240, 0.55);
+        padding: 0.2rem 0.45rem;
+        border-radius: 6px;
+        margin-bottom: 0.35rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        min-width: 0;
+    }
+
+    .branch-folder-hint i {
+        flex-shrink: 0;
+    }
+
+    .branch-folder-hint span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+    }
+
+    .branch-active-sheet-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.2rem 0.45rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        white-space: nowrap;
+        min-width: 0;
+    }
+
+    .branch-active-sheet-badge i {
+        flex-shrink: 0;
+    }
+
+    .branch-active-sheet-badge span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .branch-active-sheet-badge.empty {
+        background: #fffbeb;
+        color: #d97706;
+        border-color: #fde68a;
+    }
+
+    .hub-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        text-align: left;
+    }
+
+    .hub-table th {
+        background-color: #f8fafc;
+        color: #475569;
+        font-weight: 700;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        padding: 0.85rem 1rem;
+        border-bottom: 1.5px solid #e2e8f0;
+        white-space: nowrap;
+    }
+
+    .hub-table td {
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+        vertical-align: middle;
+    }
+
+    .hub-table tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    .table-input {
+        width: 100%;
+        height: 38px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 0 0.75rem;
+        font-size: 0.85rem;
+        background: #ffffff;
+        box-sizing: border-box;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .table-input:focus {
+        border-color: #0284c7;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    /* Bulk Month Switcher Toolbar - Clean InJourney Enterprise Theme */
+    .matrix-toolbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.65rem 1rem;
+        margin-bottom: 0.85rem;
+        gap: 1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+
+    .matrix-toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .matrix-toolbar-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0284c7;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+
+    .matrix-toolbar-title {
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: #0f172a;
+        line-height: 1.2;
+    }
+
+    .matrix-toolbar-desc {
+        font-size: 0.74rem;
+        color: #64748b;
+        margin-top: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .matrix-toolbar-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .matrix-select-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .matrix-select-icon {
+        position: absolute;
+        left: 0.75rem;
+        color: #0284c7;
+        font-size: 0.82rem;
+        pointer-events: none;
+    }
+
+    .matrix-bulk-select {
+        height: 36px;
+        width: 260px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 7px;
+        padding: 0 0.75rem 0 2.15rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #0f172a;
+        background-color: #ffffff;
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .matrix-bulk-select:focus {
+        border-color: #0284c7;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .btn-bulk-sync {
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        border: none;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.82rem;
+        height: 36px;
+        padding: 0 1rem;
+        border-radius: 7px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        box-shadow: 0 2px 5px rgba(0, 51, 102, 0.2);
+    }
+
+    .btn-bulk-sync:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0, 51, 102, 0.3);
+        filter: brightness(1.08);
+    }
+
+    @media (max-width: 900px) {
+        .matrix-toolbar-container {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.65rem;
+        }
+        .matrix-toolbar-desc {
+            white-space: normal;
+        }
+        .matrix-toolbar-controls {
+            flex-direction: row;
+            width: 100%;
+        }
+        .matrix-select-wrapper {
+            flex: 1;
+        }
+        .matrix-bulk-select {
+            width: 100%;
+        }
+    }
+
+    select.table-input {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.65rem center;
+        background-size: 1.15rem 1.15rem;
+        padding-right: 2.1rem;
+        font-weight: 600;
+        color: #003366;
+        cursor: pointer;
+    }
+
+    select.table-input:hover {
+        border-color: #0284c7;
+    }
+
+    .btn-batch-tool {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 9px;
+        border: 1.5px solid #cbd5e1;
+        background: #ffffff;
+        color: #002b49;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: left;
+    }
+
+    .btn-batch-tool:hover {
+        border-color: #0284c7;
+        background: #f8fafc;
+        color: #0284c7;
+    }
+
+    .btn-batch-tool.danger:hover {
+        border-color: #ef4444;
+        color: #ef4444;
+        background: #fef2f2;
+    }
+
+    .central-controls-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.15rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+        .central-controls-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
 </style>
 {% endblock %}
 
@@ -1665,6 +2484,10 @@
         <button class="btn btn-header-secondary" onclick="openModal()" title="Pengaturan Spreadsheet & PIC">
             <i class="fas fa-sliders me-1"></i>
             <span>Konfigurasi Bandara</span>
+        </button>
+        <button type="button" class="btn btn-header-secondary" onclick="openBatchModal()" title="Buka Mode Batch Multi-Cabang Versi 2">
+            <i class="fas fa-layer-group me-1"></i>
+            <span>Konfigurasi Bandara (V2)</span>
         </button>
         <button class="btn btn-sync-action" onclick="fetchRekap()" id="btnSync">
             <i class="fas fa-arrows-rotate me-1" id="syncSpinner"></i>
@@ -1760,7 +2583,8 @@
             </span>
             <div class="quick-chips">
                 <button type="button" class="chip-btn" id="chipToday" onclick="setQuickDate('today')">Hari Ini</button>
-                <button type="button" class="chip-btn" id="chipYesterday" onclick="setQuickDate('yesterday')">Kemarin</button>
+                <button type="button" class="chip-btn" id="chipYesterday"
+                    onclick="setQuickDate('yesterday')">Kemarin</button>
             </div>
         </div>
 
@@ -1768,7 +2592,8 @@
             <button type="button" class="date-nav-btn" onclick="shiftDate(-1)" title="Hari Sebelumnya">
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <div class="date-picker-trigger" id="datePickerTriggerBox" onclick="triggerDatePicker(event)" title="Pilih Tanggal">
+            <div class="date-picker-trigger" id="datePickerTriggerBox" onclick="triggerDatePicker(event)"
+                title="Pilih Tanggal">
                 <i class="far fa-calendar-check date-icon"></i>
                 <span id="dateDisplayFormatted" class="date-formatted-text">Memuat...</span>
                 <input type="date" class="date-input-hidden" id="filterDate" onchange="onDateChanged()">
@@ -1805,7 +2630,7 @@
             <div class="airport-card-header">
                 <span class="iata-badge iata-LOP">LOP</span>
                 <div class="status-pill loading" id="badge-LOP">
-                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                    <span class="injourney-spinner-sm me-1"></span> Loading...
                 </div>
             </div>
 
@@ -1833,7 +2658,7 @@
             <div class="airport-card-header">
                 <span class="iata-badge iata-DPS">DPS</span>
                 <div class="status-pill loading" id="badge-DPS">
-                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                    <span class="injourney-spinner-sm me-1"></span> Loading...
                 </div>
             </div>
 
@@ -1861,7 +2686,7 @@
             <div class="airport-card-header">
                 <span class="iata-badge iata-BWX">BWX</span>
                 <div class="status-pill loading" id="badge-BWX">
-                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                    <span class="injourney-spinner-sm me-1"></span> Loading...
                 </div>
             </div>
 
@@ -1889,7 +2714,7 @@
             <div class="airport-card-header">
                 <span class="iata-badge iata-KOE">KOE</span>
                 <div class="status-pill loading" id="badge-KOE">
-                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                    <span class="injourney-spinner-sm me-1"></span> Loading...
                 </div>
             </div>
 
@@ -1977,7 +2802,8 @@
                 </div>
                 <div>
                     <h3 class="modal-title">Konfigurasi Parameter Bandara</h3>
-                    <p class="modal-subtitle">Kelola integrasi Google Drive, spreadsheet aktif, dan kontak PIC tiap cabang.</p>
+                    <p class="modal-subtitle">Kelola integrasi Google Drive, spreadsheet aktif, dan kontak PIC tiap
+                        cabang.</p>
                 </div>
             </div>
             <button type="button" class="modal-close-btn" onclick="closeModal()" title="Tutup">
@@ -2009,8 +2835,8 @@
 
                         <div class="config-form-group">
                             <label class="config-field-label" for="picPhoneInput">Nomor WhatsApp PIC</label>
-                            <input type="text" class="form-control config-field-input" name="picPhone" id="picPhoneInput"
-                                placeholder="Contoh: 62812...">
+                            <input type="text" class="form-control config-field-input" name="picPhone"
+                                id="picPhoneInput" placeholder="Contoh: 62812...">
                             <small class="config-field-hint">
                                 Digunakan otomatis pada tombol 'Ingatkan PIC'.
                             </small>
@@ -2025,8 +2851,8 @@
                                 </button>
                             </div>
                             <div class="input-action-row">
-                                <select class="form-control config-field-input" name="sheetUrl" id="sheetUrlSelect" disabled
-                                    onchange="updateLinkStatus(this.value)">
+                                <select class="form-control config-field-input" name="sheetUrl" id="sheetUrlSelect"
+                                    disabled onchange="updateLinkStatus(this.value)">
                                     <option value="">-- Pilih Cabang Dulu --</option>
                                 </select>
                                 <button class="btn-action-icon" type="button" onclick="copySheetUrl()"
@@ -2037,9 +2863,11 @@
                                     title="Buka Spreadsheet di Tab Baru">
                                     <i class="fas fa-arrow-up-right-from-square"></i>
                                 </button>
-                                <div id="sheetUrlStatus" style="display: flex; align-items: center; padding: 0 0.15rem;"></div>
+                                <div id="sheetUrlStatus"
+                                    style="display: flex; align-items: center; padding: 0 0.15rem;"></div>
                             </div>
-                            <small class="config-field-hint" id="loadingSheetsText" style="display: none; color: #0284c7;">
+                            <small class="config-field-hint" id="loadingSheetsText"
+                                style="display: none; color: #0284c7;">
                                 <i class="fas fa-spinner fa-spin me-1"></i> Memuat daftar spreadsheet dari Drive...
                             </small>
                         </div>
@@ -2055,9 +2883,9 @@
                         <div class="config-form-group">
                             <label class="config-field-label" for="driveFolderInput">Folder ID Google Drive</label>
                             <div class="input-action-row">
-                                <input type="text" class="form-control config-field-input" name="driveFolder" id="driveFolderInput"
-                                    placeholder="Paste ID Folder atau link..." oninput="onDriveFolderInput()"
-                                    onchange="onDriveFolderChanged()">
+                                <input type="text" class="form-control config-field-input" name="driveFolder"
+                                    id="driveFolderInput" placeholder="Paste ID Folder atau link..."
+                                    oninput="onDriveFolderInput()" onchange="onDriveFolderChanged()">
                                 <button type="button" class="btn-action-cek" onclick="cekDaftarSheet()"
                                     title="Cek Folder Google Drive">
                                     <i class="fas fa-folder-open"></i> Cek
@@ -2070,8 +2898,8 @@
 
                         <div class="config-form-group">
                             <label class="config-field-label" for="targetMonthInput">Target Bulan Laporan</label>
-                            <input type="text" class="form-control config-field-input" name="targetMonth" id="targetMonthInput"
-                                onchange="onTargetMonthChanged()" placeholder="Pilih Bulan">
+                            <input type="text" class="form-control config-field-input" name="targetMonth"
+                                id="targetMonthInput" onchange="onTargetMonthChanged()" placeholder="Pilih Bulan">
                             <small class="config-field-hint">
                                 Target periode pembuatan sheet baru secara otomatis.
                             </small>
@@ -2079,8 +2907,8 @@
 
                         <div class="config-form-group">
                             <label class="config-field-label" for="templateIdInput">Template ID Master</label>
-                            <input type="text" class="form-control config-field-input" name="templateId" id="templateIdInput"
-                                placeholder="Opsional (Kosongkan jika default)">
+                            <input type="text" class="form-control config-field-input" name="templateId"
+                                id="templateIdInput" placeholder="Opsional (Kosongkan jika default)">
                             <small class="config-field-hint">
                                 ID template master format rekapitulasi airside.
                             </small>
@@ -2096,8 +2924,8 @@
 
                         <div class="config-form-group">
                             <label class="config-field-label" for="deputyPhoneInput">Form Input Deputy</label>
-                            <input type="text" class="form-control config-field-input" name="deputyPhone" id="deputyPhoneInput"
-                                placeholder="Contoh: 62812... (Nomor WA Deputy)">
+                            <input type="text" class="form-control config-field-input" name="deputyPhone"
+                                id="deputyPhoneInput" placeholder="Contoh: 62812... (Nomor WA Deputy)">
                             <small class="config-field-hint">
                                 Menerima kompilasi rekapitulasi harian regional.
                             </small>
@@ -2105,8 +2933,8 @@
 
                         <div class="config-form-group">
                             <label class="config-field-label" for="adminPhoneInput">Form Input Admin</label>
-                            <input type="text" class="form-control config-field-input" name="adminPhone" id="adminPhoneInput"
-                                placeholder="Contoh: 62812... (Nomor WA Admin)">
+                            <input type="text" class="form-control config-field-input" name="adminPhone"
+                                id="adminPhoneInput" placeholder="Contoh: 62812... (Nomor WA Admin)">
                             <small class="config-field-hint">
                                 Menerima salinan notifikasi laporan pusat.
                             </small>
@@ -2116,7 +2944,8 @@
                             <i class="fas fa-shield-halved"></i>
                             <div>
                                 <div class="note-title">Distribusi Pesan Aman</div>
-                                <div class="note-desc">Nomor di atas terhubung langsung ke WhatsApp Web untuk pengiriman rekapitulasi regional.</div>
+                                <div class="note-desc">Nomor di atas terhubung langsung ke WhatsApp Web untuk pengiriman
+                                    rekapitulasi regional.</div>
                             </div>
                         </div>
                     </div>
@@ -2139,6 +2968,324 @@
 </div>
 
 <!-- ==========================================================================
+     MODAL KONFIGURASI BANDARA (V2) - PUSAT OPERASIONAL MASSAL (BATCH HUB)
+     ========================================================================== -->
+<div id="batchHubModal" class="clean-modal-overlay" style="display: none; z-index: 9995;" data-open-batch="{{ 'true' if open_batch else 'false' }}">
+    <div class="clean-modal-card batch-modal-card">
+        <div class="modal-handle-bar"></div>
+        <div class="modal-head">
+            <div class="modal-title-group">
+                <div class="modal-icon-badge" style="background: linear-gradient(135deg, #003366 0%, #0284c7 100%); color: #ffffff; border: none;">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div>
+                    <div class="modal-title-row">
+                        <h3 class="modal-title">Konfigurasi Bandara (V2)</h3>
+                        <span class="hub-tag hub-tag-v2"><i class="fas fa-network-wired"></i> Batch Hub</span>
+                    </div>
+                    <p class="modal-subtitle">Penerbitan spreadsheet bulanan serentak & fleet matrix 4 cabang.</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" class="btn btn-outline btn-sm d-none d-md-inline-flex" onclick="loadAllBranchSheets(true)" title="Sinkronkan ulang daftar file dari Google Drive">
+                    <i class="fas fa-arrows-rotate me-1 text-primary" id="matrixRefreshTopIcon"></i> Refresh Drive
+                </button>
+                <button type="button" class="modal-close-btn" onclick="closeBatchModal()" title="Tutup">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="modal-body batch-modal-body">
+            <!-- ==============================================================
+                 BAGIAN 1: PENERBITAN & AKTIVASI SHEET MASSAL (BULAN BARU)
+                 ============================================================== -->
+            <div class="hub-card">
+                <div class="hub-card-header">
+                    <div class="hub-card-title-group">
+                        <div class="hub-card-icon green">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div>
+                            <h4 class="hub-card-title">Penerbitan & Aktivasi Sheet Massal (Bulan Baru)</h4>
+                            <p class="hub-card-desc">Cetak file spreadsheet baru untuk seluruh cabang sekaligus dari template master dan otomatis langsung aktif.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Controls Grid -->
+                <div class="batch-rollout-controls-grid">
+                    <div>
+                        <label class="control-label-micro" for="batchTargetMonth">
+                            <i class="far fa-calendar me-1"></i> Target Periode Bulan
+                        </label>
+                        <input type="month" class="table-input" id="batchTargetMonth" style="height: 40px; font-weight: 700; color: #003366; cursor: pointer; background: #ffffff; padding: 0 0.85rem;">
+                    </div>
+
+                    <div style="min-width: 0;">
+                        <label class="control-label-micro" for="batchTemplateId">
+                            <i class="fas fa-file-invoice me-1"></i> Master Template ID Google Drive (Satu untuk Seluruh Cabang)
+                        </label>
+                        <div class="template-box">
+                            <i class="fab fa-google-drive text-primary"></i>
+                            <input type="text" id="batchTemplateId" value="{{ default_template_id | default('1-NfvG7t8uhp7NPKygxv_oSDsmzP1GlajIRvkGXKjwuk') }}" placeholder="ID Template Master Google Drive">
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn-rollout-primary" id="btnRunBatchRollout" onclick="executeBatchRollout()">
+                            <i class="fas fa-bolt"></i>
+                            <span>Terbitkan & Aktifkan Massal</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sub-header Pemilihan Cabang Sasaran -->
+                <div class="branch-selection-header">
+                    <span class="control-label-micro mb-0">
+                        <i class="fas fa-plane-departure me-1"></i> Pilih Cabang Penerbitan:
+                    </span>
+                    <button type="button" class="btn btn-outline btn-sm btn-select-all" onclick="toggleSelectAllBranches(true)">
+                        <i class="fas fa-check-double me-1"></i> Pilih Semua
+                    </button>
+                </div>
+
+                <!-- 4 Branch Cards Selection Matrix -->
+                <div class="branch-cards-grid">
+                    {% for code in ['LOP', 'DPS', 'BWX', 'KOE'] %}
+                    {% set c = config.airports.get(code, {}) if config and config.airports else {} %}
+                    <div class="branch-select-card selected" id="batchCard-{{ code }}" onclick="toggleBranchSelection('{{ code }}')">
+                        <div class="branch-card-top">
+                            <div style="min-width: 0; flex: 1; overflow: hidden; padding-right: 0.25rem;">
+                                <span class="branch-code-badge">{{ code }}</span>
+                                <div class="branch-name-text">
+                                    {% if code == 'LOP' %}Lombok (ZAM)
+                                    {% elif code == 'DPS' %}Bali (DPS)
+                                    {% elif code == 'BWX' %}Banyuwangi (BWX)
+                                    {% elif code == 'KOE' %}Kupang (El Tari)
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <input type="checkbox" class="custom-check-box branch-checkbox" id="check-{{ code }}" value="{{ code }}" checked onclick="event.stopPropagation()">
+                        </div>
+
+                        <div style="min-width: 0; width: 100%; overflow: hidden;">
+                            <span class="control-label-micro" style="font-size: 0.65rem; margin-bottom: 0.2rem;">Folder Tujuan Drive:</span>
+                            <span class="branch-folder-hint" title="{{ c.drive_folder | default('Belum diatur') }}">
+                                <i class="fas fa-folder text-warning"></i>
+                                <span>{{ c.drive_folder | default('Folder Belum Diatur') }}</span>
+                            </span>
+
+                            <span class="branch-active-sheet-badge {% if not c.sheet_url %}empty{% endif %}" id="cardSheetBadge-{{ code }}">
+                                <i class="fas fa-table"></i>
+                                <span id="cardSheetBadgeText-{{ code }}">
+                                    {% if c.sheet_url %}
+                                        Aktif Terhubung
+                                    {% else %}
+                                        Belum Ada Sheet
+                                    {% endif %}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- ==============================================================
+                 BAGIAN 2: FLEET MANAGEMENT MATRIX TABLE (TABEL LENGKAP 4 CABANG)
+                 ============================================================== -->
+            <div class="hub-card">
+                <div class="hub-card-header">
+                    <div class="hub-card-title-group">
+                        <div class="hub-card-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div>
+                            <h4 class="hub-card-title">Matriks Pengaturan Seluruh Cabang (Fleet Matrix)</h4>
+                            <p class="hub-card-desc">Tinjau dan sesuaikan Folder ID Google Drive, Link Spreadsheet Aktif, dan Kontak WhatsApp PIC dalam satu tabel.</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="saveFleetMatrix()" style="background: linear-gradient(135deg, #003366 0%, #0284c7 100%);">
+                            <i class="fas fa-floppy-disk me-1"></i> Simpan Perubahan Matriks
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Toolbar Penyetelan Periode Serentak (Bulan Acuan) -->
+                <div class="matrix-toolbar-container">
+                    <div class="matrix-toolbar-left">
+                        <div class="matrix-toolbar-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div>
+                            <div class="matrix-toolbar-title">Acuan Penyetelan Bulan Serentak</div>
+                            <div class="matrix-toolbar-desc">Pilih bulan acuan untuk menyelaraskan spreadsheet aktif di ke-4 cabang sekaligus secara otomatis.</div>
+                        </div>
+                    </div>
+                    <div class="matrix-toolbar-controls">
+                        <div class="matrix-select-wrapper">
+                            <i class="far fa-calendar-alt matrix-select-icon"></i>
+                            <select id="matrixBulkMonthSelect" class="matrix-bulk-select" onchange="applyBulkMonthSelection(this.value)">
+                                <option value="">-- Pilih Acuan Bulan --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container" style="overflow-x: auto; width: 100%; max-width: 100%; box-sizing: border-box; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
+                    <table class="hub-table" style="width: 100%; min-width: 840px; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="width: 110px;">Cabang</th>
+                                <th style="width: 220px;">Folder Google Drive</th>
+                                <th style="min-width: 275px;">Spreadsheet Aktif Saat Ini</th>
+                                <th style="width: 175px;">WhatsApp PIC</th>
+                                <th style="width: 135px; text-align: center;">Aksi Cepat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for code in ['LOP', 'DPS', 'BWX', 'KOE'] %}
+                            {% set c = config.airports.get(code, {}) if config and config.airports else {} %}
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 800; color: #003366; font-size: 1.05rem; line-height: 1.1;">{{ code }}</div>
+                                    <div style="font-size: 0.72rem; color: #64748b; margin-top: 3px; font-weight: 500;">
+                                        {% if code == 'LOP' %}Lombok (ZAM)
+                                        {% elif code == 'DPS' %}Bali (DPS)
+                                        {% elif code == 'BWX' %}Banyuwangi (BWX)
+                                        {% elif code == 'KOE' %}Kupang (El Tari)
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" class="table-input" id="matrixFolder-{{ code }}" value="{{ c.drive_folder | default('') }}" placeholder="ID Folder Google Drive" style="font-family: monospace; font-size: 0.82rem; height: 38px;" onchange="loadSheetsForBranch('{{ code }}', false)">
+                                </td>
+                                <td>
+                                    <div style="position: relative; width: 100%;">
+                                        <select class="table-input matrix-sheet-select" id="matrixSheetSelect-{{ code }}" 
+                                                data-code="{{ code }}" 
+                                                data-active-url="{{ c.sheet_url | default('') }}"
+                                                style="height: 38px; font-weight: 700; color: #003366;"
+                                                onchange="onMatrixSheetChanged('{{ code }}')">
+                                            <option value="{{ c.sheet_url | default('') }}">
+                                                {% if c.sheet_url %}
+                                                    -- Memuat spreadsheet {{ code }}... --
+                                                {% else %}
+                                                    -- Belum ada sheet di Drive --
+                                                {% endif %}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px; line-height: 1.2;">
+                                        <span id="matrixSheetStatusText-{{ code }}"><i class="fas fa-spinner fa-spin text-primary me-1"></i> Memeriksa Drive...</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" class="table-input" id="matrixPic-{{ code }}" value="{{ c.pic_phone | default('') }}" placeholder="62812..." style="font-family: monospace; font-size: 0.85rem; height: 38px; letter-spacing: 0.3px;">
+                                </td>
+                                <td style="text-align: center;">
+                                    <div style="display: inline-flex; gap: 0.35rem; align-items: center; justify-content: center;">
+                                        <a id="matrixOpenSheetLink-{{ code }}" href="{{ c.sheet_url | default('#') }}" target="_blank" 
+                                           class="btn-action-icon {% if not c.sheet_url %}d-none{% endif %}" title="Buka Spreadsheet di Tab Baru">
+                                            <i class="fas fa-up-right-from-square"></i>
+                                        </a>
+                                        {% if c.drive_folder %}
+                                        <a id="matrixOpenFolderLink-{{ code }}" href="https://drive.google.com/drive/folders/{{ c.drive_folder }}" target="_blank" class="btn-action-icon" title="Buka Folder Drive">
+                                            <i class="fab fa-google-drive text-warning"></i>
+                                        </a>
+                                        {% endif %}
+                                        <button class="btn-action-icon" type="button" onclick="loadSheetsForBranch('{{ code }}', true)" title="Segarkan Daftar Spreadsheet Cabang {{ code }}">
+                                            <i class="fas fa-arrows-rotate" id="matrixRefreshIcon-{{ code }}"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ==============================================================
+                 BAGIAN 3: GLOBAL CENTRAL CONTROLS & BATCH UTILITIES
+                 ============================================================== -->
+            <div class="central-controls-grid">
+                <!-- Panel Kontak Pusat -->
+                <div class="hub-card" style="margin-bottom: 0;">
+                    <div class="hub-card-header">
+                        <div class="hub-card-title-group">
+                            <div class="hub-card-icon purple">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <div>
+                                <h4 class="hub-card-title">Kontak Penerima Regional (Pusat)</h4>
+                                <p class="hub-card-desc">Nomor WhatsApp tujuan rekapitulasi harian regional.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                        <div>
+                            <label class="control-label-micro" for="matrixAdminPhone">Nomor WhatsApp Administrator Regional</label>
+                            <input type="text" class="table-input" id="matrixAdminPhone" value="{{ config.admin.admin_phone | default('') if config and config.admin else '' }}" placeholder="Contoh: 6281326488542">
+                        </div>
+                        <div>
+                            <label class="control-label-micro" for="matrixDeputyPhone">Nomor WhatsApp Deputy Regional</label>
+                            <input type="text" class="table-input" id="matrixDeputyPhone" value="{{ config.admin.deputy_phone | default('') if config and config.admin else '' }}" placeholder="Contoh: 6281234567890">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Utilitas Serentak -->
+                <div class="hub-card" style="margin-bottom: 0;">
+                    <div class="hub-card-header">
+                        <div class="hub-card-title-group">
+                            <div class="hub-card-icon">
+                                <i class="fas fa-toolbox"></i>
+                            </div>
+                            <div>
+                                <h4 class="hub-card-title">Alat Batch Serentak (Global Tools)</h4>
+                                <p class="hub-card-desc">Jalankan aksi pemeliharaan ke 4 spreadsheet cabang dalam 1 klik.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+                        <button type="button" class="btn-batch-tool" onclick="syncSchemaToAll()">
+                            <span><i class="fas fa-arrows-split-up-and-left me-2 text-primary"></i> Sinkronkan Schema Form ke Semua Sheet</span>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.75rem;"></i>
+                        </button>
+                        <button type="button" class="btn-batch-tool" onclick="syncAllDailyTabs()">
+                            <span><i class="fas fa-table-cells me-2 text-success"></i> Tarik Seluruh Tab Harian ke Rekap</span>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.75rem;"></i>
+                        </button>
+                        <button type="button" class="btn-batch-tool danger" onclick="emptyDriveTrashBatch()">
+                            <span><i class="fas fa-trash-can me-2 text-danger"></i> Kosongkan Trash Google Drive (Semua)</span>
+                            <i class="fas fa-chevron-right text-muted" style="font-size: 0.75rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer batch-modal-footer">
+            <div class="batch-footer-note">
+                <i class="fas fa-shield-halved text-primary me-1"></i> Perubahan matriks dan aktivasi sheet akan langsung berlaku ke seluruh sistem laporan.
+            </div>
+            <div class="batch-footer-actions">
+                <button type="button" class="btn btn-outline btn-footer-close" onclick="closeBatchModal()">Tutup</button>
+                <button type="button" class="btn btn-primary btn-footer-save" onclick="saveFleetMatrix()" style="background: linear-gradient(135deg, #003366 0%, #0284c7 100%);">
+                    <i class="fas fa-floppy-disk me-1"></i> Simpan Perubahan Matriks
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================================
      DASHBOARD JAVASCRIPT LOGIC
      ========================================================================== -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -2154,7 +3301,849 @@
                 })
             ]
         });
+
+        // Auto open batch hub modal if opened via URL param or template flag
+        const batchModalEl = document.getElementById('batchHubModal');
+        const shouldOpenBatch = (batchModalEl && batchModalEl.dataset.openBatch === 'true') ||
+            window.location.search.includes('modal=batch-hub') || 
+            window.location.search.includes('open=batch-hub');
+        if (shouldOpenBatch) {
+            openBatchModal();
+        }
     });
+
+    // =========================================================================
+    // BATCH HUB (V2) MODAL HANDLERS & LOGIC
+    // =========================================================================
+    function openBatchModal() {
+        const modal = document.getElementById('batchHubModal');
+        if (!modal) return;
+        modal.style.display = 'flex';
+        
+        // Init target month default if empty
+        const now = new Date();
+        let targetY = now.getFullYear();
+        let targetM = now.getMonth() + 1;
+        if (now.getDate() >= 25) {
+            targetM += 1;
+            if (targetM > 12) {
+                targetM = 1;
+                targetY += 1;
+            }
+        }
+        const mStr = String(targetM).padStart(2, '0');
+        const monthInput = document.getElementById('batchTargetMonth');
+        // Ensure clean default value if empty
+        if (monthInput && !monthInput.value) {
+            monthInput.value = `${targetY}-${mStr}`;
+        }
+
+        // Load spreadsheets from Drive for all 4 branches
+        loadAllBranchSheets(false);
+    }
+
+    function closeBatchModal() {
+        const modal = document.getElementById('batchHubModal');
+        if (modal) modal.style.display = 'none';
+        
+        // Clean URL query param if present without reload
+        if (window.location.search.includes('modal=batch-hub') || window.location.search.includes('open=batch-hub')) {
+            const cleanUrl = window.location.pathname;
+            window.history.replaceState({}, '', cleanUrl);
+        }
+    }
+
+    // Close when clicking outside modal card
+    window.addEventListener('click', function(e) {
+        const batchModal = document.getElementById('batchHubModal');
+        if (batchModal && e.target === batchModal) {
+            closeBatchModal();
+        }
+    });
+
+    // Close on Escape key
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const batchModal = document.getElementById('batchHubModal');
+            if (batchModal && batchModal.style.display === 'flex') {
+                closeBatchModal();
+            }
+        }
+    });
+
+    function toggleBranchSelection(code) {
+        const checkbox = document.getElementById(`check-${code}`);
+        const card = document.getElementById(`batchCard-${code}`);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked;
+            if (checkbox.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+        }
+    }
+
+    function toggleSelectAllBranches(forceTrue) {
+        const codes = ['LOP', 'DPS', 'BWX', 'KOE'];
+        codes.forEach(code => {
+            const checkbox = document.getElementById(`check-${code}`);
+            const card = document.getElementById(`batchCard-${code}`);
+            if (checkbox && card) {
+                checkbox.checked = forceTrue;
+                if (forceTrue) card.classList.add('selected');
+                else card.classList.remove('selected');
+            }
+        });
+    }
+
+    function executeBatchRollout() {
+        const targetMonth = document.getElementById('batchTargetMonth').value;
+        const templateId = document.getElementById('batchTemplateId').value.trim();
+        
+        if (!targetMonth) {
+            return Swal.fire('Perhatian', 'Harap tentukan Target Periode Bulan terlebih dahulu!', 'warning');
+        }
+
+        const selectedAirports = [];
+        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+            const cb = document.getElementById(`check-${code}`);
+            if (cb && cb.checked) {
+                selectedAirports.push(code);
+            }
+        });
+
+        if (selectedAirports.length === 0) {
+            return Swal.fire('Tidak Ada Cabang Dipilih', 'Silakan centang minimal satu bandara cabang untuk diterbitkan sheet barunya!', 'warning');
+        }
+
+        Swal.fire({
+            title: 'Terbitkan Sheet Massal?',
+            html: `Sistem akan membuat file spreadsheet baru untuk bulan <b>${targetMonth}</b> pada cabang:<br><br>
+                   <span class="badge bg-primary text-white p-2">${selectedAirports.join(' • ')}</span><br><br>
+                   Seluruh sheet baru akan <b>otomatis langsung diaktifkan</b> di sistem begitu selesai dibuat.`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-rocket me-1"></i> Ya, Terbitkan & Aktifkan!',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#003366'
+        }).then(result => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Memproses Batch Rollout...',
+                    html: `Menduplikasi template master, mengatur hak akses, menyelaraskan form kolom, dan mengaktifkan spreadsheet...<br><br>
+                           <small class="text-muted">Proses ini membutuhkan waktu beberapa detik per cabang.</small>`,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                fetch('/admin/api/batch/create-sheets', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        targetMonth: targetMonth,
+                        templateId: templateId,
+                        airports: selectedAirports
+                    })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        let htmlContent = '<div class="text-start" style="max-height: 250px; overflow-y: auto; font-size: 0.85rem;">';
+                        data.results.forEach(item => {
+                            if (item.status === 'success') {
+                                htmlContent += `<div class="p-2 mb-1 bg-light rounded text-success border border-success border-opacity-25">
+                                    <strong>✓ [${item.airport}]</strong> ${item.message}
+                                </div>`;
+                            } else if (item.status === 'warning') {
+                                htmlContent += `<div class="p-2 mb-1 bg-light rounded text-warning border border-warning border-opacity-25">
+                                    <strong>⚠ [${item.airport}]</strong> ${item.message}
+                                </div>`;
+                            } else {
+                                htmlContent += `<div class="p-2 mb-1 bg-light rounded text-danger border border-danger border-opacity-25">
+                                    <strong>✗ [${item.airport}]</strong> ${item.message || item.error}
+                                </div>`;
+                            }
+                        });
+                        htmlContent += `</div>`;
+
+                        Swal.fire({
+                            title: 'Penerbitan Selesai!',
+                            html: htmlContent,
+                            icon: 'success',
+                            confirmButtonText: 'Selesai & Segarkan Halaman',
+                            confirmButtonColor: '#003366'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire('Gagal Batch Rollout', data.error || 'Terjadi kesalahan sistem', 'error');
+                    }
+                })
+                .catch(err => {
+                    Swal.fire('Error', err.message, 'error');
+                });
+            }
+        });
+    }
+
+    function saveFleetMatrix() {
+        const airportsData = {};
+        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+            const selectEl = document.getElementById(`matrixSheetSelect-${code}`);
+            const currentUrl = selectEl ? selectEl.value : '';
+            airportsData[code] = {
+                drive_folder: document.getElementById(`matrixFolder-${code}`)?.value?.trim() || '',
+                sheet_url: currentUrl.trim(),
+                pic_phone: document.getElementById(`matrixPic-${code}`)?.value?.trim() || ''
+            };
+        });
+
+        const adminData = {
+            admin_phone: document.getElementById('matrixAdminPhone')?.value?.trim() || '',
+            deputy_phone: document.getElementById('matrixDeputyPhone')?.value?.trim() || ''
+        };
+
+        Swal.fire({
+            title: 'Menyimpan Matriks...',
+            text: 'Memperbarui konfigurasi seluruh cabang...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        fetch('/admin/api/batch/update-matrix', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                airports: airportsData,
+                admin: adminData
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+                    const s = document.getElementById(`matrixSheetSelect-${code}`);
+                    if (s) s.setAttribute('data-active-url', s.value);
+                });
+                Swal.fire('Berhasil Disimpan!', data.message, 'success');
+            } else {
+                Swal.fire('Gagal', data.error, 'error');
+            }
+        })
+        .catch(err => {
+            Swal.fire('Error', err.message, 'error');
+        });
+    }
+
+    function updateMatrixSheetUI(code, sheetUrl, sheetPrettyName) {
+        // 1. Update Aksi Cepat Buka Spreadsheet
+        const openLink = document.getElementById(`matrixOpenSheetLink-${code}`);
+        if (openLink) {
+            if (sheetUrl && sheetUrl !== '') {
+                openLink.href = sheetUrl;
+                openLink.classList.remove('d-none');
+            } else {
+                openLink.href = '#';
+                openLink.classList.add('d-none');
+            }
+        }
+
+        // 2. Update Folder Aksi Cepat
+        const folderInput = document.getElementById(`matrixFolder-${code}`);
+        const folderLink = document.getElementById(`matrixOpenFolderLink-${code}`);
+        if (folderInput && folderLink) {
+            const cleanFolder = extractDriveIdFromText(folderInput.value);
+            if (cleanFolder) {
+                folderLink.href = `https://drive.google.com/drive/folders/${cleanFolder}`;
+                folderLink.classList.remove('d-none');
+            } else {
+                folderLink.classList.add('d-none');
+            }
+        }
+
+        // 3. Update Badge pada Card Bagian 1 (One-Click Rollout)
+        const badge = document.getElementById(`cardSheetBadge-${code}`);
+        const badgeText = document.getElementById(`cardSheetBadgeText-${code}`);
+        if (badge && badgeText) {
+            if (sheetUrl && sheetUrl !== '') {
+                badge.classList.remove('empty');
+                badgeText.textContent = sheetPrettyName || 'Aktif Terhubung';
+            } else {
+                badge.classList.add('empty');
+                badgeText.textContent = 'Belum Ada Sheet';
+            }
+        }
+    }
+
+    async function loadSheetsForBranch(code, isManual = false) {
+        const select = document.getElementById(`matrixSheetSelect-${code}`);
+        const statusText = document.getElementById(`matrixSheetStatusText-${code}`);
+        const refreshIcon = document.getElementById(`matrixRefreshIcon-${code}`);
+        const folderInput = document.getElementById(`matrixFolder-${code}`);
+        if (!select) return;
+
+        const currentActiveUrl = select.getAttribute('data-active-url') || select.value || '';
+        const cleanFolder = extractDriveIdFromText(folderInput ? folderInput.value : '');
+
+        if (!cleanFolder) {
+            select.innerHTML = '<option value="">-- Folder Drive Belum Diatur --</option>';
+            if (currentActiveUrl) {
+                const opt = document.createElement('option');
+                opt.value = currentActiveUrl;
+                opt.textContent = "Sheet Eksternal / Manual (Aktif)";
+                select.appendChild(opt);
+                select.value = currentActiveUrl;
+            }
+            if (statusText) statusText.innerHTML = '<span class="text-warning"><i class="fas fa-triangle-exclamation me-1"></i>Folder belum diatur</span>';
+            updateMatrixSheetUI(code, select.value, currentActiveUrl ? 'Sheet Eksternal' : '');
+            return;
+        }
+
+        if (refreshIcon) refreshIcon.classList.add('fa-spin');
+        if (statusText) statusText.innerHTML = '<span class="text-primary"><i class="fas fa-spinner fa-spin me-1"></i>Membaca Drive...</span>';
+
+        try {
+            const res = await fetch(`/admin/api/list-sheets?airportCode=${code}&driveFolder=${encodeURIComponent(cleanFolder)}`);
+            const data = await res.json();
+
+            select.innerHTML = '';
+
+            if (data.success && data.files && data.files.length > 0) {
+                const defOpt = document.createElement('option');
+                defOpt.value = '';
+                defOpt.textContent = `-- Pilih dari ${data.files.length} Spreadsheet di Drive --`;
+                select.appendChild(defOpt);
+
+                data.files.forEach(f => {
+                    const opt = document.createElement('option');
+                    opt.value = f.webViewLink || `https://docs.google.com/spreadsheets/d/${f.id}/edit`;
+                    let pretty = f.name.replace(/_/g, ' ');
+                    opt.textContent = pretty;
+                    opt.setAttribute('data-name', pretty);
+                    select.appendChild(opt);
+                });
+
+                let selectedVal = '';
+                let matchedName = '';
+
+                if (currentActiveUrl) {
+                    const optionsArray = Array.from(select.options);
+                    const currentId = extractDriveIdFromText(currentActiveUrl);
+                    const match = optionsArray.find(o => o.value === currentActiveUrl || (currentId && o.value.includes(currentId)));
+                    if (match) {
+                        selectedVal = match.value;
+                        matchedName = match.textContent;
+                    } else {
+                        const customOpt = document.createElement('option');
+                        customOpt.value = currentActiveUrl;
+                        customOpt.textContent = "Sheet Eksternal / Manual (Aktif)";
+                        select.appendChild(customOpt);
+                        selectedVal = currentActiveUrl;
+                        matchedName = "Sheet Eksternal";
+                    }
+                } else {
+                    selectedVal = data.files[0].webViewLink || `https://docs.google.com/spreadsheets/d/${data.files[0].id}/edit`;
+                    matchedName = data.files[0].name.replace(/_/g, ' ');
+                }
+
+                select.value = selectedVal;
+                select.setAttribute('data-active-url', selectedVal);
+
+                if (statusText) {
+                    statusText.innerHTML = `<span class="text-success"><i class="fas fa-check-circle me-1"></i>${data.files.length} sheet tersedia</span>`;
+                }
+
+                updateMatrixSheetUI(code, selectedVal, matchedName);
+
+                if (isManual) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: `Spreadsheet ${code} diperbarui (${data.files.length} file)`,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                }
+            } else {
+                select.innerHTML = '<option value="">-- Belum ada spreadsheet di Drive --</option>';
+                if (currentActiveUrl) {
+                    const opt = document.createElement('option');
+                    opt.value = currentActiveUrl;
+                    opt.textContent = "Sheet Eksternal / Manual (Aktif)";
+                    select.appendChild(opt);
+                    select.value = currentActiveUrl;
+                }
+                if (statusText) statusText.innerHTML = '<span class="text-muted"><i class="fas fa-info-circle me-1"></i>Folder Drive kosong</span>';
+                updateMatrixSheetUI(code, select.value, currentActiveUrl ? 'Sheet Eksternal' : '');
+            }
+        } catch (err) {
+            console.error(`Error loading sheets for ${code}:`, err);
+            if (statusText) statusText.innerHTML = '<span class="text-danger"><i class="fas fa-circle-xmark me-1"></i>Gagal memuat Drive</span>';
+        } finally {
+            if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+        }
+    }
+
+    async function loadAllBranchSheets(isManual = false) {
+        const refreshAllIcon = document.getElementById('matrixRefreshAllIcon');
+        const refreshTopIcon = document.getElementById('matrixRefreshTopIcon');
+        if (refreshAllIcon) refreshAllIcon.classList.add('fa-spin');
+        if (refreshTopIcon) refreshTopIcon.classList.add('fa-spin');
+
+        const codes = ['LOP', 'DPS', 'BWX', 'KOE'];
+        await Promise.all(codes.map(c => loadSheetsForBranch(c, false)));
+        populateBulkMonthOptions();
+
+        if (refreshAllIcon) refreshAllIcon.classList.remove('fa-spin');
+        if (refreshTopIcon) refreshTopIcon.classList.remove('fa-spin');
+
+        if (isManual) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Daftar spreadsheet 4 cabang berhasil disegarkan!',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    }
+
+    function populateBulkMonthOptions() {
+        const bulkSelect = document.getElementById('matrixBulkMonthSelect');
+        if (!bulkSelect) return;
+
+        const codes = ['LOP', 'DPS', 'BWX', 'KOE'];
+        const periodMap = new Map();
+
+        const monthWeights = {
+            'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MEI': 5, 'MAY': 5,
+            'JUN': 6, 'JUL': 7, 'AGU': 8, 'AGS': 8, 'AUG': 8,
+            'SEP': 9, 'OKT': 10, 'OCT': 10, 'NOV': 11, 'DES': 12, 'DEC': 12
+        };
+
+        const indonesianNames = {
+            'JAN': 'Januari', 'FEB': 'Februari', 'MAR': 'Maret', 'APR': 'April',
+            'MEI': 'Mei', 'JUN': 'Juni', 'JUL': 'Juli', 'AGU': 'Agustus',
+            'SEP': 'September', 'OKT': 'Oktober', 'NOV': 'November', 'DES': 'Desember'
+        };
+
+        codes.forEach(code => {
+            const select = document.getElementById(`matrixSheetSelect-${code}`);
+            if (!select) return;
+            Array.from(select.options).forEach(opt => {
+                if (!opt.value) return;
+                const text = (opt.textContent || opt.getAttribute('data-name') || '').toUpperCase();
+
+                const m1 = text.match(/\b(JAN(?:UARI)?|FEB(?:RUARI)?|MAR(?:ET)?|APR(?:IL)?|MEI|MAY|JUN(?:I)?|JUL(?:I)?|AGU(?:STUS)?|AGS|AUG(?:UST)?|SEP(?:TEMBER)?|OKT(?:OBER)?|OCT(?:OBER)?|NOV(?:EMBER)?|DES(?:EMBER)?|DEC(?:EMBER)?)\b.*?(\d{4})/i);
+                if (m1) {
+                    let rawM = m1[1].substring(0, 3).toUpperCase();
+                    if (rawM === 'MAY') rawM = 'MEI';
+                    if (rawM === 'AUG' || rawM === 'AGS') rawM = 'AGU';
+                    if (rawM === 'OCT') rawM = 'OKT';
+                    if (rawM === 'DEC') rawM = 'DES';
+                    const y = parseInt(m1[2]);
+                    const key = `${rawM} ${y}`;
+                    periodMap.set(key, { month: rawM, year: y, key });
+                } else {
+                    const m2 = text.match(/(\d{4})[_\-\/](\d{1,2})/);
+                    if (m2) {
+                        const y = parseInt(m2[1]);
+                        const mNum = parseInt(m2[2]);
+                        const stdMonths = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGU", "SEP", "OKT", "NOV", "DES"];
+                        if (mNum >= 1 && mNum <= 12) {
+                            const rawM = stdMonths[mNum - 1];
+                            const key = `${rawM} ${y}`;
+                            periodMap.set(key, { month: rawM, year: y, key });
+                        }
+                    }
+                }
+            });
+        });
+
+        // Pastikan bulan sekarang dan sekitarnya juga tersedia sebagai acuan
+        const now = new Date();
+        const stdMonths = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGU", "SEP", "OKT", "NOV", "DES"];
+        for (let offset = -2; offset <= 2; offset++) {
+            const d = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+            const mStr = stdMonths[d.getMonth()];
+            const yStr = d.getFullYear();
+            const key = `${mStr} ${yStr}`;
+            if (!periodMap.has(key)) {
+                periodMap.set(key, { month: mStr, year: yStr, key });
+            }
+        }
+
+        // Urutkan tahun terbaru dan bulan terbaru di atas
+        const sortedPeriods = Array.from(periodMap.values()).sort((a, b) => {
+            if (b.year !== a.year) return b.year - a.year;
+            return (monthWeights[b.month] || 0) - (monthWeights[a.month] || 0);
+        });
+
+        const currentVal = bulkSelect.value;
+        bulkSelect.innerHTML = '<option value="">-- Pilih Acuan Bulan --</option>';
+        sortedPeriods.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.key;
+            opt.textContent = `${p.key} (${indonesianNames[p.month] || p.month} ${p.year})`;
+            bulkSelect.appendChild(opt);
+        });
+
+        if (currentVal && periodMap.has(currentVal)) {
+            bulkSelect.value = currentVal;
+        }
+    }
+
+    function applyBulkMonthSelection(targetPeriod) {
+        if (!targetPeriod) return;
+
+        const parts = targetPeriod.trim().split(/\s+/);
+        const targetMonth = parts[0].toUpperCase();
+        const targetYear = parts[1] || '';
+
+        const monthSynonyms = {
+            'JAN': ['JAN', 'JANUARI', '01'],
+            'FEB': ['FEB', 'FEBRUARI', '02'],
+            'MAR': ['MAR', 'MARET', '03'],
+            'APR': ['APR', 'APRIL', '04'],
+            'MEI': ['MEI', 'MAY', '05'],
+            'JUN': ['JUN', 'JUNI', '06'],
+            'JUL': ['JUL', 'JULI', '07'],
+            'AGU': ['AGU', 'AGS', 'AUG', 'AGUSTUS', '08'],
+            'SEP': ['SEP', 'SEPTEMBER', '09'],
+            'OKT': ['OKT', 'OCT', 'OKTOBER', '10'],
+            'NOV': ['NOV', 'NOVEMBER', '11'],
+            'DES': ['DES', 'DEC', 'DESEMBER', '12']
+        };
+
+        const syns = monthSynonyms[targetMonth] || [targetMonth];
+        const codes = ['LOP', 'DPS', 'BWX', 'KOE'];
+        const matched = [];
+        const notFound = [];
+
+        codes.forEach(code => {
+            const select = document.getElementById(`matrixSheetSelect-${code}`);
+            if (!select) return;
+
+            const options = Array.from(select.options);
+            let chosenOpt = null;
+
+            for (const opt of options) {
+                if (!opt.value) continue;
+                const optText = (opt.textContent || opt.getAttribute('data-name') || '').toUpperCase();
+
+                // Cek kesesuaian tahun terlebih dahulu
+                const hasYear = targetYear ? optText.includes(targetYear) : true;
+                if (!hasYear) continue;
+
+                // Cek salah satu sinonim bulan
+                const hasMonth = syns.some(s => optText.includes(s));
+                if (hasMonth) {
+                    chosenOpt = opt;
+                    break;
+                }
+            }
+
+            if (chosenOpt) {
+                select.value = chosenOpt.value;
+                select.setAttribute('data-active-url', chosenOpt.value);
+                updateMatrixSheetUI(code, chosenOpt.value, chosenOpt.textContent);
+                matched.push(code);
+
+                // Efek visual highlight hijau lembut
+                select.style.transition = 'all 0.3s ease';
+                select.style.borderColor = '#059669';
+                select.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.25)';
+                setTimeout(() => {
+                    select.style.borderColor = '';
+                    select.style.boxShadow = '';
+                }, 1600);
+            } else {
+                notFound.push(code);
+            }
+        });
+
+        if (matched.length > 0 && notFound.length === 0) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: `Semua cabang (${matched.join(', ')}) berhasil diselaraskan ke ${targetPeriod}!`,
+                text: 'Klik "Simpan Perubahan Matriks" untuk menyimpan pilihan aktif.',
+                showConfirmButton: false,
+                timer: 4000
+            });
+        } else if (matched.length > 0 && notFound.length > 0) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: `${matched.join(', ')} diselaraskan ke ${targetPeriod}`,
+                text: `${notFound.join(', ')} belum memiliki file spreadsheet ${targetPeriod} di Drive.`,
+                showConfirmButton: false,
+                timer: 4500
+            });
+        } else {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'warning',
+                title: `Spreadsheet periode ${targetPeriod} tidak ditemukan`,
+                text: 'Anda dapat membuat sheet periode ini pada Bagian 1 di atas.',
+                showConfirmButton: false,
+                timer: 4000
+            });
+        }
+    }
+
+    function applyBulkMonthFromSelect() {
+        const bulkSelect = document.getElementById('matrixBulkMonthSelect');
+        if (!bulkSelect || !bulkSelect.value) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'warning',
+                title: 'Silakan pilih bulan acuan terlebih dahulu',
+                showConfirmButton: false,
+                timer: 2500
+            });
+            return;
+        }
+        applyBulkMonthSelection(bulkSelect.value);
+    }
+
+    function onMatrixSheetChanged(code) {
+        const select = document.getElementById(`matrixSheetSelect-${code}`);
+        if (!select) return;
+
+        const newUrl = select.value;
+        const selectedOpt = select.options[select.selectedIndex];
+        const newName = selectedOpt ? selectedOpt.textContent : '';
+
+        select.setAttribute('data-active-url', newUrl);
+        updateMatrixSheetUI(code, newUrl, newName);
+
+        if (newUrl) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: `${code}: ${newName} dipilih. Jangan lupa klik "Simpan Perubahan Matriks".`,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+    }
+
+    function copyMatrixSheetUrl(code) {
+        const select = document.getElementById(`matrixSheetSelect-${code}`);
+        if (!select || !select.value) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'warning',
+                title: `Belum ada link spreadsheet aktif untuk ${code}`,
+                showConfirmButton: false,
+                timer: 2000
+            });
+            return;
+        }
+
+        const url = select.value;
+        navigator.clipboard.writeText(url).then(() => {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: `Link Spreadsheet ${code} berhasil disalin!`,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }).catch(() => {
+            const input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: `Link Spreadsheet ${code} berhasil disalin!`,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        });
+    }
+
+    function promptManualSheetUrl(code) {
+        Swal.fire({
+            title: `Input URL Spreadsheet Manual (${code})`,
+            text: 'Masukkan URL Google Spreadsheet lengkap untuk cabang ini:',
+            input: 'url',
+            inputPlaceholder: 'https://docs.google.com/spreadsheets/d/...',
+            showCancelButton: true,
+            confirmButtonText: 'Terapkan Link',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#003366'
+        }).then(result => {
+            if (result.isConfirmed && result.value) {
+                const manualUrl = result.value.trim();
+                const select = document.getElementById(`matrixSheetSelect-${code}`);
+                if (select) {
+                    let opt = Array.from(select.options).find(o => o.value === manualUrl);
+                    if (!opt) {
+                        opt = document.createElement('option');
+                        opt.value = manualUrl;
+                        opt.textContent = `Sheet Manual: ${manualUrl.substring(0, 30)}...`;
+                        select.appendChild(opt);
+                    }
+                    select.value = manualUrl;
+                    select.setAttribute('data-active-url', manualUrl);
+                    onMatrixSheetChanged(code);
+                }
+            }
+        });
+    }
+
+    function syncSchemaToAll() {
+        Swal.fire({
+            title: 'Sinkronkan Schema Form ke Semua Sheet?',
+            text: 'Struktur form aktif saat ini akan disuntikkan ke seluruh Google Spreadsheet cabang yang terhubung.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Sinkronkan!',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#003366'
+        }).then(res => {
+            if (res.isConfirmed) {
+                Swal.fire({
+                    title: 'Menyinkronkan...',
+                    text: 'Memperbarui kolom pada seluruh spreadsheet cabang...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                fetch('/admin/api/schema')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        return fetch('/admin/api/schema/update', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data.data)
+                        });
+                    } else {
+                        throw new Error('Gagal membaca schema form');
+                    }
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        Swal.fire('Berhasil!', 'Seluruh Google Spreadsheet cabang telah berhasil diselaraskan dengan Form Schema aktif!', 'success');
+                    } else {
+                        Swal.fire('Gagal', res.error, 'error');
+                    }
+                })
+                .catch(err => {
+                    Swal.fire('Error', err.message, 'error');
+                });
+            }
+        });
+    }
+
+    function syncAllDailyTabs() {
+        Swal.fire({
+            title: 'Tarik Seluruh Tab Harian ke Rekap?',
+            text: 'Sistem akan memeriksa seluruh tab tanggal (1, 2, dst.) pada ke-4 bandara cabang dan memastikan sudah masuk ke DATABASE_REKAP.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Tarik Sekarang',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#003366'
+        }).then(res => {
+            if (res.isConfirmed) {
+                Swal.fire({
+                    title: 'Menyinkronkan Seluruh Cabang...',
+                    text: 'Membaca seluruh tab spreadsheet 4 cabang bandara...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                fetch('/admin/api/batch/sync-all-rekap', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        let msg = '<div class="text-start" style="font-size: 0.9rem;">';
+                        for (const [code, val] of Object.entries(data.results)) {
+                            if (val.status === 'success') {
+                                msg += `<div class="text-success mb-1"><strong>✓ ${code}:</strong> Menambahkan ${val.count} laporan baru ke Rekap</div>`;
+                            } else if (val.status === 'skipped') {
+                                msg += `<div class="text-muted mb-1"><strong>- ${code}:</strong> ${val.message}</div>`;
+                            } else {
+                                msg += `<div class="text-danger mb-1"><strong>✗ ${code}:</strong> ${val.error}</div>`;
+                            }
+                        }
+                        msg += '</div>';
+                        Swal.fire({
+                            title: 'Sinkronisasi Selesai!',
+                            html: msg,
+                            icon: 'success'
+                        });
+                    } else {
+                        Swal.fire('Gagal', data.error, 'error');
+                    }
+                })
+                .catch(err => {
+                    Swal.fire('Error', err.message, 'error');
+                });
+            }
+        });
+    }
+
+    function emptyDriveTrashBatch() {
+        Swal.fire({
+            title: 'Kosongkan Trash Google Drive?',
+            text: 'Seluruh file yang berada di tempat sampah Google Drive akan dihapus permanen untuk menghemat ruang.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus Permanen',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#dc2626'
+        }).then(res => {
+            if (res.isConfirmed) {
+                Swal.fire({
+                    title: 'Mengosongkan Trash...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                fetch('/admin/empty-trash', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Berhasil!', data.message, 'success');
+                    } else {
+                        Swal.fire('Gagal', data.error, 'error');
+                    }
+                })
+                .catch(err => {
+                    Swal.fire('Error', err.message, 'error');
+                });
+            }
+        });
+    }
 
     function escapeHtml(text) {
         if (text === null || text === undefined) return '';
@@ -2680,9 +4669,10 @@
         if (spinner) spinner.classList.add('fa-spin');
 
         Swal.fire({
-            title: 'Menarik Rekapitulasi...',
-            text: 'Membaca seluruh lembar database spreadsheet ke 4 bandara cabang...',
             allowOutsideClick: false,
+            showConfirmButton: false,
+            background: 'transparent',
+            backdrop: 'rgba(255, 255, 255, 0.68)',
             didOpen: () => { Swal.showLoading(); }
         });
 
@@ -3042,7 +5032,7 @@ REGION II`;
                     if (typeof this.showPicker === 'function') {
                         this.showPicker();
                     }
-                } catch (err) {}
+                } catch (err) { }
             });
         }
         updateFormattedDateDisplay(todayStr);
@@ -3497,6 +5487,13 @@ REGION II`;
     }
 
     function saveSchema() {
+        Swal.fire({
+            title: 'Menyimpan & Menyinkronkan...',
+            text: 'Menyimpan form dan menyinkronkan seluruh Google Spreadsheet bandara...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
         fetch('/admin/api/schema/update', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -3505,7 +5502,18 @@ REGION II`;
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
-                    Swal.fire('Berhasil', 'Konfigurasi form berhasil diperbarui! Tampilan form petugas akan otomatis berubah.', 'success');
+                    let syncMsg = '';
+                    if (data.sync_result && data.sync_result.synced && data.sync_result.synced.length > 0) {
+                        syncMsg = `<div class="mt-2 text-start p-2 bg-light rounded" style="font-size: 0.85rem;"><strong class="text-success"><i class="fas fa-circle-check me-1"></i>Tersinkron ke Spreadsheet:</strong><br>${data.sync_result.synced.join('<br>')}</div>`;
+                    }
+                    if (data.sync_result && data.sync_result.failed && data.sync_result.failed.length > 0) {
+                        syncMsg += `<div class="mt-2 text-start p-2 bg-light rounded text-warning" style="font-size: 0.85rem;"><strong><i class="fas fa-triangle-exclamation me-1"></i>Belum terhubung:</strong><br>${data.sync_result.failed.join('<br>')}</div>`;
+                    }
+                    Swal.fire({
+                        title: 'Berhasil Tersinkronisasi!',
+                        html: `Konfigurasi form berhasil diperbarui dan struktur Google Spreadsheet telah disesuaikan secara otomatis.${syncMsg}`,
+                        icon: 'success'
+                    });
                     closeSchemaModal();
                 } else {
                     Swal.fire('Gagal Menyimpan', data.error, 'error');
@@ -3514,6 +5522,63 @@ REGION II`;
             .catch(err => {
                 Swal.fire('Error', err.message, 'error');
             });
+    }
+
+    function syncFromSheet() {
+        const airportCode = document.getElementById('airportSelector')?.value || 'LOP';
+        Swal.fire({
+            title: 'Tarik Struktur dari Google Sheets?',
+            text: `Sistem akan membaca kolom dan baris pada Google Spreadsheet bandara ${airportCode}. Jika Anda menambah atau menghapus kolom langsung di Sheets, Form Builder akan otomatis menyesuaikan.`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-arrows-rotate me-1"></i> Ya, Tarik & Sinkronkan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#003366'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Membaca Spreadsheet...',
+                    text: 'Menganalisis kolom DATABASE_REKAP dan struktur tab...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                fetch('/admin/api/schema/sync-from-sheet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ airportCode: airportCode })
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            currentSchema = data.schema;
+                            renderVisualBuilder();
+
+                            let detailMsg = 'Struktur form sudah sama persis dengan Google Sheets.';
+                            if ((data.added && data.added.length > 0) || (data.removed && data.removed.length > 0)) {
+                                detailMsg = '<div class="text-start p-2 bg-light rounded" style="font-size: 0.88rem;">';
+                                if (data.added && data.added.length > 0) {
+                                    detailMsg += `<div class="text-success mb-1"><strong><i class="fas fa-plus-circle me-1"></i>Kolom Baru Ditambahkan:</strong><br>${data.added.join(', ')}</div>`;
+                                }
+                                if (data.removed && data.removed.length > 0) {
+                                    detailMsg += `<div class="text-danger"><strong><i class="fas fa-minus-circle me-1"></i>Kolom Dihapus dari Form:</strong><br>${data.removed.join(', ')}</div>`;
+                                }
+                                detailMsg += '</div>';
+                            }
+                            Swal.fire({
+                                title: 'Sinkronisasi Selesai!',
+                                html: detailMsg,
+                                icon: 'success'
+                            });
+                        } else {
+                            Swal.fire('Gagal Sinkronisasi', data.error, 'error');
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error', err.message, 'error');
+                    });
+            }
+        });
     }
     function syncRekap(code) {
         Swal.fire({
@@ -4006,12 +6071,19 @@ REGION II`;
                 </div>
                 <div>
                     <h3 class="modal-title">Visual Form Builder</h3>
-                    <p class="modal-subtitle">Desain form laporan dengan mudah. Perubahan akan langsung disinkronkan ke aplikasi petugas.</p>
+                    <p class="modal-subtitle">Desain form laporan dengan mudah. Perubahan akan langsung disinkronkan ke
+                        aplikasi petugas dan Google Sheets.</p>
                 </div>
             </div>
-            <button type="button" class="modal-close-btn" onclick="closeSchemaModal()" title="Tutup">
-                <i class="fas fa-xmark"></i>
-            </button>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button type="button" class="btn btn-outline btn-sm d-none d-sm-inline-flex" onclick="syncFromSheet()"
+                    title="Tarik perubahan kolom/baris dari Google Sheets ke Form Builder">
+                    <i class="fas fa-arrows-rotate me-1 text-primary"></i> Tarik dari Spreadsheet
+                </button>
+                <button type="button" class="modal-close-btn" onclick="closeSchemaModal()" title="Tutup">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
         </div>
 
         <div class="modal-body" style="flex: 1; min-height: 0; padding: 1.25rem 1.5rem; overflow-y: auto;">
@@ -4025,11 +6097,17 @@ REGION II`;
 
             <div class="builder-tip-banner">
                 <i class="fas fa-lightbulb"></i>
-                <div>Kolom <code>KODE_KOLOM</code> akan menjadi penentu nama Header di Google Sheets. Sistem memastikannya menjadi huruf besar tanpa spasi.</div>
+                <div>Kolom <code>KODE_KOLOM</code> akan menjadi penentu nama Header di Google Sheets. Sistem
+                    memastikannya menjadi huruf besar tanpa spasi.</div>
             </div>
         </div>
 
         <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="syncFromSheet()"
+                title="Tarik kolom/struktur langsung dari Spreadsheet">
+                <i class="fas fa-arrows-rotate me-1 text-primary"></i> Tarik dari Spreadsheet
+            </button>
+            <div style="flex: 1;"></div>
             <button type="button" class="btn btn-outline" onclick="closeSchemaModal()">Batal</button>
             <button type="button" class="btn btn-primary modal-btn-save" onclick="saveSchema()">
                 <i class="fas fa-floppy-disk me-1"></i> Simpan Form & Sinkronisasi

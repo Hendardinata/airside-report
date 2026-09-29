@@ -86,6 +86,16 @@ def login():
                 flash(f"Akun '{username.upper()}' kini ditangguhkan sementara selama 15 menit.", "danger")
             return redirect(url_for('auth.index'))
 
+        # Validasi kecocokan Cabang Bandara untuk akun petugas
+        selected_airport = (request.form.get('airportCode') or '').strip().upper()
+        if user.get('role') == 'staff' and selected_airport:
+            user_airport = (user.get('airport') or '').upper()
+            if user_airport != selected_airport:
+                record_failed_attempt(username)
+                sisa = get_remaining_attempts(username)
+                flash(f"Login ditolak: Akun '{username.upper()}' terdaftar untuk cabang {user_airport}, tidak sesuai dengan cabang yang dipilih ({selected_airport}). Silakan pilih cabang {user_airport}.", "danger")
+                return redirect(url_for('auth.index'))
+
         # Bersihkan record kegagalan setelah login berhasil
         clear_failed_attempts(username)
 

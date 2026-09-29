@@ -548,6 +548,31 @@
     }
 
     document.getElementById('loginForm').addEventListener('submit', function (e) {
+        const role = document.getElementById('roleInput').value;
+        const airportSelect = document.getElementById('airportSelect');
+        const airport = airportSelect ? airportSelect.value : '';
+        const username = (document.getElementById('username').value || '').trim().toLowerCase();
+
+        if (role === 'staff' && airport) {
+            const knownAirports = {
+                'lop': 'Bandara Lombok (LOP)',
+                'dps': 'Bandara Bali (DPS)',
+                'bwx': 'Bandara Banyuwangi (BWX)',
+                'koe': 'Bandara Kupang (KOE)'
+            };
+            if (knownAirports[username] && username !== airport.toLowerCase()) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Cabang Tidak Sesuai',
+                    html: `Pilihan cabang Anda adalah <b>${airport}</b>, tetapi username yang dimasukkan adalah <b>${username.toUpperCase()}</b> (${knownAirports[username]}).<br><br>Silakan sesuaikan pilihan cabang atau periksa username Anda.`,
+                    confirmButtonColor: '#003366',
+                    confirmButtonText: 'Perbaiki'
+                });
+                return false;
+            }
+        }
+
         const btn = document.getElementById('btnSubmit');
         btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Memverifikasi...';
         btn.style.opacity = '0.85';
