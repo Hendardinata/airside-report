@@ -11,7 +11,8 @@
        Clean, Compact, Zero-Scroll, Professional & Responsive
        ========================================================================== */
 
-    html, body {
+    html,
+    body {
         height: 100%;
         min-height: 100vh;
         margin: 0;
@@ -251,7 +252,7 @@
         box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
     }
 
-    .input-control:focus ~ .input-icon {
+    .input-control:focus~.input-icon {
         color: #0284c7;
     }
 
@@ -362,7 +363,9 @@
 
     /* Responsive adjustments */
     @media (max-width: 480px) {
-        html, body {
+
+        html,
+        body {
             overflow-y: auto !important;
             height: auto !important;
             min-height: 100vh !important;
@@ -425,14 +428,15 @@
 
         <!-- Flashed Security & Error Alerts -->
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                <div style="background-color: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 0.6rem;">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <span>{{ message }}</span>
-                </div>
-                {% endfor %}
-            {% endif %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div
+            style="background-color: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 0.6rem;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+        {% endif %}
         {% endwith %}
 
         <form id="loginForm" method="POST" action="/login">
@@ -493,7 +497,7 @@
     <!-- Legal Footer -->
     <div class="portal-footer">
         <p class="copyright-notice">
-            © 2026 PT Angkasa Pura Indonesia • Direktorat Operasi & Fasilitas Sisi Udara
+            © 2026 PT Angkasa Pura Indonesia
         </p>
     </div>
 </div>

@@ -1,4 +1,5 @@
-from flask import Flask, session, request, abort, jsonify
+import os
+from flask import Flask, session, request, abort, jsonify, send_from_directory
 from config import Config
 import secrets
 import hmac
@@ -63,5 +64,14 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix='/')
     app.register_blueprint(staff_bp, url_prefix='/staff')
     app.register_blueprint(admin_bp, url_prefix='/admin')
+
+    # Direct route for /favicon.ico requests
+    @app.route('/favicon.ico')
+    def favicon():
+        return send_from_directory(
+            os.path.join(app.root_path, 'static', 'img'),
+            'logo-kawung.png',
+            mimetype='image/png'
+        )
 
     return app
