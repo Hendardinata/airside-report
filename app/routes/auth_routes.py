@@ -52,6 +52,8 @@ def index():
         user = USERS.get(session['user_id'])
         if user and user.get('role') == 'admin':
             return redirect(url_for('admin.dashboard'))
+        elif user and user.get('role') == 'gm':
+            return redirect(url_for('gm.dashboard'))
         elif user:
             return redirect(url_for('staff.dashboard'))
     return render_template('login.html')
@@ -86,14 +88,15 @@ def login():
                 flash(f"Akun '{username.upper()}' kini ditangguhkan sementara selama 15 menit.", "danger")
             return redirect(url_for('auth.index'))
 
-        # Validasi kecocokan Cabang Bandara untuk akun petugas
+        # Validasi kecocokan Cabang Bandara untuk akun petugas dan GM
         selected_airport = (request.form.get('airportCode') or '').strip().upper()
-        if user.get('role') == 'staff' and selected_airport:
+        if user.get('role') in ('staff', 'gm') and selected_airport:
             user_airport = (user.get('airport') or '').upper()
             if user_airport != selected_airport:
                 record_failed_attempt(username)
                 sisa = get_remaining_attempts(username)
-                flash(f"Login ditolak: Akun '{username.upper()}' terdaftar untuk cabang {user_airport}, tidak sesuai dengan cabang yang dipilih ({selected_airport}). Silakan pilih cabang {user_airport}.", "danger")
+                role_label = "General Manager" if user.get('role') == 'gm' else "Petugas"
+                flash(f"Login ditolak: Akun {role_label} '{username.upper()}' terdaftar untuk cabang {user_airport}, tidak sesuai dengan cabang yang dipilih ({selected_airport}). Silakan pilih cabang {user_airport}.", "danger")
                 return redirect(url_for('auth.index'))
 
         # Bersihkan record kegagalan setelah login berhasil
@@ -106,6 +109,8 @@ def login():
 
         if user.get('role') == 'admin':
             return redirect(url_for('admin.dashboard'))
+        elif user.get('role') == 'gm':
+            return redirect(url_for('gm.dashboard'))
         else:
             return redirect(url_for('staff.dashboard'))
 

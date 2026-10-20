@@ -1,0 +1,2468 @@
+{% extends "base.html" %}
+{% set hide_navbar = true %}
+
+{% block title %}Dashboard General Manager - {{ airport_code }} - InJourney Regional II{% endblock %}
+
+{% block head %}
+<style>
+    /* ==========================================================================
+       GM DASHBOARD - 100% REPLICA OF EXECUTIVE DESIGN MOCKUP
+       Harmonized with Login & Staff Dashboard Design Language
+       Palette: Deep Aviation Navy (#002b49), Sky Cyan (#0284c7),
+       InJourney Signature Gradient (linear-gradient(135deg, #003366 0%, #0284c7 100%))
+       ========================================================================== */
+
+    :root {
+        --theme-navy: #002b49;
+        --theme-blue: #0284c7;
+        --theme-blue-hover: #0369a1;
+        --theme-btn-gradient: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        --theme-btn-gradient-hover: linear-gradient(135deg, #002850 0%, #0369a1 100%);
+        --theme-cyan: #0284c7;
+        --theme-slate-900: #0f172a;
+        --theme-slate-700: #334155;
+        --theme-slate-600: #475569;
+        --theme-slate-500: #64748b;
+        --theme-slate-400: #94a3b8;
+        --theme-border: #e2e8f0;
+        --theme-border-strong: #cbd5e1;
+        --theme-card-bg: #ffffff;
+        --theme-page-bg: #f8fafc;
+        --theme-green: #16a34a;
+        --theme-green-bg: #ecfdf5;
+        --theme-green-border: #a7f3d0;
+        --theme-orange: #ea580c;
+        --theme-orange-bg: #fff7ed;
+        --theme-orange-border: #fed7aa;
+    }
+
+    body {
+        background-color: var(--theme-page-bg) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        color: var(--theme-slate-900) !important;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Full width container reset */
+    main.container,
+    .container,
+    .container-fluid {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* ==========================================================================
+       1. TOP EXECUTIVE APP BAR (Edge-to-Edge)
+       ========================================================================== */
+    .staff-topbar {
+        width: 100%;
+        height: 72px;
+        background-color: #ffffff;
+        border-bottom: 1px solid var(--theme-border);
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .topbar-inner {
+        width: 100%;
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    /* Corporate Brand Header (InJourney Airports) */
+    .topbar-brand-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        text-decoration: none;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+        user-select: none;
+    }
+
+    .topbar-brand-link:hover {
+        opacity: 0.92;
+        transform: translateY(-0.5px);
+    }
+
+    .topbar-brand-logo {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        object-fit: contain;
+        display: block;
+        filter: drop-shadow(0 2px 6px rgba(0, 43, 73, 0.12));
+    }
+
+    .topbar-brand-title {
+        font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 800;
+        font-size: 1.35rem;
+        color: #002b49;
+        letter-spacing: -0.35px;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    /* Right Actions: Notification & Profile */
+    .topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .topbar-notif-btn {
+        position: relative;
+        background: transparent;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--theme-slate-600);
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .topbar-notif-btn:hover {
+        background-color: #f1f5f9;
+        color: var(--theme-slate-900);
+    }
+
+    .notif-badge-dot {
+        position: absolute;
+        top: 8px;
+        right: 9px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ef4444;
+        border: 2px solid #ffffff;
+    }
+
+    /* User Profile Pill */
+    .topbar-user-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        padding: 0.35rem 0.5rem;
+        border-radius: 12px;
+        transition: background-color 0.2s ease;
+        position: relative;
+        user-select: none;
+    }
+
+    .topbar-user-wrap:hover {
+        background-color: #f8fafc;
+    }
+
+    .user-avatar-circle {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background-color: #002b49;
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: -0.2px;
+        flex-shrink: 0;
+    }
+
+    .user-text-col {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+        text-align: left;
+    }
+
+    .user-name-text {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--theme-slate-900);
+    }
+
+    .user-role-text {
+        font-size: 0.74rem;
+        color: var(--theme-slate-500);
+    }
+
+    .user-caret-icon {
+        font-size: 0.75rem;
+        color: var(--theme-slate-500);
+        margin-left: 0.25rem;
+    }
+
+    /* User Dropdown Menu */
+    .user-dropdown-card {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.6rem;
+        width: 240px;
+        background-color: #ffffff;
+        border: 1px solid var(--theme-border);
+        border-radius: 14px;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 4px 10px rgba(0, 0, 0, 0.03);
+        padding: 0.5rem 0;
+        z-index: 1050;
+    }
+
+    .user-dropdown-card.show {
+        display: block;
+    }
+
+    .user-dropdown-header {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .user-dropdown-header strong {
+        display: block;
+        font-size: 0.875rem;
+        color: #0f172a;
+    }
+
+    .user-dropdown-header small {
+        font-size: 0.74rem;
+        color: #64748b;
+    }
+
+    .user-dropdown-link {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.65rem 1rem;
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: #ef4444;
+        text-decoration: none;
+        transition: background-color 0.15s ease;
+    }
+
+    .user-dropdown-link:hover {
+        background-color: #fef2f2;
+    }
+
+    /* ==========================================================================
+       2. MAIN CONTENT WRAPPER
+       ========================================================================== */
+    .gm-layout-canvas {
+        width: 100%;
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 1.5rem 1.5rem 3.5rem 1.5rem;
+        box-sizing: border-box;
+    }
+
+    /* ==========================================================================
+       3. HERO BANNER CARD (Aircraft on Runway Tarmac)
+       ========================================================================== */
+    .gm-hero-banner {
+        position: relative;
+        border-radius: 22px;
+        overflow: hidden;
+        background-color: #e0f2fe;
+        background-image: url("{{ url_for('static', filename='img/staff-hero-bg.jpg') }}");
+        background-size: cover;
+        background-position: center right;
+        min-height: 225px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2.25rem 2.5rem;
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
+        box-sizing: border-box;
+        gap: 1.5rem;
+    }
+
+    /* Smooth Gradient Mist Overlay */
+    .gm-hero-banner::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, 
+            rgba(238, 246, 255, 0.98) 0%, 
+            rgba(238, 246, 255, 0.95) 42%, 
+            rgba(238, 246, 255, 0.45) 72%, 
+            rgba(238, 246, 255, 0.15) 100%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .hero-info-col {
+        position: relative;
+        z-index: 2;
+        max-width: 860px;
+    }
+
+    .hero-pill-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid #bfdbfe;
+        border-radius: 9999px;
+        padding: 0.28rem 0.85rem;
+        font-size: 0.725rem;
+        font-weight: 700;
+        color: #0284c7;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 0.65rem;
+        box-shadow: 0 1px 4px rgba(2, 132, 199, 0.08);
+    }
+
+    .hero-badge-icon {
+        font-size: 0.75rem;
+        color: #0284c7;
+    }
+
+    .hero-heading {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--theme-navy);
+        letter-spacing: -0.65px;
+        margin: 0 0 0.4rem 0;
+        line-height: 1.2;
+    }
+
+    .hero-subtext {
+        font-size: 0.925rem;
+        color: var(--theme-slate-600);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* ==========================================================================
+       4. 2 STAT CARDS ROW
+       ========================================================================== */
+    .gm-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+        margin-top: 1.25rem;
+        box-sizing: border-box;
+    }
+
+    .gm-stat-card {
+        background-color: #ffffff;
+        border: 1.5px solid var(--theme-border);
+        border-radius: 18px;
+        padding: 1.25rem 1.45rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        cursor: pointer;
+        text-decoration: none;
+        box-sizing: border-box;
+    }
+
+    .gm-stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        border-color: #cbd5e1;
+    }
+
+    .stat-card-left {
+        display: flex;
+        align-items: center;
+        gap: 1.15rem;
+    }
+
+    .stat-icon-tile {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        flex-shrink: 0;
+    }
+
+    .stat-icon-tile.icon-clock {
+        background-color: #e0f2fe;
+        color: #0284c7;
+        border: 1px solid #bae6fd;
+    }
+
+    .stat-icon-tile.icon-revisi {
+        background-color: #fff7ed;
+        color: #ea580c;
+        border: 1px solid #fed7aa;
+    }
+
+    .stat-icon-tile.icon-excel {
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        color: #ffffff;
+        box-shadow: 0 3px 10px rgba(2, 132, 199, 0.25);
+    }
+
+    .stat-meta {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-big-num {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: var(--theme-navy);
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+    }
+
+    .stat-big-title {
+        font-size: 1.12rem;
+        font-weight: 800;
+        color: var(--theme-navy);
+        line-height: 1.15;
+    }
+
+    .stat-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--theme-slate-500);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-top: 3px;
+    }
+
+    .stat-chevron {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        transition: transform 0.2s ease;
+    }
+
+    .gm-stat-card:hover .stat-chevron {
+        transform: translateX(3px);
+        color: #0284c7;
+    }
+
+    /* ==========================================================================
+       5. MAIN TABLE CARD (Daftar Pengajuan Laporan Harian)
+       ========================================================================== */
+    .gm-table-card {
+        background-color: #ffffff;
+        border: 1.5px solid var(--theme-border);
+        border-radius: 20px;
+        padding: 1.75rem 2rem;
+        margin-top: 1.25rem;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+        box-sizing: border-box;
+    }
+
+    .gm-table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1.35rem;
+        border-bottom: 1px solid #f1f5f9;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .table-header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.95rem;
+    }
+
+    .table-header-icon-tile {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #0284c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .table-header-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--theme-navy);
+        margin: 0;
+        letter-spacing: -0.3px;
+    }
+
+    .table-header-right {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.825rem;
+        font-weight: 600;
+        color: var(--theme-slate-500);
+    }
+
+    /* Table Responsive Wrapper (Seamless Fit, No Scrollbars) */
+    .gm-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 1.25rem;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .gm-table-wrapper::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    .gm-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        text-align: left;
+    }
+
+    .gm-table thead tr th {
+        background-color: #f8fafc;
+        padding: 0.95rem 0.85rem;
+        font-size: 0.725rem;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1.5px solid #e2e8f0;
+        white-space: nowrap;
+    }
+
+    .gm-table thead tr th:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    .gm-table thead tr th:last-child {
+        border-top-right-radius: 10px;
+    }
+
+    .gm-table tbody tr {
+        transition: background-color 0.15s ease;
+    }
+
+    .gm-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .gm-table tbody tr td {
+        padding: 1rem 0.85rem;
+        font-size: 0.88rem;
+        color: var(--theme-slate-900);
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+
+    /* Column Specific Styles */
+    .tgl-primary {
+        font-weight: 700;
+        color: #0f172a;
+        display: block;
+        font-size: 0.915rem;
+    }
+
+    .tgl-secondary {
+        font-size: 0.72rem;
+        color: #94a3b8;
+        margin-top: 2px;
+    }
+
+    .badge-report-id {
+        display: inline-block;
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        color: #0284c7;
+        font-weight: 700;
+        font-size: 0.78rem;
+        padding: 0.32rem 0.7rem;
+        border-radius: 8px;
+        letter-spacing: 0.2px;
+    }
+
+    .badge-review-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        border-radius: 9999px;
+        padding: 0.35rem 0.85rem;
+        font-size: 0.735rem;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+    }
+
+    .badge-review-pill.pill-pend {
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #0284c7;
+    }
+
+    .badge-review-pill.pill-rev {
+        background-color: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #ea580c;
+    }
+
+    .petugas-name {
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .pci-val {
+        font-weight: 800;
+        color: #0284c7;
+    }
+
+    .kondisi-val {
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .empty-dash {
+        color: #94a3b8;
+        font-weight: 500;
+    }
+
+    .gm-note-bubble {
+        display: inline-block;
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.8rem;
+        color: #c2410c;
+        background-color: #fff7ed;
+        border: 1px solid #fed7aa;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+    }
+
+    /* Actions Stack (Detail, Revisi, Setujui) */
+    .table-actions-stack {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+
+    .btn-tbl-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        padding: 0.36rem 0.72rem;
+        border-radius: 9999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        text-decoration: none;
+        outline: none;
+        white-space: nowrap;
+    }
+
+    .btn-tbl-action.act-detail {
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        color: #0284c7;
+    }
+
+    .btn-tbl-action.act-detail:hover {
+        background-color: #e0f2fe;
+        border-color: #7dd3fc;
+        transform: translateY(-1px);
+    }
+
+    .btn-tbl-action.act-revisi {
+        background-color: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #ea580c;
+    }
+
+    .btn-tbl-action.act-revisi:hover {
+        background-color: #ffedd5;
+        border-color: #fdba74;
+        transform: translateY(-1px);
+    }
+
+    .btn-tbl-action.act-setujui {
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #16a34a;
+    }
+
+    .btn-tbl-action.act-setujui:hover {
+        background-color: #d1fae5;
+        border-color: #6ee7b7;
+        transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       6. MODAL DETAIL TELAAH & REVISI DIALOGS (EXECUTIVE REDESIGN)
+       ========================================================================== */
+    .custom-modal-backdrop {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 1050;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+        box-sizing: border-box;
+    }
+
+    .custom-modal-content {
+        background-color: #ffffff;
+        border-radius: 24px;
+        width: 100%;
+        max-width: 1020px;
+        max-height: 92vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 25px 70px -15px rgba(0, 43, 73, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+        overflow: hidden;
+        border: 1px solid var(--theme-border);
+        animation: modalScaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalScaleUp {
+        from { transform: scale(0.97) translateY(8px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .custom-modal-header {
+        padding: 1.4rem 2rem;
+        background-color: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .modal-header-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .modal-title-icon-box {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .modal-header-heading {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.28rem;
+        font-weight: 800;
+        color: var(--theme-navy);
+        margin: 0 0 0.35rem 0;
+        line-height: 1.2;
+        letter-spacing: -0.3px;
+    }
+
+    .modal-header-badges-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .modal-pill-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.65rem;
+        border-radius: 8px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+    }
+
+    .modal-pill-tag.id-tag {
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        color: #0284c7;
+        font-family: monospace;
+    }
+
+    .modal-pill-tag.status-tag.pend {
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #0284c7;
+        text-transform: uppercase;
+    }
+
+    .modal-pill-tag.status-tag.rev {
+        background-color: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #ea580c;
+        text-transform: uppercase;
+    }
+
+    .modal-pill-tag.pelapor-tag {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #475569;
+    }
+
+    .modal-close-btn {
+        background-color: #f1f5f9;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        font-size: 1rem;
+    }
+
+    .modal-close-btn:hover {
+        background-color: #e2e8f0;
+        color: #0f172a;
+        transform: scale(1.05);
+    }
+
+    /* Modal Navigation Tab Bar */
+    .modal-tab-bar {
+        display: flex;
+        gap: 6px;
+        background-color: #f8fafc;
+        border-bottom: 1.5px solid #e2e8f0;
+        padding: 0.65rem 1.85rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .modal-tab-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .modal-tab-btn {
+        background: transparent;
+        border: 1.5px solid transparent;
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        font-size: 0.825rem;
+        font-weight: 700;
+        color: #64748b;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        font-family: inherit;
+    }
+
+    .modal-tab-btn:hover {
+        color: var(--theme-navy);
+        background-color: rgba(255, 255, 255, 0.85);
+    }
+
+    .modal-tab-btn.active {
+        background-color: #ffffff;
+        color: #0284c7;
+        border-color: #cbd5e1;
+        box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
+    }
+
+    .custom-modal-body {
+        padding: 1.85rem 2rem;
+        overflow-y: auto;
+        background-color: #f8fafc;
+    }
+
+    .custom-modal-footer {
+        padding: 1.25rem 2rem;
+        background-color: #ffffff;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.85rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    /* Main Section Container inside Modal (Harmonized with .form-workspace-card) */
+    .detail-card-group {
+        background-color: #ffffff;
+        border: 1.5px solid var(--theme-border);
+        border-radius: 20px;
+        padding: 1.85rem 2rem;
+        margin-bottom: 1.6rem;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+        box-sizing: border-box;
+    }
+
+    /* Step Top Header inside Card (100% replica of .card-step-header) */
+    .card-step-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1.35rem;
+        border-bottom: 1px solid #f1f5f9;
+        margin-bottom: 1.65rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .card-step-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .step-main-icon-tile {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .step-main-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--theme-navy);
+        margin: 0;
+        line-height: 1.25;
+    }
+
+    .step-main-subtitle {
+        font-size: 0.85rem;
+        color: var(--theme-slate-500);
+        margin: 0.25rem 0 0 0;
+        line-height: 1.4;
+    }
+
+    .step-counter-pill {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #003366;
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        padding: 0.35rem 0.95rem;
+        border-radius: 9999px;
+    }
+
+    /* Subcard Section (100% replica of .form-subcard-section) */
+    .subcard-box {
+        background-color: #ffffff;
+        border: 1.5px solid var(--theme-border);
+        border-radius: 16px;
+        padding: 1.4rem 1.65rem;
+        margin-bottom: 1.4rem;
+        box-sizing: border-box;
+    }
+
+    .subcard-box:last-child {
+        margin-bottom: 0;
+    }
+
+    .subcard-header-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .subcard-icon-box {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background-color: #f0f9ff;
+        border: 1px solid #e0f2fe;
+        color: #0284c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+    }
+
+    .subcard-title-text {
+        font-size: 0.985rem;
+        font-weight: 700;
+        color: var(--theme-navy);
+        margin: 0;
+    }
+
+    .subcard-desc-text {
+        font-size: 0.81rem;
+        color: var(--theme-slate-500);
+        margin: 2px 0 0 0;
+    }
+
+    /* Grids inside Subcards */
+    .field-grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.15rem;
+    }
+
+    .field-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.15rem;
+    }
+
+    .field-block {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .field-label {
+        font-size: 0.835rem;
+        font-weight: 600;
+        color: var(--theme-slate-700);
+        margin-bottom: 0.45rem;
+        letter-spacing: 0.1px;
+    }
+
+    /* Input-like Box Container */
+    .field-input-box {
+        min-height: 48px;
+        background-color: #ffffff;
+        border: 1.5px solid var(--theme-border);
+        border-radius: 12px;
+        padding: 0.6rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.65rem;
+        box-sizing: border-box;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .field-input-box:hover {
+        border-color: var(--theme-border-strong);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .field-box-left {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .field-box-lead-icon {
+        font-size: 0.95rem;
+        color: var(--theme-slate-500);
+        width: 18px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .field-box-val {
+        font-size: 0.925rem;
+        font-weight: 600;
+        color: var(--theme-slate-900);
+        word-break: break-word;
+    }
+
+    .field-box-trail-icon {
+        font-size: 0.85rem;
+        color: var(--theme-slate-400);
+        flex-shrink: 0;
+    }
+
+    .val-primary {
+        color: #0284c7;
+        font-weight: 800;
+    }
+
+    .val-normal {
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .val-nihil {
+        color: #94a3b8;
+        font-weight: 500;
+        font-size: 0.86rem;
+        font-style: italic;
+    }
+
+    .tile-badge-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.28rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    .tile-badge-status.serviceable {
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #16a34a;
+    }
+
+    .tile-badge-status.unserviceable {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #dc2626;
+    }
+
+    .tile-badge-status.neutral {
+        background-color: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        color: #475569;
+    }
+
+    .tile-badge-pci {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        color: #0284c7;
+        font-size: 0.92rem;
+        font-weight: 800;
+        padding: 0.25rem 0.75rem;
+        border-radius: 8px;
+    }
+
+    .note-card-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.85rem;
+        background-color: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.85rem 1.15rem;
+        margin-bottom: 0.65rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+    }
+
+    .note-num-badge {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        color: #ffffff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    }
+
+    .note-text-content {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1e293b;
+        line-height: 1.5;
+    }
+
+    /* Modal Action Buttons */
+    .btn-modal-close {
+        background-color: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 12px;
+        height: 48px;
+        padding: 0 1.6rem;
+        font-size: 0.915rem;
+        font-weight: 700;
+        color: #334155;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-modal-close:hover {
+        background-color: #f8fafc;
+        border-color: #94a3b8;
+    }
+
+    .btn-modal-revise {
+        background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+        border: none;
+        border-radius: 12px;
+        height: 48px;
+        padding: 0 1.65rem;
+        font-size: 0.915rem;
+        font-weight: 700;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        box-shadow: 0 4px 14px rgba(234, 88, 12, 0.28);
+    }
+
+    .btn-modal-revise:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(234, 88, 12, 0.38);
+    }
+
+    .btn-modal-revise:active {
+        transform: translateY(0);
+    }
+
+    .btn-modal-approve {
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        border: none;
+        border-radius: 12px;
+        height: 48px;
+        padding: 0 1.85rem;
+        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        font-size: 0.925rem;
+        font-weight: 700;
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.28);
+        letter-spacing: 0.2px;
+    }
+
+    .btn-modal-approve:hover {
+        background: linear-gradient(135deg, #002850 0%, #0369a1 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(2, 132, 199, 0.38);
+    }
+
+    .btn-modal-approve:active {
+        transform: translateY(0);
+    }
+
+    .btn-template-chip {
+        background-color: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: #334155;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .btn-template-chip:hover {
+        background-color: #f0f9ff;
+        border-color: #0284c7;
+        color: #0284c7;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .gm-hero-banner {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1.75rem 1.5rem;
+        }
+
+        .gm-stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .topbar-brand-logo {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+        }
+
+        .topbar-brand-title {
+            font-size: 1.12rem;
+        }
+
+        .topbar-brand-link {
+            gap: 0.6rem;
+        }
+
+        .gm-layout-canvas {
+            padding: 1rem 0.75rem 2.5rem 0.75rem;
+        }
+
+        .hero-heading {
+            font-size: 1.65rem;
+        }
+
+        .gm-table-card {
+            padding: 1.25rem 1rem;
+            border-radius: 16px;
+        }
+
+        .custom-modal-header {
+            padding: 1.15rem 1.25rem;
+        }
+
+        .custom-modal-body {
+            padding: 1.15rem 1.25rem;
+        }
+
+        .custom-modal-footer {
+            padding: 1rem 1.25rem;
+            flex-direction: column;
+        }
+
+        .btn-modal-close,
+        .btn-modal-revise,
+        .btn-modal-approve {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ==========================================================================
+     1. TOP EXECUTIVE APP BAR (Edge-to-Edge)
+     ========================================================================== -->
+<header class="staff-topbar">
+    <div class="topbar-inner">
+        <!-- Corporate Brand Header (InJourney Airports) -->
+        <a href="{{ url_for('gm.dashboard') }}" class="topbar-brand-link" title="Dashboard General Manager - InJourney Regional II">
+            <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports" class="topbar-brand-logo">
+            <span class="topbar-brand-title">InJourney Airports</span>
+        </a>
+
+        <!-- Right Side Actions: Notification Bell + User Profile Dropdown -->
+        <div class="topbar-actions">
+            <!-- Notification Bell with Red Indicator Dot -->
+            <button type="button" class="topbar-notif-btn" title="Notifikasi Sistem" onclick="showSystemNotif()">
+                <i class="fa-regular fa-bell"></i>
+                <span class="notif-badge-dot"></span>
+            </button>
+
+            <!-- User Profile Pill -->
+            <div class="topbar-user-wrap" onclick="toggleUserDropdown(event)">
+                <div class="user-avatar-circle">
+                    {{ (current_user.name[:2]|upper) if current_user.name else 'MH' }}
+                </div>
+                <div class="user-text-col">
+                    <span class="user-name-text">{{ current_user.name | default('Muhammad Hifzil') }}</span>
+                    <span class="user-role-text">General Manager {{ airport_code }}</span>
+                </div>
+                <i class="fa-solid fa-chevron-down user-caret-icon"></i>
+
+                <!-- Dropdown Menu -->
+                <div class="user-dropdown-card" id="userDropdownCard">
+                    <div class="user-dropdown-header">
+                        <strong>{{ current_user.name | default('Muhammad Hifzil') }}</strong>
+                        <small>Akun Kedinasan • General Manager {{ airport_code }}</small>
+                    </div>
+                    <a href="/api/auth/logout" class="user-dropdown-link">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Keluar dari Sistem</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ==========================================================================
+     2. MAIN CONTENT LAYOUT
+     ========================================================================== -->
+<div class="gm-layout-canvas">
+
+    <!-- HERO BANNER CARD (Aircraft on Runway Tarmac) -->
+    <div class="gm-hero-banner">
+        <div class="hero-info-col">
+            <div class="hero-pill-badge">
+                <i class="fa-solid fa-location-dot hero-badge-icon"></i>
+                <span>PORTAL GENERAL MANAGER &rsaquo;</span>
+            </div>
+            <h1 class="hero-heading">Telaah & Persetujuan Laporan Airside</h1>
+            <p class="hero-subtext">
+                Cabang {{ airport_info.name }} ({{ airport_code }}) &bull; Kantor Regional II PT Angkasa Pura Indonesia
+            </p>
+        </div>
+    </div>
+
+    <!-- 2 STAT CARDS ROW -->
+    {% set display_reports = reports if reports else [{
+        'report_id': 'REP-' ~ airport_code ~ '-20261113',
+        'status': 'PENDING_GM',
+        'catatan_gm': '',
+        'tanggal': '2026-11-13',
+        'submitted_by': 'Petugas ' ~ airport_code,
+        'timestamp_update': '2026-10-20 18:43:16'
+    }] %}
+    <div class="gm-stats-grid">
+        <!-- Card 1: Menunggu Telaah GM -->
+        <div class="gm-stat-card" onclick="filterByStatus('PENDING_GM')">
+            <div class="stat-card-left">
+                <div class="stat-icon-tile icon-clock">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-meta">
+                    <div class="stat-big-num">{{ pending_count if pending_count else 1 }}</div>
+                    <div class="stat-label">MENUNGGU TELAAH GM</div>
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-right stat-chevron"></i>
+        </div>
+
+        <!-- Card 2: Sedang Direvisi Petugas -->
+        <div class="gm-stat-card" onclick="filterByStatus('REVISI')">
+            <div class="stat-card-left">
+                <div class="stat-icon-tile icon-revisi">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </div>
+                <div class="stat-meta">
+                    <div class="stat-big-num">{{ revisi_count if revisi_count else 0 }}</div>
+                    <div class="stat-label">SEDANG DIREVISI PETUGAS</div>
+                </div>
+            </div>
+            <i class="fa-solid fa-chevron-right stat-chevron"></i>
+        </div>
+    </div>
+
+    <!-- MAIN TABLE CARD -->
+    <div class="gm-table-card">
+        <div class="gm-table-header">
+            <div class="table-header-left">
+                <div class="table-header-icon-tile">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+                <h2 class="table-header-title">Daftar Pengajuan Laporan Harian (Sheet Staging)</h2>
+            </div>
+            <div class="table-header-right">
+                <i class="fa-solid fa-table-list"></i>
+                <span id="reportCountText">Menampilkan {{ display_reports|length }} laporan draf</span>
+            </div>
+        </div>
+
+        <!-- Table Responsive Wrapper -->
+        <div class="gm-table-wrapper" id="gmTableWrapper">
+            <table class="gm-table" id="reportsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 17%;">TANGGAL LAPORAN</th>
+                        <th style="width: 14%;">ID LAPORAN</th>
+                        <th style="width: 16%;">STATUS REVIEW</th>
+                        <th style="width: 15%;">PETUGAS PELAPOR</th>
+                        <th style="width: 18%;">CATATAN KOREKSI GM</th>
+                        <th style="width: 20%; text-align: center;">AKSI TINDAKAN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rep in display_reports %}
+                    <tr class="report-row" data-status="{{ rep.status }}" data-search="{{ rep.tanggal }} {{ rep.report_id }} {{ rep.submitted_by }}">
+                        <td>
+                            <strong class="tgl-primary">{{ rep.tanggal }}</strong>
+                            <div class="tgl-secondary">{{ rep.timestamp_update or rep.timestamp_submit or '2026-10-20 18:43:16' }}</div>
+                        </td>
+                        <td>
+                            <span class="badge-report-id">{{ rep.report_id }}</span>
+                        </td>
+                        <td>
+                            {% if rep.status == 'REVISI' %}
+                            <span class="badge-review-pill pill-rev">
+                                <i class="fa-solid fa-rotate-left"></i>
+                                <span>SEDANG DIREVISI</span>
+                            </span>
+                            {% else %}
+                            <span class="badge-review-pill pill-pend">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                                <span>MENUNGGU TELAAH</span>
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="petugas-name">{{ rep.submitted_by or ('Petugas ' ~ airport_code) }}</span>
+                        </td>
+                        <td>
+                            {% if rep.catatan_gm %}
+                            <span class="gm-note-bubble" title="{{ rep.catatan_gm }}">
+                                "{{ rep.catatan_gm }}"
+                            </span>
+                            {% else %}
+                            <span class="empty-dash">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="table-actions-stack">
+                                <button type="button" class="btn-tbl-action act-detail" onclick="openDetailModal('{{ rep.report_id }}')">
+                                    <i class="fa-regular fa-eye"></i>
+                                    <span>Detail</span>
+                                </button>
+                                <button type="button" class="btn-tbl-action act-revisi" onclick="openRevisionModal('{{ rep.report_id }}', '{{ rep.tanggal }}')">
+                                    <i class="fa-solid fa-pencil"></i>
+                                    <span>Revisi</span>
+                                </button>
+                                <button type="button" class="btn-tbl-action act-setujui" onclick="confirmApprove('{{ rep.report_id }}', '{{ rep.tanggal }}')">
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Setujui</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     MODAL DETAIL TELAAH LAPORAN LENGKAP (EXECUTIVE REDESIGN)
+     ========================================================================== -->
+<div class="custom-modal-backdrop" id="detailModal">
+    <div class="custom-modal-content">
+        <!-- Upgraded Executive Modal Header -->
+        <div class="custom-modal-header">
+            <div class="modal-header-info">
+                <div class="modal-title-icon-box">
+                    <i class="fa-solid fa-file-signature"></i>
+                </div>
+                <div>
+                    <h3 class="modal-header-heading" id="modalReportTitle">Laporan Harian Airside • -</h3>
+                    <div class="modal-header-badges-row">
+                        <span class="modal-pill-tag id-tag" id="metaBadgeId"><i class="fa-solid fa-hashtag me-1"></i><span>ID: -</span></span>
+                        <span class="modal-pill-tag status-tag pend" id="metaBadgeStatus"><i class="fa-solid fa-hourglass-half me-1"></i><span>MENUNGGU TELAAH</span></span>
+                        <span class="modal-pill-tag pelapor-tag" id="metaBadgePelapor"><i class="fa-regular fa-user me-1"></i><span>Pelapor: -</span></span>
+                    </div>
+                    <span id="modalReportMeta" style="display: none;"></span>
+                </div>
+            </div>
+            <button type="button" class="modal-close-btn" onclick="closeDetailModal()" title="Tutup Modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="custom-modal-body" id="modalReportContent">
+            <!-- Dynamic Form Breakdown Content injected by JS -->
+            <div style="text-align: center; padding: 3.5rem 1rem;">
+                <i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color: #0284c7;"></i>
+                <p style="margin-top: 1rem; color: #64748b; font-weight: 600; font-size: 0.92rem;">Sedang mengambil data inspeksi airside...</p>
+            </div>
+        </div>
+
+        <!-- Upgraded Footer with Harmonized Buttons -->
+        <div class="custom-modal-footer">
+            <button type="button" class="btn-modal-close" onclick="closeDetailModal()">
+                <span>Tutup</span>
+            </button>
+            <button type="button" class="btn-modal-revise" id="modalBtnRevise">
+                <i class="fa-solid fa-pencil"></i>
+                <span>Minta Koreksi / Revisi</span>
+            </button>
+            <button type="button" class="btn-modal-approve" id="modalBtnApprove">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Setujui & Teruskan ke Regional</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     MODAL FEEDBACK REVISI GM (EXECUTIVE REDESIGN)
+     ========================================================================== -->
+<div class="custom-modal-backdrop" id="revisionModal">
+    <div class="custom-modal-content" style="max-width: 600px;">
+        <div class="custom-modal-header">
+            <div class="modal-header-info">
+                <div class="modal-title-icon-box" style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
+                    <i class="fa-solid fa-pencil"></i>
+                </div>
+                <div>
+                    <h3 class="modal-header-heading" style="color: #9a3412;">Catatan Koreksi / Revisi GM</h3>
+                    <span style="font-size: 0.78rem; color: #64748b;" id="revModalMeta"></span>
+                </div>
+            </div>
+            <button type="button" class="modal-close-btn" onclick="closeRevisionModal()" title="Tutup Modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="custom-modal-body">
+            <p style="font-size: 0.86rem; color: #475569; margin-bottom: 0.85rem; line-height: 1.5;">
+                Tuliskan poin-poin koreksi secara jelas agar petugas dapat langsung memperbaiki data pada laporan ini:
+            </p>
+
+            <div style="margin-bottom: 1rem;">
+                <textarea id="revNotesInput" class="form-control" rows="5" 
+                          placeholder="Contoh: Titik kerusakan pada Runway belum sesuai hasil pengukuran pagi, dan mohon update nilai Skid Resistance." 
+                          style="border-radius: 14px; font-size: 0.88rem; border: 1.5px solid #cbd5e1; padding: 0.85rem; outline: none; width: 100%; box-sizing: border-box; font-family: inherit;"></textarea>
+            </div>
+
+            <div style="background-color: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1rem 1.15rem;">
+                <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">Template Koreksi Cepat:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.55rem;">
+                    <button type="button" class="btn-template-chip" onclick="insertTemplateNote('Tolong cek ulang titik kerusakan Runway dan rincian perbaikannya.')">
+                        + Kerusakan Runway
+                    </button>
+                    <button type="button" class="btn-template-chip" onclick="insertTemplateNote('Mohon sesuaikan nilai PCI Runway dan Apron sesuai inspeksi terbaru.')">
+                        + Nilai PCI
+                    </button>
+                    <button type="button" class="btn-template-chip" onclick="insertTemplateNote('Marka runway dan taxiway belum terisi lengkap.')">
+                        + Marka
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="custom-modal-footer">
+            <button type="button" class="btn-modal-close" onclick="closeRevisionModal()">
+                <span>Batal</span>
+            </button>
+            <button type="button" class="btn-modal-revise" onclick="submitRevision()" id="btnSubmitRevision">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>Simpan & Kirim ke Petugas</span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentActiveReportId = null;
+let currentActiveReportDate = null;
+
+// Setup CSRF Token
+const csrfToken = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
+
+// User Profile Dropdown Toggle
+function toggleUserDropdown(e) {
+    if (e) e.stopPropagation();
+    const menu = document.getElementById('userDropdownCard');
+    if (menu) menu.classList.toggle('show');
+}
+
+document.addEventListener('click', function(e) {
+    const menu = document.getElementById('userDropdownCard');
+    if (menu && menu.classList.contains('show')) {
+        if (!e.target.closest('.topbar-user-wrap')) {
+            menu.classList.remove('show');
+        }
+    }
+});
+
+// System Notification Popup
+function showSystemNotif() {
+    Swal.fire({
+        icon: 'info',
+        title: 'Notifikasi Sistem GM Airside',
+        html: `
+            <div style="text-align: left; font-size: 0.88rem; color: #334155; line-height: 1.6;">
+                <div style="padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;">
+                    <strong style="color: #0284c7;">• Status Staging Cabang:</strong> Spreadsheet Cabang <strong>{{ airport_code }}</strong> terhubung aktif.
+                </div>
+                <div style="padding: 0.5rem 0;">
+                    <strong style="color: #0f172a;">• Hak Akses Otoritas:</strong> General Manager memiliki wewenang telaah, koreksi revisi, dan persetujuan final ke lembar produksi regional.
+                </div>
+            </div>
+        `,
+        confirmButtonText: 'Tutup',
+        confirmButtonColor: '#003366'
+    });
+}
+
+// Table Filter on Search
+function handleTableFilter(e) {
+    const query = e.target.value.toLowerCase().trim();
+    const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const searchText = (row.getAttribute('data-search') || '').toLowerCase();
+        if (!query || searchText.includes(query)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    const countText = document.getElementById('reportCountText');
+    if (countText) {
+        countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
+    }
+}
+
+// Filter by Status Card Click
+function filterByStatus(status) {
+    const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const rowStatus = row.getAttribute('data-status');
+        if (status === 'ALL' || rowStatus === status) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    const countText = document.getElementById('reportCountText');
+    if (countText) {
+        countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
+    }
+
+    const tableCard = document.querySelector('.gm-table-card');
+    if (tableCard) tableCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+
+
+// Open Detail Modal
+function openDetailModal(reportId) {
+    currentActiveReportId = reportId;
+    const modal = document.getElementById('detailModal');
+    const contentBox = document.getElementById('modalReportContent');
+    modal.style.display = 'flex';
+    contentBox.innerHTML = `
+        <div style="text-align: center; padding: 3.5rem 1rem;">
+            <i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color: #0284c7;"></i>
+            <p style="margin-top: 1rem; color: #64748b; font-weight: 600; font-size: 0.92rem;">Sedang mengambil data inspeksi airside...</p>
+        </div>
+    `;
+
+    fetch(`/gm/api/report/${encodeURIComponent(reportId)}`)
+        .then(r => r.json())
+        .then(res => {
+            if (res.success && res.report) {
+                const rep = res.report;
+                const d = rep.data || {};
+                currentActiveReportDate = rep.tanggal;
+                
+                // Header Information
+                document.getElementById('modalReportTitle').textContent = `Laporan Harian Airside • ${rep.tanggal}`;
+                
+                const metaEl = document.getElementById('modalReportMeta');
+                if (metaEl) metaEl.textContent = `ID: ${rep.report_id} • Status: ${rep.status} • Pelapor: ${rep.submitted_by || '-'}`;
+
+                const bId = document.getElementById('metaBadgeId');
+                if (bId) bId.innerHTML = `<i class="fa-solid fa-hashtag me-1"></i><span>${rep.report_id}</span>`;
+
+                const bStatus = document.getElementById('metaBadgeStatus');
+                if (bStatus) {
+                    if (rep.status === 'REVISI') {
+                        bStatus.className = 'modal-pill-tag status-tag rev';
+                        bStatus.innerHTML = `<i class="fa-solid fa-rotate-left me-1"></i><span>SEDANG DIREVISI</span>`;
+                    } else {
+                        bStatus.className = 'modal-pill-tag status-tag pend';
+                        bStatus.innerHTML = `<i class="fa-solid fa-hourglass-half me-1"></i><span>MENUNGGU TELAAH</span>`;
+                    }
+                }
+
+                const bPelapor = document.getElementById('metaBadgePelapor');
+                if (bPelapor) bPelapor.innerHTML = `<i class="fa-regular fa-user me-1"></i><span>${rep.submitted_by || 'Petugas ' + (rep.airport || 'Cabang')}</span>`;
+
+                document.getElementById('modalBtnRevise').onclick = () => openRevisionModal(rep.report_id, rep.tanggal);
+                document.getElementById('modalBtnApprove').onclick = () => confirmApprove(rep.report_id, rep.tanggal);
+
+                // Helper makeFieldBox matching Staff Dashboard & Executive Design Language
+                function makeFieldBox(label, value, options = {}) {
+                    let displayVal = (value !== undefined && value !== null && String(value).trim() !== '') ? String(value).trim() : '-';
+                    let valHtml = '';
+                    const isNihil = (displayVal === '-' || displayVal.toLowerCase() === 'null');
+
+                    if (isNihil) {
+                        valHtml = `<span class="val-nihil">- (Nihil / Kosong)</span>`;
+                    } else if (options.badgeType === 'status') {
+                        const low = displayVal.toLowerCase();
+                        if (low.includes('unserviceable')) {
+                            valHtml = `<span class="tile-badge-status unserviceable"><i class="fa-solid fa-triangle-exclamation me-1"></i>${displayVal}</span>`;
+                        } else if (low.includes('serviceable')) {
+                            valHtml = `<span class="tile-badge-status serviceable"><i class="fa-solid fa-circle-check me-1"></i>${displayVal}</span>`;
+                        } else {
+                            valHtml = `<span class="tile-badge-status neutral">${displayVal}</span>`;
+                        }
+                    } else if (options.badgeType === 'pci') {
+                        let pciFormatted = displayVal.includes('%') ? displayVal : `${displayVal}% PCI`;
+                        valHtml = `<span class="tile-badge-pci"><i class="fa-solid fa-gauge-high me-1"></i>${pciFormatted}</span>`;
+                    } else if (options.badgeType === 'primary') {
+                        valHtml = `<span class="val-primary">${displayVal}</span>`;
+                    } else {
+                        valHtml = `<span class="val-normal">${displayVal}</span>`;
+                    }
+
+                    let leadIconHtml = '';
+                    if (options.icon) {
+                        leadIconHtml = `<i class="${options.icon} field-box-lead-icon"></i>`;
+                    }
+
+                    let trailIconHtml = '';
+                    if (options.trail === 'chevron') {
+                        trailIconHtml = `<i class="fa-solid fa-chevron-down field-box-trail-icon" style="color: #94a3b8; font-size: 0.8rem;"></i>`;
+                    } else if (options.trail === 'clear') {
+                        trailIconHtml = `<i class="fa-solid fa-circle-xmark field-box-trail-icon" style="color: #cbd5e1; font-size: 0.85rem;"></i>`;
+                    }
+
+                    const gridStyle = options.fullWidth ? 'grid-column: 1 / -1;' : '';
+                    return `
+                        <div class="field-block" style="${gridStyle}">
+                            <div class="field-label">${label}</div>
+                            <div class="field-input-box">
+                                <div class="field-box-left">
+                                    ${leadIconHtml}
+                                    <div class="field-box-val">${valHtml}</div>
+                                </div>
+                                ${trailIconHtml}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Render Catatan Khusus
+                const notesList = [
+                    { num: 1, val: d.CATATAN_1 },
+                    { num: 2, val: d.CATATAN_2 },
+                    { num: 3, val: d.CATATAN_3 },
+                    { num: 4, val: d.CATATAN_4 },
+                    { num: 5, val: d.CATATAN_5 },
+                    { num: 6, val: d.CATATAN_6 },
+                    { num: 7, val: d.CATATAN_7 }
+                ].filter(n => n.val && n.val.trim() !== '' && n.val.trim() !== '-');
+
+                let notesHtml = '';
+                if (notesList.length > 0) {
+                    notesHtml = notesList.map(n => `
+                        <div class="note-card-item">
+                            <div class="note-num-badge">${n.num}</div>
+                            <div class="note-text-content">${n.val}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    notesHtml = `
+                        <div style="background-color: #ffffff; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 1.4rem; text-align: center; color: #64748b; font-size: 0.88rem;">
+                            <i class="fa-solid fa-circle-info me-1" style="color: #94a3b8;"></i> Tidak ada catatan khusus yang dicantumkan pada laporan ini.
+                        </div>
+                    `;
+                }
+
+                const knownFields = new Set([
+                    'TANGGAL', 'SAPAAN', 'KANTOR_CABANG', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4',
+                    'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK', 'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI',
+                    'RUNWAY_TITIK_BELUM', 'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', 'RUNWAY_MARKA_STD', 'RUNWAY_MARKA_REALISASI',
+                    'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER', 'RUNWAY_WATER_PERF', 'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL', 'RUNWAY_RUBBER_SKID',
+                    'TAXIWAY_STATUS', 'TAXIWAY_NAMA', 'TAXIWAY_PCI', 'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI',
+                    'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', 'TWY_MARKA_STD', 'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER',
+                    'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI', 'APN_JENIS_DIPERBAIKI', 'APN_TITIK_BELUM',
+                    'APN_JENIS_BELUM', 'APN_TITIK_BERULANG', 'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER',
+                    'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF',
+                    'CATATAN_1', 'CATATAN_2', 'CATATAN_3', 'CATATAN_4', 'CATATAN_5', 'CATATAN_6', 'CATATAN_7',
+                    'REPORT_ID', 'STATUS', 'CATATAN_GM', 'TANGGAL_LAPORAN', 'SUBMITTED_BY', 'TIMESTAMP_SUBMIT', 'TIMESTAMP_UPDATE'
+                ]);
+
+                let extraTilesHtml = '';
+                for (const [k, v] of Object.entries(d)) {
+                    if (!knownFields.has(k) && v && String(v).trim() !== '' && String(v).trim() !== '-') {
+                        extraTilesHtml += makeFieldBox(k.replace(/_/g, ' '), v, { icon: 'fa-regular fa-file' });
+                    }
+                }
+
+                // Render Modal Content with Elevated Layout
+                contentBox.innerHTML = `
+                    <!-- 1. INFORMASI UMUM & PEJABAT PENERIMA -->
+                    <div class="detail-card-group" id="sec-umum">
+                        <div class="card-step-header">
+                            <div class="card-step-title-wrap">
+                                <div class="step-main-icon-tile">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                </div>
+                                <div>
+                                    <h3 class="step-main-title">Langkah 1: Informasi Umum & Pejabat</h3>
+                                    <p class="step-main-subtitle">Tentukan tanggal laporan, pilih pembuka, dan susunan pejabat penerima laporan.</p>
+                                </div>
+                            </div>
+                            <span class="step-counter-pill">Bagian 1 dari 5</span>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Parameter Laporan</h5>
+                                    <p class="subcard-desc-text">Silakan lengkapi informasi dasar laporan.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-2">
+                                ${makeFieldBox('Tanggal Laporan', d.TANGGAL || rep.tanggal, { icon: 'fa-regular fa-calendar-days', trail: 'clear', badgeType: 'primary' })}
+                                ${makeFieldBox('Sapaan Pembuka', d.SAPAAN || 'Selamat pagi', { icon: 'fa-regular fa-comment-dots', trail: 'chevron' })}
+                            </div>
+                            <div style="margin-top: 1.15rem;">
+                                ${makeFieldBox('Nomor & Nama Kantor Cabang', d.KANTOR_CABANG || ('1. Kantor Cabang ' + (rep.airport || 'LOP')), { icon: 'fa-solid fa-location-dot', trail: 'chevron', fullWidth: true })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-id-badge"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Pejabat Penerima Laporan</h5>
+                                    <p class="subcard-desc-text">Masukkan nama pejabat penerima laporan sesuai struktur organisasi.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-2">
+                                ${makeFieldBox('Penerima 1 (Direksi)', d.PENERIMA_1, { icon: 'fa-regular fa-user' })}
+                                ${makeFieldBox('Penerima 2 (Group Head)', d.PENERIMA_2, { icon: 'fa-regular fa-user' })}
+                                ${makeFieldBox('Penerima 3 (Deputy Regional)', d.PENERIMA_3, { icon: 'fa-regular fa-user' })}
+                                ${makeFieldBox('Penerima 4 (Opsional)', d.PENERIMA_4, { icon: 'fa-regular fa-user' })}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. FASILITAS RUNWAY -->
+                    <div class="detail-card-group" id="sec-runway">
+                        <div class="card-step-header">
+                            <div class="card-step-title-wrap">
+                                <div class="step-main-icon-tile">
+                                    <i class="fa-solid fa-road"></i>
+                                </div>
+                                <div>
+                                    <h3 class="step-main-title">Langkah 2: Fasilitas Runway (A. RUNWAY)</h3>
+                                    <p class="step-main-subtitle">Inspeksi perkerasan PCI, titik kerusakan, marka, dan endapan karet.</p>
+                                </div>
+                            </div>
+                            <span class="step-counter-pill">Bagian 2 dari 5</span>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Kondisi Umum & Perkerasan (PCI)</h5>
+                                    <p class="subcard-desc-text">Status kelayakan operasional dan indeks kondisi perkerasan runway.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-2">
+                                ${makeFieldBox('Kondisi Keseluruhan', d.RUNWAY_KONDISI, { icon: 'fa-solid fa-shield-halved', badgeType: 'status' })}
+                                ${makeFieldBox('Performance Pavement (PCI)', d.RUNWAY_PCI, { icon: 'fa-solid fa-gauge-high', badgeType: 'pci' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-hammer"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Rincian Kerusakan & Perbaikan Runway</h5>
+                                    <p class="subcard-desc-text">Inventarisasi titik kerusakan, status perbaikan, dan kerusakan berulang.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-3">
+                                ${makeFieldBox('Jumlah Titik Rusak', d.RUNWAY_TITIK_RUSAK, { icon: 'fa-solid fa-triangle-exclamation' })}
+                                ${makeFieldBox('Titik Sudah Diperbaiki', d.RUNWAY_TITIK_DIPERBAIKI, { icon: 'fa-solid fa-screwdriver-wrench' })}
+                                ${makeFieldBox('Jenis Kerusakan (Diperbaiki)', d.RUNWAY_JENIS_DIPERBAIKI, { icon: 'fa-solid fa-list-check' })}
+                                ${makeFieldBox('Titik Belum Diperbaiki', d.RUNWAY_TITIK_BELUM, { icon: 'fa-solid fa-hourglass-start' })}
+                                ${makeFieldBox('Jenis Kerusakan (Belum Diperbaiki)', d.RUNWAY_JENIS_BELUM, { icon: 'fa-solid fa-circle-exclamation' })}
+                                ${makeFieldBox('Titik Rusak Berulang (> 1x)', d.RUNWAY_TITIK_BERULANG, { icon: 'fa-solid fa-arrows-spin' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-paint-roller"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Pengecatan Marka Runway</h5>
+                                    <p class="subcard-desc-text">Standar pemeliharaan dan realisasi pengecatan marka runway.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-3">
+                                ${makeFieldBox('Marka - Standar', d.RUNWAY_MARKA_STD, { icon: 'fa-solid fa-ruler' })}
+                                ${makeFieldBox('Marka - Realisasi', d.RUNWAY_MARKA_REALISASI, { icon: 'fa-solid fa-paintbrush' })}
+                                ${makeFieldBox('Marka - Performance', d.RUNWAY_MARKA_PERF, { icon: 'fa-solid fa-chart-line' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-droplet"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Pengukuran Genangan Air (Standing Water)</h5>
+                                    <p class="subcard-desc-text">Pemantauan daya serap dan genangan air hujan di permukaan runway.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-2">
+                                ${makeFieldBox('Pengukuran Standing Water', d.RUNWAY_STANDING_WATER, { icon: 'fa-solid fa-water' })}
+                                ${makeFieldBox('Performance Standing Water', d.RUNWAY_WATER_PERF, { icon: 'fa-solid fa-gauge' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-car-side"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Pembersihan Deposit Karet (Rubber Removal) & Skid</h5>
+                                    <p class="subcard-desc-text">Pembersihan bekas karet ban pesawat dan nilai friksi kekesatan (Skid).</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-3">
+                                ${makeFieldBox('Rubber Removal - Standar', d.RUNWAY_RUBBER_STD, { icon: 'fa-solid fa-ruler' })}
+                                ${makeFieldBox('Rubber Removal - Realisasi', d.RUNWAY_RUBBER_REAL, { icon: 'fa-solid fa-broom' })}
+                                ${makeFieldBox('Nilai Skid Resistance', d.RUNWAY_RUBBER_SKID, { icon: 'fa-solid fa-tachograph-digital', badgeType: 'primary' })}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. FASILITAS TAXIWAY -->
+                    <div class="detail-card-group" id="sec-taxiway">
+                        <div class="card-step-header">
+                            <div class="card-step-title-wrap">
+                                <div class="step-main-icon-tile">
+                                    <i class="fa-solid fa-arrows-split-up-and-left"></i>
+                                </div>
+                                <div>
+                                    <h3 class="step-main-title">Langkah 3: Fasilitas Taxiway (B. TAXIWAY)</h3>
+                                    <p class="step-main-subtitle">Kondisi perkerasan taxiway, titik perbaikan, marka & genangan air.</p>
+                                </div>
+                            </div>
+                            <span class="step-counter-pill">Bagian 3 dari 5</span>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Kondisi Umum & Perkerasan (PCI)</h5>
+                                    <p class="subcard-desc-text">Identifikasi area taxiway, status kesiapan, dan nilai PCI.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-3">
+                                ${makeFieldBox('Nama / Area Taxiway', d.TAXIWAY_NAMA, { icon: 'fa-solid fa-location-arrow', badgeType: 'primary' })}
+                                ${makeFieldBox('Status Kondisi Taxiway', d.TAXIWAY_STATUS, { icon: 'fa-solid fa-shield-halved', badgeType: 'status' })}
+                                ${makeFieldBox('Performance Pavement (PCI)', d.TAXIWAY_PCI, { icon: 'fa-solid fa-gauge-high', badgeType: 'pci' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-hammer"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Rincian Kerusakan & Perbaikan Taxiway</h5>
+                                    <p class="subcard-desc-text">Data titik kerusakan dan penanganan perbaikan pada jalur taxiway.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-3">
+                                ${makeFieldBox('Jumlah Titik Rusak', d.TWY_TITIK_RUSAK, { icon: 'fa-solid fa-triangle-exclamation' })}
+                                ${makeFieldBox('Titik Sudah Diperbaiki', d.TWY_TITIK_DIPERBAIKI, { icon: 'fa-solid fa-screwdriver-wrench' })}
+                                ${makeFieldBox('Jenis Kerusakan (Diperbaiki)', d.TWY_JENIS_DIPERBAIKI, { icon: 'fa-solid fa-list-check' })}
+                                ${makeFieldBox('Titik Belum Diperbaiki', d.TWY_TITIK_BELUM, { icon: 'fa-solid fa-hourglass-start' })}
+                                ${makeFieldBox('Jenis Kerusakan (Belum Diperbaiki)', d.TWY_JENIS_BELUM, { icon: 'fa-solid fa-circle-exclamation' })}
+                                ${makeFieldBox('Titik Rusak Berulang', d.TWY_TITIK_BERULANG, { icon: 'fa-solid fa-arrows-spin' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-droplet"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Marka & Genangan Air Taxiway</h5>
+                                    <p class="subcard-desc-text">Kondisi marka jalur taxi dan standing water.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-2">
+                                ${makeFieldBox('Marka - Standar', d.TWY_MARKA_STD, { icon: 'fa-solid fa-ruler' })}
+                                ${makeFieldBox('Marka - Realisasi', d.TWY_MARKA_REALISASI, { icon: 'fa-solid fa-paintbrush' })}
+                                ${makeFieldBox('Marka - Performance', d.TWY_MARKA_PERF, { icon: 'fa-solid fa-chart-line' })}
+                                ${makeFieldBox('Pengukuran Standing Water', d.TWY_STANDING_WATER, { icon: 'fa-solid fa-water' })}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. FASILITAS APRON -->
+                    <div class="detail-card-group" id="sec-apron">
+                        <div class="card-step-header">
+                            <div class="card-step-title-wrap">
+                                <div class="step-main-icon-tile">
+                                    <i class="fa-solid fa-plane-arrival"></i>
+                                </div>
+                                <div>
+                                    <h3 class="step-main-title">Langkah 4: Fasilitas Apron (C. APRON)</h3>
+                                    <p class="step-main-subtitle">Data perkerasan apron parkir pesawat, marka parking stand & genangan air.</p>
+                                </div>
+                            </div>
+                            <span class="step-counter-pill">Bagian 4 dari 5</span>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Kondisi Umum & Perkerasan (PCI)</h5>
+                                    <p class="subcard-desc-text">Status kelayakan apron parkir pesawat udara.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-2">
+                                ${makeFieldBox('Kondisi Keseluruhan', d.APRON_KONDISI, { icon: 'fa-solid fa-shield-halved', badgeType: 'status' })}
+                                ${makeFieldBox('Performance Pavement (PCI)', d.APRON_PCI, { icon: 'fa-solid fa-gauge-high', badgeType: 'pci' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-hammer"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Rincian Kerusakan & Perbaikan Apron</h5>
+                                    <p class="subcard-desc-text">Rincian titik kerusakan spalling, crack, dan perbaikan apron.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-3">
+                                ${makeFieldBox('Jumlah Titik Rusak', d.APN_TITIK_RUSAK, { icon: 'fa-solid fa-triangle-exclamation' })}
+                                ${makeFieldBox('Titik Sudah Diperbaiki', d.APN_TITIK_DIPERBAIKI, { icon: 'fa-solid fa-screwdriver-wrench' })}
+                                ${makeFieldBox('Jenis Kerusakan (Diperbaiki)', d.APN_JENIS_DIPERBAIKI, { icon: 'fa-solid fa-list-check' })}
+                                ${makeFieldBox('Titik Belum Diperbaiki', d.APN_TITIK_BELUM, { icon: 'fa-solid fa-hourglass-start' })}
+                                ${makeFieldBox('Jenis Kerusakan (Belum Diperbaiki)', d.APN_JENIS_BELUM, { icon: 'fa-solid fa-circle-exclamation' })}
+                                ${makeFieldBox('Titik Rusak Berulang', d.APN_TITIK_BERULANG, { icon: 'fa-solid fa-arrows-spin' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-droplet"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Marka & Genangan Air Apron</h5>
+                                    <p class="subcard-desc-text">Pengecatan marka parking stand dan pemantauan genangan air apron.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-2">
+                                ${makeFieldBox('Marka - Standar', d.APN_MARKA_STD, { icon: 'fa-solid fa-ruler' })}
+                                ${makeFieldBox('Marka - Realisasi', d.APN_MARKA_REALISASI, { icon: 'fa-solid fa-paintbrush' })}
+                                ${makeFieldBox('Marka - Performance', d.APN_MARKA_PERF, { icon: 'fa-solid fa-chart-line' })}
+                                ${makeFieldBox('Pengukuran Standing Water', d.APN_STANDING_WATER, { icon: 'fa-solid fa-water' })}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. RUMPUT & CATATAN KHUSUS -->
+                    <div class="detail-card-group" id="sec-rumput">
+                        <div class="card-step-header">
+                            <div class="card-step-title-wrap">
+                                <div class="step-main-icon-tile">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                </div>
+                                <div>
+                                    <h3 class="step-main-title">Langkah 5: Pemeliharaan Rumput & Catatan Khusus</h3>
+                                    <p class="step-main-subtitle">Realisasi potong rumput strip runway dan butir catatan khusus lapangan.</p>
+                                </div>
+                            </div>
+                            <span class="step-counter-pill">Bagian 5 dari 5</span>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-leaf"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Pemotongan Rumput Area Runway Strip & Airside</h5>
+                                    <p class="subcard-desc-text">Standar dan realisasi perapian rumput safety area.</p>
+                                </div>
+                            </div>
+                            <div class="field-grid-3">
+                                ${makeFieldBox('Potong Rumput - Standar', d.RUMPUT_STD, { icon: 'fa-solid fa-ruler' })}
+                                ${makeFieldBox('Potong Rumput - Realisasi', d.RUMPUT_REALISASI, { icon: 'fa-solid fa-scissors' })}
+                                ${makeFieldBox('Potong Rumput - Performance', d.RUMPUT_PERF, { icon: 'fa-solid fa-chart-line' })}
+                            </div>
+                        </div>
+
+                        <div class="subcard-box">
+                            <div class="subcard-header-row">
+                                <div class="subcard-icon-box">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </div>
+                                <div>
+                                    <h5 class="subcard-title-text">Poin-Poin Catatan Khusus Lapangan</h5>
+                                    <p class="subcard-desc-text">Catatan penting petugas terkait kendala teknis atau rekomendasi operasional.</p>
+                                </div>
+                            </div>
+                            <div>
+                                ${notesHtml}
+                            </div>
+                        </div>
+                    </div>
+
+                    ${extraTilesHtml ? `
+                    <div class="detail-card-group" id="sec-extra">
+                        <div class="card-step-header">
+                            <div class="card-step-title-wrap">
+                                <div class="step-main-icon-tile" style="background: linear-gradient(135deg, #7e22ce 0%, #a855f7 100%);">
+                                    <i class="fa-solid fa-folder-plus"></i>
+                                </div>
+                                <div>
+                                    <h3 class="step-main-title" style="color: #6b21a8;">Parameter & Data Tambahan</h3>
+                                    <p class="step-main-subtitle">Informasi inspeksi tambahan dari lembar staging.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="subcard-box">
+                            <div class="field-grid-2">
+                                ${extraTilesHtml}
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+
+                switchModalTab('all');
+            } else {
+                contentBox.innerHTML = `<div class="alert alert-danger" style="border-radius: 12px;">${res.error || 'Gagal memuat rincian laporan.'}</div>`;
+            }
+        })
+        .catch(err => {
+            contentBox.innerHTML = `<div class="alert alert-danger" style="border-radius: 12px;">Gagal terhubung ke server.</div>`;
+        });
+}
+
+function closeDetailModal() {
+    document.getElementById('detailModal').style.display = 'none';
+}
+
+function switchModalTab(tabId) {
+    const sections = document.querySelectorAll('.detail-card-group');
+    sections.forEach(sec => {
+        sec.style.display = 'block';
+    });
+}
+
+// Open Revision Modal
+function openRevisionModal(reportId, dateStr) {
+    currentActiveReportId = reportId;
+    currentActiveReportDate = dateStr;
+    closeDetailModal();
+    document.getElementById('revModalMeta').textContent = `Laporan Tanggal: ${dateStr} (ID: ${reportId})`;
+    document.getElementById('revNotesInput').value = '';
+    document.getElementById('revisionModal').style.display = 'flex';
+}
+
+function closeRevisionModal() {
+    document.getElementById('revisionModal').style.display = 'none';
+}
+
+function insertTemplateNote(txt) {
+    const textarea = document.getElementById('revNotesInput');
+    if (textarea.value.trim() !== '') {
+        textarea.value += '\n' + txt;
+    } else {
+        textarea.value = txt;
+    }
+}
+
+// Submit Revision Request
+function submitRevision() {
+    const notes = document.getElementById('revNotesInput').value.trim();
+    if (!notes) {
+        Swal.fire({
+            title: 'Catatan Kosong',
+            text: 'Harap masukkan rincian koreksi/revisi untuk petugas.',
+            icon: 'warning',
+            confirmButtonColor: '#003366'
+        });
+        return;
+    }
+
+    const btn = document.getElementById('btnSubmitRevision');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Menyimpan...';
+
+    fetch('/gm/api/revision', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+            report_id: currentActiveReportId,
+            notes: notes,
+            csrf_token: csrfToken
+        })
+    })
+    .then(r => r.json())
+    .then(res => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Simpan & Kirim ke Petugas';
+
+        if (res.success) {
+            closeRevisionModal();
+            Swal.fire({
+                title: 'Catatan Revisi Tersimpan!',
+                text: 'Status laporan diubah menjadi "Perlu Revisi".\n\nApakah Anda ingin mengirimkan pesan feedback ini langsung ke WhatsApp Petugas?',
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa-brands fa-whatsapp"></i> Ya, Kirim ke WA Petugas',
+                cancelButtonText: 'Tutup & Segarkan Halaman',
+                confirmButtonColor: '#16a34a',
+                cancelButtonColor: '#64748b'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (res.pic_phone) {
+                        let cleanPhone = res.pic_phone.replace(/\D/g, '');
+                        if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
+                        window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(res.staff_message)}`, '_blank');
+                    } else {
+                        Swal.fire('Info', 'Nomor WhatsApp Petugas/PIC cabang belum terdaftar di konfigurasi.', 'info');
+                    }
+                }
+                setTimeout(() => window.location.reload(), 400);
+            });
+        } else {
+            Swal.fire('Gagal Menyimpan', res.error || 'Terjadi kesalahan sistem.', 'error');
+        }
+    })
+    .catch(err => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Simpan & Kirim ke Petugas';
+        Swal.fire('Error', 'Gagal terhubung ke server', 'error');
+    });
+}
+
+// Confirm Approve Laporan
+function confirmApprove(reportId, dateStr) {
+    closeDetailModal();
+    Swal.fire({
+        title: 'Setujui Laporan?',
+        html: `Anda akan menyetujui Laporan Harian Airside tanggal <b>${dateStr}</b>.<br><br><span style="font-size:0.88rem; color:#475569;">Data akan dipindahkan ke Spreadsheet Produksi Utama (DATABASE_REKAP & Tab Harian) dan dihapus dari lembar sementara Staging.</span>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '<i class="fa-solid fa-circle-check me-1"></i> Ya, Setujui Laporan',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#003366',
+        cancelButtonColor: '#64748b'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Memproses Persetujuan...',
+                text: 'Menyuntikkan data ke Spreadsheet Produksi Utama.',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            fetch('/gm/api/approve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    report_id: reportId,
+                    csrf_token: csrfToken
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    Swal.fire({
+                        title: 'Laporan Berhasil Disetujui!',
+                        text: 'Laporan resmi telah tercatat di Spreadsheet Produksi Utama dan dihapus dari Staging.\n\nApakah Anda ingin meneruskan laporan ke WhatsApp Admin Regional II?',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: '<i class="fa-brands fa-whatsapp"></i> Ya, Teruskan ke Admin Regional',
+                        cancelButtonText: 'Selesai & Segarkan',
+                        confirmButtonColor: '#16a34a',
+                        cancelButtonColor: '#64748b'
+                    }).then((forwardRes) => {
+                        if (forwardRes.isConfirmed) {
+                            if (res.admin_phone) {
+                                let cleanAdmin = res.admin_phone.replace(/\D/g, '');
+                                if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                                window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
+                            } else {
+                                Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
+                            }
+                        }
+                        setTimeout(() => window.location.reload(), 400);
+                    });
+                } else {
+                    Swal.fire('Persetujuan Gagal', res.error || 'Terjadi kesalahan sistem saat memindahkan data.', 'error');
+                }
+            })
+            .catch(err => {
+                Swal.fire('Error', 'Gagal terhubung ke server', 'error');
+            });
+        }
+    });
+}
+</script>
+{% endblock %}

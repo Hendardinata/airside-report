@@ -2,57 +2,41 @@
 
 {% set hide_navbar = true %}
 
-{% block title %}Login Portal - InJourney Regional II{% endblock %}
+{% block title %}Login - Airside Daily Report InJourney Regional II{% endblock %}
 
 {% block head %}
 <style>
     /* ==========================================================================
-       LOGIN PORTAL - MODERN ENTERPRISE AERONAUTICAL STYLING
-       Clean, Compact, Zero-Scroll, Professional & Responsive
+       ENTERPRISE AIRSIDE PORTAL - EXECUTIVE DUAL-ZONE DESIGN
+       Harmonized with Futuristic Airport Island Travel Diorama Palette:
+       Deep Aviation Navy (#08182b - #0d233e), Sky Cyan Ribbon (#0ea5e9 / #38bdf8),
+       Blazer Burgundy Accent (#9f1239), & Crisp Aeronautical White (#ffffff)
        ========================================================================== */
 
     html,
     body {
-        height: 100%;
-        min-height: 100vh;
+        height: 100vh;
         margin: 0;
         padding: 0;
+        background-color: #f1f5f9 !important;
+        font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+        -webkit-font-smoothing: antialiased;
         overflow: hidden;
     }
 
     body {
-        background: radial-gradient(1100px circle at 50% -50px, #e0f2fe 0%, #f0f7ff 35%, #f8fafc 70%, #f1f5f9 100%) !important;
+        background: radial-gradient(1300px circle at 50% 10%, #e0effd 0%, #edf5fc 45%, #f1f5f9 100%) !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
-        min-height: 100vh !important;
-        height: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
+        padding: 1.25rem !important;
         box-sizing: border-box !important;
         position: relative;
     }
 
-    /* Force parent main wrapper from base.html to center content vertically & horizontally */
-    main.container,
-    .container {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        flex: 1 1 auto !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 100% !important;
-        min-height: 100vh !important;
-        padding: 1rem !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Ambient Decorative Glows */
-    .login-bg-decor {
+    /* Ambient Outer Lighting */
+    .outer-lighting {
         position: fixed;
         top: 0;
         left: 0;
@@ -63,481 +47,1323 @@
         overflow: hidden;
     }
 
-    .login-bg-glow-top {
+    .light-orb-left {
         position: absolute;
         top: -120px;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 15%;
         width: 650px;
-        height: 350px;
-        background: radial-gradient(ellipse at center, rgba(2, 132, 199, 0.12), transparent 70%);
-        filter: blur(45px);
+        height: 650px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+        filter: blur(80px);
     }
 
-    .login-bg-glow-bottom {
+    .light-orb-right {
         position: absolute;
-        bottom: -90px;
-        right: 15%;
-        width: 450px;
-        height: 300px;
-        background: radial-gradient(ellipse at center, rgba(0, 51, 102, 0.08), transparent 70%);
-        filter: blur(45px);
+        bottom: -150px;
+        right: 12%;
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(circle, rgba(2, 132, 199, 0.07) 0%, transparent 70%);
+        filter: blur(80px);
     }
 
-    .login-container {
-        width: 100%;
-        max-width: 440px;
-        margin: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    main.container,
+    .container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        min-height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
         position: relative;
         z-index: 1;
     }
 
-    .login-card {
+    /* ==========================================================================
+       MASTER EXECUTIVE CARD (Seamless Open Horizon Canvas - Konsep 3)
+       Tanpa Sekat / No Harsh Partition - Ethereal Aero Island & Executive Suite
+       ========================================================================== */
+    .master-portal-card {
         width: 100%;
+        max-width: 1160px;
+        height: 650px;
+        max-height: 94vh;
         background-color: #ffffff;
-        border: 1px solid rgba(226, 232, 240, 0.95);
-        border-radius: 18px;
-        box-shadow: 0 16px 36px -8px rgba(0, 43, 73, 0.08), 0 3px 10px -2px rgba(0, 0, 0, 0.03);
-        padding: 1.5rem 1.85rem;
+        background-image:
+            radial-gradient(900px circle at 16% 50%, rgba(224, 242, 254, 0.45) 0%, rgba(240, 249, 255, 0.2) 48%, transparent 75%),
+            linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, #ffffff 100%);
+        border-radius: 32px;
+        border: 1px solid rgba(226, 232, 240, 0.85);
+        box-shadow:
+            0 25px 70px -15px rgba(15, 23, 42, 0.08),
+            0 8px 25px -5px rgba(15, 23, 42, 0.03),
+            0 0 0 1px rgba(255, 255, 255, 0.9) inset;
         position: relative;
+        overflow: hidden;
+        display: flex;
         box-sizing: border-box;
     }
 
-    .login-header {
-        text-align: center;
+    /* Wave boundary hidden in Seamless Open Horizon */
+    .wave-boundary-svg {
+        display: none !important;
+    }
+
+    /* ==========================================================================
+       LEFT ZONE: AERONAUTICAL PANORAMA SHOWCASE
+       ========================================================================== */
+    .zone-left {
+        width: 52%;
+        height: 100%;
+        padding: 2.5rem 2.5rem 2rem 3.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        box-sizing: border-box;
+    }
+
+    /* Top Left Corporate Emblem & Text */
+    .corp-header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.95rem;
+    }
+
+    .corp-logo-kawung {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        object-fit: contain;
+        display: block;
+        filter: drop-shadow(0 3px 8px rgba(0, 51, 102, 0.12));
+    }
+
+    .corp-title-main {
+        font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+        font-size: 1.22rem;
+        font-weight: 800;
+        color: #002b49;
+        letter-spacing: -0.3px;
+        line-height: 1;
+    }
+
+    /* Center Artwork Container - Perfectly Centered & Grand Scale */
+    .diorama-anchor-wrap {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 0;
+        margin: 0 auto;
+    }
+
+    /* Soft ambient celestial glow behind the island */
+    .diorama-anchor-wrap::before {
+        content: '';
+        position: absolute;
+        width: 490px;
+        height: 490px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.17) 0%, rgba(56, 189, 248, 0.05) 52%, transparent 72%);
+        border-radius: 50%;
+        filter: blur(40px);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .diorama-artwork {
+        width: 100%;
+        max-width: 495px;
+        height: auto;
+        max-height: 490px;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+        filter: drop-shadow(0 22px 45px rgba(0, 43, 73, 0.14)) drop-shadow(0 5px 16px rgba(14, 165, 233, 0.12));
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .diorama-artwork:hover {
+        transform: translateY(-3px) scale(1.01);
+    }
+
+    /* Bottom Left Footer Info */
+    .corp-footer {
+        width: 100%;
+        font-size: 0.74rem;
+        color: #64748b;
+        line-height: 1.45;
+    }
+
+    .corp-footer-copy {
+        margin: 0;
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .corp-footer-meta {
+        color: #64748b;
+        font-size: 0.7rem;
+    }
+
+    /* ==========================================================================
+       RIGHT ZONE: EXECUTIVE AVIATION LIGHT LOGIN FORM
+       Seamless Open Horizon Form Zone
+       ========================================================================== */
+    .zone-right {
+        width: 48%;
+        height: 100%;
+        padding: 2.75rem 3.75rem 2rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+        box-sizing: border-box;
+    }
+
+    /* Centered form wrapper prevents empty void */
+    .form-center-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        max-width: 405px;
+        margin: 0 auto;
+    }
+
+    .form-header {
+        margin-bottom: 1.6rem;
+    }
+
+    .portal-main-heading {
+        font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+        font-size: 2.25rem;
+        font-weight: 800;
+        color: #002b49;
+        margin: 0 0 0.35rem 0;
+        letter-spacing: -0.5px;
+        line-height: 1.15;
+    }
+
+    .portal-subheading {
+        font-size: 0.86rem;
+        color: #64748b;
+        margin: 0;
+        line-height: 1.45;
+    }
+
+    /* Error Alert */
+    .alert-card {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        border-radius: 12px;
+        padding: 0.65rem 0.85rem;
+        margin-bottom: 1.15rem;
+        font-size: 0.825rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+    }
+
+    /* Light Input Controls */
+    .input-field-group {
         margin-bottom: 1.15rem;
     }
 
-    .portal-icon-wrapper {
-        width: 48px;
-        height: 48px;
-        border-radius: 13px;
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 0.65rem;
-        color: #ffffff;
-        font-size: 1.35rem;
-        box-shadow: 0 6px 14px rgba(2, 132, 199, 0.28);
-        transition: transform 0.2s ease;
-    }
-
-    .portal-icon-wrapper:hover {
-        transform: scale(1.05);
-    }
-
-    .login-header h1 {
-        font-size: 1.35rem;
-        font-weight: 700;
-        color: #002b49;
-        margin-bottom: 0.2rem;
-        letter-spacing: -0.4px;
-        font-family: var(--font-heading);
-    }
-
-    .login-header p {
-        color: #64748b;
-        font-size: 0.785rem;
-        font-weight: 500;
-        margin: 0;
-    }
-
-    /* Segmented Role Selector */
-    .role-segmented-group {
-        display: flex;
-        background-color: #f1f5f9;
-        border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        padding: 3px;
-        margin-bottom: 0.95rem;
-        gap: 4px;
-    }
-
-    .role-tab-btn {
-        flex: 1;
-        background: transparent;
-        border: 1px solid transparent;
-        border-radius: 8px;
-        padding: 0.5rem 0.65rem;
-        font-family: var(--font-heading);
-        font-size: 0.825rem;
-        font-weight: 600;
-        color: #64748b;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.45rem;
-    }
-
-    .role-tab-btn i {
-        font-size: 0.85rem;
-        transition: color 0.2s ease;
-    }
-
-    .role-tab-btn.active {
-        background-color: #ffffff;
-        color: #003366;
-        box-shadow: 0 2px 5px rgba(15, 23, 42, 0.08);
-        border-color: rgba(203, 213, 225, 0.8);
-    }
-
-    .role-tab-btn.active i {
-        color: #0284c7;
-    }
-
-    .role-tab-btn:hover:not(.active) {
-        color: #0f172a;
-        background-color: rgba(255, 255, 255, 0.6);
-    }
-
-    /* Form Fields */
-    .form-group {
-        margin-bottom: 0.85rem;
-    }
-
-    .form-label {
+    .field-caption {
         display: block;
-        font-size: 0.795rem;
+        font-size: 0.835rem;
         font-weight: 600;
         color: #334155;
-        margin-bottom: 0.35rem;
+        margin-bottom: 0.45rem;
         letter-spacing: 0.1px;
     }
 
-    .input-field-wrapper {
+    .input-inner-wrap {
         position: relative;
         display: flex;
         align-items: center;
     }
 
-    .input-icon {
+    .input-icon-lead {
         position: absolute;
-        left: 0.95rem;
-        color: #94a3b8;
-        font-size: 0.9rem;
+        left: 1.05rem;
+        color: #64748b;
+        font-size: 0.95rem;
         pointer-events: none;
         transition: color 0.2s ease;
         z-index: 2;
     }
 
-    .input-control {
+    .control-dark-input {
         width: 100%;
-        height: 42px;
-        padding: 0.55rem 0.85rem 0.55rem 2.65rem;
-        font-family: var(--font-body);
-        font-size: 0.89rem;
-        color: #0f172a;
-        background-color: #ffffff;
+        height: 50px;
+        background: #f8fafc;
         border: 1.5px solid #cbd5e1;
-        border-radius: 9px;
-        transition: all 0.2s ease;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
-    }
-
-    .input-control:hover {
-        border-color: #94a3b8;
-    }
-
-    .input-control:focus {
+        border-radius: 14px;
+        padding: 0.6rem 1rem 0.6rem 2.85rem;
+        font-size: 0.925rem;
+        font-weight: 500;
+        color: #0f172a;
         outline: none;
-        border-color: #0284c7;
-        background-color: #ffffff;
-        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        box-sizing: border-box;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        font-family: inherit;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) inset;
     }
 
-    .input-control:focus~.input-icon {
+    .control-dark-input::placeholder {
+        color: #94a3b8;
+        font-weight: 400;
+        font-size: 0.88rem;
+    }
+
+    .control-dark-input:hover {
+        border-color: #94a3b8;
+        background: #ffffff;
+    }
+
+    .control-dark-input:focus {
+        border-color: #0284c7;
+        background: #ffffff;
+        box-shadow: 0 0 0 3.5px rgba(2, 132, 199, 0.15);
+    }
+
+    .control-dark-input:focus~.input-icon-lead {
         color: #0284c7;
     }
 
-    .password-toggle-btn {
+    .peek-pwd-btn {
         position: absolute;
-        right: 0.65rem;
+        right: 0.85rem;
         background: transparent;
         border: none;
-        color: #94a3b8;
-        width: 30px;
-        height: 30px;
+        color: #64748b;
+        font-size: 1rem;
         cursor: pointer;
-        border-radius: 6px;
-        transition: all 0.15s ease;
+        padding: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: color 0.15s ease;
         z-index: 2;
     }
 
-    .password-toggle-btn:hover {
+    .peek-pwd-btn:hover {
         color: #0284c7;
-        background-color: #f1f5f9;
     }
 
-    select.input-control {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 0.85rem center;
-        background-size: 1rem;
-        padding-right: 2.4rem;
+    /* Links Row */
+    .links-sub-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: -0.25rem;
+        margin-bottom: 1.35rem;
     }
 
-    /* Submit Button - Signature InJourney Blue Gradient */
-    .submit-btn {
-        width: 100%;
-        height: 44px;
-        padding: 0 1.25rem;
-        font-family: var(--font-heading);
-        font-size: 0.925rem;
-        font-weight: 700;
-        color: #ffffff !important;
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%) !important;
-        border: none !important;
-        border-radius: 9px !important;
+    .help-cred-link {
+        color: #0284c7;
+        font-size: 0.785rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.15s ease;
         cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        display: inline-flex;
+    }
+
+    .help-cred-link:hover {
+        color: #0369a1;
+        text-decoration: underline;
+    }
+
+    /* Submit Button */
+    .submit-portal-btn {
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        border: none;
+        border-radius: 14px;
+        color: #ffffff;
+        font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.55rem;
-        margin-top: 0.45rem;
-        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.32);
-        letter-spacing: 0.2px;
-        position: relative;
-        overflow: hidden;
+        gap: 0.65rem;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.28);
+        letter-spacing: 0.4px;
     }
 
-    .submit-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
-        transition: left 0.6s ease;
-    }
-
-    .submit-btn:hover {
+    .submit-portal-btn:hover {
+        background: linear-gradient(135deg, #002850 0%, #0369a1 100%);
+        box-shadow: 0 10px 28px rgba(2, 132, 199, 0.38);
         transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.42);
-        filter: brightness(1.03);
     }
 
-    .submit-btn:hover::before {
-        left: 100%;
-    }
-
-    .submit-btn:hover .fa-arrow-right-to-bracket {
-        transform: translateX(3px);
-    }
-
-    .submit-btn:active {
+    .submit-portal-btn:active {
         transform: translateY(0);
-        box-shadow: 0 2px 7px rgba(2, 132, 199, 0.28);
+        box-shadow: 0 3px 10px rgba(2, 132, 199, 0.2);
     }
 
-    .submit-btn .fa-arrow-right-to-bracket {
-        transition: transform 0.2s ease;
-        font-size: 0.9rem;
+    /* Bottom Sub-Links & Footnote */
+    .bottom-footnote-row {
+        margin-top: 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.72rem;
+        color: #64748b;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 0.85rem;
     }
 
-    /* Footer Security Badge */
-    .portal-footer {
-        margin-top: 1.15rem;
-        text-align: center;
-        position: relative;
-        z-index: 1;
+    .security-badge-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: #475569;
     }
 
-    .copyright-notice {
-        font-size: 0.725rem;
-        color: #94a3b8;
-        margin: 0;
+    .security-badge-item i {
+        color: #059669;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
+    .contact-link {
+        color: #0284c7;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .contact-link:hover {
+        color: #0369a1;
+        text-decoration: underline;
+    }
+
+    /* Desktop defaults for mobile-specific helpers (hidden on desktop) */
+    .mobile-section-divider,
+    .mobile-corp-copy,
+    .footnote-dot {
+        display: none;
+    }
+
+    .footnote-links-wrap {
+        display: contents;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS (Mobile & Tablet)
+       Executive Aviation Light Palette - Adaptive Full-Bleed Mobile Experience
+       ========================================================================== */
+    @media (max-width: 992px) {
 
         html,
         body {
             overflow-y: auto !important;
             height: auto !important;
             min-height: 100vh !important;
+            min-height: 100dvh !important;
+        }
+
+        body {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            /* Centered on tablets to prevent bottom void */
+            align-items: center !important;
+            padding: 1.5rem 1rem !important;
+            background: radial-gradient(1000px circle at 50% 0%, #e0effd 0%, #edf5fc 45%, #f1f5f9 100%) !important;
+        }
+
+        .outer-lighting {
+            display: none !important;
         }
 
         main.container,
         .container {
-            min-height: 100vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100% !important;
+            flex: 1 1 auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* Seamless Master Card (Centered for Tablet) */
+        .master-portal-card {
+            flex-direction: column;
+            width: 100%;
+            max-width: 440px;
+            height: auto;
+            max-height: none;
+            border-radius: 26px;
+            margin: auto;
+            background: #ffffff !important;
+            border: 1px solid rgba(203, 213, 225, 0.8) !important;
+            box-shadow: 0 20px 45px -12px rgba(15, 23, 42, 0.1), 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+        }
+
+        .wave-boundary-svg {
+            display: none !important;
+        }
+
+        /* Top Brand & Artwork Showcase (Zone Left) */
+        .zone-left {
+            width: 100%;
+            height: auto;
+            background: transparent !important;
+            border-radius: 26px 26px 0 0;
+            padding: 1.75rem 1.5rem 0.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .corp-header {
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .corp-logo-kawung {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            filter: drop-shadow(0 2px 6px rgba(0, 51, 102, 0.15));
+        }
+
+        .corp-title-main {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #002b49 !important;
+            /* Deep Aviation Navy */
+            letter-spacing: -0.2px;
+            text-shadow: none !important;
+        }
+
+        .diorama-anchor-wrap {
+            margin: 0.65rem auto 0 auto;
+            flex: 0 0 auto;
+            width: 100%;
+            max-width: 340px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .diorama-anchor-wrap::before {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(56, 189, 248, 0.03) 55%, transparent 70%);
+            filter: blur(28px);
+        }
+
+        .diorama-artwork {
+            max-height: 165px;
+            width: auto;
+            max-width: 100%;
+            filter: drop-shadow(0 15px 30px rgba(0, 43, 73, 0.12)) drop-shadow(0 4px 10px rgba(14, 165, 233, 0.1));
+        }
+
+        /* Hide misplaced middle corporate footer in mobile */
+        .zone-left .corp-footer {
+            display: none !important;
+        }
+
+        /* Elegant Sky-Cyan Soft Divider */
+        .mobile-section-divider {
+            display: block !important;
+            width: 86%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(226, 232, 240, 0.9) 25%, rgba(14, 165, 233, 0.35) 50%, rgba(226, 232, 240, 0.9) 75%, transparent 100%);
+            margin: 0.75rem auto 0.25rem auto;
+        }
+
+        /* Form Zone (Zone Right) on White Base */
+        .zone-right {
+            width: 100%;
+            height: auto;
+            padding: 0.75rem 1.5rem 1.75rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            background: transparent !important;
+        }
+
+        .form-center-wrapper {
+            max-width: 100%;
+        }
+
+        .form-header {
+            margin-bottom: 1.35rem;
+            text-align: center;
+        }
+
+        .portal-main-heading {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #002b49 !important;
+            /* Deep Navy */
+            letter-spacing: -0.3px;
+            margin-bottom: 0.35rem;
+        }
+
+        .portal-subheading {
+            font-size: 0.825rem;
+            color: #64748b !important;
+            line-height: 1.45;
+        }
+
+        /* Alert on White Base */
+        .alert-card {
+            background: #fef2f2 !important;
+            border: 1px solid #fecaca !important;
+            color: #b91c1c !important;
+        }
+
+        .input-field-group {
+            margin-bottom: 1.05rem;
+        }
+
+        .field-caption {
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: #334155 !important;
+        }
+
+        /* Light Inputs on Mobile */
+        .control-dark-input {
+            height: 48px;
+            font-size: 0.915rem;
+            font-weight: 500;
+            border-radius: 12px;
+            background: #f8fafc !important;
+            border: 1.5px solid #cbd5e1 !important;
+            color: #0f172a !important;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) inset !important;
+        }
+
+        .control-dark-input::placeholder {
+            color: #94a3b8 !important;
+            font-weight: 400;
+        }
+
+        .control-dark-input:hover {
+            border-color: #94a3b8 !important;
+            background: #ffffff !important;
+        }
+
+        .control-dark-input:focus {
+            border-color: #0284c7 !important;
+            background: #ffffff !important;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.16) !important;
+            color: #0f172a !important;
+        }
+
+        .input-icon-lead {
+            color: #64748b !important;
+        }
+
+        .control-dark-input:focus~.input-icon-lead {
+            color: #0284c7 !important;
+        }
+
+        .peek-pwd-btn {
+            color: #64748b !important;
+        }
+
+        .peek-pwd-btn:hover {
+            color: #0284c7 !important;
+        }
+
+        .links-sub-row {
+            margin-top: -0.15rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .help-cred-link {
+            font-size: 0.785rem;
+            color: #0284c7 !important;
+            font-weight: 600;
+        }
+
+        .help-cred-link:hover {
+            color: #0369a1 !important;
+        }
+
+        /* High-Converting Executive Blue Button */
+        .submit-portal-btn {
+            height: 48px;
+            font-size: 0.98rem;
+            font-weight: 700;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #003366 0%, #0284c7 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.28) !important;
+        }
+
+        .submit-portal-btn:hover {
+            background: linear-gradient(135deg, #002850 0%, #0369a1 100%) !important;
+            box-shadow: 0 8px 24px rgba(2, 132, 199, 0.36) !important;
+        }
+
+        /* Unified Bottom Footnote on White Base */
+        .bottom-footnote-row {
+            flex-direction: column;
+            gap: 0.65rem;
+            text-align: center;
+            margin-top: 1.4rem;
+            padding-top: 1.1rem;
+            border-top: 1px solid #e2e8f0 !important;
+            font-size: 0.72rem;
+            color: #64748b !important;
+        }
+
+        .mobile-corp-copy {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.15rem;
+        }
+
+        .mobile-corp-title {
+            margin: 0;
+            color: #334155 !important;
+            font-weight: 600;
+            font-size: 0.735rem;
+        }
+
+        .mobile-corp-meta {
+            color: #64748b !important;
+            font-size: 0.685rem;
+        }
+
+        .footnote-links-wrap {
+            display: flex !important;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            font-size: 0.715rem;
+        }
+
+        .security-badge-item {
+            color: #475569 !important;
+        }
+
+        .security-badge-item i {
+            color: #059669 !important;
+        }
+
+        .contact-link {
+            color: #0284c7 !important;
+            font-weight: 600;
+        }
+
+        .contact-link:hover {
+            color: #0369a1 !important;
+        }
+
+        .footnote-dot {
+            display: inline-block !important;
+            color: #cbd5e1 !important;
+        }
+    }
+
+    /* ==========================================================================
+       MOBILE PHONES (Full-Bleed Native App Experience)
+       Flawlessly fills all phone sizes (iPhone 16 Pro Max, Pixel, Samsung, SE)
+       ========================================================================== */
+    @media (max-width: 640px) {
+
+        html,
+        body {
+            background: #ffffff !important;
             height: auto !important;
-            padding: 1.5rem 0.75rem !important;
+            min-height: 100vh !important;
+            min-height: 100dvh !important;
         }
 
-        .login-card {
-            padding: 1.5rem 1.25rem;
-            border-radius: 16px;
+        body {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: #ffffff !important;
+            justify-content: flex-start !important;
         }
 
-        .login-header h1 {
-            font-size: 1.25rem;
+        main.container,
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            min-height: 100dvh !important;
+            height: auto !important;
+            justify-content: flex-start !important;
+            padding: 0 !important;
         }
 
-        .portal-icon-wrapper {
-            width: 44px;
-            height: 44px;
-            font-size: 1.25rem;
+        /* Full-Bleed Native Canvas - No awkward floating box & No empty chin */
+        .master-portal-card {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            min-height: 100dvh !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            background: #ffffff !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            padding-top: max(1.25rem, env(safe-area-inset-top, 0px)) !important;
+            padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px)) !important;
+            box-sizing: border-box !important;
         }
+
+        .zone-left {
+            width: 100% !important;
+            padding: 1.25rem 1.5rem 0.25rem 1.5rem !important;
+            border-radius: 0 !important;
+            flex: 0 0 auto !important;
+        }
+
+        .corp-header {
+            margin-bottom: 0.35rem !important;
+        }
+
+        .corp-logo-kawung {
+            width: 38px !important;
+            height: 38px !important;
+            min-width: 38px !important;
+        }
+
+        .corp-title-main {
+            font-size: 1.15rem !important;
+        }
+
+        .diorama-anchor-wrap {
+            margin: 0.35rem auto 0 auto !important;
+            max-height: 155px !important;
+        }
+
+        .diorama-artwork {
+            max-height: 155px !important;
+        }
+
+        .mobile-section-divider {
+            width: 88% !important;
+            margin: 0.65rem auto 0.35rem auto !important;
+        }
+
+        .zone-right {
+            width: 100% !important;
+            padding: 0.5rem 1.5rem 1.5rem 1.5rem !important;
+            flex: 1 1 auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            box-sizing: border-box !important;
+        }
+
+        .form-center-wrapper {
+            max-width: 380px !important;
+            margin: auto auto !important;
+            width: 100% !important;
+        }
+
+        .form-header {
+            margin-bottom: 1.15rem !important;
+        }
+
+        .portal-main-heading {
+            font-size: 1.48rem !important;
+        }
+
+        .portal-subheading {
+            font-size: 0.82rem !important;
+        }
+
+        .input-field-group {
+            margin-bottom: 0.95rem !important;
+        }
+
+        .control-dark-input {
+            height: 48px !important;
+            font-size: 0.92rem !important;
+        }
+
+        .submit-portal-btn {
+            height: 48px !important;
+            font-size: 0.98rem !important;
+            margin-top: 0.25rem !important;
+        }
+
+        .bottom-footnote-row {
+            margin-top: 1.5rem !important;
+            padding-top: 1rem !important;
+            padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px)) !important;
+        }
+
+        .custom-modal-card {
+            padding: 1.35rem 1.15rem 1.25rem 1.15rem !important;
+            border-radius: 20px !important;
+        }
+
+        .modal-title {
+            font-size: 1.05rem !important;
+        }
+
+        .info-item-card {
+            padding: 0.75rem 0.85rem !important;
+        }
+    }
+
+    /* Small Phone adjustments (e.g. iPhone SE, 360-380px wide) */
+    @media (max-width: 380px) {
+        .diorama-artwork {
+            max-height: 130px !important;
+        }
+
+        .diorama-anchor-wrap {
+            max-height: 130px !important;
+        }
+
+        .portal-main-heading {
+            font-size: 1.35rem !important;
+        }
+
+        .portal-subheading {
+            font-size: 0.76rem !important;
+        }
+
+        .control-dark-input {
+            height: 44px !important;
+            font-size: 0.88rem !important;
+            padding-left: 2.65rem !important;
+        }
+
+        .submit-portal-btn {
+            height: 44px !important;
+            font-size: 0.92rem !important;
+        }
+    }
+
+    /* ==========================================================================
+       MODERN GLASSMORPHIC ENTERPRISE INFO MODAL
+       Clean, Sleek, Professional General Information
+       ========================================================================== */
+    .custom-modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+
+    .custom-modal-backdrop.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .custom-modal-card {
+        width: 100%;
+        max-width: 480px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 24px;
+        box-shadow: 0 30px 80px -10px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(15, 23, 42, 0.04);
+        padding: 1.85rem 2rem 1.65rem 2rem;
+        position: relative;
+        transform: scale(0.94) translateY(12px);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-sizing: border-box;
+    }
+
+    .custom-modal-backdrop.active .custom-modal-card {
+        transform: scale(1) translateY(0);
+    }
+
+    .modal-close-btn {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+        background: #fee2e2;
+        border-color: #fecaca;
+        color: #dc2626;
+    }
+
+    .modal-brand-header {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        margin-bottom: 1.35rem;
+        padding-right: 2rem;
+    }
+
+    .modal-logo-kawung {
+        width: 38px;
+        height: 38px;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 6px rgba(0, 51, 102, 0.15));
+    }
+
+    .modal-title {
+        font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+        font-size: 1.18rem;
+        font-weight: 800;
+        color: #002b49;
+        margin: 0 0 0.15rem 0;
+        letter-spacing: -0.2px;
+    }
+
+    .modal-subtitle {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #0284c7;
+        display: block;
+        letter-spacing: 0.3px;
+    }
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-item-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        display: flex;
+        gap: 0.85rem;
+        align-items: flex-start;
+        transition: border-color 0.2s ease;
+    }
+
+    .info-item-card:hover {
+        border-color: #cbd5e1;
+    }
+
+    .info-item-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        border-radius: 10px;
+        background: rgba(2, 132, 199, 0.1);
+        border: 1px solid rgba(2, 132, 199, 0.2);
+        color: #0284c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        margin-top: 2px;
+    }
+
+    .info-item-highlight .info-item-icon {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.25);
+        color: #059669;
+    }
+
+    .info-item-content h4 {
+        margin: 0 0 0.2rem 0;
+        font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: 0.1px;
+    }
+
+    .info-item-content p {
+        margin: 0;
+        font-size: 0.79rem;
+        color: #64748b;
+        line-height: 1.45;
+    }
+
+    .info-contact-link {
+        color: #0284c7;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .info-contact-link:hover {
+        text-decoration: underline;
+    }
+
+    .modal-confirm-btn {
+        width: 100%;
+        height: 46px;
+        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        letter-spacing: 0.2px;
+    }
+
+    .modal-confirm-btn:hover {
+        background: linear-gradient(135deg, #002850 0%, #0369a1 100%);
+        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.38);
+        transform: translateY(-1px);
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Ambient Background Elements -->
-<div class="login-bg-decor" aria-hidden="true">
-    <div class="login-bg-glow-top"></div>
-    <div class="login-bg-glow-bottom"></div>
+<!-- Ambient Lighting in Outer Viewport -->
+<div class="outer-lighting" aria-hidden="true">
+    <div class="light-orb-left"></div>
+    <div class="light-orb-right"></div>
 </div>
 
-<div class="login-container">
-    <!-- Main Solid Card -->
-    <div class="login-card">
-        <div class="login-header">
-            <div class="portal-icon-wrapper">
-                <i class="fa-solid fa-plane-departure"></i>
-            </div>
-            <h1>Airside Daily Report</h1>
-            <p>PT Angkasa Pura Indonesia • Kantor Regional II</p>
+<!-- Master Portal Card -->
+<div class="master-portal-card">
+    <!-- LEFT ZONE: AERONAUTICAL PANORAMA SHOWCASE -->
+    <div class="zone-left">
+        <!-- Top Left Brand Emblem -->
+        <div class="corp-header">
+            <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports"
+                class="corp-logo-kawung">
+            <span class="corp-title-main">InJourney Airports</span>
         </div>
 
-        <!-- Segmented Role Selector -->
-        <div class="role-segmented-group">
-            <button type="button" class="role-tab-btn active" id="tabStaff" onclick="selectRole('staff')">
-                <i class="fa-solid fa-plane"></i>
-                <span>Petugas Bandara</span>
-            </button>
-            <button type="button" class="role-tab-btn" id="tabAdmin" onclick="selectRole('admin')">
-                <i class="fa-solid fa-shield-halved"></i>
-                <span>Administrator</span>
-            </button>
+        <!-- Center: Futuristic Airport Island Travel Diorama -->
+        <div class="diorama-anchor-wrap">
+            <img src="{{ url_for('static', filename='img/airport-diorama.png') }}"
+                alt="Futuristic Airport Island Travel Diorama" class="diorama-artwork" loading="eager">
         </div>
 
-        <!-- Flashed Security & Error Alerts -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div
-            style="background-color: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 0.6rem;">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>{{ message }}</span>
+        <!-- Bottom Left Corporate Footer -->
+        <div class="corp-footer">
+            <p class="corp-footer-copy">© 2026 PT. Angkasa Pura (Persero) Indonesia</p>
+            <span class="corp-footer-meta">Airside Facility Inspection System • Kantor Regional II</span>
         </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-
-        <form id="loginForm" method="POST" action="/login">
-            <!-- CSRF Protection Token -->
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-            <!-- Hidden role input synced with tabs -->
-            <input type="hidden" name="role" id="roleInput" value="staff">
-
-            <!-- Airport Selection (Shown for staff) -->
-            <div class="form-group" id="airportGroup">
-                <label class="form-label" for="airportSelect">Pilih Cabang Bandara</label>
-                <div class="input-field-wrapper">
-                    <select id="airportSelect" name="airportCode" class="input-control" required
-                        onchange="syncStaffPlaceholder()">
-                        <option value="LOP">LOP — Bandara Lombok (ZAM)</option>
-                        <option value="DPS">DPS — Bandara Bali (I Gusti Ngurah Rai)</option>
-                        <option value="BWX">BWX — Bandara Banyuwangi</option>
-                        <option value="KOE">KOE — Bandara Kupang (El Tari)</option>
-                    </select>
-                    <i class="fa-solid fa-location-dot input-icon"></i>
-                </div>
-            </div>
-
-            <!-- Username Field -->
-            <div class="form-group">
-                <label class="form-label" for="username">Username</label>
-                <div class="input-field-wrapper">
-                    <input type="text" id="username" name="username" class="input-control"
-                        placeholder="Masukkan username cabang (contoh: lop)" required autocomplete="username">
-                    <i class="fa-regular fa-user input-icon"></i>
-                </div>
-            </div>
-
-            <!-- Password Field -->
-            <div class="form-group">
-                <label class="form-label" for="password">Password</label>
-                <div class="input-field-wrapper">
-                    <input type="password" id="password" name="password" class="input-control"
-                        style="padding-right: 2.85rem;" placeholder="Masukkan password" required
-                        autocomplete="current-password">
-                    <i class="fa-solid fa-lock input-icon"></i>
-                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility()"
-                        title="Lihat Password">
-                        <i class="fa-regular fa-eye" id="eyeIcon"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Submit Button with InJourney Signature Gradient -->
-            <button type="submit" class="submit-btn" id="btnSubmit">
-                <span>Masuk ke Sistem</span>
-                <i class="fa-solid fa-arrow-right-to-bracket"></i>
-            </button>
-        </form>
     </div>
 
-    <!-- Legal Footer -->
-    <div class="portal-footer">
-        <p class="copyright-notice">
-            © 2026 PT Angkasa Pura Indonesia
-        </p>
+    <!-- Mobile Subtle Glowing Section Divider (Visible on Mobile Only) -->
+    <div class="mobile-section-divider" aria-hidden="true"></div>
+
+    <!-- RIGHT ZONE: EXECUTIVE AVIATION LIGHT LOGIN FORM -->
+    <div class="zone-right">
+        <!-- Vertically Centered Form Container -->
+        <div class="form-center-wrapper">
+            <!-- Header Area -->
+            <div class="form-header">
+                <h1 class="portal-main-heading">Airside Daily Report</h1>
+                <p class="portal-subheading">Laporan Harian Fasilitas Runway, Taxiway, & Apron</p>
+            </div>
+
+            <!-- Flashed Alerts -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert-card">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <!-- Login Form -->
+            <form id="loginForm" method="POST" action="/login">
+                <!-- CSRF Token -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <!-- Username Input -->
+                <div class="input-field-group">
+                    <label class="field-caption" for="username">Username Akun</label>
+                    <div class="input-inner-wrap">
+                        <input type="text" id="username" name="username" class="control-dark-input"
+                            placeholder="Masukkan username kedinasan Anda" required autocomplete="username">
+                        <i class="fa-regular fa-user input-icon-lead"></i>
+                    </div>
+                </div>
+
+                <!-- Password Input -->
+                <div class="input-field-group">
+                    <label class="field-caption" for="password">Kata Sandi (Password)</label>
+                    <div class="input-inner-wrap">
+                        <input type="password" id="password" name="password" class="control-dark-input"
+                            style="padding-right: 2.85rem;" placeholder="Masukkan kata sandi Anda" required
+                            autocomplete="current-password">
+                        <i class="fa-solid fa-lock input-icon-lead"></i>
+                        <button type="button" class="peek-pwd-btn" onclick="togglePasswordVisibility()"
+                            title="Lihat Password">
+                            <i class="fa-regular fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Information Link -->
+                <div class="links-sub-row">
+                    <a href="javascript:void(0)" onclick="openHelpModal()" class="help-cred-link">
+                        <i class="fa-regular fa-circle-question me-1"></i> Informasi Akses Akun
+                    </a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-portal-btn" id="btnSubmit">
+                    <span>Login</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Bottom Footnote Row -->
+        <div class="bottom-footnote-row">
+            <!-- Mobile Unified Corporate Copy (Replaces awkward mid-page text on mobile) -->
+            <div class="mobile-corp-copy">
+                <p class="mobile-corp-title">© 2026 PT. Angkasa Pura (Persero) Indonesia</p>
+                <span class="mobile-corp-meta">Airside Facility Inspection System • Kantor Regional II</span>
+            </div>
+
+            <div class="footnote-links-wrap">
+                <span class="security-badge-item">
+                    <i class="fa-solid fa-shield-check"></i> Multi-tier Review & Staging Drive
+                </span>
+                <span class="footnote-dot" aria-hidden="true">•</span>
+                <span>
+                    Bantuan: <a href="mailto:airside.reg2@angkasapura.co.id"
+                        class="contact-link">NOC@angkasapura.co.id</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modern Glassmorphic Enterprise Info Modal -->
+<div id="infoModal" class="custom-modal-backdrop" aria-hidden="true" onclick="handleBackdropClick(event)">
+    <div class="custom-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <!-- Close Button -->
+        <button type="button" class="modal-close-btn" onclick="closeHelpModal()" title="Tutup">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <!-- Header -->
+        <div class="modal-brand-header">
+            <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports"
+                class="modal-logo-kawung">
+            <div>
+                <h3 id="modalTitle" class="modal-title">Informasi & Bantuan Akses</h3>
+                <span class="modal-subtitle">InJourney Airports • Portal Sisi Udara Regional II</span>
+            </div>
+        </div>
+
+        <!-- Content Body (Informasi Umum) -->
+        <div class="modal-body">
+            <div class="info-item-card">
+                <div class="info-item-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="info-item-content">
+                    <h4>Akses Kedinasan Resmi</h4>
+                    <p>Sistem ini diperuntukkan bagi personel operasional sisi udara yang telah memiliki otorisasi
+                        kedinasan resmi di wilayah Kantor Regional II.</p>
+                </div>
+            </div>
+
+            <div class="info-item-card">
+                <div class="info-item-icon">
+                    <i class="fa-solid fa-id-badge"></i>
+                </div>
+                <div class="info-item-content">
+                    <h4>Identifikasi Peran Otomatis</h4>
+                    <p>Sistem secara otomatis mengenali peran Anda (Petugas Lapangan, General Manager, atau
+                        Administrator) saat Anda memasukkan username kedinasan.</p>
+                </div>
+            </div>
+
+            <div class="info-item-card info-item-highlight">
+                <div class="info-item-icon">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <div class="info-item-content">
+                    <h4>Bantuan & Kendala Login</h4>
+                    <p>Jika mengalami kendala akun atau membutuhkan pemulihan kata sandi, hubungi Helpdesk NOC Regional
+                        II via <a href="mailto:airside.reg2@angkasapura.co.id"
+                            class="info-contact-link">NOC@angkasapura.co.id</a>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Action -->
+        <div class="modal-footer-action">
+            <button type="button" class="modal-confirm-btn" onclick="closeHelpModal()">
+                <span>Saya Mengerti</span>
+            </button>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    function selectRole(role) {
-        const tabStaff = document.getElementById('tabStaff');
-        const tabAdmin = document.getElementById('tabAdmin');
-        const roleInput = document.getElementById('roleInput');
-        const airportGroup = document.getElementById('airportGroup');
-        const airportSelect = document.getElementById('airportSelect');
-        const usernameInput = document.getElementById('username');
-
-        roleInput.value = role;
-
-        if (role === 'admin') {
-            tabAdmin.classList.add('active');
-            tabStaff.classList.remove('active');
-            airportGroup.style.display = 'none';
-            airportSelect.removeAttribute('required');
-            usernameInput.placeholder = 'Masukkan username administrator';
-        } else {
-            tabStaff.classList.add('active');
-            tabAdmin.classList.remove('active');
-            airportGroup.style.display = 'block';
-            airportSelect.setAttribute('required', 'required');
-            syncStaffPlaceholder();
-        }
-    }
-
-    function syncStaffPlaceholder() {
-        const airportCode = document.getElementById('airportSelect').value;
-        const usernameInput = document.getElementById('username');
-        if (document.getElementById('roleInput').value === 'staff') {
-            usernameInput.placeholder = `Username petugas (contoh: ${airportCode.toLowerCase()})`;
-        }
-    }
-
     function togglePasswordVisibility() {
         const passwordInput = document.getElementById('password');
         const eyeIcon = document.getElementById('eyeIcon');
@@ -551,32 +1377,33 @@
         }
     }
 
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-        const role = document.getElementById('roleInput').value;
-        const airportSelect = document.getElementById('airportSelect');
-        const airport = airportSelect ? airportSelect.value : '';
-        const username = (document.getElementById('username').value || '').trim().toLowerCase();
-
-        if (role === 'staff' && airport) {
-            const knownAirports = {
-                'lop': 'Bandara Lombok (LOP)',
-                'dps': 'Bandara Bali (DPS)',
-                'bwx': 'Bandara Banyuwangi (BWX)',
-                'koe': 'Bandara Kupang (KOE)'
-            };
-            if (knownAirports[username] && username !== airport.toLowerCase()) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Cabang Tidak Sesuai',
-                    html: `Pilihan cabang Anda adalah <b>${airport}</b>, tetapi username yang dimasukkan adalah <b>${username.toUpperCase()}</b> (${knownAirports[username]}).<br><br>Silakan sesuaikan pilihan cabang atau periksa username Anda.`,
-                    confirmButtonColor: '#003366',
-                    confirmButtonText: 'Perbaiki'
-                });
-                return false;
-            }
+    function openHelpModal() {
+        const modal = document.getElementById('infoModal');
+        if (modal) {
+            modal.classList.add('active');
         }
+    }
 
+    function closeHelpModal() {
+        const modal = document.getElementById('infoModal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+
+    function handleBackdropClick(e) {
+        if (e.target.id === 'infoModal') {
+            closeHelpModal();
+        }
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeHelpModal();
+        }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
         const btn = document.getElementById('btnSubmit');
         btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Memverifikasi...';
         btn.style.opacity = '0.85';

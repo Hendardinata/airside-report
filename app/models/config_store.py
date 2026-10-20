@@ -23,11 +23,22 @@ def load_config():
         return DEFAULT_CONFIG
     with open(CONFIG_FILE, 'r') as f:
         config = json.load(f)
-        # Migrasi config lama jika pic_phone belum ada
+        # Migrasi config lama jika field baru belum ada
         modified = False
+        if 'staging_folder_id' not in config:
+            config['staging_folder_id'] = "1qdPtWNaXQK8ZZYt0eq2nxHrRL3IJ8b3L"
+            modified = True
+            
+        if 'staging_sheets' not in config:
+            config['staging_sheets'] = {"LOP": "", "DPS": "", "BWX": "", "KOE": ""}
+            modified = True
+
         for code in config.get('airports', {}):
             if 'pic_phone' not in config['airports'][code]:
                 config['airports'][code]['pic_phone'] = ""
+                modified = True
+            if 'gm_phone' not in config['airports'][code]:
+                config['airports'][code]['gm_phone'] = ""
                 modified = True
         
         if 'admin' not in config:
@@ -53,7 +64,7 @@ def get_airport_config(airport_code):
     config = load_config()
     return config['airports'].get(airport_code, {})
 
-def update_airport_config(airport_code, sheet_url, drive_folder=None, template_id=None, pic_phone=None):
+def update_airport_config(airport_code, sheet_url=None, drive_folder=None, template_id=None, pic_phone=None, gm_phone=None):
     config = load_config()
     if airport_code in config['airports']:
         if sheet_url is not None:
@@ -64,6 +75,8 @@ def update_airport_config(airport_code, sheet_url, drive_folder=None, template_i
             config['airports'][airport_code]['template_id'] = template_id
         if pic_phone is not None:
             config['airports'][airport_code]['pic_phone'] = pic_phone
+        if gm_phone is not None:
+            config['airports'][airport_code]['gm_phone'] = gm_phone
         save_config(config)
 
 def get_admin_config():
@@ -78,4 +91,24 @@ def update_admin_config(deputy_phone=None, admin_phone=None):
         config['admin']['deputy_phone'] = deputy_phone
     if admin_phone is not None:
         config['admin']['admin_phone'] = admin_phone
+    save_config(config)
+
+def get_staging_folder_id():
+    config = load_config()
+    return config.get('staging_folder_id', '1qdPtWNaXQK8ZZYt0eq2nxHrRL3IJ8b3L')
+
+def get_staging_sheet_url(airport_code):
+    config = load_config()
+    return config.get('staging_sheets', {}).get(airport_code, '')
+
+def update_staging_sheet_url(airport_code, sheet_url):
+    config = load_config()
+    if 'staging_sheets' not in config:
+        config['staging_sheets'] = {}
+    config['staging_sheets'][airport_code] = sheet_url
+    save_config(config)
+
+def update_staging_folder_id(folder_id):
+    config = load_config()
+    config['staging_folder_id'] = folder_id
     save_config(config)

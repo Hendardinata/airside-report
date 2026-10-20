@@ -123,6 +123,12 @@ Region II
 {catatan.strip()}"""
     return msg
 
+from app.services.staging_service import (
+    save_report_to_staging,
+    get_staging_reports,
+    get_staging_report_by_id
+)
+
 @bp.route('/dashboard')
 def dashboard():
     import os, json
@@ -139,7 +145,25 @@ def dashboard():
     except Exception as e:
         print(f"Error loading schema: {e}")
         
-    return render_template('staff_dashboard.html', current_user=user, has_sheet_url=has_sheet_url, schema=schema)
+    staging_reports = get_staging_reports(airport_code)
+    
+    return render_template(
+        'staff_dashboard.html', 
+        current_user=user, 
+        has_sheet_url=has_sheet_url, 
+        schema=schema,
+        staging_reports=staging_reports,
+        config=config
+    )
+
+@bp.route('/api/staging-report/<report_id>')
+def api_get_staging_report(report_id):
+    user = USERS.get(session['user_id'])
+    airport_code = user['airport']
+    report = get_staging_report_by_id(airport_code, report_id)
+    if not report:
+        return jsonify({"success": False, "error": "Laporan draf tidak ditemukan"}), 404
+    return jsonify({"success": True, "report": report})
 
 @bp.route('/submit', methods=['POST'])
 def submit():
@@ -151,7 +175,9 @@ def submit():
     sheet_url = config.get('sheet_url')
     
     if not sheet_url:
-        return jsonify({"status": "error", "message": "Admin belum mengatur URL Spreadsheet untuk bandara ini!"})
+        return jsonify({"status": "error", "message": "Admin belum mengatur URL Spreadsheet Produksi untuk bandara ini!"})
+    
+    report_id = data.get('report_id') or None
     
     # Filter data agar hanya field yang sah di schema aktif yang diproses
     import os, json
@@ -164,26 +190,50 @@ def submit():
                 for sec in step.get('sections', []):
                     for f_item in sec.get('fields', []):
                         allowed.add(f_item.get('name'))
-            data = {k: v for k, v in data.items() if k in allowed}
+            filtered_data = {k: v for k, v in data.items() if k in allowed}
+            # Simpan juga tanggal jika terfilter
+            if 'TANGGAL' in data:
+                filtered_data['TANGGAL'] = data['TANGGAL']
+            data = filtered_data
     except Exception as err:
         print("Warning filter submit data:", err)
     
     try:
-        write_daily_report(sheet_url, data)
-        admin_config = get_admin_config()
-        admin_phone = admin_config.get('admin_phone', '')
-        admin_message = generate_wa_message(data, airport_code)
+        # Simpan ke spreadsheet staging khusus bandara ini
+        staging_res = save_report_to_staging(
+            airport_code=airport_code,
+            form_data=data,
+            user_name=user.get('name', f"Petugas {airport_code}"),
+            report_id=report_id
+        )
+        
+        gm_phone = config.get('gm_phone', '')
+        if not gm_phone:
+            gm_phone = config.get('pic_phone', '')
+            
+        tgl_str = data.get('TANGGAL', '')
+        action_text = "diperbarui (hasil revisi)" if staging_res.get('action') == 'updated' else "berhasil disimpan"
+        
+        gm_message = (
+            f"*Laporan Harian Fasilitas Sisi Udara*\n"
+            f"Cabang: *{airport_code}*\n"
+            f"Tanggal: *{tgl_str}*\n"
+            f"Petugas Pelapor: *{user.get('name', 'Petugas')}*\n\n"
+            f"Mohon izin menyampaikan kepada Yth. General Manager {airport_code}, bahwa laporan harian airside telah {action_text} di sistem dan siap untuk ditelaah/dikoreksi.\n\n"
+            f"Mohon kesediaan Bapak/Ibu untuk memeriksa di Portal Airside. Terima kasih."
+        )
         
         return jsonify({
             "status": "success", 
-            "message": "Data berhasil disimpan ke Spreadsheet!",
-            "admin_phone": admin_phone,
-            "admin_message": admin_message,
+            "message": f"Data berhasil disimpan ke Spreadsheet Staging {airport_code} dan dikirim ke General Manager untuk ditelaah!",
+            "report_id": staging_res.get('report_id'),
+            "gm_phone": gm_phone,
+            "gm_message": gm_message,
             "airport_code": airport_code
         })
     except Exception as e:
-        print(f"Error writing to sheets: {str(e)}")
-        return jsonify({"status": "error", "message": str(e)})
+        print(f"Error saving to staging: {str(e)}")
+        return jsonify({"status": "error", "message": f"Gagal menyimpan ke Staging: {str(e)}"})
 
 @bp.route('/api/active-month')
 def api_active_month():

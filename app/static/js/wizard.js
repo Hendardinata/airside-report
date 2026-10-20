@@ -76,32 +76,31 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
     .then(data => {
         if (data.status === 'success') {
             Swal.fire({
-                title: 'Laporan Terkirim!', 
-                text: 'Data telah berhasil disimpan ke Spreadsheet.\n\nApakah Anda ingin mengirim notifikasi laporan ke WhatsApp Admin?', 
+                title: 'Laporan Diajukan ke GM!', 
+                text: 'Data telah berhasil disimpan di Spreadsheet Staging sementara.\n\nApakah Anda ingin mengirimkan notifikasi telaah ke WhatsApp General Manager?', 
                 icon: 'success',
                 showCancelButton: true,
-                confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Kirim ke Admin',
-                cancelButtonText: 'Tidak, Kembali ke Dashboard',
+                confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Beritahu GM',
+                cancelButtonText: 'Kembali ke Dashboard',
                 confirmButtonColor: '#16a34a',
                 cancelButtonColor: '#64748b'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    if (data.admin_phone) {
-                        let text = data.admin_message || `Halo Admin, Laporan Harian Airside baru saja dikirimkan dari cabang ${data.airport_code}. Mohon dicek di sistem.`;
-                        let cleanAdmin = data.admin_phone.replace(/\D/g, '');
-                        if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
-                        window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(text)}`, '_blank');
+                    if (data.gm_phone) {
+                        let text = data.gm_message || `Halo General Manager, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon ditelaah di portal.`;
+                        let cleanGM = data.gm_phone.replace(/\D/g, '');
+                        if (cleanGM.startsWith('0')) cleanGM = '62' + cleanGM.substring(1);
+                        window.open(`https://wa.me/${cleanGM}?text=${encodeURIComponent(text)}`, '_blank');
                     } else {
-                        Swal.fire('Info', 'Nomor WA Admin belum diatur di Konfigurasi Pusat.', 'info');
+                        Swal.fire('Info', 'Nomor WA General Manager belum dikonfigurasi.', 'info');
                     }
                 }
-                // Reload dashboard after interacting with the prompt
                 setTimeout(() => {
                     window.location.href = '/staff/dashboard';
                 }, 500);
             });
         } else {
-            Swal.fire('Error', data.message || 'Terjadi kesalahan sistem', 'error');
+            Swal.fire('Gagal Menyimpan', data.message || 'Terjadi kesalahan sistem', 'error');
         }
     })
     .catch(error => {

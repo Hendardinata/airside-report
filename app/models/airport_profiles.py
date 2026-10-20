@@ -40,6 +40,30 @@ USERS = {
         'airport': 'KOE',
         'name': 'Petugas KOE'
     },
+    'gm_lop': {
+        'password_hash': generate_password_hash('123'),
+        'role': 'gm',
+        'airport': 'LOP',
+        'name': 'General Manager LOP'
+    },
+    'gm_dps': {
+        'password_hash': generate_password_hash('123'),
+        'role': 'gm',
+        'airport': 'DPS',
+        'name': 'General Manager DPS'
+    },
+    'gm_bwx': {
+        'password_hash': generate_password_hash('123'),
+        'role': 'gm',
+        'airport': 'BWX',
+        'name': 'General Manager BWX'
+    },
+    'gm_koe': {
+        'password_hash': generate_password_hash('123'),
+        'role': 'gm',
+        'airport': 'KOE',
+        'name': 'General Manager KOE'
+    },
 }
 
 def verify_user_password(user_record, password):

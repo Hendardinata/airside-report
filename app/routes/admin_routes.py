@@ -64,6 +64,7 @@ def update_config():
     template_id = request.form.get('templateId')
     target_month_str = request.form.get('targetMonth')
     pic_phone = request.form.get('picPhone', '')
+    gm_phone = request.form.get('gmPhone', '')
     deputy_phone = request.form.get('deputyPhone')
     admin_phone = request.form.get('adminPhone')
     
@@ -71,6 +72,11 @@ def update_config():
     pic_phone = ''.join(filter(str.isdigit, pic_phone))
     if pic_phone.startswith('0'):
         pic_phone = '62' + pic_phone[1:]
+        
+    if gm_phone:
+        gm_phone = ''.join(filter(str.isdigit, gm_phone))
+        if gm_phone.startswith('0'):
+            gm_phone = '62' + gm_phone[1:]
         
     if deputy_phone is not None:
         deputy_phone = ''.join(filter(str.isdigit, deputy_phone))
@@ -86,7 +92,7 @@ def update_config():
     template_id = extract_drive_id(template_id)
     
     if airport_code:
-        update_airport_config(airport_code, sheet_url, drive_folder, template_id, pic_phone)
+        update_airport_config(airport_code, sheet_url, drive_folder, template_id, pic_phone, gm_phone)
         
     if deputy_phone is not None or admin_phone is not None:
         update_admin_config(deputy_phone=deputy_phone, admin_phone=admin_phone)
@@ -480,11 +486,16 @@ def api_batch_update_matrix():
         drive_folder = extract_drive_id(item.get('drive_folder'))
         sheet_url = item.get('sheet_url')
         pic_phone = item.get('pic_phone', '')
+        gm_phone = item.get('gm_phone', '')
         if pic_phone:
             pic_phone = ''.join(filter(str.isdigit, pic_phone))
             if pic_phone.startswith('0'):
                 pic_phone = '62' + pic_phone[1:]
-        update_airport_config(code, sheet_url=sheet_url, drive_folder=drive_folder, pic_phone=pic_phone)
+        if gm_phone:
+            gm_phone = ''.join(filter(str.isdigit, gm_phone))
+            if gm_phone.startswith('0'):
+                gm_phone = '62' + gm_phone[1:]
+        update_airport_config(code, sheet_url=sheet_url, drive_folder=drive_folder, pic_phone=pic_phone, gm_phone=gm_phone)
         
     deputy = admin_data.get('deputy_phone')
     admin_p = admin_data.get('admin_phone')
@@ -518,5 +529,33 @@ def api_batch_sync_all_rekap():
                 results[code] = {"status": "error", "error": str(e)}
         else:
             results[code] = {"status": "skipped", "message": "Belum ada link sheet aktif"}
+            
+    return jsonify({"success": True, "results": results})
+
+@bp.route('/api/staging/init-all', methods=['POST'])
+def api_init_staging_sheets():
+    """Inisialisasi otomatis seluruh spreadsheet staging (LOP, DPS, BWX, KOE) di folder STAGING."""
+    from app.services.staging_service import get_or_create_staging_sheet
+    from app.models.config_store import get_staging_sheet_url
+    
+    airports = ['LOP', 'DPS', 'BWX', 'KOE']
+    results = {}
+    
+    for code in airports:
+        try:
+            ws = get_or_create_staging_sheet(code)
+            url = get_staging_sheet_url(code)
+            results[code] = {
+                "status": "success",
+                "sheet_name": f"STAGING_{code}",
+                "url": url,
+                "message": f"Spreadsheet STAGING_{code} aktif dan terhubung."
+            }
+        except Exception as e:
+            results[code] = {
+                "status": "error",
+                "sheet_name": f"STAGING_{code}",
+                "error": str(e)
+            }
             
     return jsonify({"success": True, "results": results})

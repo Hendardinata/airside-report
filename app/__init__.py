@@ -39,7 +39,7 @@ def create_app():
             expected_token = session.get('_csrf_token')
 
             if not token or not expected_token or not hmac.compare_digest(str(token), str(expected_token)):
-                if request.is_json or request.path.startswith(('/admin/api/', '/staff/api/')):
+                if request.is_json or request.path.startswith(('/admin/api/', '/staff/api/', '/gm/api/')):
                     return jsonify({
                         "success": False,
                         "error": "Permintaan ditolak: Token CSRF tidak valid atau telah kedaluwarsa. Silakan muat ulang halaman."
@@ -60,10 +60,12 @@ def create_app():
     from app.routes.auth_routes import bp as auth_bp
     from app.routes.staff_routes import bp as staff_bp
     from app.routes.admin_routes import bp as admin_bp
+    from app.routes.gm_routes import bp as gm_bp
 
     app.register_blueprint(auth_bp, url_prefix='/')
     app.register_blueprint(staff_bp, url_prefix='/staff')
     app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(gm_bp, url_prefix='/gm')
 
     # Direct route for /favicon.ico requests
     @app.route('/favicon.ico')
