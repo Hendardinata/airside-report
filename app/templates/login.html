@@ -1198,8 +1198,11 @@
 
         <!-- Center: Futuristic Airport Island Travel Diorama -->
         <div class="diorama-anchor-wrap">
-            <img src="{{ url_for('static', filename='img/airport-diorama.png') }}"
-                alt="Futuristic Airport Island Travel Diorama" class="diorama-artwork" loading="eager">
+            <picture>
+                <source srcset="{{ url_for('static', filename='img/airport-diorama.webp') }}" type="image/webp">
+                <img src="{{ url_for('static', filename='img/airport-diorama.png') }}"
+                    alt="Futuristic Airport Island Travel Diorama" class="diorama-artwork" loading="eager" width="600" height="600">
+            </picture>
         </div>
 
         <!-- Bottom Left Corporate Footer -->

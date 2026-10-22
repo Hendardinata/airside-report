@@ -582,7 +582,7 @@
         border-radius: 20px;
         overflow: hidden;
         background-color: #e0f2fe;
-        background-image: url("{{ url_for('static', filename='img/staff-hero-bg.jpg') }}");
+        background-image: url("{{ url_for('static', filename='img/staff-hero-bg.webp') }}");
         background-size: cover;
         background-position: center right;
         min-height: 200px;
@@ -3499,7 +3499,8 @@
                         {% set c = config.airports.get(code, {}) if config and config.airports else {} %}
                         <div class="branch-select-card selected" id="card-branch-{{ code }}" onclick="toggleBranchSelection('{{ code }}')">
                             <div class="branch-card-media">
-                                <img src="{{ url_for('static', filename='img/airport-' ~ code|lower ~ '.jpg') }}" 
+                                <img src="{{ url_for('static', filename='img/airport-' ~ code|lower ~ '.webp') }}" 
+                                     onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/airport-' ~ code|lower ~ '.jpg') }}';"
                                      alt="Bandara {{ code }}" 
                                      loading="lazy">
                                 <div class="branch-card-media-overlay"></div>
