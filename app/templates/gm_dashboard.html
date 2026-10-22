@@ -183,8 +183,17 @@
     }
 
     @keyframes pulseBadge {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.25); opacity: 0.85; }
+
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.25);
+            opacity: 0.85;
+        }
     }
 
     .notif-dropdown-card {
@@ -209,8 +218,15 @@
     }
 
     @keyframes fadeInNotif {
-        from { opacity: 0; transform: translateY(-6px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .notif-dropdown-header {
@@ -283,6 +299,7 @@
     .notif-list-body::-webkit-scrollbar {
         width: 5px;
     }
+
     .notif-list-body::-webkit-scrollbar-thumb {
         background: #cbd5e1;
         border-radius: 4px;
@@ -590,11 +607,11 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, 
-            rgba(238, 246, 255, 0.98) 0%, 
-            rgba(238, 246, 255, 0.95) 42%, 
-            rgba(238, 246, 255, 0.45) 72%, 
-            rgba(238, 246, 255, 0.15) 100%);
+        background: linear-gradient(90deg,
+                rgba(238, 246, 255, 0.98) 0%,
+                rgba(238, 246, 255, 0.95) 42%,
+                rgba(238, 246, 255, 0.45) 72%,
+                rgba(238, 246, 255, 0.15) 100%);
         pointer-events: none;
         z-index: 1;
     }
@@ -757,11 +774,12 @@
     .gm-table-card {
         background-color: #ffffff;
         border: 1.5px solid var(--theme-border);
-        border-radius: 20px;
-        padding: 1.75rem 2rem;
+        border-radius: 18px;
+        padding: 1.5rem 1.75rem;
         margin-top: 1.25rem;
         box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
         box-sizing: border-box;
+        width: 100%;
     }
 
     .gm-table-header {
@@ -934,13 +952,16 @@
             align-items: stretch;
             gap: 1rem;
         }
+
         .table-header-right {
             width: 100%;
         }
+
         .status-filter-group {
             width: 100%;
             display: flex;
         }
+
         .status-filter-btn {
             flex: 1;
             justify-content: center;
@@ -949,23 +970,36 @@
         }
     }
 
-    /* Table Responsive Wrapper (Seamless Fit, No Scrollbars) */
+    /* Table Responsive Wrapper with Smooth Modern Scrollbar */
     .gm-table-wrapper {
         width: 100%;
         overflow-x: auto;
         margin-top: 1.25rem;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 12px;
     }
 
     .gm-table-wrapper::-webkit-scrollbar {
-        display: none;
-        width: 0;
-        height: 0;
+        height: 6px;
+    }
+
+    .gm-table-wrapper::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 9999px;
+    }
+
+    .gm-table-wrapper::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 9999px;
+    }
+
+    .gm-table-wrapper::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
     }
 
     .gm-table {
         width: 100%;
+        min-width: 860px;
         border-collapse: separate;
         border-spacing: 0;
         text-align: left;
@@ -973,14 +1007,15 @@
 
     .gm-table thead tr th {
         background-color: #f8fafc;
-        padding: 1rem 1rem;
-        font-size: 0.725rem;
+        padding: 0.85rem 0.75rem;
+        font-size: 0.72rem;
         font-weight: 700;
         color: #475569;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         border-bottom: 1.5px solid #e2e8f0;
         white-space: nowrap;
+        box-sizing: border-box;
     }
 
     .gm-table thead tr th:first-child {
@@ -1003,11 +1038,12 @@
     }
 
     .gm-table tbody tr td {
-        padding: 1.1rem 1rem;
+        padding: 0.95rem 0.75rem;
         font-size: 0.88rem;
         color: var(--theme-slate-900);
         border-bottom: 1px solid #f1f5f9;
         vertical-align: middle;
+        box-sizing: border-box;
     }
 
     .gm-table tbody tr td:first-child {
@@ -1099,24 +1135,31 @@
     .gm-note-bubble {
         display: inline-flex;
         align-items: center;
-        max-width: 240px;
+        max-width: 190px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-size: 0.825rem;
+        font-size: 0.8rem;
         color: #c2410c;
         background-color: #fff7ed;
         border: 1px solid #fed7aa;
-        padding: 0.3rem 0.75rem;
+        padding: 0.28rem 0.65rem;
         border-radius: 8px;
         font-weight: 600;
+        cursor: help;
+        transition: all 0.15s ease;
     }
 
-    /* Actions Stack (Detail, Revisi, Setujui) */
+    .gm-note-bubble:hover {
+        background-color: #ffedd5;
+        border-color: #fdba74;
+    }
+
+    /* Actions Stack (Detail, Revisi, Setujui, Hapus) */
     .table-actions-stack {
         display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
+        gap: 0.35rem;
         justify-content: flex-end;
         flex-wrap: nowrap;
         white-space: nowrap;
@@ -1126,64 +1169,84 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 0.35rem;
-        padding: 0.36rem 0.72rem;
-        border-radius: 9999px;
-        font-size: 0.76rem;
+        gap: 0.32rem;
+        padding: 0.34rem 0.65rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.18s ease;
+        transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
         text-decoration: none;
         outline: none;
         white-space: nowrap;
+        line-height: 1.2;
+        flex-shrink: 0;
+        border: 1px solid transparent;
     }
 
     .btn-tbl-action.act-detail {
         background-color: #f0f9ff;
-        border: 1px solid #bae6fd;
+        border-color: #bae6fd;
         color: #0284c7;
     }
 
     .btn-tbl-action.act-detail:hover {
         background-color: #e0f2fe;
         border-color: #7dd3fc;
+        color: #0369a1;
         transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.12);
     }
 
     .btn-tbl-action.act-revisi {
         background-color: #fff7ed;
-        border: 1px solid #fed7aa;
+        border-color: #fed7aa;
         color: #ea580c;
     }
 
     .btn-tbl-action.act-revisi:hover {
         background-color: #ffedd5;
         border-color: #fdba74;
+        color: #c2410c;
         transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(234, 88, 12, 0.15);
     }
 
     .btn-tbl-action.act-setujui {
         background-color: #ecfdf5;
-        border: 1px solid #a7f3d0;
+        border-color: #a7f3d0;
         color: #16a34a;
     }
 
     .btn-tbl-action.act-setujui:hover {
         background-color: #d1fae5;
         border-color: #6ee7b7;
+        color: #15803d;
         transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(22, 163, 74, 0.15);
     }
 
     .btn-tbl-action.act-hapus {
+        width: 32px;
+        height: 30px;
+        padding: 0;
+        border-radius: 8px;
         background-color: #fef2f2;
-        border: 1px solid #fecaca;
+        border-color: #fecaca;
         color: #dc2626;
+        font-size: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
     }
 
     .btn-tbl-action.act-hapus:hover {
         background-color: #fee2e2;
         border-color: #f87171;
+        color: #b91c1c;
         transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(220, 38, 38, 0.15);
     }
 
     /* ==========================================================================
@@ -1191,7 +1254,10 @@
        ========================================================================== */
     .custom-modal-backdrop {
         position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         background-color: rgba(15, 23, 42, 0.65);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
@@ -1218,8 +1284,15 @@
     }
 
     @keyframes modalScaleUp {
-        from { transform: scale(0.97) translateY(8px); opacity: 0; }
-        to { transform: scale(1) translateY(0); opacity: 1; }
+        from {
+            transform: scale(0.97) translateY(8px);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
     }
 
     .custom-modal-header {
@@ -2234,9 +2307,12 @@
         body * {
             visibility: hidden !important;
         }
-        #detailModal, #detailModal * {
+
+        #detailModal,
+        #detailModal * {
             visibility: visible !important;
         }
+
         #detailModal {
             position: absolute !important;
             left: 0 !important;
@@ -2249,6 +2325,7 @@
             display: block !important;
             overflow: visible !important;
         }
+
         .custom-modal-content {
             max-width: 100% !important;
             width: 100% !important;
@@ -2258,6 +2335,7 @@
             max-height: none !important;
             overflow: visible !important;
         }
+
         .custom-modal-header,
         .custom-modal-footer,
         .doc-alert-revisi-banner,
@@ -2267,12 +2345,14 @@
         .doc-gm-status-badge-box {
             display: none !important;
         }
+
         .custom-modal-body {
             padding: 0 !important;
             background: transparent !important;
             overflow: visible !important;
             display: block !important;
         }
+
         .a4-document-page {
             box-shadow: none !important;
             border: none !important;
@@ -2281,6 +2361,7 @@
             max-width: 100% !important;
             width: 100% !important;
         }
+
         .doc-section-head,
         .doc-table,
         .doc-sign-wrapper,
@@ -2288,6 +2369,7 @@
             page-break-inside: avoid !important;
             break-inside: avoid !important;
         }
+
         @page {
             size: A4 portrait;
             margin: 15mm 15mm 15mm 15mm;
@@ -2461,8 +2543,10 @@
 <header class="staff-topbar">
     <div class="topbar-inner">
         <!-- Corporate Brand Header (InJourney Airports) -->
-        <a href="{{ url_for('gm.dashboard') }}" class="topbar-brand-link" title="Dashboard General Manager - InJourney Regional II">
-            <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports" class="topbar-brand-logo">
+        <a href="{{ url_for('gm.dashboard') }}" class="topbar-brand-link"
+            title="Dashboard General Manager - InJourney Regional II">
+            <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports"
+                class="topbar-brand-logo">
             <span class="topbar-brand-title">InJourney Airports</span>
         </a>
 
@@ -2470,10 +2554,13 @@
         <div class="topbar-actions">
             <!-- Notification Bell with Dropdown Menu -->
             <div class="topbar-notif-wrap">
-                <button type="button" class="topbar-notif-btn" id="topbarNotifBtn" title="Notifikasi Sistem" onclick="toggleNotifDropdown(event)">
+                <button type="button" class="topbar-notif-btn" id="topbarNotifBtn" title="Notifikasi Sistem"
+                    onclick="toggleNotifDropdown(event)">
                     <i class="fa-regular fa-bell"></i>
                     <span class="notif-badge-dot" id="notifBadgeDot" style="display: none;"></span>
-                    <span class="notif-badge-count" id="notifBadgeCount" style="display: {% if notif_badge_num is defined and notif_badge_num > 0 %}flex{% else %}none{% endif %};">{{ notif_badge_num|default(0) }}</span>
+                    <span class="notif-badge-count" id="notifBadgeCount"
+                        style="display: {% if notif_badge_num is defined and notif_badge_num > 0 %}flex{% else %}none{% endif %};">{{
+                        notif_badge_num|default(0) }}</span>
                 </button>
 
                 <!-- Notification Dropdown Menu -->
@@ -2546,7 +2633,9 @@
                     <span>PORTAL GENERAL MANAGER &rsaquo; {{ airport_code }}</span>
                 </div>
                 {% if active_month_label %}
-                <div class="hero-pill-badge mb-0" style="background: rgba(2, 132, 199, 0.12); border-color: #38bdf8; color: #0284c7;" title="Spreadsheet Produksi Aktif: {{ active_sheet_title }}">
+                <div class="hero-pill-badge mb-0"
+                    style="background: rgba(2, 132, 199, 0.12); border-color: #38bdf8; color: #0284c7;"
+                    title="Spreadsheet Produksi Aktif: {{ active_sheet_title }}">
                     <i class="fa-regular fa-calendar-check hero-badge-icon" style="color: #0284c7;"></i>
                     <span>BULAN OPERASIONAL: <strong>{{ active_month_label|upper }}</strong></span>
                 </div>
@@ -2556,7 +2645,9 @@
             <p class="hero-subtext">
                 Cabang {{ airport_info.name }} ({{ airport_code }}) &bull; Kantor Regional II PT Angkasa Pura Indonesia
                 {% if active_sheet_title %}
-                &bull; <span class="badge bg-white text-secondary border px-2 py-1" style="font-weight: 600; font-size: 0.76rem; border-radius: 6px;"><i class="fa-solid fa-file-excel text-success me-1"></i>{{ active_sheet_title }}</span>
+                &bull; <span class="badge bg-white text-secondary border px-2 py-1"
+                    style="font-weight: 600; font-size: 0.76rem; border-radius: 6px;"><i
+                        class="fa-solid fa-file-excel text-success me-1"></i>{{ active_sheet_title }}</span>
                 {% endif %}
             </p>
         </div>
@@ -2583,16 +2674,19 @@
             </div>
             <div class="table-header-right">
                 <div class="status-filter-group" id="statusFilterGroup">
-                    <button type="button" class="status-filter-btn active" id="filterBtnAll" onclick="applyStatusFilter('ALL', this)" title="Tampilkan Semua Laporan">
+                    <button type="button" class="status-filter-btn active" id="filterBtnAll"
+                        onclick="applyStatusFilter('ALL', this)" title="Tampilkan Semua Laporan">
                         <span>Semua</span>
                         <span class="filter-count-badge" id="filterCountAll">{{ display_reports|length }}</span>
                     </button>
-                    <button type="button" class="status-filter-btn btn-filter-pend" id="filterBtnPending" onclick="applyStatusFilter('PENDING_GM', this)" title="Laporan Menunggu Telaah GM">
+                    <button type="button" class="status-filter-btn btn-filter-pend" id="filterBtnPending"
+                        onclick="applyStatusFilter('PENDING_GM', this)" title="Laporan Menunggu Telaah GM">
                         <i class="fa-solid fa-hourglass-half"></i>
                         <span>Menunggu Telaah</span>
                         <span class="filter-count-badge" id="filterCountPending">{{ pending_count }}</span>
                     </button>
-                    <button type="button" class="status-filter-btn btn-filter-rev" id="filterBtnRevisi" onclick="applyStatusFilter('REVISI', this)" title="Laporan Sedang Direvisi Petugas">
+                    <button type="button" class="status-filter-btn btn-filter-rev" id="filterBtnRevisi"
+                        onclick="applyStatusFilter('REVISI', this)" title="Laporan Sedang Direvisi Petugas">
                         <i class="fa-solid fa-rotate-left"></i>
                         <span>Sedang Direvisi</span>
                         <span class="filter-count-badge" id="filterCountRevisi">{{ revisi_count }}</span>
@@ -2606,87 +2700,98 @@
             <table class="gm-table" id="reportsTable">
                 <thead>
                     <tr>
-                        <th style="width: 17%; min-width: 140px;">TANGGAL LAPORAN</th>
-                        <th style="width: 18%; min-width: 160px;">ID LAPORAN</th>
-                        <th style="width: 18%; min-width: 165px;">STATUS REVIEW</th>
-                        <th style="width: 15%; min-width: 125px;">PETUGAS PELAPOR</th>
-                        <th style="width: 17%; min-width: 130px;">CATATAN KOREKSI GM</th>
-                        <th style="width: 15%; min-width: 110px; text-align: right;">AKSI TINDAKAN</th>
+                        <th style="width: 14%; min-width: 125px;">TANGGAL LAPORAN</th>
+                        <th style="width: 16%; min-width: 140px;">ID LAPORAN</th>
+                        <th style="width: 16%; min-width: 145px;">STATUS REVIEW</th>
+                        <th style="width: 13%; min-width: 110px;">PETUGAS PELAPOR</th>
+                        <th style="width: 18%; min-width: 135px;">CATATAN KOREKSI GM</th>
+                        <th style="width: 23%; min-width: 195px; text-align: right;">AKSI TINDAKAN</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if display_reports %}
-                        {% for rep in display_reports %}
-                        <tr class="report-row" id="row-{{ rep.report_id }}" data-report-id="{{ rep.report_id }}" data-status="{{ rep.status }}" data-search="{{ rep.tanggal }} {{ rep.report_id }} {{ rep.submitted_by }}">
-                            <td>
-                                <strong class="tgl-primary">{{ rep.tanggal }}</strong>
-                                <div class="tgl-secondary">{{ rep.timestamp_update or rep.timestamp_submit or '' }}</div>
-                            </td>
-                            <td>
-                                <span class="badge-report-id">{{ rep.report_id }}</span>
-                            </td>
-                            <td>
-                                {% if rep.status == 'REVISI' %}
-                                <span class="badge-review-pill pill-rev">
-                                    <i class="fa-solid fa-rotate-left"></i>
-                                    <span>SEDANG DIREVISI</span>
-                                </span>
-                                {% else %}
-                                <span class="badge-review-pill pill-pend">
-                                    <i class="fa-solid fa-hourglass-half"></i>
-                                    <span>MENUNGGU TELAAH</span>
-                                </span>
+                    {% for rep in display_reports %}
+                    <tr class="report-row" id="row-{{ rep.report_id }}" data-report-id="{{ rep.report_id }}"
+                        data-status="{{ rep.status }}"
+                        data-search="{{ rep.tanggal }} {{ rep.report_id }} {{ rep.submitted_by }}">
+                        <td>
+                            <strong class="tgl-primary">{{ rep.tanggal }}</strong>
+                            <div class="tgl-secondary">{{ rep.timestamp_update or rep.timestamp_submit or '' }}</div>
+                        </td>
+                        <td>
+                            <span class="badge-report-id">{{ rep.report_id }}</span>
+                        </td>
+                        <td>
+                            {% if rep.status == 'REVISI' %}
+                            <span class="badge-review-pill pill-rev">
+                                <i class="fa-solid fa-rotate-left"></i>
+                                <span>SEDANG DIREVISI</span>
+                            </span>
+                            {% else %}
+                            <span class="badge-review-pill pill-pend">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                                <span>MENUNGGU TELAAH</span>
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="petugas-name">{{ rep.submitted_by or ('Petugas ' ~ airport_code) }}</span>
+                        </td>
+                        <td>
+                            {% if rep.catatan_gm %}
+                            <span class="gm-note-bubble" title="{{ rep.catatan_gm }}">
+                                "{{ rep.catatan_gm }}"
+                            </span>
+                            {% else %}
+                            <span class="empty-dash">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="table-actions-stack">
+                                <button type="button" class="btn-tbl-action act-detail"
+                                    onclick="openDetailModal('{{ rep.report_id }}')">
+                                    <i class="fa-regular fa-eye"></i>
+                                    <span>Detail</span>
+                                </button>
+                                {% if (rep.status or '')|upper != 'REVISI' %}
+                                <button type="button" class="btn-tbl-action act-revisi"
+                                    onclick="openRevisionModal('{{ rep.report_id }}', '{{ rep.tanggal }}')">
+                                    <i class="fa-solid fa-pencil"></i>
+                                    <span>Revisi</span>
+                                </button>
+                                <button type="button" class="btn-tbl-action act-setujui"
+                                    onclick="confirmApprove('{{ rep.report_id }}', '{{ rep.tanggal }}')">
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Setujui</span>
+                                </button>
                                 {% endif %}
-                            </td>
-                            <td>
-                                <span class="petugas-name">{{ rep.submitted_by or ('Petugas ' ~ airport_code) }}</span>
-                            </td>
-                            <td>
-                                {% if rep.catatan_gm %}
-                                <span class="gm-note-bubble" title="{{ rep.catatan_gm }}">
-                                    "{{ rep.catatan_gm }}"
-                                </span>
-                                {% else %}
-                                <span class="empty-dash">-</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <div class="table-actions-stack">
-                                    <button type="button" class="btn-tbl-action act-detail" onclick="openDetailModal('{{ rep.report_id }}')">
-                                        <i class="fa-regular fa-eye"></i>
-                                        <span>Detail</span>
-                                    </button>
-                                    {% if (rep.status or '')|upper != 'REVISI' %}
-                                    <button type="button" class="btn-tbl-action act-revisi" onclick="openRevisionModal('{{ rep.report_id }}', '{{ rep.tanggal }}')">
-                                        <i class="fa-solid fa-pencil"></i>
-                                        <span>Revisi</span>
-                                    </button>
-                                    <button type="button" class="btn-tbl-action act-setujui" onclick="confirmApprove('{{ rep.report_id }}', '{{ rep.tanggal }}')">
-                                        <i class="fa-solid fa-check"></i>
-                                        <span>Setujui</span>
-                                    </button>
-                                    {% endif %}
-                                    <button type="button" class="btn-tbl-action act-hapus" onclick="confirmDeleteReport('{{ rep.report_id }}', '{{ rep.tanggal }}')" title="Hapus dari Staging">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                                <button type="button" class="btn-tbl-action act-hapus"
+                                    onclick="confirmDeleteReport('{{ rep.report_id }}', '{{ rep.tanggal }}')"
+                                    title="Hapus dari Staging">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
                     {% else %}
-                        <tr id="emptyReportsRow">
-                            <td colspan="6" style="text-align: center; padding: 3.5rem 1rem;">
-                                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;">
-                                    <div style="width: 56px; height: 56px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem;">
-                                        <i class="fa-solid fa-clipboard-check"></i>
-                                    </div>
-                                    <div style="font-weight: 700; color: #334155; font-size: 1rem;">Tidak Ada Antrean Laporan Draf</div>
-                                    <div style="font-size: 0.85rem; color: #94a3b8; max-width: 400px; line-height: 1.5;">
-                                        Semua laporan telah diverifikasi dan disetujui, atau belum ada pengajuan baru dari petugas sisi udara.
-                                    </div>
+                    <tr id="emptyReportsRow">
+                        <td colspan="6" style="text-align: center; padding: 3.5rem 1rem;">
+                            <div
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;">
+                                <div
+                                    style="width: 56px; height: 56px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem;">
+                                    <i class="fa-solid fa-clipboard-check"></i>
                                 </div>
-                            </td>
-                        </tr>
+                                <div style="font-weight: 700; color: #334155; font-size: 1rem;">Tidak Ada Antrean
+                                    Laporan Draf</div>
+                                <div style="font-size: 0.85rem; color: #94a3b8; max-width: 400px; line-height: 1.5;">
+                                    Semua laporan telah diverifikasi dan disetujui, atau belum ada pengajuan baru dari
+                                    petugas sisi udara.
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                     {% endif %}
                 </tbody>
             </table>
@@ -2703,7 +2808,8 @@
             <!-- Dynamic Form Breakdown Content injected by JS -->
             <div style="text-align: center; padding: 4.5rem 1rem;">
                 <i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color: #003366;"></i>
-                <p style="margin-top: 1rem; color: #64748b; font-weight: 700; font-size: 0.95rem;">Sedang menyusun dokumen resmi A4...</p>
+                <p style="margin-top: 1rem; color: #64748b; font-weight: 700; font-size: 0.95rem;">Sedang menyusun
+                    dokumen resmi A4...</p>
             </div>
         </div>
     </div>
@@ -2716,7 +2822,8 @@
     <div class="custom-modal-content" style="max-width: 600px;">
         <div class="custom-modal-header">
             <div class="modal-header-info">
-                <div class="modal-title-icon-box" style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
+                <div class="modal-title-icon-box"
+                    style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);">
                     <i class="fa-solid fa-pencil"></i>
                 </div>
                 <div>
@@ -2735,21 +2842,27 @@
             </p>
 
             <div style="margin-bottom: 1rem;">
-                <textarea id="revNotesInput" class="form-control" rows="5" 
-                          placeholder="Contoh: Titik kerusakan pada Runway belum sesuai hasil pengukuran pagi, dan mohon update nilai Skid Resistance." 
-                          style="border-radius: 14px; font-size: 0.88rem; border: 1.5px solid #cbd5e1; padding: 0.85rem; outline: none; width: 100%; box-sizing: border-box; font-family: inherit;"></textarea>
+                <textarea id="revNotesInput" class="form-control" rows="5"
+                    placeholder="Contoh: Titik kerusakan pada Runway belum sesuai hasil pengukuran pagi, dan mohon update nilai Skid Resistance."
+                    style="border-radius: 14px; font-size: 0.88rem; border: 1.5px solid #cbd5e1; padding: 0.85rem; outline: none; width: 100%; box-sizing: border-box; font-family: inherit;"></textarea>
             </div>
 
-            <div style="background-color: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1rem 1.15rem;">
-                <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">Template Koreksi Cepat:</span>
+            <div
+                style="background-color: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1rem 1.15rem;">
+                <span
+                    style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">Template
+                    Koreksi Cepat:</span>
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.55rem;">
-                    <button type="button" class="btn-template-chip" onclick="insertTemplateNote('Tolong cek ulang titik kerusakan Runway dan rincian perbaikannya.')">
+                    <button type="button" class="btn-template-chip"
+                        onclick="insertTemplateNote('Tolong cek ulang titik kerusakan Runway dan rincian perbaikannya.')">
                         + Kerusakan Runway
                     </button>
-                    <button type="button" class="btn-template-chip" onclick="insertTemplateNote('Mohon sesuaikan nilai PCI Runway dan Apron sesuai inspeksi terbaru.')">
+                    <button type="button" class="btn-template-chip"
+                        onclick="insertTemplateNote('Mohon sesuaikan nilai PCI Runway dan Apron sesuai inspeksi terbaru.')">
                         + Nilai PCI
                     </button>
-                    <button type="button" class="btn-template-chip" onclick="insertTemplateNote('Marka runway dan taxiway belum terisi lengkap.')">
+                    <button type="button" class="btn-template-chip"
+                        onclick="insertTemplateNote('Marka runway dan taxiway belum terisi lengkap.')">
                         + Marka
                     </button>
                 </div>
@@ -2771,135 +2884,135 @@
 
 {% block scripts %}
 <script>
-let currentActiveReportId = null;
-let currentActiveReportDate = null;
+    let currentActiveReportId = null;
+    let currentActiveReportDate = null;
 
-// Setup CSRF Token
-const csrfToken = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
+    // Setup CSRF Token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
 
-// User Profile Dropdown Toggle
-function toggleUserDropdown(e) {
-    if (e) e.stopPropagation();
-    const menu = document.getElementById('userDropdownCard');
-    if (menu) menu.classList.toggle('show');
-}
-
-document.addEventListener('click', function(e) {
-    const menu = document.getElementById('userDropdownCard');
-    if (menu && menu.classList.contains('show')) {
-        if (!e.target.closest('.topbar-user-wrap')) {
-            menu.classList.remove('show');
-        }
+    // User Profile Dropdown Toggle
+    function toggleUserDropdown(e) {
+        if (e) e.stopPropagation();
+        const menu = document.getElementById('userDropdownCard');
+        if (menu) menu.classList.toggle('show');
     }
-});
 
-// Notification Dropdown Toggle
-function toggleNotifDropdown(e) {
-    if (e) e.stopPropagation();
-    const menu = document.getElementById('notifDropdownCard');
-    const userMenu = document.getElementById('userDropdownCard');
-    if (userMenu) userMenu.classList.remove('show');
-    
-    if (menu) {
-        menu.classList.toggle('show');
-        if (menu.classList.contains('show')) {
-            fetchNotifications();
-        }
-    }
-}
-
-function closeNotifDropdown() {
-    const menu = document.getElementById('notifDropdownCard');
-    if (menu) menu.classList.remove('show');
-}
-
-document.addEventListener('click', function(e) {
-    const notifCard = document.getElementById('notifDropdownCard');
-    if (notifCard && notifCard.classList.contains('show')) {
-        if (!e.target.closest('.topbar-notif-wrap')) {
-            notifCard.classList.remove('show');
-        }
-    }
-});
-
-function fetchNotifications() {
-    fetch('/gm/api/notifications')
-        .then(r => r.json())
-        .then(res => {
-            if (res.success) {
-                renderNotifications(res.notifications || [], res.unread_count || 0);
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching GM notifications:', err);
-        });
-}
-
-function renderNotifications(notifs, unreadCount) {
-    const badgeCount = document.getElementById('notifBadgeCount');
-    const badgeDot = document.getElementById('notifBadgeDot');
-    const unreadText = document.getElementById('notifUnreadText');
-    const body = document.getElementById('notifListBody');
-
-    const totalNotifs = (notifs || []).length;
-    const displayCount = unreadCount > 0 ? unreadCount : totalNotifs;
-
-    if (displayCount > 0) {
-        if (badgeCount) {
-            badgeCount.textContent = displayCount > 9 ? '9+' : displayCount;
-            badgeCount.style.display = 'flex';
-        }
-        if (badgeDot) badgeDot.style.display = unreadCount > 0 ? 'block' : 'none';
-        if (unreadText) {
-            if (unreadCount > 0) {
-                unreadText.textContent = `${unreadCount} notifikasi belum dibaca`;
-            } else {
-                unreadText.textContent = `${totalNotifs} notifikasi aktif`;
+    document.addEventListener('click', function (e) {
+        const menu = document.getElementById('userDropdownCard');
+        if (menu && menu.classList.contains('show')) {
+            if (!e.target.closest('.topbar-user-wrap')) {
+                menu.classList.remove('show');
             }
         }
-    } else {
-        if (badgeCount) badgeCount.style.display = 'none';
-        if (badgeDot) badgeDot.style.display = 'none';
-        if (unreadText) unreadText.textContent = 'Tidak ada notifikasi';
+    });
+
+    // Notification Dropdown Toggle
+    function toggleNotifDropdown(e) {
+        if (e) e.stopPropagation();
+        const menu = document.getElementById('notifDropdownCard');
+        const userMenu = document.getElementById('userDropdownCard');
+        if (userMenu) userMenu.classList.remove('show');
+
+        if (menu) {
+            menu.classList.toggle('show');
+            if (menu.classList.contains('show')) {
+                fetchNotifications();
+            }
+        }
     }
 
-    if (!body) return;
+    function closeNotifDropdown() {
+        const menu = document.getElementById('notifDropdownCard');
+        if (menu) menu.classList.remove('show');
+    }
 
-    if (!notifs || notifs.length === 0) {
-        body.innerHTML = `
+    document.addEventListener('click', function (e) {
+        const notifCard = document.getElementById('notifDropdownCard');
+        if (notifCard && notifCard.classList.contains('show')) {
+            if (!e.target.closest('.topbar-notif-wrap')) {
+                notifCard.classList.remove('show');
+            }
+        }
+    });
+
+    function fetchNotifications() {
+        fetch('/gm/api/notifications')
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    renderNotifications(res.notifications || [], res.unread_count || 0);
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching GM notifications:', err);
+            });
+    }
+
+    function renderNotifications(notifs, unreadCount) {
+        const badgeCount = document.getElementById('notifBadgeCount');
+        const badgeDot = document.getElementById('notifBadgeDot');
+        const unreadText = document.getElementById('notifUnreadText');
+        const body = document.getElementById('notifListBody');
+
+        const totalNotifs = (notifs || []).length;
+        const displayCount = unreadCount > 0 ? unreadCount : totalNotifs;
+
+        if (displayCount > 0) {
+            if (badgeCount) {
+                badgeCount.textContent = displayCount > 9 ? '9+' : displayCount;
+                badgeCount.style.display = 'flex';
+            }
+            if (badgeDot) badgeDot.style.display = unreadCount > 0 ? 'block' : 'none';
+            if (unreadText) {
+                if (unreadCount > 0) {
+                    unreadText.textContent = `${unreadCount} notifikasi belum dibaca`;
+                } else {
+                    unreadText.textContent = `${totalNotifs} notifikasi aktif`;
+                }
+            }
+        } else {
+            if (badgeCount) badgeCount.style.display = 'none';
+            if (badgeDot) badgeDot.style.display = 'none';
+            if (unreadText) unreadText.textContent = 'Tidak ada notifikasi';
+        }
+
+        if (!body) return;
+
+        if (!notifs || notifs.length === 0) {
+            body.innerHTML = `
             <div class="notif-empty-box">
                 <i class="fa-regular fa-bell-slash"></i>
                 <div style="font-weight: 700; color: #475569; font-size: 0.88rem; margin-bottom: 0.25rem;">Tidak Ada Notifikasi</div>
                 <div style="font-size: 0.76rem; color: #94a3b8;">Pengajuan laporan baru dari petugas atau update revisi akan muncul di sini.</div>
             </div>
         `;
-        return;
-    }
-
-    let html = '';
-    notifs.forEach(n => {
-        const isUnread = !n.is_read;
-        const nType = n.notif_type || 'info';
-        
-        let iconHtml = '';
-        let pillClass = '';
-        let pillText = '';
-
-        if (nType === 'revisi') {
-            iconHtml = '<div class="notif-item-icon-box icon-box-revisi"><i class="fa-solid fa-rotate-left"></i></div>';
-            pillClass = 'pill-notif-revisi';
-            pillText = '<i class="fa-solid fa-circle-exclamation"></i> Sedang Direvisi';
-        } else if (nType === 'approved') {
-            iconHtml = '<div class="notif-item-icon-box icon-box-approved"><i class="fa-solid fa-circle-check"></i></div>';
-            pillClass = 'pill-notif-approved';
-            pillText = '<i class="fa-solid fa-check"></i> Telah Disetujui';
-        } else {
-            iconHtml = '<div class="notif-item-icon-box icon-box-pending"><i class="fa-solid fa-hourglass-half"></i></div>';
-            pillClass = 'pill-notif-pending';
-            pillText = '<i class="fa-solid fa-clock"></i> Perlu Telaah';
+            return;
         }
 
-        html += `
+        let html = '';
+        notifs.forEach(n => {
+            const isUnread = !n.is_read;
+            const nType = n.notif_type || 'info';
+
+            let iconHtml = '';
+            let pillClass = '';
+            let pillText = '';
+
+            if (nType === 'revisi') {
+                iconHtml = '<div class="notif-item-icon-box icon-box-revisi"><i class="fa-solid fa-rotate-left"></i></div>';
+                pillClass = 'pill-notif-revisi';
+                pillText = '<i class="fa-solid fa-circle-exclamation"></i> Sedang Direvisi';
+            } else if (nType === 'approved') {
+                iconHtml = '<div class="notif-item-icon-box icon-box-approved"><i class="fa-solid fa-circle-check"></i></div>';
+                pillClass = 'pill-notif-approved';
+                pillText = '<i class="fa-solid fa-check"></i> Telah Disetujui';
+            } else {
+                iconHtml = '<div class="notif-item-icon-box icon-box-pending"><i class="fa-solid fa-hourglass-half"></i></div>';
+                pillClass = 'pill-notif-pending';
+                pillText = '<i class="fa-solid fa-clock"></i> Perlu Telaah';
+            }
+
+            html += `
             <div class="notif-item ${isUnread ? 'unread' : ''}" onclick="markNotifRead('${n.id}')">
                 ${iconHtml}
                 <div class="notif-item-content">
@@ -2913,110 +3026,110 @@ function renderNotifications(notifs, unreadCount) {
                 </div>
             </div>
         `;
-    });
+        });
 
-    body.innerHTML = html;
-}
-
-function markNotifRead(notifId) {
-    if (!notifId) return;
-    fetch('/gm/api/notifications/mark-read', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({ notif_id: notifId, csrf_token: csrfToken })
-    }).then(() => {
-        fetchNotifications();
-    });
-}
-
-function markAllNotifsRead(e) {
-    if (e) e.stopPropagation();
-    fetch('/gm/api/notifications/mark-read', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({ mark_all: true, csrf_token: csrfToken })
-    }).then(() => {
-        fetchNotifications();
-    });
-}
-
-// Table Filter on Search
-function handleTableFilter(e) {
-    const query = e.target.value.toLowerCase().trim();
-    const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
-    let visibleCount = 0;
-
-    rows.forEach(row => {
-        const searchText = (row.getAttribute('data-search') || '').toLowerCase();
-        if (!query || searchText.includes(query)) {
-            row.style.display = '';
-            visibleCount++;
-        } else {
-            row.style.display = 'none';
-        }
-    });
-
-    const countText = document.getElementById('reportCountText');
-    if (countText) {
-        countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
-    }
-}
-
-// Filter by Status Review (Segmented Filter Control)
-let currentActiveStatusFilter = 'ALL';
-
-function applyStatusFilter(status, btnElement) {
-    currentActiveStatusFilter = status;
-
-    // Update active class on filter buttons
-    document.querySelectorAll('.status-filter-btn').forEach(btn => btn.classList.remove('active'));
-    if (btnElement) {
-        btnElement.classList.add('active');
-    } else {
-        const targetBtn = document.getElementById(
-            status === 'ALL' ? 'filterBtnAll' : 
-            (status === 'REVISI' ? 'filterBtnRevisi' : 'filterBtnPending')
-        );
-        if (targetBtn) targetBtn.classList.add('active');
+        body.innerHTML = html;
     }
 
-    const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
-    let visibleCount = 0;
+    function markNotifRead(notifId) {
+        if (!notifId) return;
+        fetch('/gm/api/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ notif_id: notifId, csrf_token: csrfToken })
+        }).then(() => {
+            fetchNotifications();
+        });
+    }
 
-    rows.forEach(row => {
-        const rowStatus = (row.getAttribute('data-status') || '').toUpperCase();
-        let match = false;
-        if (status === 'ALL') {
-            match = true;
-        } else if (status === 'PENDING_GM') {
-            match = (rowStatus !== 'REVISI');
-        } else if (status === 'REVISI') {
-            match = (rowStatus === 'REVISI');
+    function markAllNotifsRead(e) {
+        if (e) e.stopPropagation();
+        fetch('/gm/api/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ mark_all: true, csrf_token: csrfToken })
+        }).then(() => {
+            fetchNotifications();
+        });
+    }
+
+    // Table Filter on Search
+    function handleTableFilter(e) {
+        const query = e.target.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const searchText = (row.getAttribute('data-search') || '').toLowerCase();
+            if (!query || searchText.includes(query)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        const countText = document.getElementById('reportCountText');
+        if (countText) {
+            countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
         }
+    }
 
-        if (match) {
-            row.style.display = '';
-            visibleCount++;
+    // Filter by Status Review (Segmented Filter Control)
+    let currentActiveStatusFilter = 'ALL';
+
+    function applyStatusFilter(status, btnElement) {
+        currentActiveStatusFilter = status;
+
+        // Update active class on filter buttons
+        document.querySelectorAll('.status-filter-btn').forEach(btn => btn.classList.remove('active'));
+        if (btnElement) {
+            btnElement.classList.add('active');
         } else {
-            row.style.display = 'none';
+            const targetBtn = document.getElementById(
+                status === 'ALL' ? 'filterBtnAll' :
+                    (status === 'REVISI' ? 'filterBtnRevisi' : 'filterBtnPending')
+            );
+            if (targetBtn) targetBtn.classList.add('active');
         }
-    });
 
-    // Check empty state
-    const tbody = document.querySelector('#reportsTable tbody');
-    let emptyFilterRow = document.getElementById('emptyFilterRow');
+        const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
+        let visibleCount = 0;
 
-    if (rows.length > 0 && visibleCount === 0) {
-        if (!emptyFilterRow) {
-            emptyFilterRow = document.createElement('tr');
-            emptyFilterRow.id = 'emptyFilterRow';
-            emptyFilterRow.innerHTML = `
+        rows.forEach(row => {
+            const rowStatus = (row.getAttribute('data-status') || '').toUpperCase();
+            let match = false;
+            if (status === 'ALL') {
+                match = true;
+            } else if (status === 'PENDING_GM') {
+                match = (rowStatus !== 'REVISI');
+            } else if (status === 'REVISI') {
+                match = (rowStatus === 'REVISI');
+            }
+
+            if (match) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Check empty state
+        const tbody = document.querySelector('#reportsTable tbody');
+        let emptyFilterRow = document.getElementById('emptyFilterRow');
+
+        if (rows.length > 0 && visibleCount === 0) {
+            if (!emptyFilterRow) {
+                emptyFilterRow = document.createElement('tr');
+                emptyFilterRow.id = 'emptyFilterRow';
+                emptyFilterRow.innerHTML = `
                 <td colspan="6" style="text-align: center; padding: 3.5rem 1rem;">
                     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem;">
                         <div style="width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.35rem;">
@@ -3029,147 +3142,147 @@ function applyStatusFilter(status, btnElement) {
                     </div>
                 </td>
             `;
-            tbody.appendChild(emptyFilterRow);
-        } else {
-            emptyFilterRow.style.display = '';
+                tbody.appendChild(emptyFilterRow);
+            } else {
+                emptyFilterRow.style.display = '';
+            }
+        } else if (emptyFilterRow) {
+            emptyFilterRow.style.display = 'none';
         }
-    } else if (emptyFilterRow) {
-        emptyFilterRow.style.display = 'none';
+
+        const countText = document.getElementById('reportCountText');
+        if (countText) {
+            countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
+        }
     }
 
-    const countText = document.getElementById('reportCountText');
-    if (countText) {
-        countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
+    // Backward-compatible alias
+    function filterByStatus(status) {
+        applyStatusFilter(status);
     }
-}
 
-// Backward-compatible alias
-function filterByStatus(status) {
-    applyStatusFilter(status);
-}
+    // Dynamically refresh filter badge counts
+    function refreshFilterCounts() {
+        const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
+        let totalAll = rows.length;
+        let totalPending = 0;
+        let totalRevisi = 0;
 
-// Dynamically refresh filter badge counts
-function refreshFilterCounts() {
-    const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
-    let totalAll = rows.length;
-    let totalPending = 0;
-    let totalRevisi = 0;
+        rows.forEach(r => {
+            const s = (r.getAttribute('data-status') || '').toUpperCase();
+            if (s === 'REVISI') {
+                totalRevisi++;
+            } else {
+                totalPending++;
+            }
+        });
 
-    rows.forEach(r => {
-        const s = (r.getAttribute('data-status') || '').toUpperCase();
-        if (s === 'REVISI') {
-            totalRevisi++;
-        } else {
-            totalPending++;
-        }
-    });
+        const elAll = document.getElementById('filterCountAll');
+        if (elAll) elAll.textContent = totalAll;
 
-    const elAll = document.getElementById('filterCountAll');
-    if (elAll) elAll.textContent = totalAll;
+        const elPending = document.getElementById('filterCountPending') || document.getElementById('statPendingCount');
+        if (elPending) elPending.textContent = totalPending;
 
-    const elPending = document.getElementById('filterCountPending') || document.getElementById('statPendingCount');
-    if (elPending) elPending.textContent = totalPending;
-
-    const elRevisi = document.getElementById('filterCountRevisi') || document.getElementById('statRevisiCount');
-    if (elRevisi) elRevisi.textContent = totalRevisi;
-}
+        const elRevisi = document.getElementById('filterCountRevisi') || document.getElementById('statRevisiCount');
+        if (elRevisi) elRevisi.textContent = totalRevisi;
+    }
 
 
 
-// Open Detail Modal (Official A4 Portrait Document View)
-function openDetailModal(reportId) {
-    currentActiveReportId = reportId;
-    const modal = document.getElementById('detailModal');
-    const contentBox = document.getElementById('modalReportContent');
-    modal.style.display = 'flex';
-    contentBox.innerHTML = `
+    // Open Detail Modal (Official A4 Portrait Document View)
+    function openDetailModal(reportId) {
+        currentActiveReportId = reportId;
+        const modal = document.getElementById('detailModal');
+        const contentBox = document.getElementById('modalReportContent');
+        modal.style.display = 'flex';
+        contentBox.innerHTML = `
         <div style="text-align: center; padding: 4.5rem 1rem;">
             <i class="fa-solid fa-circle-notch fa-spin fa-2x" style="color: #003366;"></i>
             <p style="margin-top: 1rem; color: #64748b; font-weight: 700; font-size: 0.95rem;">Sedang menyusun dokumen resmi A4...</p>
         </div>
     `;
 
-    fetch(`/gm/api/report/${encodeURIComponent(reportId)}`)
-        .then(r => r.json())
-        .then(res => {
-            if (res.success && res.report) {
-                const rep = res.report;
-                const d = rep.data || {};
-                currentActiveReportDate = rep.tanggal;
+        fetch(`/gm/api/report/${encodeURIComponent(reportId)}`)
+            .then(r => r.json())
+            .then(res => {
+                if (res.success && res.report) {
+                    const rep = res.report;
+                    const d = rep.data || {};
+                    currentActiveReportDate = rep.tanggal;
 
-                // Date formatter helper (converts YYYY-MM-DD to Indonesian standard: 14 November 2026)
-                function formatIndonesianDate(dateStr) {
-                    if (!dateStr) return '-';
-                    const months = [
-                        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                    ];
-                    for (const m of months) {
-                        if (String(dateStr).toLowerCase().includes(m.toLowerCase())) {
-                            return String(dateStr);
+                    // Date formatter helper (converts YYYY-MM-DD to Indonesian standard: 14 November 2026)
+                    function formatIndonesianDate(dateStr) {
+                        if (!dateStr) return '-';
+                        const months = [
+                            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                        ];
+                        for (const m of months) {
+                            if (String(dateStr).toLowerCase().includes(m.toLowerCase())) {
+                                return String(dateStr);
+                            }
                         }
-                    }
-                    const parts = String(dateStr).split('T')[0].split('-');
-                    if (parts.length === 3) {
-                        const year = parseInt(parts[0], 10);
-                        const monthIdx = parseInt(parts[1], 10) - 1;
-                        const day = parseInt(parts[2], 10);
-                        if (!isNaN(year) && !isNaN(monthIdx) && !isNaN(day) && monthIdx >= 0 && monthIdx < 12) {
-                            return `${day} ${months[monthIdx]} ${year}`;
+                        const parts = String(dateStr).split('T')[0].split('-');
+                        if (parts.length === 3) {
+                            const year = parseInt(parts[0], 10);
+                            const monthIdx = parseInt(parts[1], 10) - 1;
+                            const day = parseInt(parts[2], 10);
+                            if (!isNaN(year) && !isNaN(monthIdx) && !isNaN(day) && monthIdx >= 0 && monthIdx < 12) {
+                                return `${day} ${months[monthIdx]} ${year}`;
+                            }
                         }
+                        const dt = new Date(dateStr);
+                        if (!isNaN(dt.getTime())) {
+                            return `${dt.getDate()} ${months[dt.getMonth()]} ${dt.getFullYear()}`;
+                        }
+                        return String(dateStr);
                     }
-                    const dt = new Date(dateStr);
-                    if (!isNaN(dt.getTime())) {
-                        return `${dt.getDate()} ${months[dt.getMonth()]} ${dt.getFullYear()}`;
+
+                    const formattedDate = formatIndonesianDate(d.TANGGAL || rep.tanggal);
+                    const isRevisi = String(rep.status || '').toUpperCase() === 'REVISI';
+                    const isApproved = String(rep.status || '').toUpperCase() === 'APPROVED';
+
+                    // Value helper
+                    function fmt(val, fallback = '-') {
+                        if (val === undefined || val === null || String(val).trim() === '' || String(val).trim().toLowerCase() === 'null') {
+                            return fallback;
+                        }
+                        return String(val).trim();
                     }
-                    return String(dateStr);
-                }
 
-                const formattedDate = formatIndonesianDate(d.TANGGAL || rep.tanggal);
-                const isRevisi = String(rep.status || '').toUpperCase() === 'REVISI';
-                const isApproved = String(rep.status || '').toUpperCase() === 'APPROVED';
-
-                // Value helper
-                function fmt(val, fallback = '-') {
-                    if (val === undefined || val === null || String(val).trim() === '' || String(val).trim().toLowerCase() === 'null') {
-                        return fallback;
+                    // Status Badge Helper
+                    function formatStatusBadge(statusVal) {
+                        const s = fmt(statusVal, '-');
+                        if (s === '-') return '<span style="color: #94a3b8;">-</span>';
+                        const low = s.toLowerCase();
+                        if (low.includes('unserviceable')) {
+                            return `<span class="doc-badge-status unserviceable"><i class="fa-solid fa-triangle-exclamation me-1"></i>${s}</span>`;
+                        } else if (low.includes('serviceable')) {
+                            return `<span class="doc-badge-status serviceable"><i class="fa-solid fa-circle-check me-1"></i>${s}</span>`;
+                        }
+                        return `<span class="doc-badge-status neutral">${s}</span>`;
                     }
-                    return String(val).trim();
-                }
 
-                // Status Badge Helper
-                function formatStatusBadge(statusVal) {
-                    const s = fmt(statusVal, '-');
-                    if (s === '-') return '<span style="color: #94a3b8;">-</span>';
-                    const low = s.toLowerCase();
-                    if (low.includes('unserviceable')) {
-                        return `<span class="doc-badge-status unserviceable"><i class="fa-solid fa-triangle-exclamation me-1"></i>${s}</span>`;
-                    } else if (low.includes('serviceable')) {
-                        return `<span class="doc-badge-status serviceable"><i class="fa-solid fa-circle-check me-1"></i>${s}</span>`;
+                    // PCI Badge Helper
+                    function formatPciBadge(pciVal) {
+                        const s = fmt(pciVal, '-');
+                        if (s === '-') return '<span style="color: #94a3b8;">-</span>';
+                        const formatted = s.includes('%') ? s : `${s}% PCI`;
+                        return `<span class="doc-badge-pci"><i class="fa-solid fa-gauge-high me-1"></i>${formatted}</span>`;
                     }
-                    return `<span class="doc-badge-status neutral">${s}</span>`;
-                }
 
-                // PCI Badge Helper
-                function formatPciBadge(pciVal) {
-                    const s = fmt(pciVal, '-');
-                    if (s === '-') return '<span style="color: #94a3b8;">-</span>';
-                    const formatted = s.includes('%') ? s : `${s}% PCI`;
-                    return `<span class="doc-badge-pci"><i class="fa-solid fa-gauge-high me-1"></i>${formatted}</span>`;
-                }
+                    // Document Status Text for Section 01
+                    let docStatusText = 'Menunggu Telaah GM';
+                    if (isRevisi) {
+                        docStatusText = 'Sedang Direvisi';
+                    } else if (isApproved) {
+                        docStatusText = 'Disetujui & Diteruskan ke Regional';
+                    }
 
-                // Document Status Text for Section 01
-                let docStatusText = 'Menunggu Telaah GM';
-                if (isRevisi) {
-                    docStatusText = 'Sedang Direvisi';
-                } else if (isApproved) {
-                    docStatusText = 'Disetujui & Diteruskan ke Regional';
-                }
-
-                // Revision Notice Banner (screen view)
-                let revisiBannerHtml = '';
-                if (isRevisi) {
-                    revisiBannerHtml = `
+                    // Revision Notice Banner (screen view)
+                    let revisiBannerHtml = '';
+                    if (isRevisi) {
+                        revisiBannerHtml = `
                     <div class="doc-alert-revisi-banner">
                         <div class="doc-revisi-icon">
                             <i class="fa-solid fa-rotate-left"></i>
@@ -3186,84 +3299,84 @@ function openDetailModal(reportId) {
                         </div>
                     </div>
                     `;
-                }
-
-                // Format Jenis Kerusakan Helper
-                function formatJenisKerusakan(diperbaiki, belum) {
-                    const parts = [];
-                    if (belum && String(belum).trim() !== '' && String(belum).trim() !== '-') {
-                        parts.push(String(belum).trim());
                     }
-                    if (diperbaiki && String(diperbaiki).trim() !== '' && String(diperbaiki).trim() !== '-') {
-                        parts.push(String(diperbaiki).trim());
+
+                    // Format Jenis Kerusakan Helper
+                    function formatJenisKerusakan(diperbaiki, belum) {
+                        const parts = [];
+                        if (belum && String(belum).trim() !== '' && String(belum).trim() !== '-') {
+                            parts.push(String(belum).trim());
+                        }
+                        if (diperbaiki && String(diperbaiki).trim() !== '' && String(diperbaiki).trim() !== '-') {
+                            parts.push(String(diperbaiki).trim());
+                        }
+                        if (parts.length === 0) return '-';
+                        return `- ${parts.join(', ')}`;
                     }
-                    if (parts.length === 0) return '-';
-                    return `- ${parts.join(', ')}`;
-                }
 
-                // Recipients List
-                const recipientList = [];
-                for (const rk of [d.PENERIMA_1, d.PENERIMA_2, d.PENERIMA_3, d.PENERIMA_4]) {
-                    if (rk && String(rk).trim() !== '' && String(rk).trim() !== '-') {
-                        recipientList.push(String(rk).trim());
+                    // Recipients List
+                    const recipientList = [];
+                    for (const rk of [d.PENERIMA_1, d.PENERIMA_2, d.PENERIMA_3, d.PENERIMA_4]) {
+                        if (rk && String(rk).trim() !== '' && String(rk).trim() !== '-') {
+                            recipientList.push(String(rk).trim());
+                        }
                     }
-                }
-                if (recipientList.length === 0) {
-                    recipientList.push('Pak DT API (Direktur Teknik Angkasa Pura Indonesia)');
-                    recipientList.push('Pak GH API (Airport Facility Management Group Head)');
-                }
+                    if (recipientList.length === 0) {
+                        recipientList.push('Pak DT API (Direktur Teknik Angkasa Pura Indonesia)');
+                        recipientList.push('Pak GH API (Airport Facility Management Group Head)');
+                    }
 
-                // Notes List (Catatan Khusus)
-                const rawNotes = [
-                    d.CATATAN_1, d.CATATAN_2, d.CATATAN_3, d.CATATAN_4, d.CATATAN_5, d.CATATAN_6, d.CATATAN_7
-                ].filter(v => v && String(v).trim() !== '' && String(v).trim() !== '-');
+                    // Notes List (Catatan Khusus)
+                    const rawNotes = [
+                        d.CATATAN_1, d.CATATAN_2, d.CATATAN_3, d.CATATAN_4, d.CATATAN_5, d.CATATAN_6, d.CATATAN_7
+                    ].filter(v => v && String(v).trim() !== '' && String(v).trim() !== '-');
 
-                let notesListHtml = '';
-                if (rawNotes.length > 0) {
-                    notesListHtml = `
+                    let notesListHtml = '';
+                    if (rawNotes.length > 0) {
+                        notesListHtml = `
                         <ol class="doc-notes-ordered-list">
                             ${rawNotes.map(note => `<li>${note}</li>`).join('')}
                         </ol>
                     `;
-                } else {
-                    notesListHtml = `
+                    } else {
+                        notesListHtml = `
                         <div class="doc-empty-box">
                             <i class="fa-solid fa-circle-info me-2 text-muted"></i>Tidak ada catatan khusus yang dicantumkan pada laporan inspeksi ini.
                         </div>
                     `;
-                }
+                    }
 
-                // Extra Fields (if any unmapped fields exist)
-                const knownFields = new Set([
-                    'TANGGAL', 'SAPAAN', 'KANTOR_CABANG', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4',
-                    'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK', 'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI',
-                    'RUNWAY_TITIK_BELUM', 'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', 'RUNWAY_MARKA_STD', 'RUNWAY_MARKA_REALISASI',
-                    'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER', 'RUNWAY_WATER_PERF', 'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL', 'RUNWAY_RUBBER_SKID',
-                    'TAXIWAY_STATUS', 'TAXIWAY_NAMA', 'TAXIWAY_PCI', 'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI',
-                    'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', 'TWY_MARKA_STD', 'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER',
-                    'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI', 'APN_JENIS_DIPERBAIKI', 'APN_TITIK_BELUM',
-                    'APN_JENIS_BELUM', 'APN_TITIK_BERULANG', 'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER',
-                    'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF',
-                    'CATATAN_1', 'CATATAN_2', 'CATATAN_3', 'CATATAN_4', 'CATATAN_5', 'CATATAN_6', 'CATATAN_7',
-                    'REPORT_ID', 'STATUS', 'CATATAN_GM', 'TANGGAL_LAPORAN', 'SUBMITTED_BY', 'TIMESTAMP_SUBMIT', 'TIMESTAMP_UPDATE'
-                ]);
+                    // Extra Fields (if any unmapped fields exist)
+                    const knownFields = new Set([
+                        'TANGGAL', 'SAPAAN', 'KANTOR_CABANG', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4',
+                        'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK', 'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI',
+                        'RUNWAY_TITIK_BELUM', 'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', 'RUNWAY_MARKA_STD', 'RUNWAY_MARKA_REALISASI',
+                        'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER', 'RUNWAY_WATER_PERF', 'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL', 'RUNWAY_RUBBER_SKID',
+                        'TAXIWAY_STATUS', 'TAXIWAY_NAMA', 'TAXIWAY_PCI', 'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI',
+                        'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', 'TWY_MARKA_STD', 'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER',
+                        'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI', 'APN_JENIS_DIPERBAIKI', 'APN_TITIK_BELUM',
+                        'APN_JENIS_BELUM', 'APN_TITIK_BERULANG', 'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER',
+                        'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF',
+                        'CATATAN_1', 'CATATAN_2', 'CATATAN_3', 'CATATAN_4', 'CATATAN_5', 'CATATAN_6', 'CATATAN_7',
+                        'REPORT_ID', 'STATUS', 'CATATAN_GM', 'TANGGAL_LAPORAN', 'SUBMITTED_BY', 'TIMESTAMP_SUBMIT', 'TIMESTAMP_UPDATE'
+                    ]);
 
-                const extraPairs = [];
-                for (const [k, v] of Object.entries(d)) {
-                    if (!knownFields.has(k) && v && String(v).trim() !== '' && String(v).trim() !== '-') {
-                        extraPairs.push(`
+                    const extraPairs = [];
+                    for (const [k, v] of Object.entries(d)) {
+                        if (!knownFields.has(k) && v && String(v).trim() !== '' && String(v).trim() !== '-') {
+                            extraPairs.push(`
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">${k.replace(/_/g, ' ')}</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${v}</div>
                             </div>
                         `);
+                        }
                     }
-                }
 
-                let extraSectionHtml = '';
-                if (extraPairs.length > 0) {
-                    extraSectionHtml = `
+                    let extraSectionHtml = '';
+                    if (extraPairs.length > 0) {
+                        extraSectionHtml = `
                     <div class="doc-section-head">
                         <div class="doc-section-badge">F</div>
                         <h2 class="doc-section-heading">PARAMETER & DATA TAMBAHAN</h2>
@@ -3272,12 +3385,12 @@ function openDetailModal(reportId) {
                         ${extraPairs.join('')}
                     </div>
                     `;
-                }
+                    }
 
-                const branchCode = (rep.airport || 'LOP').toUpperCase();
+                    const branchCode = (rep.airport || 'LOP').toUpperCase();
 
-                // Construct Official Executive A4 Portrait Document (Paired Key-Value Format)
-                contentBox.innerHTML = `
+                    // Construct Official Executive A4 Portrait Document (Paired Key-Value Format)
+                    contentBox.innerHTML = `
                     ${revisiBannerHtml}
 
                     <div class="a4-document-page">
@@ -3708,185 +3821,185 @@ function openDetailModal(reportId) {
                         </div>
                     </div>
                 `;
-            } else {
-                contentBox.innerHTML = `<div class="alert alert-danger" style="border-radius: 12px; margin: 2rem;">${res.error || 'Gagal memuat rincian laporan.'}</div>`;
-            }
-        })
-        .catch(err => {
-            contentBox.innerHTML = `<div class="alert alert-danger" style="border-radius: 12px; margin: 2rem;">Gagal terhubung ke server: ${err.message || err}</div>`;
-        });
-}
-
-function closeDetailModal() {
-    document.getElementById('detailModal').style.display = 'none';
-}
-
-function handleDetailModalBackdropClick(e) {
-    if (e.target && e.target.id === 'detailModal') {
-        closeDetailModal();
+                } else {
+                    contentBox.innerHTML = `<div class="alert alert-danger" style="border-radius: 12px; margin: 2rem;">${res.error || 'Gagal memuat rincian laporan.'}</div>`;
+                }
+            })
+            .catch(err => {
+                contentBox.innerHTML = `<div class="alert alert-danger" style="border-radius: 12px; margin: 2rem;">Gagal terhubung ke server: ${err.message || err}</div>`;
+            });
     }
-}
 
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        const modal = document.getElementById('detailModal');
-        if (modal && (modal.style.display === 'flex' || modal.style.display === 'block')) {
+    function closeDetailModal() {
+        document.getElementById('detailModal').style.display = 'none';
+    }
+
+    function handleDetailModalBackdropClick(e) {
+        if (e.target && e.target.id === 'detailModal') {
             closeDetailModal();
         }
     }
-});
 
-function switchModalTab(tabId) {
-    const sections = document.querySelectorAll('.detail-card-group');
-    sections.forEach(sec => {
-        sec.style.display = 'block';
-    });
-}
-
-// Open Revision Modal
-function openRevisionModal(reportId, dateStr) {
-    currentActiveReportId = reportId;
-    currentActiveReportDate = dateStr;
-    closeDetailModal();
-    document.getElementById('revModalMeta').textContent = `Laporan Tanggal: ${dateStr} (ID: ${reportId})`;
-    document.getElementById('revNotesInput').value = '';
-    document.getElementById('revisionModal').style.display = 'flex';
-}
-
-function closeRevisionModal() {
-    document.getElementById('revisionModal').style.display = 'none';
-}
-
-function insertTemplateNote(txt) {
-    const textarea = document.getElementById('revNotesInput');
-    if (textarea.value.trim() !== '') {
-        textarea.value += '\n' + txt;
-    } else {
-        textarea.value = txt;
-    }
-}
-
-// Submit Revision Request
-function submitRevision() {
-    const notes = document.getElementById('revNotesInput').value.trim();
-    if (!notes) {
-        Swal.fire({
-            title: 'Catatan Kosong',
-            text: 'Harap masukkan rincian koreksi/revisi untuk petugas.',
-            icon: 'warning',
-            confirmButtonColor: '#90c1e8'
-        });
-        return;
-    }
-
-    const btn = document.getElementById('btnSubmitRevision');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Menyimpan...';
-
-    fetch('/gm/api/revision', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({
-            report_id: currentActiveReportId,
-            notes: notes,
-            csrf_token: csrfToken
-        })
-    })
-    .then(r => r.json())
-    .then(res => {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Simpan & Kirim ke Petugas';
-
-        if (res.success) {
-            closeRevisionModal();
-            Swal.fire({
-                title: 'Catatan Revisi Tersimpan!',
-                text: 'Status laporan diubah menjadi "Perlu Revisi".\n\nApakah Anda ingin mengirimkan pesan feedback ini langsung ke WhatsApp Petugas?',
-                icon: 'success',
-                showCancelButton: true,
-                confirmButtonText: '<i class="fa-brands fa-whatsapp"></i> Ya, Kirim ke WA Petugas',
-                cancelButtonText: 'Tutup & Segarkan Halaman',
-                confirmButtonColor: '#16a34a',
-                cancelButtonColor: '#64748b'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    if (res.pic_phone) {
-                        let cleanPhone = res.pic_phone.replace(/\D/g, '');
-                        if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
-                        window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(res.staff_message)}`, '_blank');
-                    } else {
-                        Swal.fire('Info', 'Nomor WhatsApp Petugas/PIC cabang belum terdaftar di konfigurasi.', 'info');
-                    }
-                }
-                setTimeout(() => window.location.reload(), 400);
-            });
-        } else {
-            Swal.fire('Gagal Menyimpan', res.error || 'Terjadi kesalahan sistem.', 'error');
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('detailModal');
+            if (modal && (modal.style.display === 'flex' || modal.style.display === 'block')) {
+                closeDetailModal();
+            }
         }
-    })
-    .catch(err => {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Simpan & Kirim ke Petugas';
-        Swal.fire('Error', 'Gagal terhubung ke server', 'error');
     });
-}
 
-// Confirm Approve Laporan
-function confirmApprove(reportId, dateStr) {
-    closeDetailModal();
-    Swal.fire({
-        title: 'Setujui Laporan?',
-        html: `Anda akan menyetujui Laporan Harian Airside tanggal <b>${dateStr}</b>.<br><br><span style="font-size:0.88rem; color:#475569;">Data akan dipindahkan ke Spreadsheet Produksi Utama (DATABASE_REKAP & Tab Harian) dan dihapus dari lembar sementara Staging.</span>`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: '<i class="fa-solid fa-circle-check me-1"></i> Ya, Setujui Laporan',
-        cancelButtonText: 'Batal',
-        confirmButtonColor: '#90c1e8',
-        cancelButtonColor: '#64748b'
-    }).then((result) => {
-        if (result.isConfirmed) {
+    function switchModalTab(tabId) {
+        const sections = document.querySelectorAll('.detail-card-group');
+        sections.forEach(sec => {
+            sec.style.display = 'block';
+        });
+    }
+
+    // Open Revision Modal
+    function openRevisionModal(reportId, dateStr) {
+        currentActiveReportId = reportId;
+        currentActiveReportDate = dateStr;
+        closeDetailModal();
+        document.getElementById('revModalMeta').textContent = `Laporan Tanggal: ${dateStr} (ID: ${reportId})`;
+        document.getElementById('revNotesInput').value = '';
+        document.getElementById('revisionModal').style.display = 'flex';
+    }
+
+    function closeRevisionModal() {
+        document.getElementById('revisionModal').style.display = 'none';
+    }
+
+    function insertTemplateNote(txt) {
+        const textarea = document.getElementById('revNotesInput');
+        if (textarea.value.trim() !== '') {
+            textarea.value += '\n' + txt;
+        } else {
+            textarea.value = txt;
+        }
+    }
+
+    // Submit Revision Request
+    function submitRevision() {
+        const notes = document.getElementById('revNotesInput').value.trim();
+        if (!notes) {
             Swal.fire({
-                title: 'Memproses Persetujuan...',
-                text: 'Menyuntikkan data ke Spreadsheet Produksi Utama.',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
+                title: 'Catatan Kosong',
+                text: 'Harap masukkan rincian koreksi/revisi untuk petugas.',
+                icon: 'warning',
+                confirmButtonColor: '#90c1e8'
             });
+            return;
+        }
 
-            fetch('/gm/api/approve', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                body: JSON.stringify({
-                    report_id: reportId,
-                    csrf_token: csrfToken
-                })
+        const btn = document.getElementById('btnSubmitRevision');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-1"></i> Menyimpan...';
+
+        fetch('/gm/api/revision', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                report_id: currentActiveReportId,
+                notes: notes,
+                csrf_token: csrfToken
             })
+        })
             .then(r => r.json())
             .then(res => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Simpan & Kirim ke Petugas';
+
                 if (res.success) {
-                    // Instantly remove approved row from DOM
-                    const tr = document.getElementById(`row-${reportId}`) || document.querySelector(`tr[data-report-id="${reportId}"]`);
-                    if (tr) tr.remove();
-                    refreshFilterCounts();
-                    const remRows = document.querySelectorAll('#reportsTable tbody tr.report-row');
-                    const statPending = document.getElementById('statPendingCount');
-                    if (statPending) {
-                        const curVal = parseInt(statPending.textContent) || 0;
-                        statPending.textContent = Math.max(0, curVal - 1);
-                    }
-                    const countText = document.getElementById('reportCountText');
-                    if (countText) {
-                        countText.textContent = `Menampilkan ${remRows.length} laporan draf`;
-                    }
-                    if (remRows.length === 0) {
-                        const tbody = document.querySelector('#reportsTable tbody');
-                        if (tbody) {
-                            tbody.innerHTML = `
+                    closeRevisionModal();
+                    Swal.fire({
+                        title: 'Catatan Revisi Tersimpan!',
+                        text: 'Status laporan diubah menjadi "Perlu Revisi".\n\nApakah Anda ingin mengirimkan pesan feedback ini langsung ke WhatsApp Petugas?',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: '<i class="fa-brands fa-whatsapp"></i> Ya, Kirim ke WA Petugas',
+                        cancelButtonText: 'Tutup & Segarkan Halaman',
+                        confirmButtonColor: '#16a34a',
+                        cancelButtonColor: '#64748b'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (res.pic_phone) {
+                                let cleanPhone = res.pic_phone.replace(/\D/g, '');
+                                if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
+                                window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(res.staff_message)}`, '_blank');
+                            } else {
+                                Swal.fire('Info', 'Nomor WhatsApp Petugas/PIC cabang belum terdaftar di konfigurasi.', 'info');
+                            }
+                        }
+                        setTimeout(() => window.location.reload(), 400);
+                    });
+                } else {
+                    Swal.fire('Gagal Menyimpan', res.error || 'Terjadi kesalahan sistem.', 'error');
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Simpan & Kirim ke Petugas';
+                Swal.fire('Error', 'Gagal terhubung ke server', 'error');
+            });
+    }
+
+    // Confirm Approve Laporan
+    function confirmApprove(reportId, dateStr) {
+        closeDetailModal();
+        Swal.fire({
+            title: 'Setujui Laporan?',
+            html: `Anda akan menyetujui Laporan Harian Airside tanggal <b>${dateStr}</b>.<br><br><span style="font-size:0.88rem; color:#475569;">Data akan dipindahkan ke Spreadsheet Produksi Utama (DATABASE_REKAP & Tab Harian) dan dihapus dari lembar sementara Staging.</span>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fa-solid fa-circle-check me-1"></i> Ya, Setujui Laporan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#90c1e8',
+            cancelButtonColor: '#64748b'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Memproses Persetujuan...',
+                    text: 'Menyuntikkan data ke Spreadsheet Produksi Utama.',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                fetch('/gm/api/approve', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        report_id: reportId,
+                        csrf_token: csrfToken
+                    })
+                })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.success) {
+                            // Instantly remove approved row from DOM
+                            const tr = document.getElementById(`row-${reportId}`) || document.querySelector(`tr[data-report-id="${reportId}"]`);
+                            if (tr) tr.remove();
+                            refreshFilterCounts();
+                            const remRows = document.querySelectorAll('#reportsTable tbody tr.report-row');
+                            const statPending = document.getElementById('statPendingCount');
+                            if (statPending) {
+                                const curVal = parseInt(statPending.textContent) || 0;
+                                statPending.textContent = Math.max(0, curVal - 1);
+                            }
+                            const countText = document.getElementById('reportCountText');
+                            if (countText) {
+                                countText.textContent = `Menampilkan ${remRows.length} laporan draf`;
+                            }
+                            if (remRows.length === 0) {
+                                const tbody = document.querySelector('#reportsTable tbody');
+                                if (tbody) {
+                                    tbody.innerHTML = `
                                 <tr id="emptyReportsRow">
                                     <td colspan="6" style="text-align: center; padding: 3.5rem 1rem;">
                                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;">
@@ -3901,128 +4014,128 @@ function confirmApprove(reportId, dateStr) {
                                     </td>
                                 </tr>
                             `;
-                        }
-                    }
-
-                    Swal.fire({
-                        title: 'Laporan Berhasil Disetujui!',
-                        text: 'Laporan resmi telah tercatat di Spreadsheet Produksi Utama dan dihapus dari Staging.\n\nApakah Anda ingin meneruskan laporan ke WhatsApp Admin Regional II?',
-                        icon: 'success',
-                        showCancelButton: true,
-                        confirmButtonText: '<i class="fa-brands fa-whatsapp"></i> Ya, Teruskan ke Admin Regional',
-                        cancelButtonText: 'Selesai & Segarkan',
-                        confirmButtonColor: '#16a34a',
-                        cancelButtonColor: '#64748b'
-                    }).then((forwardRes) => {
-                        if (forwardRes.isConfirmed) {
-                            if (res.admin_phone) {
-                                let cleanAdmin = res.admin_phone.replace(/\D/g, '');
-                                if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
-                                window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
-                            } else {
-                                Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
+                                }
                             }
-                        }
-                        setTimeout(() => window.location.reload(), 400);
-                    });
-                } else {
-                    const errorMsg = res.error || 'Terjadi kesalahan sistem saat memindahkan data.';
-                    const isDuplicate = errorMsg.includes('SUDAH PERNAH DIISI') || errorMsg.includes('duplikasi');
-                    
-                    if (isDuplicate) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Persetujuan Gagal (Duplikasi)',
-                            html: `<div style="text-align: left; font-size: 0.95rem; line-height: 1.5;">
+
+                            Swal.fire({
+                                title: 'Laporan Berhasil Disetujui!',
+                                text: 'Laporan resmi telah tercatat di Spreadsheet Produksi Utama dan dihapus dari Staging.\n\nApakah Anda ingin meneruskan laporan ke WhatsApp Admin Regional II?',
+                                icon: 'success',
+                                showCancelButton: true,
+                                confirmButtonText: '<i class="fa-brands fa-whatsapp"></i> Ya, Teruskan ke Admin Regional',
+                                cancelButtonText: 'Selesai & Segarkan',
+                                confirmButtonColor: '#16a34a',
+                                cancelButtonColor: '#64748b'
+                            }).then((forwardRes) => {
+                                if (forwardRes.isConfirmed) {
+                                    if (res.admin_phone) {
+                                        let cleanAdmin = res.admin_phone.replace(/\D/g, '');
+                                        if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                                        window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
+                                    } else {
+                                        Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
+                                    }
+                                }
+                                setTimeout(() => window.location.reload(), 400);
+                            });
+                        } else {
+                            const errorMsg = res.error || 'Terjadi kesalahan sistem saat memindahkan data.';
+                            const isDuplicate = errorMsg.includes('SUDAH PERNAH DIISI') || errorMsg.includes('duplikasi');
+
+                            if (isDuplicate) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Persetujuan Gagal (Duplikasi)',
+                                    html: `<div style="text-align: left; font-size: 0.95rem; line-height: 1.5;">
                                      <p>${errorMsg}</p>
                                      <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 10px; border-radius: 6px; margin-top: 12px; color: #991b1b; font-size: 0.88rem;">
                                        <strong>Solusi Bersih:</strong> Laporan tanggal ini sudah ada di Spreadsheet Produksi Utama (FIX). Anda dapat menghapus draf pengajuan duplikat ini dari Staging agar daftar antrean telaah bersih kembali.
                                      </div>
                                    </div>`,
-                            showCancelButton: true,
-                            confirmButtonText: '<i class="fa-solid fa-trash-can me-1"></i> Hapus Draf Duplikat dari Staging',
-                            confirmButtonColor: '#ef4444',
-                            cancelButtonText: 'Tutup',
-                            cancelButtonColor: '#64748b'
-                        }).then((delRes) => {
-                            if (delRes.isConfirmed) {
-                                deleteStagingReport(reportId);
+                                    showCancelButton: true,
+                                    confirmButtonText: '<i class="fa-solid fa-trash-can me-1"></i> Hapus Draf Duplikat dari Staging',
+                                    confirmButtonColor: '#ef4444',
+                                    cancelButtonText: 'Tutup',
+                                    cancelButtonColor: '#64748b'
+                                }).then((delRes) => {
+                                    if (delRes.isConfirmed) {
+                                        deleteStagingReport(reportId);
+                                    }
+                                });
+                            } else {
+                                Swal.fire('Persetujuan Gagal', errorMsg, 'error');
                             }
-                        });
-                    } else {
-                        Swal.fire('Persetujuan Gagal', errorMsg, 'error');
-                    }
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error', 'Gagal terhubung ke server', 'error');
+                    });
+            }
+        });
+    }
+
+    // Confirm Delete Report dari Staging
+    function confirmDeleteReport(reportId, dateStr) {
+        Swal.fire({
+            title: 'Hapus Laporan Pengajuan?',
+            html: `Apakah Anda yakin ingin menghapus laporan tanggal <b>${dateStr}</b> (ID: <code>${reportId}</code>) dari lembar Staging?<br><br><span style="color:#ef4444; font-size:0.85rem;">Tindakan ini tidak dapat dibatalkan.</span>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fa-solid fa-trash-can me-1"></i> Ya, Hapus',
+            confirmButtonColor: '#ef4444',
+            cancelButtonText: 'Batal',
+            cancelButtonColor: '#64748b'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteStagingReport(reportId);
+            }
+        });
+    }
+
+    function deleteStagingReport(reportId) {
+        Swal.fire({
+            title: 'Menghapus Draf...',
+            text: 'Menghapus data laporan dari lembar kerja Staging.',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        fetch('/gm/api/delete-report', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                report_id: reportId,
+                csrf_token: csrfToken
+            })
+        })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Draf Berhasil Dihapus',
+                        text: 'Laporan pengajuan telah dibersihkan dari Staging.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire('Gagal Menghapus', res.error || 'Terjadi kesalahan sistem.', 'error');
                 }
             })
             .catch(err => {
                 Swal.fire('Error', 'Gagal terhubung ke server', 'error');
             });
-        }
-    });
-}
+    }
 
-// Confirm Delete Report dari Staging
-function confirmDeleteReport(reportId, dateStr) {
-    Swal.fire({
-        title: 'Hapus Laporan Pengajuan?',
-        html: `Apakah Anda yakin ingin menghapus laporan tanggal <b>${dateStr}</b> (ID: <code>${reportId}</code>) dari lembar Staging?<br><br><span style="color:#ef4444; font-size:0.85rem;">Tindakan ini tidak dapat dibatalkan.</span>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '<i class="fa-solid fa-trash-can me-1"></i> Ya, Hapus',
-        confirmButtonColor: '#ef4444',
-        cancelButtonText: 'Batal',
-        cancelButtonColor: '#64748b'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            deleteStagingReport(reportId);
-        }
+    // Auto fetch notifications on load
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchNotifications();
+        setInterval(fetchNotifications, 30000);
     });
-}
-
-function deleteStagingReport(reportId) {
-    Swal.fire({
-        title: 'Menghapus Draf...',
-        text: 'Menghapus data laporan dari lembar kerja Staging.',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
-    });
-
-    fetch('/gm/api/delete-report', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({
-            report_id: reportId,
-            csrf_token: csrfToken
-        })
-    })
-    .then(r => r.json())
-    .then(res => {
-        if (res.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Draf Berhasil Dihapus',
-                text: 'Laporan pengajuan telah dibersihkan dari Staging.',
-                timer: 1500,
-                showConfirmButton: false
-            }).then(() => {
-                window.location.reload();
-            });
-        } else {
-            Swal.fire('Gagal Menghapus', res.error || 'Terjadi kesalahan sistem.', 'error');
-        }
-    })
-    .catch(err => {
-        Swal.fire('Error', 'Gagal terhubung ke server', 'error');
-    });
-}
-
-// Auto fetch notifications on load
-document.addEventListener("DOMContentLoaded", function() {
-    fetchNotifications();
-    setInterval(fetchNotifications, 30000);
-});
 </script>
 {% endblock %}
