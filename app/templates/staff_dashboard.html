@@ -4,17 +4,386 @@
 {% block title %}Dashboard Petugas Bandara - InJourney Regional II{% endblock %}
 
 {% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
     /* ==========================================================================
        STAFF DASHBOARD - 100% REPLICA OF EXECUTIVE DESIGN MOCKUP
        ========================================================================== */
 
+    /* ==========================================================================
+       EXECUTIVE CORPORATE SWEETALERT MODAL THEMING
+       ========================================================================== */
+    .swal2-popup.swal-corp-popup {
+        border-radius: 20px !important;
+        padding: 2.2rem 2.25rem 1.85rem 2.25rem !important;
+        box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.24), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+        background: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        max-width: 460px !important;
+        width: 92% !important;
+    }
+
+    .swal-corp-icon-tile {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto 1.15rem auto;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+    }
+
+    .swal-corp-icon-tile.icon-warning-corp {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        color: #d97706;
+        border: 1.5px solid #fde68a;
+        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15);
+    }
+
+    .swal-corp-title {
+        font-size: 1.3rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        margin: 0 0 0.35rem 0 !important;
+        padding: 0 !important;
+        letter-spacing: -0.3px;
+        text-align: center;
+    }
+
+    .swal-corp-sub {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 1.25rem;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+    }
+
+    .swal-corp-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
+        text-align: left;
+    }
+
+    .swal-corp-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.35rem;
+    }
+
+    .swal-corp-card-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .swal-corp-card-date {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .swal-corp-status-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #b91c1c;
+        background: #fee2e2;
+        padding: 0.25rem 0.65rem;
+        border-radius: 9999px;
+    }
+
+    .swal-corp-info-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.65rem;
+        background: #f1f5f9;
+        border-radius: 11px;
+        padding: 0.75rem 0.9rem;
+        font-size: 0.82rem;
+        line-height: 1.45;
+        color: #475569;
+        margin-bottom: 1rem;
+        text-align: left;
+    }
+
+    .swal-corp-info-note i {
+        color: #0284c7;
+        margin-top: 2px;
+        font-size: 0.95rem;
+    }
+
+    .swal-corp-rec-box {
+        background: #f0fdf4;
+        border: 1.5px dashed #86efac;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.25rem;
+        text-align: left;
+    }
+
+    .swal-corp-rec-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #15803d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 2px;
+    }
+
+    .swal-corp-rec-value {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #14532d;
+    }
+
+    .swal-corp-popup .swal2-close {
+        color: #94a3b8 !important;
+        font-size: 1.4rem !important;
+        transition: color 0.15s ease !important;
+        top: 0.75rem !important;
+        right: 0.75rem !important;
+    }
+
+    .swal-corp-popup .swal2-close:hover {
+        color: #334155 !important;
+    }
+
+    .swal-corp-popup .swal2-timer-progress-bar {
+        background: linear-gradient(90deg, #0284c7 0%, #10b981 100%) !important;
+        height: 3px !important;
+    }
+
+    .swal-corp-actions-bar {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.65rem !important;
+        width: 100% !important;
+        margin: 0.5rem 0 0 0 !important;
+        padding: 0 !important;
+    }
+
+    .swal-corp-btn-primary {
+        background: #90c1e8 !important;
+        color: #002b49 !important;
+        border: none !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        font-size: 0.9rem !important;
+        padding: 0.82rem 1.25rem !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 14px rgba(144, 193, 232, 0.45) !important;
+        transition: all 0.2s ease !important;
+        width: 100% !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+    }
+
+    .swal-corp-btn-primary:hover {
+        background: #7bb5e3 !important;
+        color: #001f35 !important;
+        box-shadow: 0 6px 20px rgba(144, 193, 232, 0.55) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    .swal-corp-btn-secondary {
+        background: #ffffff !important;
+        color: #64748b !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        font-size: 0.86rem !important;
+        padding: 0.72rem 1.25rem !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        width: 100% !important;
+    }
+
+    .swal-corp-btn-secondary:hover {
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        border-color: #94a3b8 !important;
+    }
+
+    /* ==========================================================================
+       FLATPICKR MONTH-LOCKED CORPORATE THEMING
+       ========================================================================== */
+    .flatpickr-calendar {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        border-radius: 14px !important;
+        box-shadow: 0 16px 36px rgba(0, 43, 73, 0.16), 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+        overflow: hidden !important;
+        z-index: 99999 !important;
+    }
+
+    .flatpickr-months {
+        background: linear-gradient(135deg, #002b49 0%, #003366 100%) !important;
+        padding: 8px 0 6px 0 !important;
+        border-top-left-radius: 14px !important;
+        border-top-right-radius: 14px !important;
+    }
+
+    /* STRICT LOCK: Sembunyikan Panah Navigasi Prev & Next Bulan */
+    .flatpickr-calendar.month-locked .flatpickr-prev-month,
+    .flatpickr-calendar.month-locked .flatpickr-next-month {
+        display: none !important;
+    }
+
+    /* STRICT LOCK: Kunci Header Bulan & Tahun agar tidak bisa diklik / dirubah */
+    .flatpickr-calendar.month-locked .flatpickr-current-month {
+        pointer-events: none !important;
+        padding: 4px 0 2px 0 !important;
+        font-size: 1.05rem !important;
+        color: #ffffff !important;
+        text-align: center !important;
+        cursor: default !important;
+    }
+
+    .flatpickr-calendar.month-locked .flatpickr-current-month .cur-month {
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        letter-spacing: 0.3px !important;
+    }
+
+    .flatpickr-calendar.month-locked .flatpickr-current-month .cur-year {
+        font-weight: 700 !important;
+        color: #93c5fd !important;
+    }
+
+    .flatpickr-calendar.month-locked .flatpickr-current-month .numInputWrapper {
+        display: none !important;
+    }
+
+    .flatpickr-weekdays {
+        background: #f8fafc !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        padding: 6px 0 !important;
+    }
+
+    span.flatpickr-weekday {
+        color: #475569 !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+    }
+
+    .flatpickr-day {
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
+        position: relative !important;
+        margin: 2px !important;
+        transition: all 0.15s ease !important;
+        border: 1px solid transparent !important;
+    }
+
+    .flatpickr-day:hover {
+        background: #e0f2fe !important;
+        color: #0284c7 !important;
+        border-color: #bae6fd !important;
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.selected:hover {
+        background: #90c1e8 !important;
+        border-color: #90c1e8 !important;
+        color: #002b49 !important;
+        box-shadow: 0 4px 10px rgba(144, 193, 232, 0.45) !important;
+        font-weight: 800 !important;
+    }
+
+    .flatpickr-day.flatpickr-disabled,
+    .flatpickr-day.flatpickr-disabled:hover {
+        color: #cbd5e1 !important;
+        background: transparent !important;
+        cursor: not-allowed !important;
+    }
+
+    /* Indikator Status Tanggal */
+    .flatpickr-day.day-status-filled {
+        background-color: #f0fdf4 !important;
+        color: #15803d !important;
+        font-weight: 700 !important;
+    }
+    .flatpickr-day.day-status-filled::after {
+        content: '';
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: #16a34a;
+    }
+
+    .flatpickr-day.day-status-pending {
+        background-color: #fffbeb !important;
+        color: #b45309 !important;
+        font-weight: 700 !important;
+    }
+    .flatpickr-day.day-status-pending::after {
+        content: '';
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: #d97706;
+    }
+
+    .flatpickr-day.day-status-revision {
+        background-color: #fef2f2 !important;
+        color: #b91c1c !important;
+        font-weight: 700 !important;
+    }
+    .flatpickr-day.day-status-revision::after {
+        content: '';
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: #dc2626;
+    }
+
+    .flatpickr-day.day-status-recommended {
+        outline: 2px dashed #0284c7 !important;
+        outline-offset: -2px !important;
+    }
+
+    .theme-control-input.flatpickr-custom-input {
+        background-color: #ffffff !important;
+        cursor: pointer !important;
+        font-weight: 600 !important;
+        color: #0f172a !important;
+    }
+
     :root {
         --theme-navy: #002b49;
         --theme-blue: #0284c7;
         --theme-blue-hover: #0369a1;
-        --theme-btn-gradient: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        --theme-btn-gradient-hover: linear-gradient(135deg, #002850 0%, #0369a1 100%);
+        --theme-btn-gradient: #90c1e8;
+        --theme-btn-gradient-hover: #7bb5e3;
         --theme-cyan: #0284c7;
         --theme-slate-900: #0f172a;
         --theme-slate-700: #334155;
@@ -117,18 +486,23 @@
         gap: 1.5rem;
     }
 
+    /* Notification Bell & Dropdown Component */
+    .topbar-notif-wrap {
+        position: relative;
+    }
+
     .topbar-notif-btn {
         position: relative;
         background: transparent;
-        border: none;
+        border: 1px solid #e2e8f0;
         width: 40px;
         height: 40px;
-        border-radius: 10px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         color: var(--theme-slate-600);
-        font-size: 1.25rem;
+        font-size: 1.15rem;
         cursor: pointer;
         transition: all 0.2s ease;
     }
@@ -136,17 +510,338 @@
     .topbar-notif-btn:hover {
         background-color: #f1f5f9;
         color: var(--theme-slate-900);
+        border-color: #cbd5e1;
     }
 
     .notif-badge-dot {
         position: absolute;
-        top: 8px;
-        right: 9px;
+        top: 6px;
+        right: 6px;
         width: 8px;
         height: 8px;
         border-radius: 50%;
         background-color: #ef4444;
         border: 2px solid #ffffff;
+        animation: pulseBadge 2s infinite ease-in-out;
+    }
+
+    .notif-badge-count {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: #ffffff;
+        font-size: 0.68rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 5px rgba(220, 38, 38, 0.4);
+    }
+
+    @keyframes pulseBadge {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.25); opacity: 0.85; }
+    }
+
+    .notif-dropdown-card {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.65rem;
+        width: 380px;
+        max-width: 92vw;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 14px 35px -5px rgba(15, 23, 42, 0.16), 0 6px 12px rgba(0, 0, 0, 0.04);
+        z-index: 1060;
+        overflow: hidden;
+        animation: fadeInNotif 0.18s ease-out;
+    }
+
+    .notif-dropdown-card.show {
+        display: block;
+    }
+
+    @keyframes fadeInNotif {
+        from { opacity: 0; transform: translateY(-6px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .notif-dropdown-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.85rem 1.15rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .notif-hdr-left {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    .notif-hdr-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #e0f2fe;
+        color: #0284c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.88rem;
+    }
+
+    .notif-hdr-title {
+        display: block;
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #0f172a;
+        line-height: 1.2;
+    }
+
+    .notif-hdr-sub {
+        display: block;
+        font-size: 0.72rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .notif-btn-mark-all {
+        border: none;
+        background: transparent;
+        color: #0284c7;
+        font-size: 0.74rem;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0.3rem 0.5rem;
+        border-radius: 6px;
+        transition: background 0.15s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .notif-btn-mark-all:hover {
+        background: #e0f2fe;
+    }
+
+    .notif-list-body {
+        max-height: 380px;
+        overflow-y: auto;
+        padding: 0.5rem 0;
+    }
+
+    .notif-list-body::-webkit-scrollbar {
+        width: 5px;
+    }
+    .notif-list-body::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .notif-item {
+        padding: 0.85rem 1.15rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        gap: 0.75rem;
+        transition: background-color 0.15s ease;
+        position: relative;
+    }
+
+    .notif-item:last-child {
+        border-bottom: none;
+    }
+
+    .notif-item.unread {
+        background-color: #f8fafc;
+    }
+
+    .notif-item:hover {
+        background-color: #f1f5f9;
+    }
+
+    .notif-item-icon-box {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+
+    .icon-box-revisi {
+        background: #ffedd5;
+        color: #ea580c;
+    }
+
+    .icon-box-approved {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .icon-box-pending {
+        background: #e0f2fe;
+        color: #0284c7;
+    }
+
+    .icon-box-info {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .notif-item-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .notif-item-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .notif-pill {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .pill-notif-revisi {
+        background: #fff7ed;
+        color: #c2410c;
+        border: 1px solid #fed7aa;
+    }
+
+    .pill-notif-approved {
+        background: #f0fdf4;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+    }
+
+    .pill-notif-pending {
+        background: #f0f9ff;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+    }
+
+    .notif-item-time {
+        font-size: 0.7rem;
+        color: #94a3b8;
+        white-space: nowrap;
+    }
+
+    .notif-item-title {
+        font-size: 0.84rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.2rem;
+        line-height: 1.3;
+    }
+
+    .notif-item-msg {
+        font-size: 0.78rem;
+        color: #475569;
+        line-height: 1.4;
+        margin-bottom: 0.4rem;
+        word-break: break-word;
+    }
+
+    .notif-item-meta {
+        font-size: 0.72rem;
+        color: #64748b;
+        margin-bottom: 0.45rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .notif-action-btn-revisi {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.38rem 0.85rem;
+        border-radius: 8px;
+        background: #ea580c;
+        color: #ffffff;
+        font-size: 0.76rem;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    .notif-action-btn-revisi:hover {
+        background: #c2410c;
+    }
+
+    .notif-action-btn-edit {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.38rem 0.85rem;
+        border-radius: 8px;
+        background: #0284c7;
+        color: #ffffff;
+        font-size: 0.76rem;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    .notif-action-btn-edit:hover {
+        background: #0369a1;
+    }
+
+    .notif-empty-box {
+        padding: 2.5rem 1rem;
+        text-align: center;
+        color: #94a3b8;
+    }
+
+    .notif-empty-box i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: #cbd5e1;
+    }
+
+    .notif-dropdown-footer {
+        padding: 0.65rem 1.15rem;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+        font-size: 0.72rem;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .status-indicator-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #22c55e;
+        display: inline-block;
+        margin-right: 0.35rem;
     }
 
     /* User Profile Pill */
@@ -205,20 +900,22 @@
         margin-left: 0.25rem;
     }
 
-    /* User Dropdown Menu */
+    /* User Dropdown Menu with Embedded Status Info */
     .user-dropdown-card {
         display: none;
         position: absolute;
         top: 100%;
         right: 0;
         margin-top: 0.6rem;
-        width: 230px;
+        width: 285px;
         background-color: #ffffff;
         border: 1px solid var(--theme-border);
-        border-radius: 14px;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 4px 10px rgba(0, 0, 0, 0.03);
-        padding: 0.5rem 0;
+        border-radius: 16px;
+        box-shadow: 0 14px 35px -5px rgba(15, 23, 42, 0.16), 0 4px 10px rgba(0, 0, 0, 0.03);
+        padding: 0;
         z-index: 1050;
+        overflow: hidden;
+        animation: fadeInNotif 0.18s ease-out;
     }
 
     .user-dropdown-card.show {
@@ -226,13 +923,15 @@
     }
 
     .user-dropdown-header {
-        padding: 0.75rem 1rem;
+        padding: 0.85rem 1.15rem;
+        background: #f8fafc;
         border-bottom: 1px solid #f1f5f9;
     }
 
     .user-dropdown-header strong {
         display: block;
-        font-size: 0.875rem;
+        font-size: 0.88rem;
+        font-weight: 700;
         color: #0f172a;
     }
 
@@ -241,11 +940,111 @@
         color: #64748b;
     }
 
+    .user-dropdown-status-box {
+        padding: 0.75rem 0.95rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        background: #ffffff;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .user-status-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.5rem 0.75rem;
+        transition: background 0.15s ease;
+    }
+
+    .user-status-item:hover {
+        background: #f1f5f9;
+    }
+
+    .user-status-left {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    .user-status-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .user-status-icon.icon-plane {
+        background: #90c1e8;
+        color: #002b49;
+        box-shadow: 0 2px 6px rgba(144, 193, 232, 0.45);
+    }
+
+    .user-status-icon.icon-sheet {
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #16a34a;
+    }
+
+    .user-status-icon.icon-calendar {
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        color: #0284c7;
+    }
+
+    .user-status-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+    }
+
+    .user-status-kicker {
+        font-size: 0.64rem;
+        font-weight: 700;
+        color: #64748b;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+    }
+
+    .user-status-value {
+        font-size: 0.84rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .user-status-value.text-green {
+        color: #16a34a;
+    }
+
+    .user-status-badge {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 6px;
+    }
+
+    .badge-sheet-on {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .badge-sheet-off {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
     .user-dropdown-link {
         display: flex;
         align-items: center;
         gap: 0.65rem;
-        padding: 0.65rem 1rem;
+        padding: 0.75rem 1.15rem;
         font-size: 0.84rem;
         font-weight: 600;
         color: #ef4444;
@@ -279,11 +1078,11 @@
         background-image: url("{{ url_for('static', filename='img/staff-hero-bg.jpg') }}");
         background-size: cover;
         background-position: center right;
-        min-height: 225px;
+        min-height: 165px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 2.25rem 2.5rem;
+        padding: 2rem 2.5rem;
         border: 1px solid rgba(226, 232, 240, 0.9);
         box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
         box-sizing: border-box;
@@ -385,9 +1184,9 @@
     }
 
     .status-col-icon.icon-plane {
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        color: #ffffff;
-        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+        background: #90c1e8;
+        color: #002b49;
+        box-shadow: 0 2px 6px rgba(144, 193, 232, 0.45);
     }
 
     .status-col-icon.icon-sheet {
@@ -456,14 +1255,14 @@
         width: 44px;
         height: 44px;
         border-radius: 12px;
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        color: #ffffff;
+        background: #90c1e8;
+        color: #002b49;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.2rem;
         flex-shrink: 0;
-        box-shadow: 0 3px 10px rgba(2, 132, 199, 0.25);
+        box-shadow: 0 3px 10px rgba(144, 193, 232, 0.45);
     }
 
     .staging-meta-wrap {
@@ -597,9 +1396,9 @@
     }
 
     .stepper-cell.active .step-num-bubble {
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        color: #ffffff;
-        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+        background: #90c1e8;
+        color: #002b49;
+        box-shadow: 0 2px 8px rgba(144, 193, 232, 0.55);
     }
 
     .step-labels-col {
@@ -680,14 +1479,14 @@
         width: 46px;
         height: 46px;
         border-radius: 12px;
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        color: #ffffff;
+        background: #90c1e8;
+        color: #002b49;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.3rem;
         flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+        box-shadow: 0 4px 12px rgba(144, 193, 232, 0.45);
     }
 
     .step-main-title {
@@ -853,6 +1652,34 @@
         box-shadow: 0 0 0 3.5px rgba(2, 132, 199, 0.15);
     }
 
+    .theme-control-input.field-locked {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+        color: #1e293b;
+        font-weight: 600;
+        cursor: default;
+        padding-right: 2.75rem;
+    }
+
+    .theme-control-input.field-locked:hover,
+    .theme-control-input.field-locked:focus {
+        border-color: #cbd5e1;
+        box-shadow: none;
+        outline: none;
+    }
+
+    .field-locked-badge {
+        position: absolute;
+        right: 1.05rem;
+        color: #94a3b8;
+        font-size: 0.85rem;
+        pointer-events: none;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     select.theme-control-input {
         appearance: none;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
@@ -913,8 +1740,8 @@
     }
 
     .btn-action-next {
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        color: #ffffff;
+        background: #90c1e8;
+        color: #002b49;
         border: none;
         border-radius: 12px;
         height: 48px;
@@ -927,24 +1754,25 @@
         gap: 0.55rem;
         cursor: pointer;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.28);
+        box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45);
         letter-spacing: 0.2px;
     }
 
     .btn-action-next:hover {
-        background: linear-gradient(135deg, #002850 0%, #0369a1 100%);
+        background: #7bb5e3;
+        color: #001f35;
         transform: translateY(-2px);
-        box-shadow: 0 10px 26px rgba(2, 132, 199, 0.38);
+        box-shadow: 0 8px 22px rgba(144, 193, 232, 0.55);
     }
 
     .btn-action-next:active {
         transform: translateY(0);
-        box-shadow: 0 3px 10px rgba(2, 132, 199, 0.2);
+        box-shadow: 0 2px 8px rgba(144, 193, 232, 0.3);
     }
 
     .btn-action-submit {
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        color: #ffffff;
+        background: #90c1e8;
+        color: #002b49;
         border: none;
         border-radius: 12px;
         height: 48px;
@@ -956,20 +1784,21 @@
         align-items: center;
         gap: 0.65rem;
         cursor: pointer;
-        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.32);
+        box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45);
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         letter-spacing: 0.2px;
     }
 
     .btn-action-submit:hover {
-        background: linear-gradient(135deg, #002850 0%, #0369a1 100%);
+        background: #7bb5e3;
+        color: #001f35;
         transform: translateY(-2px);
-        box-shadow: 0 10px 28px rgba(2, 132, 199, 0.42);
+        box-shadow: 0 8px 24px rgba(144, 193, 232, 0.55);
     }
 
     .btn-action-submit:active {
         transform: translateY(0);
-        box-shadow: 0 3px 10px rgba(2, 132, 199, 0.2);
+        box-shadow: 0 2px 8px rgba(144, 193, 232, 0.3);
     }
 
     /* Responsive Adjustments */
@@ -1033,6 +1862,53 @@
             padding: 1.15rem 1rem;
         }
     }
+
+    /* ==========================================================================
+       7. DATE STATUS ALERT (INPUT VALIDATION)
+       ========================================================================== */
+
+    /* Date Status Alert Below Input */
+    .date-status-alert {
+        margin-top: 0.5rem;
+        padding: 0.6rem 0.85rem;
+        border-radius: 8px;
+        font-size: 0.825rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        line-height: 1.4;
+        animation: fadeInAlert 0.25s ease-out;
+    }
+
+    @keyframes fadeInAlert {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .date-status-alert.alert-warning {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+    }
+
+    .date-status-alert.alert-pending {
+        background-color: #fffbeb;
+        border: 1px solid #fde68a;
+        color: #92400e;
+    }
+
+    .date-status-alert.alert-revision {
+        background-color: #faf5ff;
+        border: 1px solid #e9d5ff;
+        color: #6b21a8;
+    }
+
+    .date-status-alert.alert-success {
+        background-color: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        color: #166534;
+    }
 </style>
 {% endblock %}
 
@@ -1050,11 +1926,42 @@
 
         <!-- Right Side Actions: Notification Bell + User Profile Dropdown -->
         <div class="topbar-actions">
-            <!-- Notification Bell with Red Indicator Dot -->
-            <button type="button" class="topbar-notif-btn" title="Notifikasi Sistem" onclick="showSystemNotif()">
-                <i class="fa-regular fa-bell"></i>
-                <span class="notif-badge-dot"></span>
-            </button>
+            <!-- Notification Bell with Dropdown Menu -->
+            <div class="topbar-notif-wrap">
+                <button type="button" class="topbar-notif-btn" id="topbarNotifBtn" title="Notifikasi Sistem" onclick="toggleNotifDropdown(event)">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge-dot" id="notifBadgeDot" style="display: none;"></span>
+                    <span class="notif-badge-count" id="notifBadgeCount" style="display: {% if notif_badge_num is defined and notif_badge_num > 0 %}flex{% else %}none{% endif %};">{{ notif_badge_num|default(0) }}</span>
+                </button>
+
+                <!-- Notification Dropdown Menu -->
+                <div class="notif-dropdown-card" id="notifDropdownCard">
+                    <div class="notif-dropdown-header">
+                        <div class="notif-hdr-left">
+                            <div class="notif-hdr-icon">
+                                <i class="fa-solid fa-bell"></i>
+                            </div>
+                            <div>
+                                <strong class="notif-hdr-title">Notifikasi Laporan Airside</strong>
+                                <span class="notif-hdr-sub" id="notifUnreadText">Memuat notifikasi...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notif-list-body" id="notifListBody">
+                        <div style="text-align: center; padding: 2.5rem 1rem; color: #94a3b8;">
+                            <i class="fa-solid fa-circle-notch fa-spin fa-lg" style="color: #0284c7;"></i>
+                            <p style="margin-top: 0.6rem; font-size: 0.8rem; font-weight: 500;">Memuat notifikasi...</p>
+                        </div>
+                    </div>
+                    <div class="notif-dropdown-footer">
+                        <div class="notif-ftr-status">
+                            <span class="status-indicator-dot"></span>
+                            <span>Cabang {{ current_user.airport | default('LOP') }}</span>
+                        </div>
+                        <span style="font-size: 0.7rem; color: #94a3b8;">Sistem Terhubung</span>
+                    </div>
+                </div>
+            </div>
 
             <!-- User Profile Pill -->
             <div class="topbar-user-wrap" onclick="toggleUserDropdown(event)">
@@ -1067,12 +1974,57 @@
                 </div>
                 <i class="fa-solid fa-chevron-down user-caret-icon"></i>
 
-                <!-- Dropdown Menu -->
+                <!-- Dropdown Menu with Embedded Status Info -->
                 <div class="user-dropdown-card" id="userDropdownCard">
                     <div class="user-dropdown-header">
-                        <strong>{{ current_user.name | default('Muhammad Hifzil') }}</strong>
+                        <strong>{{ current_user.name | default('Petugas LOP') }}</strong>
                         <small>Akun Kedinasan • Cabang {{ current_user.airport | default('LOP') }}</small>
                     </div>
+
+                    <!-- Status Operasional Cabang -->
+                    <div class="user-dropdown-status-box">
+                        <div class="user-status-item">
+                            <div class="user-status-left">
+                                <div class="user-status-icon icon-plane">
+                                    <i class="fa-solid fa-plane"></i>
+                                </div>
+                                <div class="user-status-info">
+                                    <span class="user-status-kicker">CABANG</span>
+                                    <strong class="user-status-value">{{ current_user.airport | default('LOP') }}</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="user-status-item">
+                            <div class="user-status-left">
+                                <div class="user-status-icon icon-sheet">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </div>
+                                <div class="user-status-info">
+                                    <span class="user-status-kicker">SPREADSHEET</span>
+                                    <strong class="user-status-value text-green">
+                                        {% if has_sheet_url %}Aktif{% else %}Belum Diatur{% endif %}
+                                    </strong>
+                                </div>
+                            </div>
+                            <span class="user-status-badge {% if has_sheet_url %}badge-sheet-on{% else %}badge-sheet-off{% endif %}">
+                                {% if has_sheet_url %}Online{% else %}Offline{% endif %}
+                            </span>
+                        </div>
+
+                        <div class="user-status-item">
+                            <div class="user-status-left">
+                                <div class="user-status-icon icon-calendar">
+                                    <i class="fa-regular fa-calendar-check"></i>
+                                </div>
+                                <div class="user-status-info">
+                                    <span class="user-status-kicker">BULAN AKTIF</span>
+                                    <strong class="user-status-value" id="profileActiveMonth">{{ active_month_label or 'November 2026' }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="/api/auth/logout" class="user-dropdown-link">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                         <span>Keluar dari Sistem</span>
@@ -1100,114 +2052,8 @@
                 Pencatatan data inspeksi runway, taxiway, apron, dan pemeliharaan fasilitas harian cabang.
             </p>
         </div>
-
-        <!-- Floating Quick Status Widget (3 Columns) -->
-        <div class="hero-status-widget">
-            <!-- Column 1: Cabang -->
-            <div class="status-col-item">
-                <div class="status-col-icon icon-plane">
-                    <i class="fa-solid fa-plane"></i>
-                </div>
-                <span class="status-col-kicker">CABANG</span>
-                <span class="status-col-value">{{ current_user.airport | default('LOP') }}</span>
-            </div>
-
-            <div class="status-col-separator"></div>
-
-            <!-- Column 2: Spreadsheet -->
-            <div class="status-col-item">
-                <div class="status-col-icon icon-sheet">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <span class="status-col-kicker">SPREADSHEET</span>
-                <span class="status-col-value text-green">
-                    {% if has_sheet_url %}Aktif{% else %}Belum Diatur{% endif %}
-                </span>
-            </div>
-
-            <div class="status-col-separator"></div>
-
-            <!-- Column 3: Bulan Aktif -->
-            <div class="status-col-item">
-                <div class="status-col-icon icon-calendar">
-                    <i class="fa-regular fa-calendar-check"></i>
-                </div>
-                <span class="status-col-kicker">BULAN AKTIF</span>
-                <span class="status-col-value" id="heroActiveMonth">Nov 2026</span>
-            </div>
-        </div>
     </div>
 
-    <!-- STAGING STATUS ROW (Menunggu Telaah GM / Revisi) -->
-    {% if staging_reports %}
-        {% for srep in staging_reports %}
-            {% if srep.status == 'REVISI' %}
-            <div class="staging-revision-strip">
-                <div class="staging-left-group">
-                    <div class="staging-tile-icon">
-                        <i class="fa-solid fa-rotate-left"></i>
-                    </div>
-                    <div class="staging-meta-wrap">
-                        <div class="staging-header-line">
-                            <span class="staging-status-label" style="color: #c2410c;">Catatan Koreksi GM</span>
-                            <span class="staging-date-label">Laporan Tanggal {{ srep.tanggal }}</span>
-                        </div>
-                        <div class="staging-sub-line" style="color: #9a3412;">
-                            <strong>Pesan GM:</strong> "{{ srep.catatan_gm or 'Periksa kembali data inspeksi.' }}" • ID: {{ srep.report_id }}
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="staging-edit-action-btn" onclick="loadReportForEdit('{{ srep.report_id }}')">
-                    <i class="fa-solid fa-pencil"></i>
-                    <span>Perbaiki Laporan</span>
-                </button>
-            </div>
-            {% else %}
-            <div class="staging-alert-strip">
-                <div class="staging-left-group">
-                    <div class="staging-tile-icon">
-                        <i class="fa-solid fa-hourglass-half"></i>
-                    </div>
-                    <div class="staging-meta-wrap">
-                        <div class="staging-header-line">
-                            <span class="staging-status-label">Menunggu Telah GM</span>
-                            <span class="staging-date-label">Laporan Tanggal {{ srep.tanggal }}</span>
-                        </div>
-                        <div class="staging-sub-line">
-                            Tersimpan di Sheet Staging • ID: {{ srep.report_id }}
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="staging-edit-action-btn" onclick="loadReportForEdit('{{ srep.report_id }}')">
-                    <i class="fa-solid fa-pencil"></i>
-                    <span>Edit Laporan</span>
-                </button>
-            </div>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-    <!-- Default Staging Display identical to reference mockup -->
-    <div class="staging-alert-strip" id="defaultStagingStrip">
-        <div class="staging-left-group">
-            <div class="staging-tile-icon">
-                <i class="fa-solid fa-hourglass-half"></i>
-            </div>
-            <div class="staging-meta-wrap">
-                <div class="staging-header-line">
-                    <span class="staging-status-label">Menunggu Telah GM</span>
-                    <span class="staging-date-label" id="defaultStagingDate">Laporan Tanggal 2026-11-13</span>
-                </div>
-                <div class="staging-sub-line" id="defaultStagingMeta">
-                    Tersimpan di Sheet Staging • ID: REP-{{ current_user.airport | default('LOP') }}-20261113
-                </div>
-            </div>
-        </div>
-        <button type="button" class="staging-edit-action-btn" onclick="handleDefaultEditClick()">
-            <i class="fa-solid fa-pencil"></i>
-            <span>Edit Laporan</span>
-        </button>
-    </div>
-    {% endif %}
 
     <!-- 5-STEP HORIZONTAL STEPPER NAVIGATION -->
     <div class="stepper-nav-container">
@@ -1238,7 +2084,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="display: inline-block; padding: 0.25rem 0.65rem; background: linear-gradient(135deg, #003366 0%, #0284c7 100%); color: #ffffff; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
+                        <span style="display: inline-block; padding: 0.25rem 0.65rem; background: #90c1e8; color: #002b49; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
                             <i class="fas fa-edit me-1"></i> Mode Edit Laporan
                         </span>
                         <strong style="color: #002b49; font-size: 0.95rem;" id="editReportLabel">Laporan ID: -</strong>
@@ -1288,14 +2134,22 @@
                         <!-- Row 1: Tanggal Laporan & Sapaan Pembuka -->
                         <div class="form-grid-2">
                             <div class="field-block">
-                                <label class="field-label" for="input-TANGGAL">Tanggal Laporan</label>
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <label class="field-label mb-0" for="input-TANGGAL">
+                                        Tanggal Laporan <span class="text-danger">*</span>
+                                    </label>
+                                    <span class="badge bg-light text-primary border" id="labelActiveMonthBadge" style="font-size:0.75rem; font-weight:600;">
+                                        <i class="fa-solid fa-cloud-arrow-down me-1"></i>Bulan: {{ active_month_label or 'November 2026' }}
+                                    </span>
+                                </div>
                                 <div class="field-input-group">
                                     <i class="fa-regular fa-calendar-days field-lead-icon"></i>
-                                    <input type="date" class="theme-control-input" name="TANGGAL" id="input-TANGGAL" required value="2026-11-13">
+                                    <input type="text" class="theme-control-input flatpickr-custom-input" name="TANGGAL" id="input-TANGGAL" required value="" readonly placeholder="Pilih Tanggal Laporan" autocomplete="off">
                                     <button type="button" class="field-trail-clear" onclick="clearDateField()" title="Hapus Tanggal">
                                         <i class="fa-regular fa-circle-xmark"></i>
                                     </button>
                                 </div>
+                                <div id="dateStatusAlert" class="date-status-alert" style="display: none;"></div>
                             </div>
 
                             <div class="field-block">
@@ -1312,18 +2166,18 @@
                             </div>
                         </div>
 
-                        <!-- Row 2: Nomor & Nama Kantor Cabang (Full Width) -->
+                        <!-- Row 2: Nomor & Nama Kantor Cabang (Full Width - Terkunci Sesuai Akun Bandara) -->
                         <div class="form-grid-full">
                             <div class="field-block">
                                 <label class="field-label" for="input-KANTOR_CABANG">Nomor & Nama Kantor Cabang</label>
                                 <div class="field-input-group">
                                     <i class="fa-solid fa-location-dot field-lead-icon"></i>
-                                    <select class="theme-control-input" name="KANTOR_CABANG" id="input-KANTOR_CABANG" required>
-                                        <option value="1. Kantor Cabang LOP" {% if current_user.airport == 'LOP' %}selected{% endif %}>1. Kantor Cabang LOP</option>
-                                        <option value="2. Kantor Cabang DPS" {% if current_user.airport == 'DPS' %}selected{% endif %}>2. Kantor Cabang DPS</option>
-                                        <option value="3. Kantor Cabang BWX" {% if current_user.airport == 'BWX' %}selected{% endif %}>3. Kantor Cabang BWX</option>
-                                        <option value="4. Kantor Cabang KOE" {% if current_user.airport == 'KOE' %}selected{% endif %}>4. Kantor Cabang KOE</option>
-                                    </select>
+                                    <input type="text" class="theme-control-input field-locked" name="KANTOR_CABANG" id="input-KANTOR_CABANG"
+                                           value="{{ airport_info.code if airport_info and airport_info.code else ('1. Kantor Cabang ' ~ (current_user.airport or 'LOP')) }}"
+                                           readonly>
+                                    <span class="field-locked-badge" title="Terkunci otomatis sesuai bandara penugasan ({{ current_user.airport or 'LOP' }})">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -1454,6 +2308,8 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 <script src="{{ url_for('static', filename='js/wizard.js') }}"></script>
 <script>
     // Toggle User Profile Dropdown Menu
@@ -1480,6 +2336,9 @@
         const dateInput = document.getElementById('input-TANGGAL');
         if (dateInput) {
             dateInput.value = '';
+            if (typeof updateDateValidationStatus === 'function') {
+                updateDateValidationStatus('', false);
+            }
             dateInput.focus();
         }
     }
@@ -1500,23 +2359,168 @@
         }
     }
 
-    // System Notification bell click
-    function showSystemNotif() {
-        Swal.fire({
-            icon: 'info',
-            title: 'Notifikasi Sistem Airside',
-            html: `
-                <div style="text-align: left; font-size: 0.88rem; color: #334155; line-height: 1.6;">
-                    <div style="padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;">
-                        <strong style="color: #0284c7;">• Status Sinkronisasi:</strong> Spreadsheet Cabang <strong>{{ current_user.airport | default('LOP') }}</strong> terhubung aktif.
-                    </div>
-                    <div style="padding: 0.5rem 0;">
-                        <strong style="color: #0f172a;">• Periode Aktif:</strong> Siklus pelaporan bulan berjalan telah dibuka.
+    // Notification Dropdown Toggle
+    function toggleNotifDropdown(e) {
+        if (e) e.stopPropagation();
+        const menu = document.getElementById('notifDropdownCard');
+        const userMenu = document.getElementById('userDropdownCard');
+        if (userMenu) userMenu.classList.remove('show');
+        
+        if (menu) {
+            menu.classList.toggle('show');
+            if (menu.classList.contains('show')) {
+                fetchNotifications();
+            }
+        }
+    }
+
+    function closeNotifDropdown() {
+        const menu = document.getElementById('notifDropdownCard');
+        if (menu) menu.classList.remove('show');
+    }
+
+    document.addEventListener('click', function(e) {
+        const notifCard = document.getElementById('notifDropdownCard');
+        if (notifCard && notifCard.classList.contains('show')) {
+            if (!e.target.closest('.topbar-notif-wrap')) {
+                notifCard.classList.remove('show');
+            }
+        }
+    });
+
+    function fetchNotifications() {
+        fetch('/staff/api/notifications')
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    renderNotifications(res.notifications || [], res.unread_count || 0);
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching staff notifications:', err);
+            });
+    }
+
+    function renderNotifications(notifs, unreadCount) {
+        const badgeCount = document.getElementById('notifBadgeCount');
+        const badgeDot = document.getElementById('notifBadgeDot');
+        const unreadText = document.getElementById('notifUnreadText');
+        const body = document.getElementById('notifListBody');
+
+        const totalNotifs = (notifs || []).length;
+        // Selalu tampilkan angka notifikasi jika terdapat notifikasi (apapun bentuknya)
+        const displayCount = unreadCount > 0 ? unreadCount : totalNotifs;
+
+        if (displayCount > 0) {
+            if (badgeCount) {
+                badgeCount.textContent = displayCount > 9 ? '9+' : displayCount;
+                badgeCount.style.display = 'flex';
+            }
+            if (badgeDot) badgeDot.style.display = unreadCount > 0 ? 'block' : 'none';
+            if (unreadText) {
+                if (unreadCount > 0) {
+                    unreadText.textContent = `${unreadCount} notifikasi belum dibaca`;
+                } else {
+                    unreadText.textContent = `${totalNotifs} notifikasi aktif`;
+                }
+            }
+        } else {
+            if (badgeCount) badgeCount.style.display = 'none';
+            if (badgeDot) badgeDot.style.display = 'none';
+            if (unreadText) unreadText.textContent = 'Tidak ada notifikasi';
+        }
+
+        if (!body) return;
+
+        if (!notifs || notifs.length === 0) {
+            body.innerHTML = `
+                <div class="notif-empty-box">
+                    <i class="fa-regular fa-bell-slash"></i>
+                    <div style="font-weight: 700; color: #475569; font-size: 0.88rem; margin-bottom: 0.25rem;">Tidak Ada Notifikasi</div>
+                    <div style="font-size: 0.76rem; color: #94a3b8;">Catatan revisi atau persetujuan laporan oleh GM akan tampil di sini.</div>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        notifs.forEach(n => {
+            const isUnread = !n.is_read;
+            const nType = n.notif_type || 'info';
+            
+            let iconHtml = '';
+            let pillClass = '';
+            let pillText = '';
+            let actionBtnHtml = '';
+
+            if (nType === 'revisi') {
+                iconHtml = '<div class="notif-item-icon-box icon-box-revisi"><i class="fa-solid fa-rotate-left"></i></div>';
+                pillClass = 'pill-notif-revisi';
+                pillText = '<i class="fa-solid fa-circle-exclamation"></i> Perlu Revisi';
+                if (n.report_id) {
+                    actionBtnHtml = `
+                        <div style="margin-top: 0.5rem;">
+                            <button type="button" class="notif-action-btn-revisi" onclick="loadReportForEdit('${n.report_id}'); closeNotifDropdown();">
+                                <i class="fa-solid fa-pencil"></i>
+                                <span>Perbaiki Laporan Sekarang</span>
+                            </button>
+                        </div>
+                    `;
+                }
+            } else if (nType === 'approved') {
+                iconHtml = '<div class="notif-item-icon-box icon-box-approved"><i class="fa-solid fa-circle-check"></i></div>';
+                pillClass = 'pill-notif-approved';
+                pillText = '<i class="fa-solid fa-check"></i> Laporan Disetujui';
+            } else {
+                iconHtml = '<div class="notif-item-icon-box icon-box-pending"><i class="fa-solid fa-hourglass-half"></i></div>';
+                pillClass = 'pill-notif-pending';
+                pillText = '<i class="fa-solid fa-clock"></i> Menunggu GM';
+                actionBtnHtml = '';
+            }
+
+            html += `
+                <div class="notif-item ${isUnread ? 'unread' : ''}" onclick="markNotifRead('${n.id}')">
+                    ${iconHtml}
+                    <div class="notif-item-content">
+                        <div class="notif-item-top">
+                            <span class="notif-pill ${pillClass}">${pillText}</span>
+                            <span class="notif-item-time">${n.created_at || ''}</span>
+                        </div>
+                        <div class="notif-item-title">${n.title || 'Notifikasi Laporan'}</div>
+                        <div class="notif-item-msg">${n.message || ''}</div>
+                        ${n.report_id ? `<div class="notif-item-meta">ID Laporan: ${n.report_id}</div>` : ''}
+                        ${actionBtnHtml}
                     </div>
                 </div>
-            `,
-            confirmButtonText: 'Tutup',
-            confirmButtonColor: '#003366'
+            `;
+        });
+
+        body.innerHTML = html;
+    }
+
+    function markNotifRead(notifId) {
+        if (!notifId) return;
+        fetch('/staff/api/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ notif_id: notifId })
+        }).then(() => {
+            fetchNotifications();
+        });
+    }
+
+    function markAllNotifsRead(e) {
+        if (e) e.stopPropagation();
+        fetch('/staff/api/notifications/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mark_all: true })
+        }).then(() => {
+            fetchNotifications();
         });
     }
 
@@ -1535,7 +2539,15 @@
             if (result.isConfirmed) {
                 document.getElementById('reportWizard').reset();
                 const dateInput = document.getElementById('input-TANGGAL');
-                if (dateInput) dateInput.value = '2026-11-13';
+                if (dateInput) {
+                    const defDate = window.ACTIVE_MONTH_DATA?.next_recommended_date || '';
+                    if (window.staffDatePicker) {
+                        window.staffDatePicker.setDate(defDate, true);
+                    } else {
+                        dateInput.value = defDate;
+                    }
+                    updateDateValidationStatus(defDate, false);
+                }
             }
         });
     }
@@ -1544,7 +2556,11 @@
     function handleDefaultEditClick() {
         const dateInput = document.getElementById('input-TANGGAL');
         if (dateInput) {
-            dateInput.value = '2026-11-13';
+            if (window.staffDatePicker) {
+                window.staffDatePicker.setDate('2026-11-13', true);
+            } else {
+                dateInput.value = '2026-11-13';
+            }
         }
         Swal.fire({
             icon: 'info',
@@ -1592,8 +2608,12 @@
                     for (const [key, val] of Object.entries(data)) {
                         const el = document.getElementById(`input-${key}`) || document.querySelector(`[name="${key}"]`);
                         if (el) {
-                            el.value = val;
-                            el.dispatchEvent(new Event('change', { bubbles: true }));
+                            if (key === 'TANGGAL' && window.staffDatePicker) {
+                                window.staffDatePicker.setDate(val, false);
+                            } else {
+                                el.value = val;
+                                el.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
                         }
                     }
                     
@@ -1615,7 +2635,7 @@
                         icon: 'info',
                         title: 'Mode Edit Aktif',
                         text: `Data laporan tanggal ${rep.tanggal} telah dimuat ke dalam formulir.`,
-                        confirmButtonColor: '#003366'
+                        confirmButtonColor: '#90c1e8'
                     });
                 } else {
                     Swal.fire('Gagal', res.error || 'Data laporan tidak dapat dimuat.', 'error');
@@ -1646,36 +2666,445 @@
         });
     }
 
-    // Synchronize Active Month Constraints on Page Load
-    document.addEventListener("DOMContentLoaded", function() {
+    // ==============================================================================
+    // MANAJEMEN KALENDER STATUS DARI SPREADSHEET FIX & VALIDASI DUPLIKASI
+    // ==============================================================================
+    window.ACTIVE_MONTH_DATA = null;
+
+    function formatIndonesianDate(isoStr) {
+        if (!isoStr) return '-';
+        try {
+            const parts = isoStr.split('-');
+            if (parts.length === 3) {
+                const months = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                const day = parseInt(parts[2], 10);
+                const m = parseInt(parts[1], 10);
+                const y = parts[0];
+                return `${day} ${months[m]} ${y}`;
+            }
+        } catch(e) {}
+        return isoStr;
+    }
+
+    function formatShortDate(isoStr) {
+        if (!isoStr) return '-';
+        try {
+            const parts = isoStr.split('-');
+            if (parts.length === 3) {
+                const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+                return `${parseInt(parts[2], 10)} ${months[parseInt(parts[1], 10)]}`;
+            }
+        } catch(e) {}
+        return isoStr;
+    }
+
+    let staffDatePicker = null;
+
+    function initStaffDatePicker(res) {
         const dateInput = document.getElementById('input-TANGGAL');
-        
-        fetch('/staff/api/active-month')
+        if (!dateInput) return;
+
+        const minDate = res?.min || '2026-11-01';
+        const maxDate = res?.max || '2026-11-30';
+        const defaultDate = res?.next_recommended_date || minDate;
+
+        if (staffDatePicker) {
+            staffDatePicker.set('minDate', minDate);
+            staffDatePicker.set('maxDate', maxDate);
+            staffDatePicker.jumpToDate(minDate);
+            staffDatePicker.redraw();
+            return;
+        }
+
+        dateInput.readOnly = true;
+
+        staffDatePicker = flatpickr(dateInput, {
+            locale: "id",
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "l, d F Y",
+            altInputClass: "theme-control-input flatpickr-custom-input",
+            minDate: minDate,
+            maxDate: maxDate,
+            defaultDate: defaultDate,
+            disableMobile: true,
+            showMonths: 1,
+            onReady: function(selectedDates, dateStr, instance) {
+                instance.calendarContainer.classList.add('month-locked');
+            },
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+                const y = dayElem.dateObj.getFullYear();
+                const m = String(dayElem.dateObj.getMonth() + 1).padStart(2, '0');
+                const d = String(dayElem.dateObj.getDate()).padStart(2, '0');
+                const dateIso = `${y}-${m}-${d}`;
+
+                const data = window.ACTIVE_MONTH_DATA || res;
+                if (data) {
+                    if (data.filled_dates && data.filled_dates.includes(dateIso)) {
+                        dayElem.classList.add('day-status-filled');
+                        dayElem.title = `Sudah Terisi di Sheet Produksi Utama (${dateIso})`;
+                    } else if (data.staging_revision_dates && data.staging_revision_dates.includes(dateIso)) {
+                        dayElem.classList.add('day-status-revision');
+                        dayElem.title = `Status: Revisi Draf (${dateIso})`;
+                    } else if (data.staging_pending_dates && data.staging_pending_dates.includes(dateIso)) {
+                        dayElem.classList.add('day-status-pending');
+                        dayElem.title = `Status: Menunggu Persetujuan GM (${dateIso})`;
+                    }
+                    if (dateIso === data.next_recommended_date) {
+                        dayElem.classList.add('day-status-recommended');
+                    }
+                }
+            },
+            onMonthChange: function(selectedDates, dateStr, instance) {
+                // Strict Month Lock: Snap back to active month
+                instance.jumpToDate(minDate);
+            },
+            onYearChange: function(selectedDates, dateStr, instance) {
+                instance.jumpToDate(minDate);
+            },
+            onChange: function(selectedDates, dateStr, instance) {
+                updateDateValidationStatus(dateStr, true);
+            }
+        });
+
+        window.staffDatePicker = staffDatePicker;
+    }
+
+    function fetchActiveMonthData(forceRefresh = false) {
+        const dateInput = document.getElementById('input-TANGGAL');
+        const refreshIcon = document.getElementById('calRefreshIcon');
+        if (refreshIcon && forceRefresh) {
+            refreshIcon.classList.add('fa-spin');
+        }
+
+        const url = forceRefresh ? '/staff/api/active-month?refresh=1' : '/staff/api/active-month';
+
+        fetch(url)
             .then(r => r.json())
             .then(res => {
-                if (res.success) {
-                    if (dateInput) {
-                        dateInput.min = res.min;
-                        dateInput.max = res.max;
+                if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+                if (!res || !res.success) {
+                    console.warn("Gagal memuat status kalender:", res?.error);
+                    renderCalendarEmptyState(res?.error || 'Gagal terhubung ke Spreadsheet FIX.');
+                    return;
+                }
+
+                window.ACTIVE_MONTH_DATA = res;
+
+                // 1. Update Header & Badges
+                const titleEl = document.getElementById('calDisplayMonthYear');
+                if (titleEl) {
+                    titleEl.textContent = `Bulan Aktif: ${res.display_month_year}`;
+                }
+
+                const monthText = document.getElementById('profileActiveMonth') || document.getElementById('heroActiveMonth');
+                if (monthText && res.display_month_year) {
+                    monthText.textContent = res.display_month_year;
+                }
+
+                const badgeEl = document.getElementById('labelActiveMonthBadge');
+                if (badgeEl && res.display_month_year) {
+                    badgeEl.innerHTML = `<i class="fa-solid fa-cloud-arrow-down me-1"></i>Bulan: ${res.display_month_year}`;
+                }
+
+                // 2. Inisialisasi / Perbarui Flatpickr Terkunci
+                initStaffDatePicker(res);
+
+                // 3. Set Default Date jika form masih kosong
+                const editId = document.getElementById('editReportId')?.value;
+                if (dateInput && !dateInput.value && !editId) {
+                    const defDate = res.next_recommended_date || res.min;
+                    if (window.staffDatePicker) {
+                        window.staffDatePicker.setDate(defDate, true);
+                    } else {
+                        dateInput.value = defDate;
                     }
-                    
-                    const monthText = document.getElementById('heroActiveMonth');
-                    if (monthText && res.month_name) {
-                        monthText.textContent = res.month_name;
-                    }
-                    
-                    // Set default date if within range
-                    if (dateInput && !dateInput.value) {
-                        dateInput.value = res.min || '2026-11-13';
-                    }
-                } else {
-                    const monthText = document.getElementById('heroActiveMonth');
-                    if (monthText) monthText.textContent = "Nov 2026";
+                }
+
+                // 4. Update Status Banner di Bawah Input
+                if (dateInput) {
+                    updateDateValidationStatus(dateInput.value, false);
+                }
+
+                if (forceRefresh) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sinkronisasi Berhasil',
+                        text: 'Status tanggal berhasil diperbarui dari Spreadsheet FIX.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
                 }
             })
             .catch(err => {
-                console.log("Active month fetch error:", err);
+                if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+                console.error("Active month error:", err);
             });
+    }
+
+    function selectCalendarDate(dateStr, triggerWarning = true) {
+        const dateInput = document.getElementById('input-TANGGAL');
+        if (dateInput) {
+            if (window.staffDatePicker) {
+                window.staffDatePicker.setDate(dateStr, true);
+            } else {
+                dateInput.value = dateStr;
+            }
+        }
+        updateDateValidationStatus(dateStr, triggerWarning);
+    }
+
+    function clearDateField() {
+        const dateInput = document.getElementById('input-TANGGAL');
+        if (dateInput) {
+            if (window.staffDatePicker) {
+                window.staffDatePicker.clear();
+            } else {
+                dateInput.value = '';
+            }
+            if (typeof updateDateValidationStatus === 'function') {
+                updateDateValidationStatus('', false);
+            }
+        }
+    }
+
+    function applyRecommendedDate() {
+        if (window.ACTIVE_MONTH_DATA && window.ACTIVE_MONTH_DATA.next_recommended_date) {
+            selectCalendarDate(window.ACTIVE_MONTH_DATA.next_recommended_date, false);
+        }
+    }
+
+    function showDuplicateDateModal(dateStr, res) {
+        const formattedSelected = formatIndonesianDate(dateStr);
+        const recDate = res?.next_recommended_date;
+        const formattedRec = recDate ? formatIndonesianDate(recDate) : '-';
+
+        // 1. Otomatis langsung set tanggal pada formulir & kalender ke tanggal rekomendasi
+        if (recDate && recDate !== dateStr) {
+            const dateInput = document.getElementById('input-TANGGAL');
+            if (window.staffDatePicker) {
+                window.staffDatePicker.setDate(recDate, false);
+            } else if (dateInput) {
+                dateInput.value = recDate;
+            }
+            updateDateValidationStatus(recDate, false);
+        }
+
+        // 2. Tampilkan notifikasi eksekutif tanpa tombol pertanyaan (auto-close & clean)
+        Swal.fire({
+            customClass: {
+                popup: 'swal-corp-popup'
+            },
+            buttonsStyling: false,
+            showConfirmButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
+            timer: 3200,
+            timerProgressBar: true,
+            html: `
+                <div class="swal-corp-icon-tile icon-warning-corp">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <h3 class="swal-corp-title">Tanggal Sudah Terisi</h3>
+                <div class="swal-corp-sub">
+                    <i class="fa-solid fa-cloud-arrow-down"></i> Database Spreadsheet Produksi (FIX)
+                </div>
+
+                <div class="swal-corp-card">
+                    <div class="swal-corp-card-header">
+                        <span class="swal-corp-card-label">Tanggal Dipilih</span>
+                        <span class="swal-corp-status-tag"><i class="fa-solid fa-ban"></i> Terisi</span>
+                    </div>
+                    <div class="swal-corp-card-date">${formattedSelected}</div>
+                </div>
+
+                <div class="swal-corp-info-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        Laporan untuk tanggal ini <strong>sudah tercatat</strong> di lembar kerja utama. Sistem membatasi pengisian hanya pada tanggal yang belum dilaporkan untuk mencegah duplikasi.
+                    </div>
+                </div>
+
+                ${recDate ? `
+                <div class="swal-corp-rec-box" style="margin-bottom: 0.4rem; background: #f0fdf4; border: 1.5px solid #86efac;">
+                    <div class="swal-corp-rec-label" style="display: flex; justify-content: space-between; align-items: center; color: #15803d;">
+                        <span><i class="fa-solid fa-arrow-right-arrow-left me-1"></i> Otomatis Dialihkan Ke</span>
+                        <span style="font-size: 0.68rem; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">Tersedia</span>
+                    </div>
+                    <div class="swal-corp-rec-value" style="font-size: 1.12rem; color: #0f172a; font-weight: 800; margin-top: 0.35rem;">
+                        ${formattedRec}
+                    </div>
+                </div>
+                <div style="font-size: 0.76rem; color: #64748b; text-align: center; margin-top: 0.5rem;">
+                    <i class="fa-regular fa-clock me-1"></i>Tanggal formulir telah disesuaikan otomatis ke tanggal rekomendasi berikutnya.
+                </div>
+                ` : ''}
+            `
+        });
+    }
+
+    function updateDateValidationStatus(dateStr, triggerModal = false) {
+        const alertBox = document.getElementById('dateStatusAlert');
+        if (!alertBox) return;
+
+        if (!dateStr) {
+            alertBox.style.display = 'none';
+            return;
+        }
+
+        const editId = document.getElementById('editReportId')?.value;
+        const res = window.ACTIVE_MONTH_DATA;
+        if (!res) {
+            alertBox.style.display = 'none';
+            return;
+        }
+
+        const filledDates = new Set(res.filled_dates || []);
+        const pendingDates = new Set(res.staging_pending_dates || []);
+        const revisionDates = new Set(res.staging_revision_dates || []);
+
+        alertBox.style.display = 'flex';
+        alertBox.className = 'date-status-alert';
+
+        if (filledDates.has(dateStr)) {
+            // Otomatis langsung alihkan ke tanggal yang disarankan
+            const recDate = res.next_recommended_date;
+            if (recDate && recDate !== dateStr) {
+                const dateInput = document.getElementById('input-TANGGAL');
+                if (window.staffDatePicker) {
+                    window.staffDatePicker.setDate(recDate, false);
+                } else if (dateInput) {
+                    dateInput.value = recDate;
+                }
+                updateDateValidationStatus(recDate, false);
+            }
+
+            if (triggerModal && !editId) {
+                showDuplicateDateModal(dateStr, res);
+            }
+            return;
+        } else if (pendingDates.has(dateStr)) {
+            alertBox.classList.add('alert-pending');
+            alertBox.innerHTML = `
+                <i class="fa-solid fa-hourglass-half text-amber-600 fa-lg"></i>
+                <div>
+                    <strong>Menunggu Telaah GM:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> saat ini sudah tersimpan di Staging dan menunggu persetujuan General Manager.
+                </div>
+            `;
+        } else if (revisionDates.has(dateStr)) {
+            alertBox.classList.add('alert-revision');
+            alertBox.innerHTML = `
+                <i class="fa-solid fa-pencil text-purple-600 fa-lg"></i>
+                <div>
+                    <strong>Perlu Revisi:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> memiliki catatan perbaikan dari GM. Anda dapat mengedit draf tersebut.
+                </div>
+            `;
+        } else {
+            alertBox.classList.add('alert-success');
+            alertBox.innerHTML = `
+                <i class="fa-solid fa-circle-check text-green-600 fa-lg"></i>
+                <div>
+                    <strong>Tanggal Siap Diisi:</strong> Belum ada laporan tercatat untuk tanggal <b>${formatIndonesianDate(dateStr)}</b>. Aman untuk pengajuan baru.
+                </div>
+            `;
+        }
+    }
+
+    // Hook validasi tanggal sebelum Next Step di Wizard
+    window.validateStepDateBeforeNext = function() {
+        const dateInput = document.getElementById('input-TANGGAL');
+        const editId = document.getElementById('editReportId')?.value;
+        if (!dateInput) return true;
+
+        const val = dateInput.value;
+        if (!val) {
+            Swal.fire({
+                customClass: {
+                    popup: 'swal-corp-popup',
+                    confirmButton: 'swal-corp-btn-primary',
+                    actions: 'swal-corp-actions-bar'
+                },
+                buttonsStyling: false,
+                html: `
+                    <div class="swal-corp-icon-tile icon-warning-corp">
+                        <i class="fa-regular fa-calendar-days"></i>
+                    </div>
+                    <h3 class="swal-corp-title">Tanggal Belum Dipilih</h3>
+                    <div class="swal-corp-sub">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Formulir Laporan Harian Airside
+                    </div>
+                    <p style="font-size:0.86rem; color:#475569; margin:0 0 1.25rem 0; line-height: 1.5;">
+                        Harap pilih tanggal laporan pada formulir atau kalender terlebih dahulu sebelum melanjutkan ke langkah berikutnya.
+                    </p>
+                `,
+                confirmButtonText: '<i class="fa-solid fa-check me-1"></i> Mengerti & Pilih Tanggal'
+            });
+            dateInput.focus();
+            return false;
+        }
+
+        const res = window.ACTIVE_MONTH_DATA;
+        if (res && res.filled_dates && !editId) {
+            if (res.filled_dates.includes(val)) {
+                showDuplicateDateModal(val, res);
+                return false;
+            }
+        }
+        return true;
+    };
+
+    // Listeners pada dateInput
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateInput = document.getElementById('input-TANGGAL');
+        if (dateInput) {
+            dateInput.addEventListener('change', function() {
+                if (window.ACTIVE_MONTH_DATA) {
+                    const prefix = `${window.ACTIVE_MONTH_DATA.year}-${String(window.ACTIVE_MONTH_DATA.month).padStart(2, '0')}`;
+                    if (this.value && !this.value.startsWith(prefix)) {
+                        Swal.fire({
+                            customClass: {
+                                popup: 'swal-corp-popup',
+                                confirmButton: 'swal-corp-btn-primary',
+                                actions: 'swal-corp-actions-bar'
+                            },
+                            buttonsStyling: false,
+                            html: `
+                                <div class="swal-corp-icon-tile icon-warning-corp">
+                                    <i class="fa-solid fa-calendar-check"></i>
+                                </div>
+                                <h3 class="swal-corp-title">Bulan Operasional Terkunci</h3>
+                                <div class="swal-corp-sub">
+                                    <i class="fa-solid fa-lock"></i> Periode Aktif: ${window.ACTIVE_MONTH_DATA.display_month_year}
+                                </div>
+                                <p style="font-size:0.86rem; color:#475569; margin:0 0 1.25rem 0; line-height: 1.5;">
+                                    Anda hanya dapat mengisi laporan untuk periode operasional aktif (<strong>${window.ACTIVE_MONTH_DATA.display_month_year}</strong>).
+                                </p>
+                            `,
+                            confirmButtonText: '<i class="fa-solid fa-check me-1"></i> Kembali ke Bulan Aktif'
+                        });
+                        const fallback = window.ACTIVE_MONTH_DATA.next_recommended_date || `${prefix}-01`;
+                        if (window.staffDatePicker) {
+                            window.staffDatePicker.setDate(fallback, true);
+                        } else {
+                            this.value = fallback;
+                        }
+                        return;
+                    }
+                }
+                updateDateValidationStatus(this.value, true);
+            });
+            dateInput.addEventListener('input', function() {
+                updateDateValidationStatus(this.value, true);
+            });
+        }
+
+        // Fetch Data Status Bulan Aktif
+        fetchActiveMonthData(false);
+
+        // Initialize Notifications
+        fetchNotifications();
+        setInterval(fetchNotifications, 30000);
     });
 </script>
 {% endblock %}
+

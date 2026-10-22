@@ -21,8 +21,8 @@
         --theme-blue-hover: #0369a1;
         --theme-blue-light: #f0f9ff;
         --theme-blue-border: #bae6fd;
-        --theme-btn-gradient: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        --theme-btn-gradient-hover: linear-gradient(135deg, #002850 0%, #0369a1 100%);
+        --theme-btn-gradient: #90c1e8;
+        --theme-btn-gradient-hover: #7bb5e3;
         --theme-cyan: #0284c7;
         --theme-slate-900: #0f172a;
         --theme-slate-700: #334155;
@@ -1025,8 +1025,8 @@
     }
 
     .iata-LOP {
-        background-color: #003366;
-        color: #ffffff;
+        background-color: #90c1e8;
+        color: #002b49;
     }
 
     .iata-DPS {
@@ -3999,7 +3999,7 @@
             `,
             icon: 'info',
             confirmButtonText: 'Tutup',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         });
     }
 
@@ -4033,7 +4033,10 @@
                     theme: "light"
                 })
             ],
-            defaultDate: null
+            defaultDate: null,
+            onChange: function(selectedDates, dateStr, instance) {
+                onTargetMonthChanged(dateStr);
+            }
         });
 
         flatpickr("#batchTargetMonth", {
@@ -4145,7 +4148,7 @@
             showCancelButton: true,
             confirmButtonText: '<i class="fa-solid fa-rocket me-1"></i> Ya, Terbitkan & Aktifkan!',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(result => {
             if (result.isConfirmed) {
                 Swal.fire({
@@ -4185,7 +4188,7 @@
                             html: htmlContent,
                             icon: 'success',
                             confirmButtonText: 'Selesai & Segarkan Halaman',
-                            confirmButtonColor: '#003366'
+                            confirmButtonColor: '#90c1e8'
                         }).then(() => {
                             location.reload();
                         });
@@ -4201,13 +4204,35 @@
     }
 
     function saveFleetMatrix() {
+        const bulkSelect = document.getElementById('matrixBulkMonthSelect');
+        let bulkMonth = bulkSelect ? bulkSelect.value : '';
+        let detectedActiveMonth = '';
+
+        // Konversi jika bulkMonth berbentuk "NOV 2026" -> "2026-11"
+        if (bulkMonth) {
+            const mParts = bulkMonth.trim().split(/\s+/);
+            const mMap = {
+                'JAN': '01', 'FEB': '02', 'MAR': '03', 'APR': '04', 'MEI': '05',
+                'JUN': '06', 'JUL': '07', 'AGS': '08', 'SEP': '09', 'OKT': '10',
+                'NOV': '11', 'DES': '12'
+            };
+            if (mParts.length === 2 && mMap[mParts[0].toUpperCase()]) {
+                detectedActiveMonth = `${mParts[1]}-${mMap[mParts[0].toUpperCase()]}`;
+            }
+        }
+
         const airportsData = {};
         ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
             const selectEl = document.getElementById(`matrixSheetSelect-${code}`);
             const currentUrl = selectEl ? selectEl.value : '';
+            const activeOpt = selectEl && selectEl.selectedIndex >= 0 ? selectEl.options[selectEl.selectedIndex] : null;
+            const sheetName = activeOpt ? (activeOpt.getAttribute('data-name') || activeOpt.textContent || '') : '';
+            
             airportsData[code] = {
                 drive_folder: document.getElementById(`matrixFolder-${code}`)?.value?.trim() || '',
                 sheet_url: currentUrl.trim(),
+                sheet_name: sheetName.trim(),
+                active_month: detectedActiveMonth,
                 pic_phone: document.getElementById(`matrixPic-${code}`)?.value?.trim() || '',
                 gm_phone: document.getElementById(`matrixGM-${code}`)?.value?.trim() || ''
             };
@@ -4230,7 +4255,8 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 airports: airportsData,
-                admin: adminData
+                admin: adminData,
+                active_month: detectedActiveMonth
             })
         })
         .then(r => r.json())
@@ -4501,7 +4527,7 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Sinkronkan!',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({
@@ -4547,7 +4573,7 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Tarik Sekarang',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({
@@ -4821,6 +4847,14 @@
                 document.getElementById('templateIdInput').value = conf.template_id || '';
                 document.getElementById('picPhoneInput').value = conf.pic_phone || '';
 
+                const targetMonthInput = document.getElementById('targetMonthInput');
+                if (targetMonthInput) {
+                    targetMonthInput.value = conf.active_month || '';
+                    if (targetMonthInput._flatpickr && conf.active_month) {
+                        targetMonthInput._flatpickr.setDate(conf.active_month, true);
+                    }
+                }
+
                 const cleanFolder = extractDriveIdFromText(conf.drive_folder || '');
                 refreshDropdownList(airportCode, cleanFolder, conf.sheet_url || '');
             }
@@ -4900,11 +4934,68 @@
     }
 
     function updateLinkStatus(url) {
-        // Status indicator hook
+        const select = document.getElementById('sheetUrlSelect');
+        if (!select || select.selectedIndex < 0) return;
+        const opt = select.options[select.selectedIndex];
+        const text = (opt ? opt.textContent : '').toUpperCase();
+        
+        const monthMap = {
+            'JAN': '01', 'FEB': '02', 'MAR': '03', 'APR': '04', 'MEI': '05', 'MAY': '05',
+            'JUN': '06', 'JUL': '07', 'AGS': '08', 'AUG': '08', 'SEP': '09', 'OKT': '10', 'OCT': '10',
+            'NOV': '11', 'DES': '12', 'DEC': '12'
+        };
+        const clean = text.replace(/[^A-Z0-9]/g, ' ');
+        const tokens = clean.split(/\s+/);
+        let foundM = null;
+        let foundY = null;
+        tokens.forEach(tok => {
+            if (/^20\d\d$/.test(tok)) foundY = tok;
+            if (monthMap[tok]) foundM = monthMap[tok];
+        });
+        if (foundM && foundY) {
+            const ym = `${foundY}-${foundM}`;
+            const targetInput = document.getElementById('targetMonthInput');
+            if (targetInput) {
+                targetInput.value = ym;
+                if (targetInput._flatpickr) {
+                    targetInput._flatpickr.setDate(ym, true);
+                }
+            }
+        }
     }
 
-    function onTargetMonthChanged() {
-        // Trigger on month change
+    function onTargetMonthChanged(val) {
+        const targetMonth = val || document.getElementById('targetMonthInput')?.value;
+        const select = document.getElementById('sheetUrlSelect');
+        if (!targetMonth || !select || select.options.length <= 1) return;
+
+        if (targetMonth.includes('-')) {
+            const [y, m] = targetMonth.split('-');
+            const indonesianMonths = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGS", "SEP", "OKT", "NOV", "DES"];
+            const mStr = indonesianMonths[parseInt(m, 10) - 1];
+
+            let matched = false;
+            for (let i = 0; i < select.options.length; i++) {
+                const opt = select.options[i];
+                const text = opt.textContent.toUpperCase();
+                if (text.includes(mStr) && text.includes(y)) {
+                    select.selectedIndex = i;
+                    updateLinkStatus(select.value);
+                    matched = true;
+                    break;
+                }
+            }
+            const hintEl = document.querySelector('#targetMonthInput + .config-field-hint') || document.querySelector('#targetMonthInput')?.parentElement?.querySelector('.config-field-hint');
+            if (!matched) {
+                if (hintEl) {
+                    hintEl.innerHTML = `<span style="color:#e11d48; font-weight:600;"><i class="fa-solid fa-circle-exclamation me-1"></i>Sheet untuk ${mStr} ${y} belum ada di folder Drive. Silakan klik "Buat Sheet Baru" di samping untuk membuatnya otomatis.</span>`;
+                }
+            } else {
+                if (hintEl) {
+                    hintEl.innerHTML = `<span style="color:#16a34a; font-weight:600;"><i class="fa-solid fa-circle-check me-1"></i>Sheet untuk ${mStr} ${y} otomatis terpilih di menu spreadsheet!</span>`;
+                }
+            }
+        }
     }
 
     function formatDateIndonesian(dateStr) {
@@ -5418,7 +5509,7 @@ REGION II`;
                     showCancelButton: true,
                     confirmButtonText: 'Ya, Kirim ke Admin',
                     cancelButtonText: 'Tidak',
-                    confirmButtonColor: '#003366'
+                    confirmButtonColor: '#90c1e8'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         let cleanAdmin = adminPhone.trim().replace(/\D/g, '');
@@ -5762,7 +5853,7 @@ REGION II`;
             showCancelButton: true,
             confirmButtonText: 'Ya, Tarik Sekarang',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(result => {
             if (result.isConfirmed) {
                 Swal.fire({
@@ -5801,7 +5892,7 @@ REGION II`;
             showCancelButton: true,
             confirmButtonText: 'Tarik Data',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({

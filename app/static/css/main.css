@@ -2,7 +2,7 @@
 
 :root {
   /* InJourney Theme Colors */
-  --primary-color: #003366; /* Dark Blue */
+  --primary-color: #90c1e8; /* InJourney Sky Blue */
   --secondary-color: #0284c7; /* Aviation Azure */
   --accent-color: #f0f9ff;
   --bg-color: #f8fafc;
@@ -102,13 +102,13 @@ a.btn {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-  color: #ffffff;
+  background: #90c1e8;
+  color: #002b49;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.05rem;
-  box-shadow: 0 3px 8px rgba(2, 132, 199, 0.28);
+  box-shadow: 0 3px 8px rgba(144, 193, 232, 0.45);
   flex-shrink: 0;
 }
 
@@ -272,13 +272,15 @@ select.form-control {
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: var(--white);
+  color: #002b49;
+  font-weight: 700;
 }
 
 .btn-primary:hover {
-  background-color: #002244;
+  background-color: #7bb5e3;
+  color: #001f35;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(144, 193, 232, 0.45);
 }
 
 .btn-secondary {

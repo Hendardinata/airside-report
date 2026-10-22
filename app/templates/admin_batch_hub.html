@@ -50,10 +50,10 @@
     }
 
     .hub-tag-v2 {
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        color: #ffffff;
+        background: #90c1e8;
+        color: #002b49;
         border: none;
-        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+        box-shadow: 0 2px 6px rgba(144, 193, 232, 0.45);
     }
 
     .hub-title {
@@ -252,8 +252,8 @@
     .btn-rollout-primary {
         height: 44px;
         padding: 0 1.35rem;
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
-        color: #ffffff;
+        background: #90c1e8;
+        color: #002b49;
         border: none;
         border-radius: 9px;
         font-weight: 700;
@@ -263,14 +263,16 @@
         align-items: center;
         gap: 0.6rem;
         white-space: nowrap;
-        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.32);
+        box-shadow: 0 4px 14px rgba(144, 193, 232, 0.45);
         transition: all 0.2s ease;
         flex-shrink: 0;
     }
 
     .btn-rollout-primary:hover {
+        background: #7bb5e3;
+        color: #001f35;
         transform: translateY(-2px);
-        box-shadow: 0 7px 18px rgba(2, 132, 199, 0.42);
+        box-shadow: 0 7px 18px rgba(144, 193, 232, 0.55);
         filter: brightness(1.05);
     }
 
@@ -779,7 +781,7 @@
             </div>
 
             <div>
-                <button type="button" class="btn btn-primary" onclick="saveFleetMatrix()" style="background: linear-gradient(135deg, #003366 0%, #0284c7 100%);">
+                <button type="button" class="btn btn-primary" onclick="saveFleetMatrix()" style="background: #90c1e8; color: #002b49; font-weight: 700; border: none;">
                     <i class="fas fa-floppy-disk me-1"></i> Simpan Perubahan Matriks
                 </button>
             </div>
@@ -1042,7 +1044,7 @@
             showCancelButton: true,
             confirmButtonText: '<i class="fas fa-rocket me-1"></i> Ya, Terbitkan & Aktifkan!',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366',
+            confirmButtonColor: '#90c1e8',
             cancelButtonColor: '#64748b'
         }).then((res) => {
             if (res.isConfirmed) {
@@ -1094,7 +1096,7 @@
                             html: htmlContent,
                             icon: 'success',
                             confirmButtonText: 'Selesai & Segarkan Halaman',
-                            confirmButtonColor: '#003366'
+                            confirmButtonColor: '#90c1e8'
                         }).then(() => {
                             location.reload();
                         });
@@ -1618,7 +1620,7 @@
             showCancelButton: true,
             confirmButtonText: 'Terapkan Link',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(result => {
             if (result.isConfirmed && result.value) {
                 const manualUrl = result.value.trim();
@@ -1650,7 +1652,7 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Sinkronkan!',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({
@@ -1696,7 +1698,7 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Tarik Sekarang',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({

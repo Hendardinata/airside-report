@@ -1,5 +1,12 @@
 // wizard.js
 function nextStep(step) {
+    // Validasi tanggal sebelum berpindah dari langkah 1 ke langkah berikutnya
+    if (step > 1 && typeof validateStepDateBeforeNext === 'function') {
+        if (!validateStepDateBeforeNext()) {
+            return false;
+        }
+    }
+
     // Hide all steps
     document.querySelectorAll('.wizard-step').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
@@ -11,18 +18,36 @@ function nextStep(step) {
     if (targetNav) targetNav.classList.add('active');
 
     // Smooth scroll to top of wizard card
-    const formCard = document.querySelector('.form-main-card') || document.getElementById('reportWizard');
+    const formCard = document.querySelector('.form-workspace-card') || document.querySelector('.form-main-card') || document.getElementById('reportWizard');
     if (formCard) {
         formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 
 function prevStep(step) {
-    nextStep(step);
+    // Hide all steps
+    document.querySelectorAll('.wizard-step').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    
+    // Show current step
+    const targetStep = document.getElementById(`step-${step}`);
+    const targetNav = document.getElementById(`step-nav-${step}`);
+    if (targetStep) targetStep.style.display = 'block';
+    if (targetNav) targetNav.classList.add('active');
+
+    const formCard = document.querySelector('.form-workspace-card') || document.querySelector('.form-main-card') || document.getElementById('reportWizard');
+    if (formCard) {
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 document.getElementById('reportWizard').addEventListener('submit', function(e) {
     e.preventDefault();
+
+    // Validasi tanggal sebelum submit
+    if (typeof validateStepDateBeforeNext === 'function' && !validateStepDateBeforeNext()) {
+        return;
+    }
     
     // Validasi input kosong
     let isEmpty = false;
@@ -45,7 +70,7 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
             title: 'Form Belum Lengkap!',
             text: 'Masih ada form inputan yang kosong. Mohon lengkapi terlebih dahulu baru kirim.',
             confirmButtonText: 'Mengerti',
-            confirmButtonColor: '#003366'
+            confirmButtonColor: '#90c1e8'
         }).then(() => {
             if (invalidElement) {
                 const step = invalidElement.closest('.wizard-step');

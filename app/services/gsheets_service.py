@@ -334,6 +334,11 @@ def write_daily_report(sheet_url, form_data):
             print(f"Gagal membuat tab harian: {str(e)}")
             pass
             
+    try:
+        invalidate_calendar_cache()
+    except Exception:
+        pass
+        
     return True
 
 def get_daily_summary(date_str):
@@ -945,3 +950,339 @@ def sync_sheets_to_schema(sheet_url):
         "removed": removed_fields,
         "schema": schema
     }
+
+# ==============================================================================
+# FITUR KALENDER STATUS REAL-TIME DARI SPREADSHEET FIX (DATABASE_REKAP)
+# ==============================================================================
+
+import time
+import calendar
+import re
+
+_CALENDAR_CACHE = {}
+_CALENDAR_CACHE_TTL = 90  # Cache 90 detik untuk efisiensi kuota API
+
+def invalidate_calendar_cache(airport_code=None):
+    """
+    Menghapus cache kalender agar data terbaru dari Google Sheets segera terbaca.
+    """
+    global _CALENDAR_CACHE
+    if airport_code:
+        _CALENDAR_CACHE.pop(str(airport_code).upper(), None)
+    else:
+        _CALENDAR_CACHE.clear()
+
+def normalize_date_str(val):
+    """
+    Normalisasi serial date atau string tanggal dari Google Sheets ke format YYYY-MM-DD.
+    """
+    if val is None:
+        return None
+    from datetime import datetime, timedelta
+    if isinstance(val, (int, float)):
+        try:
+            dt = datetime(1899, 12, 30) + timedelta(days=val)
+            return dt.strftime('%Y-%m-%d')
+        except Exception:
+            return None
+    s = str(val).strip()
+    if not s or s.upper() in ('TANGGAL', 'DATE', 'TIMESTAMP', 'NONE', 'NULL', '-'):
+        return None
+    for fmt in ('%Y-%m-%d', '%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%d %b %Y', '%d %B %Y'):
+        try:
+            dt = datetime.strptime(s, fmt)
+            return dt.strftime('%Y-%m-%d')
+        except ValueError:
+            pass
+    m = re.search(r'\b(20\d\d)[-/](0?[1-9]|1[0-2])[-/](0?[1-9]|[12]\d|3[01])\b', s)
+    if m:
+        return f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    return None
+
+def parse_month_year_from_title(title):
+    """
+    Mendeteksi bulan dan tahun dari judul spreadsheet (misal: LOP_OKT_2026 (1), DPS_NOV_2026, 2026-11, dsb.)
+    """
+    if not title:
+        now = datetime.now()
+        return now.month, now.year
+
+    indonesian_months = {
+        "JAN": 1, "JANUARI": 1,
+        "FEB": 2, "FEBRUARI": 2,
+        "MAR": 3, "MARET": 3,
+        "APR": 4, "APRIL": 4,
+        "MEI": 5, "MAY": 5,
+        "JUN": 6, "JUNI": 6,
+        "JUL": 7, "JULI": 7,
+        "AGS": 8, "AGUSTUS": 8, "AUG": 8,
+        "SEP": 9, "SEPTEMBER": 9,
+        "OKT": 10, "OKTOBER": 10, "OCT": 10,
+        "NOV": 11, "NOVEMBER": 11,
+        "DES": 12, "DESEMBER": 12, "DEC": 12
+    }
+    
+    # Ganti seluruh karakter selain huruf dan angka menjadi spasi agar token terpisah sempurna
+    title_clean = re.sub(r'[^A-Z0-9]', ' ', str(title).upper())
+    tokens = title_clean.split()
+    
+    # 1. Cek format numerik YYYY-MM atau MM-YYYY (misal: 2026-11)
+    m_num = re.search(r'\b(20\d\d)\s*(0?[1-9]|1[0-2])\b', title_clean)
+    if m_num:
+        return int(m_num.group(2)), int(m_num.group(1))
+        
+    m_num2 = re.search(r'\b(0?[1-9]|1[0-2])\s*(20\d\d)\b', title_clean)
+    if m_num2:
+        return int(m_num2.group(1)), int(m_num2.group(2))
+
+    # 2. Cari token tahun 20xx
+    found_year = None
+    for token in tokens:
+        if re.match(r'^20\d\d$', token):
+            found_year = int(token)
+            break
+            
+    # 3. Cari token bulan teks
+    found_month = None
+    for token in tokens:
+        if token in indonesian_months:
+            found_month = indonesian_months[token]
+            break
+            
+    if found_month and found_year:
+        return found_month, found_year
+    elif found_month:
+        now = datetime.now()
+        return found_month, now.year
+    elif found_year:
+        now = datetime.now()
+        return now.month, found_year
+
+    now = datetime.now()
+    return now.month, now.year
+
+def get_airport_sheet_calendar_data(airport_code, force_refresh=False):
+    """
+    Membaca tanggal yang sudah terisi di Spreadsheet FIX (Produksi Utama)
+    dan mengkombinasikannya dengan data laporan di Staging.
+    """
+    airport_code = str(airport_code).upper()
+    now_ts = time.time()
+    
+    if not force_refresh and airport_code in _CALENDAR_CACHE:
+        cached = _CALENDAR_CACHE[airport_code]
+        if (now_ts - cached['ts']) < _CALENDAR_CACHE_TTL:
+            return cached['data']
+
+    from app.models.config_store import get_airport_config, get_active_month, update_airport_config
+    config = get_airport_config(airport_code)
+    sheet_url = config.get('sheet_url')
+    configured_month_str = config.get('active_month') or get_active_month(airport_code)
+    
+    MONTH_NAMES_ID = [
+        "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ]
+    MONTH_ABBRS_ID = [
+        "", "JAN", "FEB", "MAR", "APR", "MEI", "JUN",
+        "JUL", "AGS", "SEP", "OKT", "NOV", "DES"
+    ]
+    
+    if not sheet_url:
+        if configured_month_str:
+            month_idx, year = parse_month_year_from_title(configured_month_str)
+        else:
+            now = datetime.now()
+            month_idx = now.month
+            year = now.year
+        last_day = calendar.monthrange(year, month_idx)[1]
+        return {
+            "success": False,
+            "error": f"URL Spreadsheet Produksi belum dikonfigurasi untuk bandara {airport_code}.",
+            "airport_code": airport_code,
+            "month": month_idx,
+            "year": year,
+            "month_name": MONTH_NAMES_ID[month_idx],
+            "month_abbr": MONTH_ABBRS_ID[month_idx],
+            "display_month_year": f"{MONTH_NAMES_ID[month_idx]} {year}",
+            "min": f"{year}-{month_idx:02d}-01",
+            "max": f"{year}-{month_idx:02d}-{last_day:02d}",
+            "total_days": last_day,
+            "filled_dates": [],
+            "staging_pending_dates": [],
+            "staging_revision_dates": [],
+            "unfilled_dates": [f"{year}-{month_idx:02d}-{day:02d}" for day in range(1, last_day + 1)],
+            "next_recommended_date": f"{year}-{month_idx:02d}-01",
+            "counts": {"filled": 0, "staging_pending": 0, "staging_revision": 0, "unfilled": last_day, "total": last_day}
+        }
+
+    try:
+        client = get_client()
+        spreadsheet = client.open_by_url(sheet_url)
+        sheet_title = spreadsheet.title
+        
+        # 1. Prioritas Utama: Konfigurasi Bulan Aktif dari Admin (configured_month_str)
+        # Jika Admin telah memilih bulan aktif (misal 2026-11), maka itu adalah acuan mutlak.
+        if configured_month_str:
+            cfg_m, cfg_y = parse_month_year_from_title(configured_month_str)
+            if cfg_m and cfg_y:
+                month_idx, year = cfg_m, cfg_y
+            else:
+                month_idx, year = parse_month_year_from_title(sheet_title)
+        elif sheet_title:
+            month_idx, year = parse_month_year_from_title(sheet_title)
+            # Isi active_month ke config hanya jika config belum memiliki active_month
+            if not config.get('active_month'):
+                try:
+                    update_airport_config(airport_code, active_month=f"{year}-{month_idx:02d}")
+                except Exception:
+                    pass
+        else:
+            now = datetime.now()
+            month_idx, year = now.month, now.year
+
+        # 2. Cek apakah Spreadsheet yang saat ini terhubung sesuai dengan bulan operasional
+        # Jika berbeda (misal sheet_url masih sheet Oktober padahal Admin mengaktifkan November),
+        # otomatis cari file spreadsheet untuk bulan aktif tersebut di folder Drive bandara.
+        sheet_m, sheet_y = parse_month_year_from_title(sheet_title)
+        if (sheet_m != month_idx or sheet_y != year) and config.get('drive_folder'):
+            try:
+                from app.services.drive_service import find_monthly_sheet
+                found_sheet = find_monthly_sheet(airport_code, config.get('drive_folder'), MONTH_ABBRS_ID[month_idx], year)
+                if found_sheet:
+                    new_sheet_url = found_sheet.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{found_sheet['id']}/edit"
+                    if new_sheet_url != sheet_url:
+                        update_airport_config(airport_code, sheet_url=new_sheet_url, active_month=f"{year}-{month_idx:02d}")
+                        spreadsheet = client.open_by_url(new_sheet_url)
+                        sheet_title = spreadsheet.title
+            except Exception as auto_switch_err:
+                print(f"Auto-switch spreadsheet error for {airport_code}: {auto_switch_err}")
+
+        last_day = calendar.monthrange(year, month_idx)[1]
+        month_prefix = f"{year}-{month_idx:02d}-"
+        
+        # 2. Ambil worksheet DATABASE_REKAP
+        rekap_sheet = spreadsheet.worksheet('DATABASE_REKAP')
+        header_rows = rekap_sheet.get_values('A1:ZZ3')
+        header_row = []
+        if header_rows:
+            for r in header_rows:
+                if 'TANGGAL' in r or 'KANTOR_CABANG' in r:
+                    header_row = r
+                    break
+            if not header_row and len(header_rows) > 0:
+                header_row = header_rows[0]
+                
+        tanggal_col_idx = 3 # default kolom C
+        if header_row:
+            for i, h in enumerate(header_row):
+                if str(h).strip().upper() == 'TANGGAL':
+                    tanggal_col_idx = i + 1
+                    break
+                    
+        # 3. Ambil seluruh tanggal di kolom TANGGAL
+        dates_raw = rekap_sheet.col_values(tanggal_col_idx, value_render_option='UNFORMATTED_VALUE')
+        
+        filled_dates_set = set()
+        for d in dates_raw:
+            norm = normalize_date_str(d)
+            if norm and norm.startswith(month_prefix):
+                filled_dates_set.add(norm)
+                
+        filled_dates = sorted(list(filled_dates_set))
+        
+        # 4. Ambil data staging untuk bandara ini
+        from app.services.staging_service import get_staging_reports
+        staging_reports = get_staging_reports(airport_code)
+        
+        staging_pending_dates = []
+        staging_revision_dates = []
+        
+        for sr in staging_reports:
+            tgl = sr.get('tanggal', '')
+            norm_tgl = normalize_date_str(tgl)
+            if norm_tgl and norm_tgl.startswith(month_prefix):
+                status = sr.get('status', 'PENDING_GM')
+                if status == 'PENDING_GM':
+                    staging_pending_dates.append(norm_tgl)
+                elif status == 'REVISI':
+                    staging_revision_dates.append(norm_tgl)
+                    
+        staging_pending_dates = sorted(list(set(staging_pending_dates)))
+        staging_revision_dates = sorted(list(set(staging_revision_dates)))
+        
+        # 5. Buat daftar seluruh tanggal di bulan bersangkutan
+        all_month_dates = [f"{year}-{month_idx:02d}-{day:02d}" for day in range(1, last_day + 1)]
+        
+        unfilled_dates = [
+            d for d in all_month_dates 
+            if d not in filled_dates_set and d not in staging_pending_dates
+        ]
+        
+        # 6. Tentukan Rekomendasi Tanggal Pengisian Berikutnya
+        next_recommended_date = None
+        if unfilled_dates:
+            next_recommended_date = unfilled_dates[0]
+        else:
+            now_str = datetime.now().strftime('%Y-%m-%d')
+            next_recommended_date = now_str if now_str.startswith(month_prefix) else all_month_dates[-1]
+            
+        data = {
+            "success": True,
+            "airport_code": airport_code,
+            "sheet_title": sheet_title,
+            "sheet_url": sheet_url,
+            "month": month_idx,
+            "year": year,
+            "month_name": MONTH_NAMES_ID[month_idx],
+            "month_abbr": MONTH_ABBRS_ID[month_idx],
+            "display_month_year": f"{MONTH_NAMES_ID[month_idx]} {year}",
+            "min": f"{year}-{month_idx:02d}-01",
+            "max": f"{year}-{month_idx:02d}-{last_day:02d}",
+            "total_days": last_day,
+            "filled_dates": filled_dates,
+            "staging_pending_dates": staging_pending_dates,
+            "staging_revision_dates": staging_revision_dates,
+            "unfilled_dates": unfilled_dates,
+            "next_recommended_date": next_recommended_date,
+            "counts": {
+                "filled": len(filled_dates),
+                "staging_pending": len(staging_pending_dates),
+                "staging_revision": len(staging_revision_dates),
+                "unfilled": len(unfilled_dates),
+                "total": last_day
+            }
+        }
+        
+        _CALENDAR_CACHE[airport_code] = {
+            "ts": now_ts,
+            "data": data
+        }
+        
+        return data
+        
+    except Exception as e:
+        print(f"Error fetching calendar data for {airport_code}: {e}")
+        now = datetime.now()
+        month_idx = now.month
+        year = now.year
+        last_day = calendar.monthrange(year, month_idx)[1]
+        return {
+            "success": False,
+            "error": str(e),
+            "airport_code": airport_code,
+            "month": month_idx,
+            "year": year,
+            "month_name": MONTH_NAMES_ID[month_idx],
+            "month_abbr": MONTH_ABBRS_ID[month_idx],
+            "display_month_year": f"{MONTH_NAMES_ID[month_idx]} {year}",
+            "min": f"{year}-{month_idx:02d}-01",
+            "max": f"{year}-{month_idx:02d}-{last_day:02d}",
+            "total_days": last_day,
+            "filled_dates": [],
+            "staging_pending_dates": [],
+            "staging_revision_dates": [],
+            "unfilled_dates": [f"{year}-{month_idx:02d}-{day:02d}" for day in range(1, last_day + 1)],
+            "next_recommended_date": f"{year}-{month_idx:02d}-01",
+            "counts": {"filled": 0, "staging_pending": 0, "staging_revision": 0, "unfilled": last_day, "total": last_day}
+        }

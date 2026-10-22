@@ -92,7 +92,9 @@ def update_config():
     template_id = extract_drive_id(template_id)
     
     if airport_code:
-        update_airport_config(airport_code, sheet_url, drive_folder, template_id, pic_phone, gm_phone)
+        update_airport_config(airport_code, sheet_url, drive_folder, template_id, pic_phone, gm_phone, active_month=target_month_str)
+        from app.services.gsheets_service import invalidate_calendar_cache
+        invalidate_calendar_cache(airport_code)
         
     if deputy_phone is not None or admin_phone is not None:
         update_admin_config(deputy_phone=deputy_phone, admin_phone=admin_phone)
@@ -184,13 +186,29 @@ def api_create_sheet():
             query = f"name='{new_name}' and '{drive_folder}' in parents and trashed=false"
             res = drive_svc.files().list(q=query, spaces='drive', fields='files(id, name, webViewLink)').execute()
             if res.get('files'):
-                return jsonify({"success": False, "error": f"GAGAL: Spreadsheet dengan nama '{new_name}' SUDAH ADA di dalam folder tersebut! Sistem menolak membuat duplikat."}), 400
+                existing_file = res['files'][0]
+                existing_url = existing_file.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{existing_file['id']}/edit"
+                update_airport_config(airport_code, existing_url, active_month=target_month_str)
+                from app.services.gsheets_service import invalidate_calendar_cache, sync_schema_to_sheets
+                invalidate_calendar_cache(airport_code)
+                try:
+                    sync_schema_to_sheets(existing_url)
+                except Exception:
+                    pass
+                return jsonify({
+                    "success": True,
+                    "url": existing_url,
+                    "sheet_name": new_name,
+                    "message": f"Spreadsheet '{new_name}' sudah ada di Drive. Berhasil langsung diaktifkan sebagai sheet operasional!"
+                })
         except Exception as check_err:
             print("Gagal cek duplikat:", check_err)
             
         new_url = create_monthly_sheet(new_name, drive_folder, template_id)
         # Update config to point to new sheet
-        update_airport_config(airport_code, new_url)
+        update_airport_config(airport_code, new_url, active_month=target_month_str)
+        from app.services.gsheets_service import invalidate_calendar_cache
+        invalidate_calendar_cache(airport_code)
         
         # --- Update Judul di dalam Spreadsheet (Cell A1) ---
         try:
@@ -405,7 +423,7 @@ def api_batch_create_sheets():
                 existing_file = res['files'][0]
                 existing_url = existing_file.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{existing_file['id']}/edit"
                 # Otomatis langsung aktifkan
-                update_airport_config(code, existing_url)
+                update_airport_config(code, existing_url, active_month=target_month_str)
                 try:
                     sync_schema_to_sheets(existing_url)
                 except Exception:
@@ -453,7 +471,7 @@ def api_batch_create_sheets():
                 print(f"Warning sync schema {code}:", sync_err)
                 
             # 5. Otomatis LANGSUNG AKTIFKAN di konfigurasi cabang
-            update_airport_config(code, new_url)
+            update_airport_config(code, new_url, active_month=target_month_str)
             
             results.append({
                 "airport": code,
@@ -469,6 +487,11 @@ def api_batch_create_sheets():
                 "message": f"Gagal membuat sheet: {str(create_err)}"
             })
             
+    from app.models.config_store import set_active_month
+    set_active_month(target_month_str)
+    from app.services.gsheets_service import invalidate_calendar_cache
+    invalidate_calendar_cache()
+
     return jsonify({
         "success": True,
         "month_label": f"{month} {year}",
@@ -482,11 +505,26 @@ def api_batch_update_matrix():
     airports_data = data.get('airports', {})
     admin_data = data.get('admin', {})
     
+    active_month = data.get('active_month')
+    if active_month:
+        from app.models.config_store import set_active_month
+        set_active_month(active_month)
+
+    from app.services.gsheets_service import parse_month_year_from_title, invalidate_calendar_cache
+
     for code, item in airports_data.items():
         drive_folder = extract_drive_id(item.get('drive_folder'))
         sheet_url = item.get('sheet_url')
         pic_phone = item.get('pic_phone', '')
         gm_phone = item.get('gm_phone', '')
+        sheet_name = item.get('sheet_name', '')
+        
+        branch_active_month = item.get('active_month') or active_month
+        if not branch_active_month and sheet_name:
+            m_num, y_num = parse_month_year_from_title(sheet_name)
+            if m_num and y_num:
+                branch_active_month = f"{y_num}-{m_num:02d}"
+
         if pic_phone:
             pic_phone = ''.join(filter(str.isdigit, pic_phone))
             if pic_phone.startswith('0'):
@@ -495,7 +533,7 @@ def api_batch_update_matrix():
             gm_phone = ''.join(filter(str.isdigit, gm_phone))
             if gm_phone.startswith('0'):
                 gm_phone = '62' + gm_phone[1:]
-        update_airport_config(code, sheet_url=sheet_url, drive_folder=drive_folder, pic_phone=pic_phone, gm_phone=gm_phone)
+        update_airport_config(code, sheet_url=sheet_url, drive_folder=drive_folder, pic_phone=pic_phone, gm_phone=gm_phone, active_month=branch_active_month)
         
     deputy = admin_data.get('deputy_phone')
     admin_p = admin_data.get('admin_phone')
@@ -509,6 +547,9 @@ def api_batch_update_matrix():
             admin_p = '62' + admin_p[1:]
     update_admin_config(deputy_phone=deputy, admin_phone=admin_p)
     
+    # Invalidate seluruh cache kalender agar staf & GM langsung melihat perubahan
+    invalidate_calendar_cache()
+
     return jsonify({"success": True, "message": "Konfigurasi seluruh cabang berhasil disimpan!"})
 
 @bp.route('/api/batch/sync-all-rekap', methods=['POST'])

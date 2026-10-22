@@ -4,11 +4,12 @@ import os
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), '..', '..', 'app_config.json')
 
 DEFAULT_CONFIG = {
+    "active_month": "",
     "airports": {
-        "LOP": {"sheet_url": "", "drive_folder": "", "template_id": "", "pic_phone": ""},
-        "DPS": {"sheet_url": "", "drive_folder": "", "template_id": "", "pic_phone": ""},
-        "BWX": {"sheet_url": "", "drive_folder": "1jBdLeBkpy0RLRnPoOd53bduNET-I7ysT", "template_id": "", "pic_phone": ""},
-        "KOE": {"sheet_url": "", "drive_folder": "", "template_id": "", "pic_phone": ""}
+        "LOP": {"sheet_url": "", "active_month": "", "drive_folder": "", "template_id": "", "pic_phone": ""},
+        "DPS": {"sheet_url": "", "active_month": "", "drive_folder": "", "template_id": "", "pic_phone": ""},
+        "BWX": {"sheet_url": "", "active_month": "", "drive_folder": "1jBdLeBkpy0RLRnPoOd53bduNET-I7ysT", "template_id": "", "pic_phone": ""},
+        "KOE": {"sheet_url": "", "active_month": "", "drive_folder": "", "template_id": "", "pic_phone": ""}
     },
     "admin": {
         "master_sheet_url": "",
@@ -25,6 +26,10 @@ def load_config():
         config = json.load(f)
         # Migrasi config lama jika field baru belum ada
         modified = False
+        if 'active_month' not in config:
+            config['active_month'] = ""
+            modified = True
+
         if 'staging_folder_id' not in config:
             config['staging_folder_id'] = "1qdPtWNaXQK8ZZYt0eq2nxHrRL3IJ8b3L"
             modified = True
@@ -34,6 +39,9 @@ def load_config():
             modified = True
 
         for code in config.get('airports', {}):
+            if 'active_month' not in config['airports'][code]:
+                config['airports'][code]['active_month'] = ""
+                modified = True
             if 'pic_phone' not in config['airports'][code]:
                 config['airports'][code]['pic_phone'] = ""
                 modified = True
@@ -64,7 +72,7 @@ def get_airport_config(airport_code):
     config = load_config()
     return config['airports'].get(airport_code, {})
 
-def update_airport_config(airport_code, sheet_url=None, drive_folder=None, template_id=None, pic_phone=None, gm_phone=None):
+def update_airport_config(airport_code, sheet_url=None, drive_folder=None, template_id=None, pic_phone=None, gm_phone=None, active_month=None):
     config = load_config()
     if airport_code in config['airports']:
         if sheet_url is not None:
@@ -77,7 +85,40 @@ def update_airport_config(airport_code, sheet_url=None, drive_folder=None, templ
             config['airports'][airport_code]['pic_phone'] = pic_phone
         if gm_phone is not None:
             config['airports'][airport_code]['gm_phone'] = gm_phone
+        if active_month is not None:
+            config['airports'][airport_code]['active_month'] = str(active_month).strip()
+            config['active_month'] = str(active_month).strip()
         save_config(config)
+        try:
+            from app.services.gsheets_service import invalidate_calendar_cache
+            invalidate_calendar_cache(airport_code)
+        except Exception:
+            pass
+
+def get_active_month(airport_code=None):
+    config = load_config()
+    if airport_code and airport_code in config.get('airports', {}):
+        branch_m = config['airports'][airport_code].get('active_month')
+        if branch_m:
+            return branch_m
+    return config.get('active_month', '')
+
+def set_active_month(active_month, airport_code=None):
+    config = load_config()
+    month_val = str(active_month).strip()
+    config['active_month'] = month_val
+    if airport_code and airport_code in config.get('airports', {}):
+        config['airports'][airport_code]['active_month'] = month_val
+    elif not airport_code:
+        # Update semua bandara
+        for code in config.get('airports', {}):
+            config['airports'][code]['active_month'] = month_val
+    save_config(config)
+    try:
+        from app.services.gsheets_service import invalidate_calendar_cache
+        invalidate_calendar_cache(airport_code)
+    except Exception:
+        pass
 
 def get_admin_config():
     config = load_config()

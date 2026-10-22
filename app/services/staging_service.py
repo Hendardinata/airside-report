@@ -64,11 +64,31 @@ def get_or_create_staging_sheet(airport_code):
         file_name = f"STAGING_{airport_code}"
         query = f"name='{file_name}' and '{folder_id}' in parents and trashed=false"
         try:
-            res = drive_svc.files().list(q=query, spaces='drive', fields='files(id, name, webViewLink)').execute()
+            res = drive_svc.files().list(
+                q=query,
+                spaces='drive',
+                fields='files(id, name, webViewLink, modifiedTime)',
+                orderBy='modifiedTime desc'
+            ).execute()
             files = res.get('files', [])
             if files:
-                sheet_url = files[0].get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{files[0]['id']}/edit"
-                spreadsheet = client.open_by_url(sheet_url)
+                best_file = None
+                for cand in files:
+                    try:
+                        cand_url = cand.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{cand['id']}/edit"
+                        cand_ss = client.open_by_url(cand_url)
+                        cand_ws = cand_ss.worksheet('STAGING_DATA')
+                        if len(cand_ws.get_all_values()) > 1:
+                            best_file = (cand_url, cand_ss)
+                            break
+                    except Exception:
+                        continue
+
+                if best_file:
+                    sheet_url, spreadsheet = best_file
+                else:
+                    sheet_url = files[0].get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{files[0]['id']}/edit"
+                    spreadsheet = client.open_by_url(sheet_url)
                 update_staging_sheet_url(airport_code, sheet_url)
         except Exception as drive_err:
             print(f"Warning saat mencari staging sheet {airport_code} di Drive: {drive_err}")
@@ -332,4 +352,36 @@ def gm_approve_report(airport_code, report_id):
         "report_id": report_id,
         "message": f"Laporan {report_id} berhasil disetujui, dipindahkan ke Spreadsheet Utama, dan dihapus dari Staging.",
         "form_data": form_data
+    }
+
+def delete_staging_report(airport_code, report_id):
+    """
+    Menghapus laporan pengajuan dari spreadsheet staging (misal laporan duplikat atau ditolak).
+    """
+    airport_code = airport_code.upper()
+    worksheet = get_or_create_staging_sheet(airport_code)
+    all_rows = worksheet.get_all_values()
+
+    target_idx = -1
+    for idx, row in enumerate(all_rows):
+        if idx > 0 and len(row) > 0 and row[0].strip() == report_id.strip():
+            target_idx = idx + 1
+            break
+
+    if target_idx == -1:
+        raise Exception(f"Laporan {report_id} tidak ditemukan di staging {airport_code}.")
+
+    worksheet.delete_rows(target_idx)
+
+    # Bersihkan notifikasi terkait laporan ini dari notifications.json
+    try:
+        from app.services.notification_service import delete_notifications_by_report_id
+        delete_notifications_by_report_id(airport_code, report_id)
+    except Exception as e:
+        print(f"Warning deleting notifications for report {report_id}: {e}")
+
+    return {
+        "success": True,
+        "report_id": report_id,
+        "message": f"Laporan {report_id} berhasil dihapus dari Staging."
     }

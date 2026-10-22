@@ -40,3 +40,56 @@ def create_monthly_sheet(new_file_name, target_folder_id, template_file_id):
             raise Exception(f"Respons tidak valid dari Apps Script: {response.text}")
     else:
         raise Exception(f"HTTP Error {response.status_code}: {response.text}")
+
+def find_monthly_sheet(airport_code, target_folder_id, month_abbr, year):
+    """
+    Mencari file Google Spreadsheet di Google Drive untuk bandara, bulan, dan tahun tertentu.
+    Contoh: mencari LOP_NOV_2026 di folder LOP.
+    """
+    if not target_folder_id:
+        return None
+    try:
+        drive_svc = get_drive_service()
+        clean_folder = target_folder_id.strip()
+        # Ekstrak ID folder jika berupa URL
+        import re
+        m_id = re.search(r'[-\w]{25,}', clean_folder)
+        if m_id:
+            clean_folder = m_id.group(0)
+
+        query = f"'{clean_folder}' in parents and trashed=false and mimeType='application/vnd.google-apps.spreadsheet'"
+        res = drive_svc.files().list(
+            q=query,
+            spaces='drive',
+            fields='files(id, name, webViewLink, modifiedTime)',
+            orderBy='modifiedTime desc'
+        ).execute()
+        files = res.get('files', [])
+
+        code_upper = str(airport_code).upper().strip()
+        month_abbr_upper = str(month_abbr).upper().strip()
+        year_str = str(year).strip()
+
+        # 1. Exact pattern: misal LOP_NOV_2026
+        exact_pattern = f"{code_upper}_{month_abbr_upper}_{year_str}"
+        for f in files:
+            fname = f.get('name', '').upper()
+            if exact_pattern in fname:
+                return f
+
+        # 2. Match bandara + bulan + tahun
+        for f in files:
+            fname = f.get('name', '').upper()
+            if code_upper in fname and month_abbr_upper in fname and year_str in fname:
+                return f
+
+        # 3. Match bulan + tahun
+        for f in files:
+            fname = f.get('name', '').upper()
+            if month_abbr_upper in fname and year_str in fname:
+                return f
+
+        return None
+    except Exception as e:
+        print(f"Warning find_monthly_sheet ({airport_code}, {month_abbr}, {year}): {e}")
+        return None

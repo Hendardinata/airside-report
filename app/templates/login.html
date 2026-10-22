@@ -398,10 +398,10 @@
     .submit-portal-btn {
         width: 100%;
         height: 50px;
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        background: #90c1e8;
         border: none;
         border-radius: 14px;
-        color: #ffffff;
+        color: #002b49;
         font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
         font-size: 1.05rem;
         font-weight: 700;
@@ -411,13 +411,14 @@
         justify-content: center;
         gap: 0.65rem;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.28);
+        box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45);
         letter-spacing: 0.4px;
     }
 
     .submit-portal-btn:hover {
-        background: linear-gradient(135deg, #002850 0%, #0369a1 100%);
-        box-shadow: 0 10px 28px rgba(2, 132, 199, 0.38);
+        background: #7bb5e3;
+        color: #001f35;
+        box-shadow: 0 8px 24px rgba(144, 193, 232, 0.55);
         transform: translateY(-2px);
     }
 
@@ -723,14 +724,15 @@
             font-size: 0.98rem;
             font-weight: 700;
             border-radius: 12px;
-            background: linear-gradient(135deg, #003366 0%, #0284c7 100%) !important;
-            color: #ffffff !important;
-            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.28) !important;
+            background: #90c1e8 !important;
+            color: #002b49 !important;
+            box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45) !important;
         }
 
         .submit-portal-btn:hover {
-            background: linear-gradient(135deg, #002850 0%, #0369a1 100%) !important;
-            box-shadow: 0 8px 24px rgba(2, 132, 199, 0.36) !important;
+            background: #7bb5e3 !important;
+            color: #001f35 !important;
+            box-shadow: 0 8px 24px rgba(144, 193, 232, 0.55) !important;
         }
 
         /* Unified Bottom Footnote on White Base */
@@ -1150,10 +1152,10 @@
     .modal-confirm-btn {
         width: 100%;
         height: 46px;
-        background: linear-gradient(135deg, #003366 0%, #0284c7 100%);
+        background: #90c1e8;
         border: none;
         border-radius: 12px;
-        color: #ffffff;
+        color: #002b49;
         font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
         font-size: 0.95rem;
         font-weight: 700;
@@ -1162,14 +1164,15 @@
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+        box-shadow: 0 4px 14px rgba(144, 193, 232, 0.45);
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         letter-spacing: 0.2px;
     }
 
     .modal-confirm-btn:hover {
-        background: linear-gradient(135deg, #002850 0%, #0369a1 100%);
-        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.38);
+        background: #7bb5e3;
+        color: #001f35;
+        box-shadow: 0 6px 20px rgba(144, 193, 232, 0.55);
         transform: translateY(-1px);
     }
 </style>
@@ -1408,6 +1411,18 @@
         btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Memverifikasi...';
         btn.style.opacity = '0.85';
         btn.style.pointerEvents = 'none';
+    });
+
+    window.addEventListener('pageshow', function (event) {
+        const btn = document.getElementById('btnSubmit');
+        if (btn) {
+            btn.innerHTML = '<span>Login</span>';
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        }
+        if (event.persisted) {
+            window.location.reload();
+        }
     });
 </script>
 {% endblock %}

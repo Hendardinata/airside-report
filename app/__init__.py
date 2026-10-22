@@ -23,6 +23,12 @@ def create_app():
     def validate_csrf():
         # Validasi hanya metode HTTP yang memutasi state
         if request.method in ('POST', 'PUT', 'DELETE', 'PATCH'):
+            # Endpoint otentikasi publik (/login & /api/auth/logout) dikecualikan dari CSRF abort
+            # agar pengguna tidak terblokir saat sesi kedaluwarsa atau cache peramban desinkron
+            req_path = (request.path or '').rstrip('/')
+            if req_path in ('/login', '/api/auth/logout') or request.endpoint in ('auth.login', 'auth.logout'):
+                return
+
             token = (
                 request.headers.get('X-CSRFToken') or
                 request.headers.get('X-CSRF-Token') or
@@ -46,6 +52,18 @@ def create_app():
                     }), 403
                 abort(403, description="Token CSRF tidak valid atau telah kedaluwarsa. Silakan muat ulang halaman.")
 
+    # Graceful 403 Forbidden handler
+    @app.errorhandler(403)
+    def handle_forbidden(e):
+        if request.is_json or request.path.startswith(('/admin/api/', '/staff/api/', '/gm/api/')):
+            return jsonify({
+                "success": False,
+                "error": str(getattr(e, 'description', 'Permintaan ditolak: Token CSRF tidak valid.'))
+            }), 403
+        from flask import flash, redirect, url_for
+        flash("Sesi Anda telah kedaluwarsa atau token tidak valid. Silakan masuk kembali.", "warning")
+        return redirect(url_for('auth.index'))
+
     # 3. HTTP Security Headers
     @app.after_request
     def set_security_headers(response):
@@ -54,6 +72,14 @@ def create_app():
         response.headers['X-XSS-Protection'] = '1; mode=block'
         response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
         response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
+
+        # Mencegah peramban menyimpan cache halaman HTML (portal, dashboard, login)
+        # agar setelah logout peramban selalu meminta halaman segar tanpa perlu refresh manual
+        if 'text/html' in response.headers.get('Content-Type', ''):
+            response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0'
+            response.headers['Pragma'] = 'no-cache'
+            response.headers['Expires'] = '0'
+
         return response
 
     # Register Blueprints

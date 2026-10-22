@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from app.models.airport_profiles import USERS, verify_user_password
 import time
+import secrets
 
 bp = Blueprint('auth', __name__)
 
@@ -58,8 +59,11 @@ def index():
             return redirect(url_for('staff.dashboard'))
     return render_template('login.html')
 
-@bp.route('/login', methods=['POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'GET':
+        return redirect(url_for('auth.index'))
+
     username = (request.form.get('username') or '').strip().lower()
     password = request.form.get('password') or ''
     selected_role = (request.form.get('role') or '').strip()
@@ -106,6 +110,7 @@ def login():
         session.clear()
         session['user_id'] = username
         session.permanent = True
+        session['_csrf_token'] = secrets.token_hex(32)
 
         if user.get('role') == 'admin':
             return redirect(url_for('admin.dashboard'))
@@ -128,4 +133,5 @@ def login():
 @bp.route('/api/auth/logout', methods=['GET', 'POST'])
 def logout():
     session.clear()
+    session['_csrf_token'] = secrets.token_hex(32)
     return redirect(url_for('auth.index'))
