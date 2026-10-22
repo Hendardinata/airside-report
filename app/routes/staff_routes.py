@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, jsonify
 from app.models.airport_profiles import USERS, AIRPORTS
+from app.models.config_store import get_airport_config, get_admin_config
+from app.services.gsheets_service import write_daily_report
 
 bp = Blueprint('staff', __name__)
 
@@ -11,9 +13,6 @@ def require_login():
         if request.path.startswith('/staff/api/') or request.is_json or request.method == 'POST':
             return jsonify({"status": "error", "message": "Unauthorized. Sesi login petugas diperlukan."}), 401
         return redirect(url_for('auth.index'))
-
-from app.models.config_store import get_airport_config, get_admin_config
-from app.services.gsheets_service import write_daily_report
 
 def generate_wa_message(data, airport_code):
     def v(key):

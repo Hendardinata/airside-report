@@ -3500,7 +3500,6 @@
                         <div class="branch-select-card selected" id="card-branch-{{ code }}" onclick="toggleBranchSelection('{{ code }}')">
                             <div class="branch-card-media">
                                 <img src="{{ url_for('static', filename='img/airport-' ~ code|lower ~ '.webp') }}" 
-                                     onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/airport-' ~ code|lower ~ '.jpg') }}';"
                                      alt="Bandara {{ code }}" 
                                      loading="lazy">
                                 <div class="branch-card-media-overlay"></div>
