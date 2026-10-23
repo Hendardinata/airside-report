@@ -51,9 +51,14 @@ def clear_failed_attempts(username):
 def index():
     if 'user_id' in session:
         user = USERS.get(session['user_id'])
+        if user and not user.get('is_active', True):
+            session.clear()
+            flash("Akun Anda saat ini dinonaktifkan. Silakan hubungi Administrator.", "warning")
+            return render_template('login.html')
+
         if user and user.get('role') == 'admin':
             return redirect(url_for('admin.dashboard'))
-        elif user and user.get('role') == 'gm':
+        elif user and user.get('role') in ('dh', 'gm'):
             return redirect(url_for('gm.dashboard'))
         elif user:
             return redirect(url_for('staff.dashboard'))
@@ -66,7 +71,7 @@ def login():
 
     username = (request.form.get('username') or '').strip().lower()
     password = request.form.get('password') or ''
-    selected_role = (request.form.get('role') or '').strip()
+    selected_role = (request.form.get('role') or '').strip().lower()
 
     if not username or not password:
         flash("Username dan password wajib diisi.", "danger")
@@ -80,26 +85,34 @@ def login():
 
     user = USERS.get(username)
 
+    # Validasi apakah akun sedang dinonaktifkan oleh Administrator
+    if user and not user.get('is_active', True):
+        flash(f"Login ditolak: Akun '{username.upper()}' saat ini berstatus NONAKTIF (pindah tugas atau berhenti). Silakan hubungi Administrator Regional II.", "danger")
+        return redirect(url_for('auth.index'))
+
     # Verifikasi Password menggunakan hash aman
     if user and verify_user_password(user, password):
         # Validasi role jika dipilih
-        if selected_role and user.get('role') != selected_role:
-            record_failed_attempt(username)
-            sisa = get_remaining_attempts(username)
-            if sisa > 0:
-                flash(f"Peran (Role) yang dipilih tidak sesuai dengan akun '{username.upper()}'. Sisa percobaan: {sisa} kali.", "danger")
-            else:
-                flash(f"Akun '{username.upper()}' kini ditangguhkan sementara selama 15 menit.", "danger")
-            return redirect(url_for('auth.index'))
+        if selected_role:
+            sel_norm = 'dh' if selected_role in ('gm', 'dh') else selected_role
+            user_norm = 'dh' if user.get('role') in ('gm', 'dh') else user.get('role')
+            if user_norm != sel_norm:
+                record_failed_attempt(username)
+                sisa = get_remaining_attempts(username)
+                if sisa > 0:
+                    flash(f"Peran (Role) yang dipilih tidak sesuai dengan akun '{username.upper()}'. Sisa percobaan: {sisa} kali.", "danger")
+                else:
+                    flash(f"Akun '{username.upper()}' kini ditangguhkan sementara selama 15 menit.", "danger")
+                return redirect(url_for('auth.index'))
 
-        # Validasi kecocokan Cabang Bandara untuk akun petugas dan GM
+        # Validasi kecocokan Cabang Bandara untuk akun petugas dan Department Head
         selected_airport = (request.form.get('airportCode') or '').strip().upper()
-        if user.get('role') in ('staff', 'gm') and selected_airport:
+        if user.get('role') in ('staff', 'dh', 'gm') and selected_airport:
             user_airport = (user.get('airport') or '').upper()
             if user_airport != selected_airport:
                 record_failed_attempt(username)
                 sisa = get_remaining_attempts(username)
-                role_label = "General Manager" if user.get('role') == 'gm' else "Petugas"
+                role_label = "Department Head" if user.get('role') in ('dh', 'gm') else "Petugas"
                 flash(f"Login ditolak: Akun {role_label} '{username.upper()}' terdaftar untuk cabang {user_airport}, tidak sesuai dengan cabang yang dipilih ({selected_airport}). Silakan pilih cabang {user_airport}.", "danger")
                 return redirect(url_for('auth.index'))
 
@@ -114,7 +127,7 @@ def login():
 
         if user.get('role') == 'admin':
             return redirect(url_for('admin.dashboard'))
-        elif user.get('role') == 'gm':
+        elif user.get('role') in ('dh', 'gm'):
             return redirect(url_for('gm.dashboard'))
         else:
             return redirect(url_for('staff.dashboard'))
@@ -130,6 +143,7 @@ def login():
 
     return redirect(url_for('auth.index'))
 
+@bp.route('/logout', methods=['GET', 'POST'])
 @bp.route('/api/auth/logout', methods=['GET', 'POST'])
 def logout():
     session.clear()

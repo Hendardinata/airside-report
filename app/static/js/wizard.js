@@ -22,6 +22,10 @@ function nextStep(step) {
     if (formCard) {
         formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    if (typeof updateLiveWaPreview === 'function') {
+        updateLiveWaPreview();
+    }
 }
 
 function prevStep(step) {
@@ -38,6 +42,10 @@ function prevStep(step) {
     const formCard = document.querySelector('.form-workspace-card') || document.querySelector('.form-main-card') || document.getElementById('reportWizard');
     if (formCard) {
         formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    if (typeof updateLiveWaPreview === 'function') {
+        updateLiveWaPreview();
     }
 }
 
@@ -84,12 +92,15 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
         return;
     }
 
-    Swal.fire({
-        title: 'Mengirim Laporan...',
-        text: 'Sedang menyuntikkan data ke Google Spreadsheet.',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading() }
-    });
+    if (typeof showKawungLoading === 'function') {
+        showKawungLoading();
+    } else {
+        Swal.fire({
+            title: 'Mengirim Laporan...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+    }
 
     const formData = new FormData(this);
     
@@ -99,6 +110,9 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
     })
     .then(response => response.json())
     .then(data => {
+        if (typeof hideKawungLoading === 'function') hideKawungLoading();
+        Swal.close();
+
         if (data.status === 'success') {
             Swal.fire({
                 title: 'Laporan Diajukan ke GM!', 
@@ -129,6 +143,8 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
         }
     })
     .catch(error => {
+        if (typeof hideKawungLoading === 'function') hideKawungLoading();
+        Swal.close();
         Swal.fire('Error', 'Gagal terhubung ke server', 'error');
         console.error('Error:', error);
     });

@@ -85,7 +85,38 @@ def write_daily_report(sheet_url, form_data):
             if 'TANGGAL' in row or 'KANTOR_CABANG' in row:
                 header_row = row
                 break
-                
+
+    # --- Validasi & Normalisasi Nilai Tanggal Secara Defensif ---
+    import re
+    tanggal_str = str(form_data.get('TANGGAL', '')).strip()
+    date_regex = r'^\d{4}-\d{2}-\d{2}$'
+    if not re.match(date_regex, tanggal_str):
+        # 1. Cek apakah tertukar dengan SAPAAN
+        if re.match(date_regex, str(form_data.get('SAPAAN', '')).strip()):
+            real_date = str(form_data['SAPAAN']).strip()
+            form_data['SAPAAN'] = tanggal_str
+            tanggal_str = real_date
+            form_data['TANGGAL'] = tanggal_str
+        # 2. Cek TANGGAL_LAPORAN
+        elif re.match(date_regex, str(form_data.get('TANGGAL_LAPORAN', '')).strip()):
+            tanggal_str = str(form_data['TANGGAL_LAPORAN']).strip()
+            form_data['TANGGAL'] = tanggal_str
+        # 3. Cek REPORT_ID (misal REP-LOP-20261116)
+        elif form_data.get('REPORT_ID'):
+            m = re.search(r'(\d{4})(\d{2})(\d{2})', str(form_data['REPORT_ID']))
+            if m:
+                tanggal_str = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+                form_data['TANGGAL'] = tanggal_str
+        else:
+            for fmt in ("%d/%m/%Y", "%d-%m-%Y", "%Y/%m/%d"):
+                try:
+                    alt_dt = datetime.strptime(tanggal_str, fmt)
+                    tanggal_str = alt_dt.strftime("%Y-%m-%d")
+                    form_data['TANGGAL'] = tanggal_str
+                    break
+                except ValueError:
+                    pass
+
     row_data = []
     if header_row:
         for idx, header in enumerate(header_row):
@@ -102,9 +133,12 @@ def write_daily_report(sheet_url, form_data):
         row_data = [timestamp, form_data.get('KANTOR_CABANG', ''), form_data.get('TANGGAL', '')]
     
     # --- Validasi Bulan ---
-    tanggal_str = form_data.get('TANGGAL', '')
     if tanggal_str:
-        dt = datetime.strptime(tanggal_str, "%Y-%m-%d")
+        try:
+            dt = datetime.strptime(tanggal_str, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError(f"DITOLAK: Format tanggal laporan '{tanggal_str}' tidak valid (harus YYYY-MM-DD).")
+
         indonesian_months = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGS", "SEP", "OKT", "NOV", "DES"]
         month_abbr = indonesian_months[dt.month - 1]
         year_str = dt.strftime("%Y")
@@ -156,10 +190,10 @@ def write_daily_report(sheet_url, form_data):
     
     # ====== LOGIKA DOUBLE ACTION (Menduplikasi Tab Harian) ======
     tanggal_str = form_data.get('TANGGAL', '')
-    if tanggal_str:
+    if tanggal_str and re.match(r'^\d{4}-\d{2}-\d{2}$', str(tanggal_str).strip()):
         try:
             # Mengambil angka tanggal (misal '2026-10-01' -> '1')
-            day = str(int(tanggal_str.split('-')[2]))
+            day = str(int(str(tanggal_str).strip().split('-')[2]))
             
             try:
                 target_sheet = spreadsheet.worksheet(day)
@@ -366,7 +400,8 @@ def get_daily_summary(date_str):
             "status": "Belum Mengirim",
             "pci": "-",
             "is_submitted": False,
-            "pic_phone": conf.get("pic_phone", "")
+            "pic_phone": conf.get("pic_phone", ""),
+            "gm_phone": conf.get("gm_phone", "")
         }
         
         default_url = conf.get('sheet_url')
@@ -1202,8 +1237,8 @@ def get_airport_sheet_calendar_data(airport_code, force_refresh=False):
             tgl = sr.get('tanggal', '')
             norm_tgl = normalize_date_str(tgl)
             if norm_tgl and norm_tgl.startswith(month_prefix):
-                status = sr.get('status', 'PENDING_GM')
-                if status == 'PENDING_GM':
+                status = str(sr.get('status', 'PENDING_DH')).upper().strip()
+                if status in ('PENDING_DH', 'PENDING_GM'):
                     staging_pending_dates.append(norm_tgl)
                 elif status == 'REVISI':
                     staging_revision_dates.append(norm_tgl)

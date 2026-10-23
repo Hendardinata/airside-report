@@ -432,6 +432,229 @@
         border: 2px solid #ffffff;
     }
 
+    .notif-badge-dot.success {
+        background-color: #22c55e;
+    }
+
+    .notif-badge-dot.warning {
+        background-color: #ea580c;
+    }
+
+    /* Notification Dropdown Menu */
+    .topbar-notif-wrap {
+        position: relative;
+    }
+
+    .notif-dropdown-card {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.65rem;
+        width: 380px;
+        max-width: 92vw;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 14px 35px -5px rgba(15, 23, 42, 0.16), 0 6px 12px rgba(0, 0, 0, 0.04);
+        z-index: 1060;
+        overflow: hidden;
+        animation: fadeInNotif 0.18s ease-out;
+    }
+
+    .notif-dropdown-card.show {
+        display: block;
+    }
+
+    @keyframes fadeInNotif {
+        from { opacity: 0; transform: translateY(-6px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .notif-dropdown-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.85rem 1.15rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .notif-hdr-title {
+        display: block;
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.2;
+    }
+
+    .notif-hdr-sub {
+        display: block;
+        font-size: 0.72rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .notif-count-badge {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.2rem 0.55rem;
+        border-radius: 9999px;
+    }
+
+    .notif-count-badge.has-pending {
+        background: #fff7ed;
+        color: #ea580c;
+        border: 1px solid #fed7aa;
+    }
+
+    .notif-count-badge.all-done {
+        background: #ecfdf5;
+        color: #16a34a;
+        border: 1px solid #a7f3d0;
+    }
+
+    .notif-list-body {
+        max-height: 360px;
+        overflow-y: auto;
+        padding: 0.25rem 0;
+    }
+
+    .notif-list-body::-webkit-scrollbar {
+        width: 5px;
+    }
+    .notif-list-body::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .notif-item {
+        padding: 0.75rem 1.15rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        transition: background-color 0.15s ease;
+    }
+
+    .notif-item:last-child {
+        border-bottom: none;
+    }
+
+    .notif-item.unread {
+        background-color: #fffbf5;
+    }
+
+    .notif-item:hover {
+        background-color: #f8fafc;
+    }
+
+    .notif-item-icon {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .notif-item-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .notif-item-title {
+        font-size: 0.835rem;
+        font-weight: 700;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2px;
+    }
+
+    .notif-pill {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 6px;
+    }
+
+    .notif-pill.warning {
+        background: #fff7ed;
+        color: #c2410c;
+        border: 1px solid #fed7aa;
+    }
+
+    .notif-pill.success {
+        background: #f0fdf4;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+    }
+
+    .notif-item-desc {
+        font-size: 0.74rem;
+        color: #64748b;
+        line-height: 1.35;
+        margin-bottom: 0.45rem;
+    }
+
+    .notif-item-actions {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+
+    .notif-mini-btn {
+        padding: 0.22rem 0.55rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        background: #ffffff;
+        color: #112347;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        transition: all 0.15s ease;
+        text-decoration: none;
+    }
+
+    .notif-mini-btn:hover {
+        background: #f1f5f9;
+        border-color: #94a3b8;
+    }
+
+    .notif-mini-btn.btn-gm {
+        background: #fff7ed;
+        border-color: #fed7aa;
+        color: #ea580c;
+    }
+
+    .notif-mini-btn.btn-gm:hover {
+        background: #ffedd5;
+    }
+
+    .notif-dropdown-footer {
+        padding: 0.65rem 1.15rem;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+        text-align: center;
+    }
+
+    .btn-notif-action-all {
+        background: transparent;
+        border: none;
+        color: #0284c7;
+        font-size: 0.76rem;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .btn-notif-action-all:hover {
+        color: #0369a1;
+        text-decoration: underline;
+    }
+
     /* User Profile Pill */
     .topbar-user-wrap {
         display: flex;
@@ -575,26 +798,26 @@
     }
 
     /* ==========================================================================
-       5. HERO BANNER CARD (EXACT REPLICA OF ATTACHED SCREENSHOT)
+       5. CLEAN CORPORATE PAGE HEADER (ADMIN DASHBOARD)
        ========================================================================== */
     .admin-hero-banner {
         position: relative;
-        border-radius: 20px;
+        border-radius: 18px;
         overflow: hidden;
         background-color: #e0f2fe;
         background-image: url("{{ url_for('static', filename='img/staff-hero-bg.webp') }}");
         background-size: cover;
         background-position: center right;
-        min-height: 200px;
+        min-height: 180px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 2.2rem 2.5rem;
+        padding: 2rem 2.4rem;
         border: 1px solid rgba(226, 232, 240, 0.95);
         box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
         box-sizing: border-box;
         gap: 1.5rem;
-        margin-bottom: 1.6rem;
+        margin-bottom: 1.4rem;
     }
 
     .admin-hero-banner::before {
@@ -633,6 +856,7 @@
         box-shadow: 0 1px 4px rgba(2, 132, 199, 0.08);
     }
 
+    .hero-dot-marker,
     .hero-badge-dot {
         width: 7px;
         height: 7px;
@@ -642,10 +866,10 @@
 
     .hero-heading {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 2.2rem;
+        font-size: 2.1rem;
         font-weight: 800;
         color: var(--theme-navy);
-        letter-spacing: -0.65px;
+        letter-spacing: -0.5px;
         margin: 0 0 0.45rem 0;
         line-height: 1.2;
     }
@@ -670,18 +894,18 @@
 
     .btn-hero-action {
         background: #ffffff;
-        border: 1.5px solid var(--theme-border-strong);
+        border: 1px solid var(--theme-border-strong);
         color: var(--theme-slate-700);
-        border-radius: 12px;
-        padding: 0.65rem 1.15rem;
-        font-size: 0.865rem;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.825rem;
         font-weight: 700;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
         cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+        transition: all 0.15s ease;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
         white-space: nowrap;
     }
 
@@ -689,38 +913,35 @@
         background-color: #f8fafc;
         border-color: #94a3b8;
         color: var(--theme-navy);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
     }
 
     .btn-hero-action.btn-primary-sync {
-        background: var(--theme-btn-gradient);
+        background: var(--theme-navy);
         color: #ffffff;
-        border: none;
-        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+        border: 1px solid var(--theme-navy);
     }
 
     .btn-hero-action.btn-primary-sync:hover {
-        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
-        background: var(--theme-btn-gradient-hover);
+        background: var(--theme-navy-dark);
+        border-color: var(--theme-navy-dark);
     }
 
     /* ==========================================================================
-       6. KPI SUMMARY METRIC CARDS
-       ========================================================================== */
+       6. KPI SUMMARY METRIC CARDS (CLEAN & BALANCED)
+       ========================================================================= */
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.25rem;
-        margin-bottom: 1.6rem;
+        gap: 1.1rem;
+        margin-bottom: 1.25rem;
     }
 
     .kpi-card {
         background-color: #ffffff;
-        border: 1.5px solid var(--theme-border);
-        border-radius: 16px;
-        padding: 1.25rem 1.35rem;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        border: 1px solid var(--theme-border);
+        border-radius: 12px;
+        padding: 1.15rem 1.25rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         display: flex;
         flex-direction: column;
@@ -730,33 +951,32 @@
 
     .kpi-card:hover {
         border-color: #cbd5e1;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
     }
 
     .kpi-card-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 0.65rem;
+        margin-bottom: 0.55rem;
     }
 
     .kpi-label {
-        font-size: 0.735rem;
-        font-weight: 800;
+        font-size: 0.72rem;
+        font-weight: 700;
         color: var(--theme-slate-500);
-        letter-spacing: 0.6px;
+        letter-spacing: 0.5px;
         text-transform: uppercase;
     }
 
     .kpi-icon-box {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         flex-shrink: 0;
     }
 
@@ -787,12 +1007,12 @@
     .kpi-value-row {
         display: flex;
         align-items: baseline;
-        gap: 0.5rem;
-        margin-bottom: 0.4rem;
+        gap: 0.45rem;
+        margin-bottom: 0.25rem;
     }
 
     .kpi-value {
-        font-size: 1.75rem;
+        font-size: 1.65rem;
         font-weight: 800;
         color: var(--theme-navy);
         line-height: 1;
@@ -800,28 +1020,26 @@
     }
 
     .kpi-value-unit {
-        font-size: 0.88rem;
+        font-size: 0.85rem;
         font-weight: 600;
-        color: var(--theme-slate-600);
+        color: var(--theme-slate-500);
     }
 
     .kpi-chevron-arrow {
-        font-size: 0.8rem;
-        color: var(--theme-slate-400);
-        margin-left: auto;
+        display: none !important;
     }
 
     .kpi-progress {
-        height: 6px;
+        height: 5px;
         background-color: #f1f5f9;
         border-radius: 9999px;
         overflow: hidden;
-        margin: 0.35rem 0 0.55rem 0;
+        margin: 0.35rem 0 0.45rem 0;
     }
 
     .kpi-progress-bar {
         height: 100%;
-        background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+        background: #16a34a;
         border-radius: 9999px;
         transition: width 0.4s ease;
     }
@@ -837,129 +1055,136 @@
     }
 
     .pci-scale-tag {
-        font-size: 0.725rem;
+        font-size: 0.72rem;
         font-weight: 700;
-        padding: 0.2rem 0.55rem;
+        padding: 0.18rem 0.55rem;
         border-radius: 6px;
         background-color: #f1f5f9;
         color: #475569;
     }
 
     /* ==========================================================================
-       7. INTERACTIVE DATE CONTROL BAR
+       7. INTERACTIVE DATE CONTROL BAR (CORPORATE STYLE - 100% MATCH IMAGE 1)
        ========================================================================== */
     .filter-bar {
         background-color: #ffffff;
-        border: 1.5px solid var(--theme-border);
-        border-radius: 16px;
-        padding: 0.75rem 1.25rem;
-        margin-bottom: 1.6rem;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 0.65rem 1.35rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        min-height: 56px;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .filter-bar::-webkit-scrollbar {
+        display: none;
     }
 
     .filter-deck-inner {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
-        flex-wrap: wrap;
+        gap: 1.25rem;
+        flex-wrap: nowrap !important;
+        width: 100%;
+        min-width: max-content;
     }
 
     .filter-meta-left {
         display: flex;
         align-items: center;
         gap: 0.85rem;
-        flex-wrap: wrap;
+        flex-wrap: nowrap !important;
+        flex-shrink: 0;
     }
 
     .filter-label {
         font-size: 0.84rem;
         font-weight: 700;
-        color: var(--theme-slate-700);
+        color: #64748b;
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-    }
-
-    .quick-chips {
-        display: flex;
         gap: 0.45rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+        line-height: 1;
     }
 
-    .chip-btn {
-        background-color: #ffffff;
-        border: 1.5px solid var(--theme-border-strong);
-        border-radius: 9999px;
-        padding: 0.32rem 0.95rem;
-        font-size: 0.815rem;
-        font-weight: 700;
-        color: var(--theme-slate-700);
-        cursor: pointer;
-        transition: all 0.18s ease;
-    }
-
-    .chip-btn:hover {
-        background-color: #f1f5f9;
-        border-color: #94a3b8;
-    }
-
-    .chip-btn.active {
-        background-color: var(--theme-navy);
-        border-color: var(--theme-navy);
-        color: #ffffff;
+    .filter-label i {
+        color: #94a3b8;
+        font-size: 0.95rem;
     }
 
     .date-stepper-box {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 0.45rem;
-        background: #f8fafc;
-        border: 1.5px solid var(--theme-border);
-        border-radius: 12px;
-        padding: 0.25rem;
+        height: 38px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 9px;
+        padding: 0 0.35rem;
+        flex-shrink: 0;
+        white-space: nowrap;
+        box-sizing: border-box;
+        transition: border-color 0.15s ease;
+    }
+
+    .date-stepper-box:hover {
+        border-color: #cbd5e1;
     }
 
     .date-nav-btn {
-        width: 34px;
-        height: 34px;
-        border-radius: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
         border: none;
         background: transparent;
-        color: var(--theme-slate-600);
+        color: #64748b;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: background-color 0.15s ease;
+        transition: all 0.15s ease;
+        font-size: 0.75rem;
+        flex-shrink: 0;
     }
 
     .date-nav-btn:hover {
-        background-color: #e2e8f0;
-        color: var(--theme-navy);
+        background-color: #f1f5f9;
+        color: #112347;
     }
 
     .date-picker-trigger {
         display: flex;
         align-items: center;
-        gap: 0.55rem;
-        padding: 0.35rem 0.85rem;
-        background: #ffffff;
-        border: 1px solid var(--theme-border);
-        border-radius: 8px;
+        gap: 0.5rem;
+        padding: 0 0.65rem;
+        height: 100%;
+        background: transparent;
         cursor: pointer;
         position: relative;
         user-select: none;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .date-icon {
-        color: #0284c7;
-        font-size: 0.95rem;
+        color: #2563eb;
+        font-size: 0.9rem;
     }
 
     .date-formatted-text {
         font-size: 0.85rem;
         font-weight: 700;
-        color: var(--theme-slate-900);
+        color: #112347;
+        letter-spacing: -0.15px;
+        white-space: nowrap;
     }
 
     .date-input-hidden {
@@ -972,22 +1197,101 @@
         cursor: pointer;
     }
 
+    /* Right Side Status & Sync Cluster (Matching Image 1 - Strictly Single Line) */
+    .filter-status-summary {
+        display: flex;
+        align-items: center;
+        gap: 0.95rem;
+        flex-wrap: nowrap !important;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .summary-report-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        height: 38px;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 9px;
+        padding: 0 0.95rem;
+        font-size: 0.825rem;
+        color: #112347;
+        font-weight: 500;
+        flex-shrink: 0;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+
+    .summary-report-pill i {
+        color: #16a34a;
+        font-size: 0.95rem;
+    }
+
+    .summary-report-pill strong {
+        font-weight: 800;
+        color: #112347;
+    }
+
+    .summary-v-divider {
+        width: 1px;
+        height: 18px;
+        background-color: #e2e8f0;
+        flex-shrink: 0;
+        margin: 0 0.25rem;
+    }
+
+    .summary-info-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.825rem;
+        color: #64748b;
+        font-weight: 500;
+        flex-shrink: 0;
+        white-space: nowrap;
+        line-height: 1;
+    }
+
+    .summary-info-item i {
+        color: #94a3b8;
+        font-size: 0.95rem;
+    }
+
+    .summary-clock-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.825rem;
+        color: #64748b;
+        font-weight: 500;
+        flex-shrink: 0;
+        white-space: nowrap;
+        line-height: 1;
+    }
+
+    .summary-clock-item i {
+        color: #94a3b8;
+        font-size: 0.95rem;
+    }
+
     /* ==========================================================================
-       8. 4 AIRPORT STATUS CARDS (CABANG BANDARA)
+       8. 4 AIRPORT STATUS CARDS (CABANG BANDARA - MATCHING IMAGE 1)
        ========================================================================== */
     .airports-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 1.15rem;
-        margin-bottom: 1.75rem;
+        margin-bottom: 1.25rem;
     }
 
     .airport-card {
         background-color: #ffffff;
-        border: 1.5px solid var(--theme-border);
+        border: 1px solid var(--theme-border);
         border-radius: 16px;
-        padding: 1.25rem 1.2rem;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+        padding: 1.15rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -998,175 +1302,176 @@
         min-width: 0;
     }
 
-
     .airport-card:hover {
         border-color: #cbd5e1;
-        transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+        transform: translateY(-2px);
     }
 
     .airport-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 0.85rem;
-        gap: 0.5rem;
+        margin-bottom: 0.75rem;
     }
 
     .iata-badge {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 0.82rem;
-        font-weight: 800;
-        padding: 0.28rem 0.65rem;
-        border-radius: 7px;
-        letter-spacing: 0.5px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.22rem 0.75rem;
+        border-radius: 8px;
+        letter-spacing: 0.4px;
         line-height: 1;
         flex-shrink: 0;
     }
 
-    .iata-LOP {
-        background-color: #90c1e8;
-        color: #002b49;
-    }
-
+    .iata-LOP,
     .iata-DPS {
-        background-color: #0284c7;
-        color: #ffffff;
+        background-color: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
     }
 
     .iata-BWX {
-        background-color: #059669;
-        color: #ffffff;
+        background-color: #f0fdf4;
+        color: #16a34a;
+        border: 1px solid #bbf7d0;
     }
 
     .iata-KOE {
-        background-color: #6366f1;
-        color: #ffffff;
+        background-color: #f5f3ff;
+        color: #7c3aed;
+        border: 1px solid #ddd6fe;
     }
 
-    .status-pill {
+    /* Top Right Status Badge Icon (Status Indicator Only, Not Clickable) */
+    .card-status-indicator,
+    .card-status-icon-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
-        padding: 0.25rem 0.65rem;
-        border-radius: 9999px;
-        font-size: 0.72rem;
-        font-weight: 700;
-        white-space: nowrap;
-        line-height: 1.2;
-        flex-shrink: 0;
+        justify-content: center;
+        font-size: 1.4rem;
+        padding: 0;
+        line-height: 1;
+        cursor: default;
+        pointer-events: none;
+        user-select: none;
     }
 
-    .status-pill.warning {
-        background-color: #fff7ed;
+    .card-status-indicator.warning,
+    .card-status-icon-btn.warning {
         color: #ea580c;
-        border: 1px solid #fed7aa;
+        cursor: default;
+        pointer-events: none;
     }
 
-    .status-pill.success {
-        background-color: #ecfdf5;
+    .card-status-indicator.success,
+    .card-status-icon-btn.success {
         color: #16a34a;
-        border: 1px solid #a7f3d0;
+        cursor: default;
+        pointer-events: none;
     }
 
-    .status-pill.loading {
+    /* Middle: Airport Photo Media */
+    .airport-card-media {
+        width: 100%;
+        height: 135px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 0.85rem;
         background-color: #f1f5f9;
-        color: #64748b;
         border: 1px solid #e2e8f0;
+        position: relative;
+    }
+
+    .airport-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.35s ease;
+    }
+
+    .airport-card:hover .airport-card-media img {
+        transform: scale(1.05);
+    }
+
+    .airport-card-body {
+        margin-bottom: 0.85rem;
     }
 
     .airport-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 1.22rem;
+        font-size: 1.25rem;
         font-weight: 800;
-        color: var(--theme-navy);
+        color: #112347;
         margin: 0 0 0.2rem 0;
         letter-spacing: -0.3px;
         line-height: 1.2;
     }
 
     .airport-fullname {
-        font-size: 0.76rem;
-        color: var(--theme-slate-500);
-        margin: 0 0 1.15rem 0;
+        font-size: 0.78rem;
+        color: #64748b;
+        margin: 0;
         line-height: 1.35;
         height: 2.1rem;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
 
+    /* Bottom: SUDAH/BELUM Status Pill Button */
     .airport-action-area {
-        min-height: 40px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
         width: 100%;
         margin-top: auto;
     }
 
-    .airport-actions-dual {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+    .btn-status-pill {
+        width: 100%;
+        min-height: 40px;
+        border-radius: 10px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.825rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         gap: 0.45rem;
-        width: 100%;
-    }
-
-    .btn-wa-reminder {
-        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-        color: #ffffff !important;
-        border: none;
-        border-radius: 9px;
-        padding: 0.52rem 0.45rem;
-        font-size: 0.77rem;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.35rem;
-        text-decoration: none;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        white-space: nowrap;
-        box-shadow: 0 2px 6px rgba(22, 163, 74, 0.22);
-        min-width: 0;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .btn-wa-reminder:hover {
-        background: linear-gradient(135deg, #15803d 0%, #166534 100%);
-        color: #ffffff !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(22, 163, 74, 0.32);
-    }
-
-    .btn-outline-pull {
-        background-color: #ffffff;
-        border: 1.5px solid var(--theme-border-strong);
-        color: var(--theme-slate-700);
-        border-radius: 9px;
-        padding: 0.52rem 0.45rem;
-        font-size: 0.77rem;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.35rem;
         cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        white-space: nowrap;
-        min-width: 0;
-        width: 100%;
+        transition: all 0.2s ease;
+        border: 1.5px solid transparent;
+        text-decoration: none;
         box-sizing: border-box;
     }
 
-    .btn-outline-pull:hover {
-        background-color: #f0f9ff;
-        border-color: #0284c7;
-        color: #0284c7;
+    .btn-status-pill.warning {
+        background-color: #fff7ed;
+        color: #c2410c;
+        border-color: #fed7aa;
+    }
+
+    .btn-status-pill.warning:hover {
+        background-color: #ffedd5;
+        border-color: #fdba74;
+        color: #9a3412;
         transform: translateY(-1px);
-        box-shadow: 0 3px 8px rgba(2, 132, 199, 0.15);
+        box-shadow: 0 3px 10px rgba(234, 88, 12, 0.15);
+    }
+
+    .btn-status-pill.success {
+        background-color: #f0fdf4;
+        color: #15803d;
+        border-color: #bbf7d0;
+        cursor: default;
     }
 
     .btn-wa-reminder span,
@@ -1180,86 +1485,146 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.45rem;
-        color: var(--theme-green);
-        font-size: 0.79rem;
+        gap: 0.4rem;
+        color: #15803d;
+        font-size: 0.76rem;
         font-weight: 700;
         width: 100%;
-        min-height: 40px;
-        padding: 0.52rem 0.65rem;
-        background-color: var(--theme-green-bg);
-        border: 1px solid var(--theme-green-border);
-        border-radius: 9px;
+        min-height: 38px;
+        padding: 0.45rem 0.5rem;
+        background-color: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
         box-sizing: border-box;
         white-space: nowrap;
     }
 
-    /* Quick Access Notification Strip for WhatsApp Message on Rekap page */
+    /* Quick Access Notification Strip for WhatsApp Message on Rekap page (Single Row) */
     .quick-console-strip {
         background: #ffffff;
-        border: 1.5px solid #fed7aa;
-        background: linear-gradient(180deg, #fffbf5 0%, #fff7ed 100%);
-        border-radius: 16px;
-        padding: 1rem 1.45rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 0.85rem 1.35rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
-        margin-top: 0.5rem;
-        box-shadow: 0 2px 8px rgba(234, 88, 12, 0.04);
-        flex-wrap: wrap;
+        gap: 1.25rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+        flex-wrap: nowrap;
+        margin-top: 0.25rem;
     }
 
     .strip-left {
         display: flex;
         align-items: center;
-        gap: 0.85rem;
+        flex: 1;
+        min-width: 0;
     }
 
     .strip-icon-box {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        background: #ea580c;
-        color: #ffffff;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        border-radius: 12px;
+        background: #ecfdf5;
+        border: 1px solid #d1fae5;
+        color: #16a34a;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1.45rem;
         flex-shrink: 0;
     }
 
+    .strip-divider {
+        width: 1px;
+        height: 32px;
+        background-color: #e2e8f0;
+        margin: 0 1.15rem;
+        flex-shrink: 0;
+    }
+
+    .strip-text-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+        flex: 1;
+    }
+
     .strip-title {
-        font-size: 0.925rem;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.92rem;
         font-weight: 800;
-        color: #9a3412;
+        color: #112347;
         margin: 0 0 2px 0;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .strip-desc {
-        font-size: 0.785rem;
-        color: #c2410c;
+        font-size: 0.8rem;
+        color: #64748b;
         margin: 0;
+        line-height: 1.35;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .strip-btn-open {
+    .strip-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        flex-shrink: 0;
+    }
+
+    .btn-strip-copy {
         background: #ffffff;
-        border: 1.5px solid #fdba74;
-        color: #c2410c;
-        padding: 0.55rem 1.15rem;
-        border-radius: 10px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 0.52rem 1.15rem;
         font-size: 0.84rem;
         font-weight: 700;
+        color: #112347;
         cursor: pointer;
-        transition: all 0.15s ease;
         display: inline-flex;
         align-items: center;
         gap: 0.45rem;
+        transition: all 0.15s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
-    .strip-btn-open:hover {
-        background-color: #ffedd5;
-        border-color: #ea580c;
+    .btn-strip-copy:hover {
+        background-color: #f8fafc;
+        border-color: #94a3b8;
+    }
+
+    .btn-strip-open {
+        background: #112347;
+        border: none;
+        border-radius: 8px;
+        padding: 0.52rem 1.25rem;
+        font-size: 0.84rem;
+        font-weight: 700;
+        color: #ffffff;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.15s ease;
+        box-shadow: 0 2px 6px rgba(17, 35, 71, 0.15);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .btn-strip-open:hover {
+        background-color: #0b1833;
+        box-shadow: 0 4px 12px rgba(17, 35, 71, 0.25);
+        color: #ffffff;
     }
 
     /* ==========================================================================
@@ -2894,6 +3259,459 @@
             justify-content: center;
         }
     }
+
+    /* ==========================================================================
+       INJOURNEY KAWUNG LOADING SPINNER OVERLAY
+       ========================================================================== */
+    @keyframes injourney-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes orbitalPulse {
+        0% { transform: rotate(0deg) scale(1); opacity: 0.85; }
+        50% { transform: rotate(180deg) scale(1.08); opacity: 1; }
+        100% { transform: rotate(360deg) scale(1); opacity: 0.85; }
+    }
+
+    .drive-loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(248, 250, 252, 0.75);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+    }
+
+    .drive-loading-overlay.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: all;
+    }
+
+    .drive-loading-box {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: 460px;
+        transform: scale(0.96);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .drive-loading-overlay.show .drive-loading-box {
+        transform: scale(1);
+    }
+
+    .kawung-spinner-wrap {
+        position: relative;
+        width: 88px;
+        height: 88px;
+        margin-bottom: 1.35rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .kawung-orbital-ring {
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        border-top-color: #0284c7;
+        border-right-color: #90c1e8;
+        border-bottom-color: rgba(2, 132, 199, 0.15);
+        animation: orbitalPulse 1.4s ease-in-out infinite;
+    }
+
+    .kawung-spinner-logo {
+        width: 70px;
+        height: 70px;
+        object-fit: contain;
+        animation: injourney-spin 2.2s linear infinite;
+        filter: drop-shadow(0 8px 24px rgba(0, 43, 73, 0.18));
+        user-select: none;
+    }
+
+    .drive-loading-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #002b49;
+        margin-bottom: 0.4rem;
+        letter-spacing: -0.3px;
+    }
+
+    .drive-loading-sub {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #475569;
+        line-height: 1.45;
+    }
+
+    /* ==========================================================================
+       13. VIEW: MANAJEMEN PENGGUNA (STAFF & DEPARTMENT HEAD)
+       ========================================================================== */
+    .users-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+    @media (max-width: 992px) {
+        .users-kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 576px) {
+        .users-kpi-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .user-kpi-card {
+        background: #ffffff;
+        border: 1px solid var(--theme-border);
+        border-radius: 14px;
+        padding: 1.15rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .user-kpi-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+    .user-kpi-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+    .user-kpi-icon.navy { background: #f0f4f8; color: #002b49; border: 1px solid #cbd5e1; }
+    .user-kpi-icon.blue { background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd; }
+    .user-kpi-icon.purple { background: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+    .user-kpi-icon.amber { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+    .user-kpi-icon.red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    .user-kpi-content {
+        min-width: 0;
+    }
+    .user-kpi-val {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: #002b49;
+        line-height: 1.1;
+        margin-bottom: 0.15rem;
+    }
+    .user-kpi-label {
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: #64748b;
+        letter-spacing: -0.1px;
+    }
+
+    .user-filter-bar {
+        background: #ffffff;
+        border: 1px solid var(--theme-border);
+        border-radius: 14px;
+        padding: 0.85rem 1.15rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+    }
+    .user-filter-left {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        flex: 1;
+        min-width: 260px;
+        flex-wrap: wrap;
+    }
+    .user-search-box {
+        position: relative;
+        min-width: 220px;
+        flex: 1;
+    }
+    .user-search-input {
+        width: 100%;
+        height: 38px;
+        background: #f8fafc;
+        border: 1.5px solid var(--theme-border);
+        border-radius: 10px;
+        padding: 0 0.85rem 0 2.25rem;
+        font-size: 0.84rem;
+        color: #0f172a;
+        outline: none;
+        transition: all 0.18s ease;
+    }
+    .user-search-input:focus {
+        background: #ffffff;
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+    .user-search-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 0.85rem;
+        pointer-events: none;
+    }
+
+    .user-filter-select {
+        height: 38px;
+        background: #f8fafc;
+        border: 1.5px solid var(--theme-border);
+        border-radius: 10px;
+        padding: 0 0.85rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #334155;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.18s ease;
+    }
+    .user-filter-select:focus {
+        background: #ffffff;
+        border-color: #0284c7;
+    }
+
+    .btn-add-user {
+        height: 38px;
+        background: var(--theme-btn-gradient);
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        padding: 0 1.25rem;
+        font-size: 0.84rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+        white-space: nowrap;
+    }
+    .btn-add-user:hover {
+        background: var(--theme-btn-gradient-hover);
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.38);
+        transform: translateY(-1px);
+    }
+
+    /* User Avatar & Info */
+    .user-profile-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .user-cell-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.82rem;
+        color: #ffffff;
+        flex-shrink: 0;
+        text-transform: uppercase;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .user-cell-avatar.staff { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
+    .user-cell-avatar.dh { background: linear-gradient(135deg, #7c3aed 0%, #002b49 100%); }
+    .user-cell-avatar.admin { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); }
+
+    .user-cell-meta {
+        min-width: 0;
+    }
+    .user-cell-name {
+        font-weight: 700;
+        font-size: 0.86rem;
+        color: #002b49;
+        margin-bottom: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .user-cell-uname {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: #64748b;
+        letter-spacing: -0.2px;
+    }
+
+    /* Badges */
+    .badge-role-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.1px;
+    }
+    .badge-role-tag.staff {
+        background: #f0f9ff;
+        color: #0284c7;
+        border: 1px solid #bae6fd;
+    }
+    .badge-role-tag.dh {
+        background: #faf5ff;
+        color: #7c3aed;
+        border: 1px solid #e9d5ff;
+    }
+    .badge-role-tag.admin {
+        background: #fffbeb;
+        color: #b45309;
+        border: 1px solid #fde68a;
+    }
+
+    .badge-airport-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+        font-size: 0.74rem;
+        font-weight: 800;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.5px;
+        background: #f1f5f9;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+    }
+    .badge-airport-tag.lop { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+    .badge-airport-tag.dps { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+    .badge-airport-tag.bwx { background: #fff7ed; color: #ea580c; border-color: #fed7aa; }
+    .badge-airport-tag.koe { background: #faf5ff; color: #9333ea; border-color: #e9d5ff; }
+
+    /* Modern Switch Control for Status */
+    .status-toggle-wrap {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        cursor: pointer;
+        user-select: none;
+    }
+    .switch-ui {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+    .switch-ui input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .switch-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #cbd5e1;
+        transition: .22s cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius: 22px;
+    }
+    .switch-slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .22s cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius: 50%;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .switch-ui input:checked + .switch-slider {
+        background-color: #16a34a;
+    }
+    .switch-ui input:checked + .switch-slider:before {
+        transform: translateX(18px);
+    }
+    .switch-ui input:disabled + .switch-slider {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+    .status-pill-text {
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+    .status-pill-text.active { color: #16a34a; }
+    .status-pill-text.inactive { color: #94a3b8; }
+
+    /* Action buttons in table */
+    .user-actions-cluster {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+    }
+    .btn-action-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid var(--theme-border);
+        background: #ffffff;
+        color: #475569;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    .btn-action-icon:hover {
+        background: #f1f5f9;
+        color: #002b49;
+        border-color: #cbd5e1;
+    }
+    .btn-action-icon.edit:hover {
+        background: #f0f9ff;
+        color: #0284c7;
+        border-color: #bae6fd;
+    }
+    .btn-action-icon.delete:hover {
+        background: #fef2f2;
+        color: #dc2626;
+        border-color: #fecaca;
+    }
+    .btn-action-icon:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
 </style>
 {% endblock %}
 
@@ -2902,6 +3720,18 @@
     
     <!-- Backdrop for mobile drawer -->
     <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar(false)"></div>
+
+    <!-- Drive Data Fetching Kawung Loading Overlay -->
+    <div class="drive-loading-overlay" id="driveLoadingOverlay" aria-hidden="true">
+        <div class="drive-loading-box">
+            <div class="kawung-spinner-wrap">
+                <div class="kawung-orbital-ring"></div>
+                <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports" class="kawung-spinner-logo">
+            </div>
+            <div class="drive-loading-title" id="driveLoadingTitle">Mengambil Data dari Google Drive...</div>
+            <div class="drive-loading-sub" id="driveLoadingSub">Sinkronisasi data rekapitulasi bandara Regional II</div>
+        </div>
+    </div>
 
     <!-- ==========================================================================
          SIDEBAR NAVIGATION (ALIGNED WITH ALL FEATURES)
@@ -2924,21 +3754,15 @@
                         <span class="sidebar-item-title">Rekapitulasi Bandara</span>
                     </button>
                 </li>
-                <li>
-                    <button type="button" class="sidebar-menu-btn" id="nav-btn-console" onclick="switchAdminView('console')">
-                        <i class="fa-brands fa-whatsapp sidebar-item-icon"></i>
-                        <span class="sidebar-item-title">Kompilasi Pesan WA</span>
-                    </button>
-                </li>
             </ul>
 
             <!-- GROUP 2: PENGATURAN & MASTER DATA -->
             <div class="nav-group-label">Pengaturan & Master Data</div>
             <ul class="sidebar-menu-list">
                 <li>
-                    <button type="button" class="sidebar-menu-btn" id="nav-btn-config" onclick="switchAdminView('config')">
-                        <i class="fa-solid fa-sliders sidebar-item-icon"></i>
-                        <span class="sidebar-item-title">Konfigurasi Bandara</span>
+                    <button type="button" class="sidebar-menu-btn" id="nav-btn-users" onclick="switchAdminView('users')">
+                        <i class="fa-solid fa-users-gear sidebar-item-icon"></i>
+                        <span class="sidebar-item-title">Manajemen Pengguna</span>
                     </button>
                 </li>
                 <li>
@@ -2989,10 +3813,37 @@
 
                 <!-- Right Side Actions: Notification Bell + User Profile Dropdown -->
                 <div class="topbar-actions">
-                    <button type="button" class="topbar-notif-btn" title="Notifikasi Sistem" onclick="showSystemNotif()">
-                        <i class="fa-regular fa-bell"></i>
-                        <span class="notif-badge-dot"></span>
-                    </button>
+                    <!-- Notification Bell with Interactive Dropdown Menu -->
+                    <div class="topbar-notif-wrap" id="topbarNotifWrap">
+                        <button type="button" class="topbar-notif-btn" id="topbarNotifBtn" title="Status Notifikasi Laporan Cabang" onclick="toggleNotifDropdown(event)">
+                            <i class="fa-regular fa-bell"></i>
+                            <span class="notif-badge-dot warning" id="notifBadgeDot"></span>
+                        </button>
+
+                        <!-- Notification Dropdown Flyout Card -->
+                        <div class="notif-dropdown-card" id="notifDropdownCard">
+                            <div class="notif-dropdown-header">
+                                <div>
+                                    <span class="notif-hdr-title">Pemberitahuan Laporan Harian</span>
+                                    <span class="notif-hdr-sub" id="notifSubtext">Memuat status cabang...</span>
+                                </div>
+                                <span class="notif-count-badge has-pending" id="notifCountBadge">4 Belum</span>
+                            </div>
+
+                            <div class="notif-list-body" id="notifListBody">
+                                <!-- Populated dynamically by updateNotificationCenter -->
+                                <div style="padding: 1.5rem; text-align: center; color: #64748b; font-size: 0.8rem;">
+                                    <i class="fa-solid fa-spinner fa-spin me-1"></i> Memuat status...
+                                </div>
+                            </div>
+
+                            <div class="notif-dropdown-footer">
+                                <button type="button" class="btn-notif-action-all" onclick="fetchRekap()">
+                                    <i class="fa-solid fa-arrows-rotate me-1"></i> Segarkan Status Laporan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- User Profile Pill -->
                     <div class="topbar-user-wrap" onclick="toggleUserDropdown(event)">
@@ -3025,231 +3876,256 @@
         <main class="admin-content-canvas">
 
             <!-- ==================================================================
-                 VIEW 1: REKAPITULASI BANDARA (MATCHING USER SCREENSHOT)
+                 VIEW 1: REKAPITULASI BANDARA (100% MATCH IMAGE 1)
                  ================================================================== -->
             <section class="content-view-panel active-view" id="view-rekap">
                 <!-- HERO BANNER CARD (Aircraft on Runway Tarmac) -->
                 <div class="admin-hero-banner">
                     <div class="hero-info-col">
                         <div class="hero-pill-badge">
-                            <span class="hero-badge-dot"></span>
-                            <span>REGIONAL II • INJOURNEY AIRPORTS</span>
+                            <span class="hero-dot-marker"></span>
+                            <span>UNIT FASILITAS SISI UDARA • REGIONAL II</span>
                         </div>
-                        <h1 class="hero-heading">Rekapitulasi Fasilitas Sisi Udara</h1>
+                        <h1 class="hero-heading">Rekapitulasi Laporan Harian Airside</h1>
                         <p class="hero-subtext">
-                            Pemantauan real-time status pelaporan fasilitas runway, taxiway, dan apron dari 4 bandara cabang.
+                            Pencatatan data inspeksi runway, taxiway, apron, dan pemeliharaan fasilitas harian cabang.
                         </p>
                     </div>
                 </div>
 
-                <!-- 3 KPI SUMMARY METRIC CARDS -->
-                <div class="kpi-grid">
-                    <!-- Card 1: Total Bandara Cabang -->
-                    <div class="kpi-card">
-                        <div class="kpi-card-header">
-                            <span class="kpi-label">Bandara Cabang</span>
-                            <div class="kpi-icon-box kpi-icon-blue">
-                                <i class="fa-solid fa-building-columns"></i>
-                            </div>
-                        </div>
-                        <div class="kpi-value-row">
-                            <span class="kpi-value">4</span>
-                            <span class="kpi-value-unit">Cabang</span>
-                            <i class="fa-solid fa-chevron-right kpi-chevron-arrow"></i>
-                        </div>
-                        <p class="kpi-subtext">
-                            <span>LOP • DPS • BWX • KOE</span>
-                        </p>
-                    </div>
-
-                    <!-- Card 2: Status Pengiriman -->
-                    <div class="kpi-card">
-                        <div class="kpi-card-header">
-                            <span class="kpi-label">Status Pengiriman</span>
-                            <div class="kpi-icon-box kpi-icon-emerald">
-                                <i class="fa-solid fa-clipboard-check"></i>
-                            </div>
-                        </div>
-                        <div class="kpi-value-row">
-                            <span class="kpi-value" id="kpiSubmittedNum">0/4</span>
-                            <span class="kpi-value-unit">Terkirim</span>
-                            <i class="fa-solid fa-chevron-right kpi-chevron-arrow"></i>
-                        </div>
-                        <div class="kpi-progress">
-                            <div class="kpi-progress-bar" id="kpiProgressBar" style="width: 0%;"></div>
-                        </div>
-                        <p class="kpi-subtext">
-                            <span id="kpiProgressText">4 bandara belum melaporkan</span>
-                        </p>
-                    </div>
-
-                    <!-- Hidden telemetric anchors for safe JS telemetry binding -->
-                    <span id="kpiAvgPci" style="display:none;"></span>
-                    <span id="kpiPciRating" style="display:none;"></span>
-
-                    <!-- Card 3: Status Sinkronisasi -->
-                    <div class="kpi-card">
-                        <div class="kpi-card-header">
-                            <span class="kpi-label">Status Sinkronisasi</span>
-                            <div class="kpi-icon-box kpi-icon-amber">
-                                <i class="fa-solid fa-cloud-arrow-up"></i>
-                            </div>
-                        </div>
-                        <div class="kpi-value-row">
-                            <span class="kpi-value" style="font-size: 1.35rem;" id="kpiLastSync">Memuat...</span>
-                        </div>
-                        <p class="kpi-subtext" id="kpiSyncStatus">
-                            <i class="fa-solid fa-circle-check text-success"></i> Google Drive
-                        </p>
-                    </div>
-                </div>
-
-                <!-- INTERACTIVE DATE CONTROL BAR -->
+                <!-- 1. TOP BAR: INTERACTIVE DATE CONTROL & REPORTING SUMMARY -->
                 <div class="filter-bar">
                     <div class="filter-deck-inner">
+                        <!-- Left: Date controls -->
                         <div class="filter-meta-left">
                             <span class="filter-label">
-                                <i class="fa-regular fa-calendar-days text-primary"></i>
-                                <span>Tanggal Laporan:</span>
+                                <i class="fa-regular fa-calendar-days"></i>
+                                <span>Tanggal:</span>
                             </span>
-                            <div class="quick-chips">
-                                <button type="button" class="chip-btn active" id="chipToday" onclick="setQuickDate('today')">Hari Ini</button>
-                                <button type="button" class="chip-btn" id="chipYesterday" onclick="setQuickDate('yesterday')">Kemarin</button>
+                            <div class="date-stepper-box">
+                                <button type="button" class="date-nav-btn" onclick="shiftDate(-1)" title="Hari Sebelumnya">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <div class="date-picker-trigger" id="datePickerTriggerBox" onclick="triggerDatePicker(event)" title="Pilih Tanggal">
+                                    <i class="fa-solid fa-calendar-days date-icon"></i>
+                                    <span id="dateDisplayFormatted" class="date-formatted-text">Memuat...</span>
+                                    <input type="date" class="date-input-hidden" id="filterDate" onchange="onDateChanged()">
+                                </div>
+                                <button type="button" class="date-nav-btn" onclick="shiftDate(1)" title="Hari Berikutnya">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <div class="date-stepper-box">
-                            <button type="button" class="date-nav-btn" onclick="shiftDate(-1)" title="Hari Sebelumnya">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
-                            <div class="date-picker-trigger" id="datePickerTriggerBox" onclick="triggerDatePicker(event)" title="Pilih Tanggal">
-                                <i class="fa-regular fa-calendar-check date-icon"></i>
-                                <span id="dateDisplayFormatted" class="date-formatted-text">Memuat...</span>
-                                <input type="date" class="date-input-hidden" id="filterDate" onchange="onDateChanged()">
+                        <!-- Right: Status summary cluster -->
+                        <div class="filter-status-summary">
+                            <div class="summary-report-pill">
+                                <i class="fa-solid fa-file-lines text-success"></i>
+                                <span>Laporan: <strong id="kpiSubmittedNum">0/4</strong> Terkirim</span>
                             </div>
-                            <button type="button" class="date-nav-btn" onclick="shiftDate(1)" title="Hari Berikutnya">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
+                            <div class="summary-v-divider"></div>
+                            <div class="summary-info-item">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <span id="kpiProgressText">4 bandara belum melaporkan</span>
+                            </div>
+                            <div class="summary-v-divider"></div>
+                            <div class="summary-clock-item">
+                                <i class="fa-regular fa-clock"></i>
+                                <span id="kpiLastSync">Pukul 13.03</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 4 AIRPORT STATUS CARDS -->
+                <!-- 2. 4 AIRPORT STATUS CARDS (MATCHING SKETCH) -->
                 <div class="airports-grid" id="airportsSection">
                     <!-- 1. LOP (Lombok) -->
                     <div class="airport-card" id="card-LOP">
                         <div>
+                            <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
                                 <span class="iata-badge iata-LOP">LOP</span>
-                                <div class="status-pill loading" id="badge-LOP">
-                                    <span class="injourney-spinner-sm me-1"></span> Loading...
-                                </div>
+                                <span class="card-status-indicator warning" id="status-icon-LOP">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                </span>
+                                <!-- Legacy anchor for safe DOM binding -->
+                                <div id="badge-LOP" style="display: none;"></div>
                             </div>
 
-                            <h3 class="airport-title">Lombok</h3>
-                            <p class="airport-fullname">Bandara Internasional Zainuddin Abdul Madjid</p>
+                            <!-- Media: Real Airport Media Thumbnail -->
+                            <div class="airport-card-media">
+                                <img src="{{ url_for('static', filename='img/airport-lop.webp') }}" alt="Bandara Lombok" loading="lazy">
+                            </div>
 
+                            <!-- Title & Subtitle -->
+                            <div class="airport-card-body">
+                                <h3 class="airport-title">Lombok</h3>
+                                <p class="airport-fullname">Bandara Internasional Zainuddin Abdul Madjid</p>
+                            </div>
+
+                            <!-- Hidden telemetric anchors for safe JS telemetry binding -->
                             <span id="pci-val-LOP" style="display: none;"></span>
                             <span id="pci-tag-LOP" style="display: none;"></span>
                             <span id="pci-LOP" style="display: none;"></span>
                         </div>
 
+                        <!-- Bottom: Single Rounded Status Button (SUDAH/BELUM) -->
                         <div class="airport-action-area" id="action-LOP">
-                            <!-- Populated dynamically via JS -->
+                            <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('LOP')" title="Klik untuk tindakan pengingat / tarik data">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <span>Belum Mengirim</span>
+                            </button>
                         </div>
                     </div>
 
                     <!-- 2. DPS (Bali) -->
                     <div class="airport-card" id="card-DPS">
                         <div>
+                            <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
                                 <span class="iata-badge iata-DPS">DPS</span>
-                                <div class="status-pill loading" id="badge-DPS">
-                                    <span class="injourney-spinner-sm me-1"></span> Loading...
-                                </div>
+                                <span class="card-status-indicator warning" id="status-icon-DPS">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                </span>
+                                <!-- Legacy anchor for safe DOM binding -->
+                                <div id="badge-DPS" style="display: none;"></div>
                             </div>
 
-                            <h3 class="airport-title">Bali</h3>
-                            <p class="airport-fullname">Bandara Internasional I Gusti Ngurah Rai</p>
+                            <!-- Media: Real Airport Media Thumbnail -->
+                            <div class="airport-card-media">
+                                <img src="{{ url_for('static', filename='img/airport-dps.webp') }}" alt="Bandara Bali" loading="lazy">
+                            </div>
 
+                            <!-- Title & Subtitle -->
+                            <div class="airport-card-body">
+                                <h3 class="airport-title">Bali</h3>
+                                <p class="airport-fullname">Bandara Internasional I Gusti Ngurah Rai</p>
+                            </div>
+
+                            <!-- Hidden telemetric anchors for safe JS telemetry binding -->
                             <span id="pci-val-DPS" style="display: none;"></span>
                             <span id="pci-tag-DPS" style="display: none;"></span>
                             <span id="pci-DPS" style="display: none;"></span>
                         </div>
 
+                        <!-- Bottom: Single Rounded Status Button (SUDAH/BELUM) -->
                         <div class="airport-action-area" id="action-DPS">
-                            <!-- Populated dynamically via JS -->
+                            <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('DPS')" title="Klik untuk tindakan pengingat / tarik data">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <span>Belum Mengirim</span>
+                            </button>
                         </div>
                     </div>
 
                     <!-- 3. BWX (Banyuwangi) -->
                     <div class="airport-card" id="card-BWX">
                         <div>
+                            <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
                                 <span class="iata-badge iata-BWX">BWX</span>
-                                <div class="status-pill loading" id="badge-BWX">
-                                    <span class="injourney-spinner-sm me-1"></span> Loading...
-                                </div>
+                                <span class="card-status-indicator warning" id="status-icon-BWX">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                </span>
+                                <!-- Legacy anchor for safe DOM binding -->
+                                <div id="badge-BWX" style="display: none;"></div>
                             </div>
 
-                            <h3 class="airport-title">Banyuwangi</h3>
-                            <p class="airport-fullname">Bandara Internasional Banyuwangi</p>
+                            <!-- Media: Real Airport Media Thumbnail -->
+                            <div class="airport-card-media">
+                                <img src="{{ url_for('static', filename='img/airport-bwx.webp') }}" alt="Bandara Banyuwangi" loading="lazy">
+                            </div>
 
+                            <!-- Title & Subtitle -->
+                            <div class="airport-card-body">
+                                <h3 class="airport-title">Banyuwangi</h3>
+                                <p class="airport-fullname">Bandara Internasional Banyuwangi</p>
+                            </div>
+
+                            <!-- Hidden telemetric anchors for safe JS telemetry binding -->
                             <span id="pci-val-BWX" style="display: none;"></span>
                             <span id="pci-tag-BWX" style="display: none;"></span>
                             <span id="pci-BWX" style="display: none;"></span>
                         </div>
 
+                        <!-- Bottom: Single Rounded Status Button (SUDAH/BELUM) -->
                         <div class="airport-action-area" id="action-BWX">
-                            <!-- Populated dynamically via JS -->
+                            <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('BWX')" title="Klik untuk tindakan pengingat / tarik data">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <span>Belum Mengirim</span>
+                            </button>
                         </div>
                     </div>
 
                     <!-- 4. KOE (Kupang) -->
                     <div class="airport-card" id="card-KOE">
                         <div>
+                            <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
                                 <span class="iata-badge iata-KOE">KOE</span>
-                                <div class="status-pill loading" id="badge-KOE">
-                                    <span class="injourney-spinner-sm me-1"></span> Loading...
-                                </div>
+                                <span class="card-status-indicator warning" id="status-icon-KOE">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                </span>
+                                <!-- Legacy anchor for safe DOM binding -->
+                                <div id="badge-KOE" style="display: none;"></div>
                             </div>
 
-                            <h3 class="airport-title">Kupang</h3>
-                            <p class="airport-fullname">Bandara Internasional El Tari</p>
+                            <!-- Media: Real Airport Media Thumbnail -->
+                            <div class="airport-card-media">
+                                <img src="{{ url_for('static', filename='img/airport-koe.webp') }}" alt="Bandara Kupang" loading="lazy">
+                            </div>
 
+                            <!-- Title & Subtitle -->
+                            <div class="airport-card-body">
+                                <h3 class="airport-title">Kupang</h3>
+                                <p class="airport-fullname">Bandara Internasional El Tari</p>
+                            </div>
+
+                            <!-- Hidden telemetric anchors for safe JS telemetry binding -->
                             <span id="pci-val-KOE" style="display: none;"></span>
                             <span id="pci-tag-KOE" style="display: none;"></span>
                             <span id="pci-KOE" style="display: none;"></span>
                         </div>
 
+                        <!-- Bottom: Single Rounded Status Button (SUDAH/BELUM) -->
                         <div class="airport-action-area" id="action-KOE">
-                            <!-- Populated dynamically via JS -->
+                            <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('KOE')" title="Klik untuk tindakan pengingat / tarik data">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <span>Belum Mengirim</span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Clean Compact WhatsApp Notification Banner (Non-crowded access) -->
+                <!-- 3. COMPACT WHATSAPP NOTIFICATION STRIP (MATCHING IMAGE 1) -->
                 <div class="quick-console-strip">
                     <div class="strip-left">
                         <div class="strip-icon-box">
                             <i class="fa-brands fa-whatsapp"></i>
                         </div>
-                        <div>
-                            <div class="strip-title">Kompilasi Pesan WhatsApp Deputy Siap Digunakan</div>
-                            <div class="strip-desc">Laporan harian standar pimpinan telah otomatis dirangkum dan dapat ditinjau atau dikirimkan serentak.</div>
+                        <div class="strip-divider"></div>
+                        <div class="strip-text-col">
+                            <h4 class="strip-title">Kompilasi Pesan WhatsApp Deputy Siap Digunakan</h4>
+                            <p class="strip-desc">Laporan harian standar pimpinan telah otomatis dirangkum dan dapat ditinjau atau dikirimkan serentak.</p>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                        <button type="button" class="btn-outline-action btn-sm" onclick="salinTeksRekap()">
-                            <i class="fa-regular fa-copy me-1"></i> Salin Cepat
+                    <div class="strip-actions">
+                        <button type="button" class="btn-strip-copy" onclick="salinTeksRekap()">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>Salin Cepat</span>
                         </button>
-                        <button type="button" class="strip-btn-open" onclick="switchAdminView('console')">
+                        <button type="button" class="btn-strip-open" onclick="switchAdminView('console')">
+                            <i class="fa-solid fa-file-lines me-1"></i>
                             <span>Buka Kompilasi Penuh</span>
-                            <i class="fa-solid fa-arrow-right"></i>
+                            <i class="fa-solid fa-arrow-right ms-1"></i>
                         </button>
                     </div>
                 </div>
+
+                <!-- Hidden telemetric anchors for safe JS telemetry binding -->
+                <div id="kpiProgressBar" style="display: none;"></div>
+                <span id="kpiAvgPci" style="display: none;"></span>
+                <span id="kpiPciRating" style="display: none;"></span>
+                <span id="kpiSyncStatus" style="display: none;"></span>
             </section>
 
             <!-- ==================================================================
@@ -3272,6 +4148,9 @@
                         </div>
 
                         <div class="console-tools">
+                            <button class="btn-outline-action me-2" type="button" onclick="switchAdminView('rekap')" title="Kembali ke Rekapitulasi Bandara">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Dashboard
+                            </button>
                             <button class="btn-outline-action" type="button" onclick="unduhTeksRekap()" title="Download file .txt">
                                 <i class="fa-solid fa-file-arrow-down me-1 text-primary"></i> Unduh (.txt)
                             </button>
@@ -3303,149 +4182,7 @@
                 </div>
             </section>
 
-            <!-- ==================================================================
-                 VIEW 3: KONFIGURASI BANDARA (DEDICATED FULL WORKSPACE)
-                 ================================================================== -->
-            <section class="content-view-panel" id="view-config">
-                <div class="config-view-header">
-                    <div>
-                        <h2 class="console-title mb-1">Konfigurasi Parameter Bandara</h2>
-                        <p class="console-subtitle">Kelola integrasi Google Drive, spreadsheet aktif, dan nomor kontak tiap cabang.</p>
-                    </div>
-                    <div>
-                        <button type="button" class="btn-modal-sheet" onclick="buatSheetBaru()">
-                            <i class="fa-solid fa-wand-magic-sparkles me-1 text-primary"></i> Buat Sheet Baru
-                        </button>
-                    </div>
-                </div>
 
-                <form id="configForm" onsubmit="submitConfig(event)">
-                    <div class="config-columns">
-                        <!-- Kolom 1: Profil Cabang & Spreadsheet -->
-                        <div class="config-section-card">
-                            <div class="config-card-header">
-                                <span class="config-badge-icon badge-navy"><i class="fa-solid fa-building-user"></i></span>
-                                <h4 class="config-card-title">Informasi Cabang & PIC</h4>
-                            </div>
-
-                            <div class="config-form-group">
-                                <label class="config-field-label" for="configAirportSelect">Pilih Cabang Bandara</label>
-                                <select class="form-control config-field-input" name="airportCode" id="configAirportSelect"
-                                    onchange="loadConfig(this.value)" required>
-                                    <option value="">-- Pilih Cabang --</option>
-                                    <option value="LOP">LOP - Lombok (Zainuddin Abdul Madjid)</option>
-                                    <option value="DPS">DPS - Bali (I Gusti Ngurah Rai)</option>
-                                    <option value="BWX">BWX - Banyuwangi</option>
-                                    <option value="KOE">KOE - Kupang (El Tari)</option>
-                                </select>
-                            </div>
-
-                            <div class="config-form-group">
-                                <label class="config-field-label" for="picPhoneInput">Nomor WhatsApp PIC</label>
-                                <input type="text" class="form-control config-field-input" name="picPhone"
-                                    id="picPhoneInput" placeholder="Contoh: 62812...">
-                                <small class="config-field-hint">Digunakan otomatis pada tombol 'Ingatkan PIC'.</small>
-                            </div>
-
-                            <div class="config-form-group">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <label class="config-field-label mb-0" for="sheetUrlSelect">Spreadsheet Aktif</label>
-                                    <button type="button" class="btn-refresh-micro" onclick="manualRefreshSheets()"
-                                        title="Sinkronkan Ulang Daftar File dari Drive">
-                                        <i class="fa-solid fa-arrows-rotate" id="sheetRefreshIcon"></i> Refresh List
-                                    </button>
-                                </div>
-                                <div class="input-action-row">
-                                    <select class="form-control config-field-input" name="sheetUrl" id="sheetUrlSelect"
-                                        disabled onchange="updateLinkStatus(this.value)">
-                                        <option value="">-- Pilih Cabang Dulu --</option>
-                                    </select>
-                                    <button class="btn-action-icon" type="button" onclick="copySheetUrl()" title="Salin URL Sheet">
-                                        <i class="fa-regular fa-copy"></i>
-                                    </button>
-                                    <button class="btn-action-icon btn-sky" type="button" onclick="openSheetUrl()" title="Buka Spreadsheet di Tab Baru">
-                                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                    </button>
-                                </div>
-                                <small class="config-field-hint" id="loadingSheetsText" style="display: none; color: #0284c7;">
-                                    <i class="fa-solid fa-spinner fa-spin me-1"></i> Memuat daftar spreadsheet dari Drive...
-                                </small>
-                            </div>
-                        </div>
-
-                        <!-- Kolom 2: Automasi Google Drive & Template -->
-                        <div class="config-section-card">
-                            <div class="config-card-header">
-                                <span class="config-badge-icon badge-sky"><i class="fa-solid fa-cloud"></i></span>
-                                <h4 class="config-card-title">Automasi Google Drive</h4>
-                            </div>
-
-                            <div class="config-form-group">
-                                <label class="config-field-label" for="driveFolderInput">Folder ID Google Drive</label>
-                                <div class="input-action-row">
-                                    <input type="text" class="form-control config-field-input" name="driveFolder"
-                                        id="driveFolderInput" placeholder="Paste ID Folder atau link..."
-                                        oninput="onDriveFolderInput()" onchange="onDriveFolderChanged()">
-                                    <button type="button" class="btn-action-cek" onclick="cekDaftarSheet()" title="Cek Folder Google Drive">
-                                        <i class="fa-solid fa-folder-open"></i> Cek
-                                    </button>
-                                </div>
-                                <small class="config-field-hint">Folder penyimpanan file spreadsheet bulanan cabang.</small>
-                            </div>
-
-                            <div class="config-form-group">
-                                <label class="config-field-label" for="targetMonthInput">Target Bulan Laporan</label>
-                                <input type="text" class="form-control config-field-input" name="targetMonth"
-                                    id="targetMonthInput" onchange="onTargetMonthChanged()" placeholder="Pilih Bulan">
-                                <small class="config-field-hint">Target periode pembuatan sheet baru secara otomatis.</small>
-                            </div>
-
-                            <div class="config-form-group">
-                                <label class="config-field-label" for="templateIdInput">Template ID Master</label>
-                                <input type="text" class="form-control config-field-input" name="templateId"
-                                    id="templateIdInput" placeholder="Opsional (Kosongkan jika default)">
-                                <small class="config-field-hint">ID template master format rekapitulasi airside.</small>
-                            </div>
-                        </div>
-
-                        <!-- Kolom 3: Konfigurasi Nomor Tujuan -->
-                        <div class="config-section-card">
-                            <div class="config-card-header">
-                                <span class="config-badge-icon badge-emerald"><i class="fa-solid fa-paper-plane"></i></span>
-                                <h4 class="config-card-title">Nomor Penerima Regional</h4>
-                            </div>
-
-                            <div class="config-form-group">
-                                <label class="config-field-label" for="deputyPhoneInput">Form Input Deputy</label>
-                                <input type="text" class="form-control config-field-input" name="deputyPhone"
-                                    id="deputyPhoneInput" placeholder="Contoh: 62812... (Nomor WA Deputy)">
-                                <small class="config-field-hint">Menerima kompilasi rekapitulasi harian regional.</small>
-                            </div>
-
-                            <div class="config-form-group">
-                                <label class="config-field-label" for="adminPhoneInput">Form Input Admin</label>
-                                <input type="text" class="form-control config-field-input" name="adminPhone"
-                                    id="adminPhoneInput" placeholder="Contoh: 62812... (Nomor WA Admin)">
-                                <small class="config-field-hint">Menerima salinan notifikasi laporan pusat.</small>
-                            </div>
-
-                            <div class="config-broadcast-note">
-                                <i class="fa-solid fa-shield-halved"></i>
-                                <div>
-                                    <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">Distribusi Pesan Aman</div>
-                                    <div>Nomor di atas terhubung langsung ke WhatsApp Web untuk pengiriman rekapitulasi regional.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="config-action-footer">
-                        <button type="submit" class="modal-btn-save">
-                            <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Konfigurasi Bandara
-                        </button>
-                    </div>
-                </form>
-            </section>
 
             <!-- ==================================================================
                  VIEW 4: BATCH OPERATIONS HUB MULTI-CABANG (V2)
@@ -3625,7 +4362,7 @@
                                     <th style="width: 21%;">Folder Google Drive</th>
                                     <th style="width: 32%;">Spreadsheet Aktif Saat Ini</th>
                                     <th style="width: 15%;">WhatsApp PIC</th>
-                                    <th style="width: 15%;">WhatsApp GM</th>
+                                    <th style="width: 15%;">WhatsApp DH</th>
                                     <th style="width: 7%; text-align: center;">Aksi</th>
                                 </tr>
                             </thead>
@@ -3644,7 +4381,7 @@
                                                 <i class="fa-brands fa-google-drive text-warning"></i>
                                             </a>
                                             {% else %}
-                                            <a id="matrixOpenFolderLink-{{ code }}" href="#" target="_blank" class="input-action-btn d-none" title="Buka Folder di Google Drive">
+                                             <a id="matrixOpenFolderLink-{{ code }}" href="#" target="_blank" class="input-action-btn d-none" title="Buka Folder di Google Drive">
                                                 <i class="fa-brands fa-google-drive text-warning"></i>
                                             </a>
                                             {% endif %}
@@ -3662,7 +4399,7 @@
                                                 </option>
                                             </select>
                                             <a id="matrixOpenSheetLink-{{ code }}" href="{{ c.sheet_url | default('#') }}" target="_blank" 
-                                               class="input-action-btn {% if not c.sheet_url %}d-none{% endif %}" title="Buka Spreadsheet di Tab Baru">
+                                                class="input-action-btn {% if not c.sheet_url %}d-none{% endif %}" title="Buka Spreadsheet di Tab Baru">
                                                 <i class="fa-solid fa-arrow-up-right-from-square text-primary"></i>
                                             </a>
                                         </div>
@@ -3679,7 +4416,7 @@
                                     <td>
                                         <div class="input-with-icon">
                                             <i class="fa-brands fa-whatsapp input-icon text-success"></i>
-                                            <input type="text" class="table-input with-icon monospace" id="matrixGM-{{ code }}" value="{{ c.gm_phone | default('') }}" placeholder="62812...">
+                                            <input type="text" class="table-input with-icon monospace" id="matrixGM-{{ code }}" value="{{ c.dh_phone | default(c.gm_phone | default('')) }}" placeholder="62812..." title="Nomor WhatsApp Department Head (DH)">
                                         </div>
                                     </td>
                                     <td style="text-align: center;">
@@ -3838,6 +4575,141 @@
                 </div>
             </section>
 
+            <!-- ==================================================================
+                 VIEW: MANAJEMEN PENGGUNA (STAFF & DEPARTMENT HEAD)
+                 ================================================================== -->
+            <section class="content-view-panel" id="view-users">
+                <div class="config-view-header">
+                    <div>
+                        <h2 class="console-title mb-1">Manajemen Pengguna & Otorisasi</h2>
+                        <p class="console-subtitle">Kelola akun Petugas Lapangan (Staff) dan Department Head (DH) di seluruh bandara cabang Regional II.</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn-outline-action" onclick="fetchUsersList(true)" title="Segarkan Data Pengguna">
+                            <i class="fa-solid fa-arrows-rotate me-1 text-primary"></i> Segarkan
+                        </button>
+                        <button type="button" class="btn-add-user" onclick="openAddUserModal()">
+                            <i class="fa-solid fa-user-plus"></i> Tambah Pengguna Baru
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI STATS CARDS -->
+                <div class="users-kpi-grid">
+                    <div class="user-kpi-card">
+                        <div class="user-kpi-icon navy">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="user-kpi-content">
+                            <div class="user-kpi-val" id="kpiTotalUsers">0</div>
+                            <div class="user-kpi-label">Total Pengguna Terdaftar</div>
+                        </div>
+                    </div>
+                    <div class="user-kpi-card">
+                        <div class="user-kpi-icon blue">
+                            <i class="fa-solid fa-user-pen"></i>
+                        </div>
+                        <div class="user-kpi-content">
+                            <div class="user-kpi-val" id="kpiActiveStaff">0</div>
+                            <div class="user-kpi-label">Staff Lapangan Aktif</div>
+                        </div>
+                    </div>
+                    <div class="user-kpi-card">
+                        <div class="user-kpi-icon purple">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <div class="user-kpi-content">
+                            <div class="user-kpi-val" id="kpiActiveDH">0</div>
+                            <div class="user-kpi-label">Department Head Aktif</div>
+                        </div>
+                    </div>
+                    <div class="user-kpi-card">
+                        <div class="user-kpi-icon red">
+                            <i class="fa-solid fa-user-slash"></i>
+                        </div>
+                        <div class="user-kpi-content">
+                            <div class="user-kpi-val" id="kpiInactiveUsers">0</div>
+                            <div class="user-kpi-label">Pengguna Nonaktif (Diblokir)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILTER & SEARCH BAR -->
+                <div class="user-filter-bar">
+                    <div class="user-filter-left">
+                        <div class="user-search-box">
+                            <i class="fa-solid fa-magnifying-glass user-search-icon"></i>
+                            <input type="text" id="userSearchInput" class="user-search-input" placeholder="Cari nama lengkap, username..." oninput="filterUsers()">
+                        </div>
+
+                        <select id="userFilterRole" class="user-filter-select" onchange="filterUsers()">
+                            <option value="">Semua Peran Otorisasi</option>
+                            <option value="staff">Staff Lapangan</option>
+                            <option value="dh">Department Head (DH)</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+
+                        <select id="userFilterAirport" class="user-filter-select" onchange="filterUsers()">
+                            <option value="">Semua Cabang Bandara</option>
+                            <option value="LOP">LOP - Bandara Lombok</option>
+                            <option value="DPS">DPS - Bandara Bali</option>
+                            <option value="BWX">BWX - Bandara Banyuwangi</option>
+                            <option value="KOE">KOE - Bandara Kupang</option>
+                            <option value="ALL">Pusat Regional II</option>
+                        </select>
+
+                        <select id="userFilterStatus" class="user-filter-select" onchange="filterUsers()">
+                            <option value="">Semua Status</option>
+                            <option value="active">Hanya Aktif</option>
+                            <option value="inactive">Hanya Nonaktif</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn-outline-action" onclick="resetUserFilters()" style="height: 38px;">
+                        <i class="fa-solid fa-rotate-left me-1"></i> Reset Filter
+                    </button>
+                </div>
+
+                <!-- USERS TABLE CARD -->
+                <div class="hub-card" style="padding: 0; overflow: hidden;">
+                    <div class="hub-table-wrapper" style="border: none; margin-bottom: 0; border-radius: 0;">
+                        <table class="hub-table">
+                            <colgroup>
+                                <col style="width: 28%;">
+                                <col style="width: 18%;">
+                                <col style="width: 20%;">
+                                <col style="width: 18%;">
+                                <col style="width: 16%; text-align: center;">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th style="padding-left: 1.25rem !important;">Pengguna & Akun</th>
+                                    <th>Peran (Role)</th>
+                                    <th>Penempatan Cabang</th>
+                                    <th>Status Akses Login</th>
+                                    <th style="text-align: center; padding-right: 1.25rem !important;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 2.5rem !important; color: #64748b;">
+                                        <i class="fa-solid fa-spinner fa-spin me-2 text-primary"></i> Memuat data pengguna...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Micro info footer inside card -->
+                    <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #64748b; flex-wrap: wrap; gap: 0.5rem;">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-primary"></i>
+                            <span>Pengguna dengan status <strong>Nonaktif</strong> dilarang login ke sistem. Akun Administrator Sistem dilindungi demi keamanan.</span>
+                        </div>
+                        <div id="usersCountFooter">Menampilkan 0 pengguna</div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 </div>
@@ -3845,28 +4717,6 @@
 <!-- ==========================================================================
      LEGACY COMPATIBILITY MODALS (FOR CODE TRIGGERING MODALS DIRECTLY)
      ========================================================================== -->
-<div id="configModal" class="clean-modal-overlay" style="display: none;">
-    <div class="clean-modal-card">
-        <div class="modal-head">
-            <div class="modal-title-group">
-                <div class="modal-icon-badge"><i class="fa-solid fa-sliders"></i></div>
-                <div>
-                    <h3 class="modal-title">Konfigurasi Parameter Bandara</h3>
-                    <p class="modal-subtitle">Pengaturan Google Drive, link spreadsheet, dan nomor PIC.</p>
-                </div>
-            </div>
-            <button type="button" class="modal-close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="modal-body" style="padding: 1rem 1.5rem;">
-            <p class="text-muted">Gunakan menu <strong>Konfigurasi Bandara</strong> di sidebar untuk pengalaman manajemen layar penuh yang optimal.</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn-modal-sheet" onclick="closeModal(); switchAdminView('config');">Buka Konfigurasi Lengkap</button>
-            <button type="button" class="btn-outline-action" onclick="closeModal()">Tutup</button>
-        </div>
-    </div>
-</div>
-
 <div id="batchHubModal" class="clean-modal-overlay" style="display: none;" data-open-batch="{{ 'true' if open_batch else 'false' }}">
     <div class="clean-modal-card">
         <div class="modal-head">
@@ -3912,10 +4762,234 @@
 </div>
 
 <!-- ==========================================================================
+     MODAL: TAMBAH PENGGUNA BARU
+     ========================================================================== -->
+<div class="clean-modal-overlay" id="modalAddUser" style="display: none;">
+    <div class="clean-modal-card" style="max-width: 540px;">
+        <div class="modal-head">
+            <div class="modal-title-group">
+                <div class="modal-icon-badge" style="background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd;">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div>
+                    <h3 class="modal-title">Tambah Pengguna Baru</h3>
+                    <p class="modal-subtitle">Daftarkan akun Petugas Lapangan (Staff) atau Department Head (DH).</p>
+                </div>
+            </div>
+            <button type="button" class="modal-close-btn" onclick="closeAddUserModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <form id="formAddUser" onsubmit="submitAddUser(event)">
+            <div class="modal-body" style="padding: 1.25rem 1.75rem; display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group-modern">
+                    <label class="form-label-modern" for="add_username">
+                        Username Login <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-at input-icon text-muted"></i>
+                        <input type="text" class="table-input with-icon monospace" id="add_username" placeholder="contoh: staff_lop_rizky atau dh_dps" required autocomplete="off" oninput="this.value = this.value.toLowerCase().replace(/[^a-z0-9_]/g, '')">
+                    </div>
+                    <small class="text-muted" style="font-size: 0.72rem;">Hanya huruf kecil, angka, dan garis bawah (_).</small>
+                </div>
+
+                <div class="form-group-modern">
+                    <label class="form-label-modern" for="add_password">
+                        Password Login <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-with-icon" style="position: relative;">
+                        <i class="fa-solid fa-key input-icon text-muted"></i>
+                        <input type="password" class="table-input with-icon" id="add_password" placeholder="Masukkan password akun" required autocomplete="new-password">
+                        <button type="button" class="btn-action-icon" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: none; width: 28px; height: 28px;" onclick="togglePasswordVisibility('add_password', 'eye_add_pw')">
+                            <i class="fa-solid fa-eye" id="eye_add_pw"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group-modern">
+                    <label class="form-label-modern" for="add_name">
+                        Nama Lengkap & Gelar <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-id-card input-icon text-muted"></i>
+                        <input type="text" class="table-input with-icon" id="add_name" placeholder="contoh: Rizky Ramadhan, S.T." required>
+                    </div>
+                    <small class="text-muted" style="font-size: 0.72rem;">Nama ini akan tercantum sebagai <strong>Petugas Pengirim</strong> pada dokumen resmi Department Head.</small>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="form-group-modern">
+                            <label class="form-label-modern" for="add_role">
+                                Peran (Role) <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-user-shield input-icon text-muted"></i>
+                                <select class="table-input with-icon" id="add_role" required style="font-weight: 600;">
+                                    <option value="staff" selected>Staff Lapangan</option>
+                                    <option value="dh">Department Head (DH)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group-modern">
+                            <label class="form-label-modern" for="add_airport">
+                                Cabang Bandara <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-plane-departure input-icon text-muted"></i>
+                                <select class="table-input with-icon" id="add_airport" required style="font-weight: 700; color: #002b49;">
+                                    <option value="LOP">LOP - Lombok</option>
+                                    <option value="DPS">DPS - Bali</option>
+                                    <option value="BWX">BWX - Banyuwangi</option>
+                                    <option value="KOE">KOE - Kupang</option>
+                                    <option value="ALL">Pusat Regional II</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group-modern" style="margin-top: 0.25rem;">
+                    <label class="status-toggle-wrap">
+                        <label class="switch-ui">
+                            <input type="checkbox" id="add_is_active" checked onchange="document.getElementById('add_status_label').textContent = this.checked ? 'Akun Langsung Aktif' : 'Akun Dibuat Nonaktif'; document.getElementById('add_status_label').className = this.checked ? 'status-pill-text active' : 'status-pill-text inactive';">
+                            <span class="switch-slider"></span>
+                        </label>
+                        <span class="status-pill-text active" id="add_status_label">Akun Langsung Aktif</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="padding: 1rem 1.75rem; background: #f8fafc; border-top: 1px solid #e2e8f0; border-radius: 0 0 16px 16px;">
+                <button type="button" class="btn-outline-action" onclick="closeAddUserModal()">Batal</button>
+                <button type="submit" class="modal-btn-save" id="btnSubmitAddUser">
+                    <i class="fa-solid fa-user-plus me-1"></i> Simpan Pengguna
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     MODAL: EDIT PENGGUNA
+     ========================================================================== -->
+<div class="clean-modal-overlay" id="modalEditUser" style="display: none;">
+    <div class="clean-modal-card" style="max-width: 540px;">
+        <div class="modal-head">
+            <div class="modal-title-group">
+                <div class="modal-icon-badge" style="background: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff;">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+                <div>
+                    <h3 class="modal-title">Edit Profil & Akses Pengguna</h3>
+                    <p class="modal-subtitle" id="editModalSub">Perbarui data nama, peran, cabang, atau atur ulang password.</p>
+                </div>
+            </div>
+            <button type="button" class="modal-close-btn" onclick="closeEditUserModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <form id="formEditUser" onsubmit="submitEditUser(event)">
+            <div class="modal-body" style="padding: 1.25rem 1.75rem; display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group-modern">
+                    <label class="form-label-modern" for="edit_username">
+                        Username (ID Sistem)
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock input-icon text-muted"></i>
+                        <input type="text" class="table-input with-icon monospace" id="edit_username" readonly style="background: #f1f5f9; cursor: not-allowed; font-weight: 700; color: #002b49;">
+                    </div>
+                </div>
+
+                <div class="form-group-modern">
+                    <label class="form-label-modern" for="edit_name">
+                        Nama Lengkap & Gelar <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-id-card input-icon text-muted"></i>
+                        <input type="text" class="table-input with-icon" id="edit_name" required>
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="form-group-modern">
+                            <label class="form-label-modern" for="edit_role">
+                                Peran (Role) <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-user-shield input-icon text-muted"></i>
+                                <select class="table-input with-icon" id="edit_role" required style="font-weight: 600;">
+                                    <option value="staff">Staff Lapangan</option>
+                                    <option value="dh">Department Head (DH)</option>
+                                    <option value="admin">Administrator</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group-modern">
+                            <label class="form-label-modern" for="edit_airport">
+                                Cabang Bandara <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-plane-departure input-icon text-muted"></i>
+                                <select class="table-input with-icon" id="edit_airport" required style="font-weight: 700; color: #002b49;">
+                                    <option value="LOP">LOP - Lombok</option>
+                                    <option value="DPS">DPS - Bali</option>
+                                    <option value="BWX">BWX - Banyuwangi</option>
+                                    <option value="KOE">KOE - Kupang</option>
+                                    <option value="ALL">Pusat Regional II</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group-modern">
+                    <label class="form-label-modern" for="edit_password">
+                        Ganti Password Baru <span class="text-muted fw-normal">(Opsional)</span>
+                    </label>
+                    <div class="input-with-icon" style="position: relative;">
+                        <i class="fa-solid fa-key input-icon text-muted"></i>
+                        <input type="password" class="table-input with-icon" id="edit_password" placeholder="Kosongkan jika password tidak ingin diubah" autocomplete="new-password">
+                        <button type="button" class="btn-action-icon" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: none; width: 28px; height: 28px;" onclick="togglePasswordVisibility('edit_password', 'eye_edit_pw')">
+                            <i class="fa-solid fa-eye" id="eye_edit_pw"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group-modern" style="margin-top: 0.25rem;">
+                    <label class="status-toggle-wrap">
+                        <label class="switch-ui">
+                            <input type="checkbox" id="edit_is_active" onchange="document.getElementById('edit_status_label').textContent = this.checked ? 'Status Akun: Aktif' : 'Status Akun: Nonaktif (Diblokir)'; document.getElementById('edit_status_label').className = this.checked ? 'status-pill-text active' : 'status-pill-text inactive';">
+                            <span class="switch-slider"></span>
+                        </label>
+                        <span class="status-pill-text active" id="edit_status_label">Status Akun: Aktif</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="padding: 1rem 1.75rem; background: #f8fafc; border-top: 1px solid #e2e8f0; border-radius: 0 0 16px 16px;">
+                <button type="button" class="btn-outline-action" onclick="closeEditUserModal()">Batal</button>
+                <button type="submit" class="modal-btn-save" id="btnSubmitEditUser">
+                    <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Perubahan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ==========================================================================
      DASHBOARD JAVASCRIPT LOGIC
      ========================================================================== -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/plugins/monthSelect/index.js"></script>
+
+<!-- Embedded Fleet Config Data (JSON Island) -->
+<script type="application/json" id="fleetConfigData">
+    {{ (config.airports if config and config.airports else {}) | tojson | safe }}
+</script>
 
 <script>
     // --- SIDEBAR & VIEW MANAGEMENT ---
@@ -3945,13 +5019,242 @@
             populateBulkMonthOptions();
         } else if (viewId === 'schema') {
             loadFormBuilderSchema();
-        } else if (viewId === 'config') {
-            const currentAirport = document.getElementById('configAirportSelect')?.value;
-            loadConfig(currentAirport || '');
+        } else if (viewId === 'users') {
+            fetchUsersList();
+        } else if (viewId === 'console') {
+            const textarea = document.getElementById('kompilasiText');
+            if (textarea && textarea.value) {
+                updateConsoleStats(textarea.value);
+            }
         }
 
         // Scroll to top smoothly
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- GLOBAL FLEET DATA & CACHE ---
+    const FLEET_CONFIG = (function() {
+        try {
+            const el = document.getElementById('fleetConfigData');
+            return el ? JSON.parse(el.textContent) : {};
+        } catch (e) {
+            return {};
+        }
+    })();
+    window.FLEET_CONFIG = FLEET_CONFIG;
+    const AIRPORT_NAMES = {
+        'LOP': { city: 'Lombok', fullname: 'Bandara Internasional Zainuddin Abdul Madjid', full: 'Bandara Internasional Zainuddin Abdul Madjid' },
+        'DPS': { city: 'Bali', fullname: 'Bandara Internasional I Gusti Ngurah Rai', full: 'Bandara Internasional I Gusti Ngurah Rai' },
+        'BWX': { city: 'Banyuwangi', fullname: 'Bandara Internasional Banyuwangi', full: 'Bandara Internasional Banyuwangi' },
+        'KOE': { city: 'Kupang', fullname: 'Bandara Internasional El Tari', full: 'Bandara Internasional El Tari' }
+    };
+    let lastRekapData = null;
+    let lastRekapDate = '';
+
+    // --- NOTIFICATION DROPDOWN TOGGLE ---
+    function toggleNotifDropdown(e) {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        const card = document.getElementById('notifDropdownCard');
+        if (!card) return;
+        card.classList.toggle('show');
+    }
+
+    // --- DEPARTMENT HEAD (DH) WHATSAPP CONTACT ACTION ---
+    function contactGMWhatsApp(code) {
+        const info = (lastRekapData && lastRekapData[code]) || {};
+        const fleetConf = (window.FLEET_CONFIG && window.FLEET_CONFIG[code]) || {};
+        const dhPhone = info.dh_phone || fleetConf.dh_phone || info.gm_phone || fleetConf.gm_phone || '';
+        const airportMeta = AIRPORT_NAMES[code] || { city: code, fullname: code };
+        const dStr = lastRekapDate || document.getElementById('filterDate')?.value || '';
+
+        if (!dhPhone || !dhPhone.trim()) {
+            Swal.fire({
+                title: `Nomor WhatsApp DH ${code} Belum Diatur`,
+                text: `Nomor WhatsApp Department Head untuk cabang ${code} belum disetel di konfigurasi fleet. Buka menu Batch Hub untuk melengkapinya?`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Buka Batch Hub',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#90c1e8'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    switchAdminView('batch');
+                }
+            });
+            return;
+        }
+
+        let cleanNum = dhPhone.trim().replace(/\D/g, '');
+        if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
+
+        const waMsg = `Yth. Department Head Bandara ${airportMeta.fullname} (${code}),\n\nMohon izin menginformasikan bahwa Laporan Harian Kondisi Fasilitas Sisi Udara (Airside) untuk tanggal *${dStr}* belum kami terima di sistem Regional II.\n\nMohon arahan kepada tim terkait di cabang untuk segera melakukan pengisian dan verifikasi. Atas perhatian dan kerjasamanya kami ucapkan terima kasih.\n\nSalam hormat,\n*Administrator Regional II - InJourney Airports*`;
+
+        const waUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(waMsg)}`;
+        window.open(waUrl, '_blank');
+    }
+    window.contactDHWhatsApp = contactGMWhatsApp;
+
+    // --- STATUS ICON & ACTION SHEET HANDLERS ---
+    function handleStatusIconClick(code) {
+        const info = (lastRekapData && lastRekapData[code]) || {};
+        if (info.is_submitted) {
+            openBranchSuccessSheet(code);
+        } else {
+            contactGMWhatsApp(code);
+        }
+    }
+
+    function openBranchActionSheet(code) {
+        const info = (lastRekapData && lastRekapData[code]) || {};
+        const branchCity = AIRPORT_NAMES[code]?.city || code;
+        const dStr = lastRekapDate || document.getElementById('filterDate')?.value || '';
+
+        Swal.fire({
+            title: `Tindakan Cepat - ${code}`,
+            text: `Bandara ${branchCity} belum mengirimkan laporan tanggal ${dStr}. Pilih tindakan:`,
+            icon: 'warning',
+            showCancelButton: true,
+            showDenyButton: true,
+            confirmButtonText: '<i class="fa-solid fa-user-tie me-1"></i> WhatsApp DH',
+            confirmButtonColor: '#ea580c',
+            denyButtonText: '<i class="fa-brands fa-whatsapp me-1"></i> Ingatkan PIC Lapangan',
+            denyButtonColor: '#16a34a',
+            cancelButtonText: '<i class="fa-solid fa-cloud-arrow-down me-1"></i> Tarik Data',
+            cancelButtonColor: '#0284c7',
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                contactGMWhatsApp(code);
+            } else if (result.isDenied) {
+                remindPicWhatsApp(code, info.pic_phone || '', branchCity, dStr);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                syncRekap(code);
+            }
+        });
+    }
+
+    function openBranchSuccessSheet(code) {
+        const info = (lastRekapData && lastRekapData[code]) || {};
+        const airportMeta = AIRPORT_NAMES[code] || { city: code, fullname: code };
+        const dStr = lastRekapDate || document.getElementById('filterDate')?.value || '';
+
+        Swal.fire({
+            title: `Laporan ${code} Terverifikasi`,
+            html: `
+                <div style="text-align: left; font-size: 0.9rem; line-height: 1.6; padding: 0.5rem;">
+                    <div style="margin-bottom: 0.35rem;"><strong>Cabang:</strong> ${airportMeta.city} (${airportMeta.fullname})</div>
+                    <div style="margin-bottom: 0.35rem;"><strong>Tanggal:</strong> ${formatDateIndonesian(dStr)}</div>
+                    <div style="margin-bottom: 0.35rem;"><strong>Status:</strong> <span style="background:#ecfdf5; color:#16a34a; padding:0.2rem 0.6rem; border-radius:6px; font-weight:700;">✓ Sudah Mengirim</span></div>
+                    <div><strong>PCI Runway:</strong> ${info.pci || '-'}</div>
+                </div>
+            `,
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fa-solid fa-rotate me-1"></i> Tarik Ulang Data',
+            confirmButtonColor: '#0284c7',
+            cancelButtonText: 'Tutup'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                syncRekap(code);
+            }
+        });
+    }
+
+    // --- NOTIFICATION CENTER UPDATER ---
+    function updateNotificationCenter(data, dateStr) {
+        let submittedCount = 0;
+        const total = 4;
+        const pendingAirports = [];
+        const submittedAirports = [];
+
+        ['DPS', 'LOP', 'BWX', 'KOE'].forEach(code => {
+            const info = (data && data[code]) || { is_submitted: false };
+            if (info.is_submitted) {
+                submittedCount++;
+                submittedAirports.push(code);
+            } else {
+                pendingAirports.push(code);
+            }
+        });
+
+        const pendingCount = total - submittedCount;
+        const notifBadgeDot = document.getElementById('notifBadgeDot');
+        const notifCountBadge = document.getElementById('notifCountBadge');
+        const notifSubtext = document.getElementById('notifSubtext');
+        const notifListBody = document.getElementById('notifListBody');
+
+        if (notifBadgeDot) {
+            notifBadgeDot.className = pendingCount > 0 ? 'notif-badge-dot warning' : 'notif-badge-dot success';
+        }
+
+        if (notifCountBadge) {
+            if (pendingCount > 0) {
+                notifCountBadge.className = 'notif-count-badge has-pending';
+                notifCountBadge.textContent = `${pendingCount} Belum`;
+            } else {
+                notifCountBadge.className = 'notif-count-badge all-done';
+                notifCountBadge.textContent = `Lengkap (4/4)`;
+            }
+        }
+
+        if (notifSubtext) {
+            notifSubtext.textContent = `${formatDateIndonesian(dateStr)} • ${submittedCount}/${total} Terkirim`;
+        }
+
+        if (notifListBody) {
+            let html = '';
+            ['DPS', 'LOP', 'BWX', 'KOE'].forEach(code => {
+                const info = (data && data[code]) || { is_submitted: false, pci: '-' };
+                const meta = AIRPORT_NAMES[code] || { city: code, fullname: code };
+                if (info.is_submitted) {
+                    html += `
+                        <div class="notif-item">
+                            <i class="fa-solid fa-circle-check notif-item-icon text-success"></i>
+                            <div class="notif-item-content">
+                                <div class="notif-item-title">
+                                    <span><strong>${code}</strong> - ${meta.city}</span>
+                                    <span class="notif-pill success">Sudah Mengirim</span>
+                                </div>
+                                <div class="notif-item-desc">Laporan harian terverifikasi (PCI Runway: <strong>${info.pci || '-'}</strong>).</div>
+                                <div class="notif-item-actions">
+                                    <button type="button" class="notif-mini-btn" onclick="openBranchSuccessSheet('${code}')">
+                                        <i class="fa-solid fa-eye"></i> Detail
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="notif-item unread">
+                            <i class="fa-solid fa-circle-exclamation notif-item-icon text-warning"></i>
+                            <div class="notif-item-content">
+                                <div class="notif-item-title">
+                                    <span><strong>${code}</strong> - ${meta.city}</span>
+                                    <span class="notif-pill warning">Belum Mengirim</span>
+                                </div>
+                                <div class="notif-item-desc">Laporan tanggal ${dateStr} belum diinput ke sistem.</div>
+                                <div class="notif-item-actions">
+                                    <button type="button" class="notif-mini-btn btn-gm" onclick="contactGMWhatsApp('${code}')" title="Hubungi General Manager ${code}">
+                                        <i class="fa-solid fa-user-tie"></i> WhatsApp GM
+                                    </button>
+                                    <button type="button" class="notif-mini-btn" onclick="remindPicWhatsApp('${code}', '${info.pic_phone || ''}', '${meta.city}', '${dateStr}')" title="Ingatkan PIC Lapangan">
+                                        <i class="fa-brands fa-whatsapp text-success"></i> PIC
+                                    </button>
+                                    <button type="button" class="notif-mini-btn" onclick="syncRekap('${code}')" title="Tarik data sheet">
+                                        <i class="fa-solid fa-cloud-arrow-down text-primary"></i> Tarik
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            notifListBody.innerHTML = html;
+        }
     }
 
     function toggleSidebar(open) {
@@ -3981,6 +5284,13 @@
         const card = document.getElementById('userDropdownCard');
         if (card && card.classList.contains('show')) {
             card.classList.remove('show');
+        }
+        const notifWrap = document.getElementById('topbarNotifWrap');
+        const notifCard = document.getElementById('notifDropdownCard');
+        if (notifCard && notifCard.classList.contains('show')) {
+            if (notifWrap && !notifWrap.contains(e.target)) {
+                notifCard.classList.remove('show');
+            }
         }
     });
 
@@ -4024,32 +5334,39 @@
 
     // --- FLATPICKR INITIALIZATION ---
     document.addEventListener("DOMContentLoaded", function () {
-        flatpickr("#targetMonthInput", {
-            plugins: [
-                new monthSelectPlugin({
-                    shorthand: true,
-                    dateFormat: "Y-m",
-                    altFormat: "F Y",
-                    theme: "light"
-                })
-            ],
-            defaultDate: null,
-            onChange: function(selectedDates, dateStr, instance) {
-                onTargetMonthChanged(dateStr);
-            }
-        });
+        try {
+            if (typeof flatpickr !== 'undefined') {
+                const plugins = (typeof monthSelectPlugin !== 'undefined') ? [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "F Y",
+                        theme: "light"
+                    })
+                ] : [];
 
-        flatpickr("#batchTargetMonth", {
-            plugins: [
-                new monthSelectPlugin({
-                    shorthand: true,
-                    dateFormat: "Y-m",
-                    altFormat: "F Y",
-                    theme: "light"
-                })
-            ],
-            defaultDate: new Date()
-        });
+                const batchTargetMonth = document.getElementById('batchTargetMonth');
+                if (batchTargetMonth) {
+                    flatpickr(batchTargetMonth, {
+                        plugins: plugins,
+                        defaultDate: new Date()
+                    });
+                }
+
+                const targetMonthInput = document.getElementById('targetMonthInput');
+                if (targetMonthInput) {
+                    flatpickr(targetMonthInput, {
+                        plugins: plugins,
+                        defaultDate: null,
+                        onChange: function(selectedDates, dateStr, instance) {
+                            onTargetMonthChanged(dateStr);
+                        }
+                    });
+                }
+            }
+        } catch (e) {
+            console.warn("Flatpickr initialization notice:", e);
+        }
 
         // Initialize Today's Date
         const today = new Date();
@@ -4068,6 +5385,12 @@
             });
         }
         updateFormattedDateDisplay(todayStr);
+
+        const nowTime = new Date();
+        const hh = String(nowTime.getHours()).padStart(2, '0');
+        const mm = String(nowTime.getMinutes()).padStart(2, '0');
+        const kpiSyncInit = document.getElementById('kpiLastSync');
+        if (kpiSyncInit) kpiSyncInit.textContent = `Pukul ${hh}.${mm}`;
 
         const textarea = document.getElementById('kompilasiText');
         if (textarea) {
@@ -4234,7 +5557,8 @@
                 sheet_name: sheetName.trim(),
                 active_month: detectedActiveMonth,
                 pic_phone: document.getElementById(`matrixPic-${code}`)?.value?.trim() || '',
-                gm_phone: document.getElementById(`matrixGM-${code}`)?.value?.trim() || ''
+                gm_phone: document.getElementById(`matrixGM-${code}`)?.value?.trim() || '',
+                dh_phone: document.getElementById(`matrixGM-${code}`)?.value?.trim() || ''
             };
         });
 
@@ -4663,12 +5987,6 @@
             .replace(/'/g, '&#039;');
     }
 
-    const AIRPORT_NAMES = {
-        LOP: { city: "Lombok", full: "Bandara Internasional Zainuddin Abdul Madjid" },
-        DPS: { city: "Bali", full: "Bandara Internasional I Gusti Ngurah Rai" },
-        BWX: { city: "Banyuwangi", full: "Bandara Internasional Banyuwangi" },
-        KOE: { city: "Kupang", full: "Bandara Internasional El Tari" }
-    };
 
     // --- CONFIGURATION MODAL / VIEW HANDLERS ---
     function openModal(defaultBranch) {
@@ -5120,21 +6438,50 @@
         return { label: "Poor", color: "#dc2626", bg: "#fee2e2" };
     }
 
+    // --- DRIVE LOADING SPINNER CONTROLS ---
+    function showDriveLoading(title, sub) {
+        if (typeof showKawungLoading === 'function') {
+            showKawungLoading(title, sub);
+        } else {
+            const overlay = document.getElementById('driveLoadingOverlay');
+            if (overlay) overlay.classList.add('show');
+        }
+    }
+
+    function hideDriveLoading() {
+        if (typeof hideKawungLoading === 'function') {
+            hideKawungLoading();
+        } else {
+            const overlay = document.getElementById('driveLoadingOverlay');
+            if (overlay) overlay.classList.remove('show');
+        }
+    }
+
     // --- MAIN TELEMETRY DATA FETCH (fetchRekap) ---
-    function fetchRekap() {
+    function fetchRekap(showLoader = true) {
         const dateInput = document.getElementById('filterDate');
         const dateStr = dateInput ? dateInput.value : '';
         const spinner = document.getElementById('syncSpinner');
 
         if (spinner) spinner.classList.add('fa-spin');
+        if (showLoader) {
+            const formatted = formatDateIndonesian(dateStr);
+            showDriveLoading(
+                'Mengambil Data Laporan Airside...',
+                dateStr ? `Menyinkronkan data Google Drive untuk ${formatted}` : 'Sinkronisasi data rekapitulasi bandara Regional II'
+            );
+        }
 
         fetch(`/admin/api/rekap?date=${encodeURIComponent(dateStr)}`)
             .then(r => r.json())
             .then(res => {
                 if (spinner) spinner.classList.remove('fa-spin');
+                hideDriveLoading();
 
                 if (res.success) {
                     const data = res.data || {};
+                    lastRekapData = data;
+                    lastRekapDate = res.date;
                     let submittedCount = 0;
                     let validPciSum = 0;
                     let validPciCount = 0;
@@ -5190,7 +6537,7 @@
                     let branchText = "";
 
                     ['DPS', 'LOP', 'KOE', 'BWX'].forEach((code, index) => {
-                        const info = data[code] || { is_submitted: false, pci: "-", pic_phone: "" };
+                        const info = data[code] || { is_submitted: false, pci: "-", pic_phone: "", gm_phone: "" };
                         const badge = document.getElementById(`badge-${code}`);
                         const pciNumEl = document.getElementById(`pci-val-${code}`);
                         const pciTagEl = document.getElementById(`pci-tag-${code}`);
@@ -5204,6 +6551,12 @@
                             if (badge) {
                                 badge.className = "status-pill success";
                                 badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Sudah Mengirim`;
+                            }
+
+                            const statusIcon = document.getElementById(`status-icon-${code}`);
+                            if (statusIcon) {
+                                statusIcon.className = "card-status-indicator success";
+                                statusIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
                             }
 
                             if (pciNumEl) pciNumEl.textContent = info.pci || "-";
@@ -5224,10 +6577,10 @@
 
                             if (actionDiv) {
                                 actionDiv.innerHTML = `
-                                    <div class="submitted-check">
+                                    <button type="button" class="btn-status-pill success" onclick="openBranchSuccessSheet('${code}')" title="Laporan terverifikasi">
                                         <i class="fa-solid fa-circle-check"></i>
-                                        <span>Laporan Terverifikasi</span>
-                                    </div>
+                                        <span>Sudah Mengirim</span>
+                                    </button>
                                 `;
                             }
 
@@ -5341,6 +6694,12 @@
                                 badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Belum Mengirim`;
                             }
 
+                            const statusIcon = document.getElementById(`status-icon-${code}`);
+                            if (statusIcon) {
+                                statusIcon.className = "card-status-indicator warning";
+                                statusIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i>`;
+                            }
+
                             if (pciNumEl) pciNumEl.textContent = "-";
                             if (pciTextEl) pciTextEl.innerHTML = `PCI Runway: <em>Belum Ada Data</em>`;
                             if (pciTagEl) {
@@ -5353,34 +6712,18 @@
                             branchText += `⚠️ Laporan belum diterima (Belum mengirim data)\n\n\n`;
 
                             if (actionDiv) {
-                                if (info.pic_phone) {
-                                    const waMsg = `Halo tim Fasilitas Sisi Udara ${code} - ${branchCity}, mohon segera mengisi laporan harian Airside untuk tanggal *${res.date}* melalui Dashboard Petugas. Terima kasih.`;
-                                    const waUrl = `https://wa.me/${info.pic_phone}?text=${encodeURIComponent(waMsg)}`;
-                                    actionDiv.innerHTML = `
-                                        <div class="airport-actions-dual">
-                                            <a href="${waUrl}" target="_blank" class="btn-wa-reminder" title="Kirim Pengingat WhatsApp ke PIC ${code}">
-                                                <i class="fa-brands fa-whatsapp"></i> <span>Ingatkan PIC</span>
-                                            </a>
-                                            <button class="btn-outline-pull" onclick="syncRekap('${code}')" title="Tarik data dari tab harian">
-                                                <i class="fa-solid fa-cloud-arrow-down text-primary"></i> <span>Tarik Data</span>
-                                            </button>
-                                        </div>
-                                    `;
-                                } else {
-                                    actionDiv.innerHTML = `
-                                        <div class="airport-actions-dual">
-                                            <button class="btn-outline-pull" onclick="openModal('${code}')" title="Atur Nomor PIC di Konfigurasi">
-                                                <i class="fa-solid fa-phone text-primary"></i> <span>Atur PIC</span>
-                                            </button>
-                                            <button class="btn-outline-pull" onclick="syncRekap('${code}')" title="Tarik data dari tab harian">
-                                                <i class="fa-solid fa-cloud-arrow-down text-primary"></i> <span>Tarik Data</span>
-                                            </button>
-                                        </div>
-                                    `;
-                                }
+                                actionDiv.innerHTML = `
+                                    <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('${code}')" title="Klik untuk opsi penanganan cepat">
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                        <span>Belum Mengirim</span>
+                                    </button>
+                                `;
                             }
                         }
                     });
+
+                    // Update Realtime Notification Dropdown
+                    updateNotificationCenter(data, res.date);
 
                     // Update KPI Cards
                     const kpiSub = document.getElementById('kpiSubmittedNum');
@@ -5450,9 +6793,35 @@ REGION II`;
             })
             .catch(err => {
                 if (spinner) spinner.classList.remove('fa-spin');
+                hideDriveLoading();
                 console.error('Fetch error:', err);
                 Swal.fire('Koneksi Gagal', 'Tidak dapat menghubungi server lokal.', 'error');
             });
+    }
+
+    function remindPicWhatsApp(code, phone, branchCity, dateStr) {
+        if (!phone || !phone.trim()) {
+            Swal.fire({
+                title: `Nomor PIC ${code} Belum Diatur`,
+                text: `Nomor WhatsApp PIC untuk cabang ${code} belum disetel. Buka menu Konfigurasi untuk menambahkan nomor?`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Buka Konfigurasi',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#90c1e8'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    openModal(code);
+                }
+            });
+            return;
+        }
+
+        let cleanNum = phone.trim().replace(/\D/g, '');
+        if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
+        const waMsg = `Halo tim Fasilitas Sisi Udara ${code} - ${branchCity}, mohon segera mengisi laporan harian Airside untuk tanggal *${dateStr}* melalui Dashboard Petugas. Terima kasih.`;
+        const waUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(waMsg)}`;
+        window.open(waUrl, '_blank');
     }
 
     // --- WHATSAPP CONSOLE ACTIONS ---
@@ -5895,12 +7264,10 @@ REGION II`;
             confirmButtonColor: '#90c1e8'
         }).then(res => {
             if (res.isConfirmed) {
-                Swal.fire({
-                    title: 'Menyinkronkan...',
-                    text: `Membaca Google Spreadsheet ${code}...`,
-                    allowOutsideClick: false,
-                    didOpen: () => { Swal.showLoading(); }
-                });
+                showDriveLoading(
+                    `Menyinkronkan Data ${code}...`,
+                    `Membaca Google Spreadsheet ${code} dan menarik data terbaru`
+                );
 
                 fetch('/admin/api/sync-rekap', {
                     method: 'POST',
@@ -5909,19 +7276,506 @@ REGION II`;
                 })
                 .then(r => r.json())
                 .then(data => {
+                    hideDriveLoading();
                     if (data.success) {
                         Swal.fire('Berhasil!', `Data harian ${code} berhasil ditarik (${data.synced_count} baris diproses).`, 'success').then(() => {
-                            fetchRekap();
+                            fetchRekap(true);
                         });
                     } else {
                         Swal.fire('Gagal', data.error, 'error');
                     }
                 })
                 .catch(err => {
+                    hideDriveLoading();
                     Swal.fire('Error', err.message, 'error');
                 });
             }
         });
+    }
+
+    // ==========================================================================
+    // USER MANAGEMENT LOGIC (STAFF & DEPARTMENT HEAD)
+    // ==========================================================================
+    let allUsersList = [];
+
+    async function fetchUsersList(showNotification = false) {
+        const tableBody = document.getElementById('usersTableBody');
+        if (!tableBody) return;
+
+        if (showNotification) {
+            Swal.fire({
+                title: 'Memuat Pengguna...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+        }
+
+        try {
+            const res = await fetch('/admin/api/users');
+            const data = await res.json();
+
+            if (showNotification) Swal.close();
+
+            if (data.success && Array.isArray(data.users)) {
+                allUsersList = data.users;
+                updateUserKpiStats(allUsersList);
+                renderUsersTable(allUsersList);
+            } else {
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger p-4"><i class="fa-solid fa-triangle-exclamation me-1"></i> Gagal memuat pengguna: ${escapeHtml(data.error || 'Terjadi kesalahan')}</td></tr>`;
+            }
+        } catch (err) {
+            if (showNotification) Swal.close();
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger p-4"><i class="fa-solid fa-triangle-exclamation me-1"></i> Gagal memuat data pengguna: ${escapeHtml(err.message)}</td></tr>`;
+        }
+    }
+
+    function updateUserKpiStats(users) {
+        let total = users.length;
+        let staffActive = 0;
+        let dhActive = 0;
+        let inactive = 0;
+
+        users.forEach(u => {
+            const isActive = u.is_active !== false;
+            if (!isActive) {
+                inactive++;
+            } else {
+                if (u.role === 'staff') staffActive++;
+                else if (u.role === 'dh' || u.role === 'gm') dhActive++;
+            }
+        });
+
+        const kpiTotal = document.getElementById('kpiTotalUsers');
+        const kpiStaff = document.getElementById('kpiActiveStaff');
+        const kpiDH = document.getElementById('kpiActiveDH');
+        const kpiInactive = document.getElementById('kpiInactiveUsers');
+
+        if (kpiTotal) kpiTotal.textContent = total;
+        if (kpiStaff) kpiStaff.textContent = staffActive;
+        if (kpiDH) kpiDH.textContent = dhActive;
+        if (kpiInactive) kpiInactive.textContent = inactive;
+    }
+
+    function renderUsersTable(users) {
+        const tbody = document.getElementById('usersTableBody');
+        const footerCount = document.getElementById('usersCountFooter');
+        if (!tbody) return;
+
+        if (!users || users.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 3rem 1rem !important; color: #64748b;">
+                        <div style="font-size: 2.2rem; color: #cbd5e1; margin-bottom: 0.5rem;"><i class="fa-solid fa-users-slash"></i></div>
+                        <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem;">Tidak Ada Pengguna Ditemukan</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.25rem;">Coba sesuaikan kata kunci pencarian atau filter yang dipilih.</div>
+                    </td>
+                </tr>
+            `;
+            if (footerCount) footerCount.textContent = 'Menampilkan 0 pengguna';
+            return;
+        }
+
+        if (footerCount) footerCount.textContent = `Menampilkan ${users.length} dari ${allUsersList.length} pengguna`;
+
+        let html = '';
+        users.forEach(u => {
+            const role = (u.role || 'staff').toLowerCase();
+            const isDh = (role === 'dh' || role === 'gm');
+            const isAdmin = (role === 'admin');
+
+            let roleBadgeClass = 'staff';
+            let roleBadgeLabel = 'Staff Lapangan';
+            let roleIcon = 'fa-user-pen';
+            let avatarClass = 'staff';
+
+            if (isAdmin) {
+                roleBadgeClass = 'admin';
+                roleBadgeLabel = 'Administrator';
+                roleIcon = 'fa-user-shield';
+                avatarClass = 'admin';
+            } else if (isDh) {
+                roleBadgeClass = 'dh';
+                roleBadgeLabel = 'Department Head';
+                roleIcon = 'fa-user-tie';
+                avatarClass = 'dh';
+            }
+
+            const airport = (u.airport || 'ALL').toUpperCase();
+            let airportBadgeClass = 'lop';
+            let airportLabel = airport;
+            if (airport === 'DPS') airportBadgeClass = 'dps';
+            else if (airport === 'BWX') airportBadgeClass = 'bwx';
+            else if (airport === 'KOE') airportBadgeClass = 'koe';
+            else if (airport === 'ALL') {
+                airportBadgeClass = '';
+                airportLabel = 'Pusat Regional II';
+            }
+
+            const isActive = u.is_active !== false;
+            const isSystem = u.is_system === true || u.username === 'admin';
+
+            // Initials for avatar
+            const name = u.name || u.username;
+            const initials = name.split(/\s+/).map(p => p[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'US';
+
+            html += `
+                <tr>
+                    <td style="padding-left: 1.25rem !important;">
+                        <div class="user-profile-cell">
+                            <div class="user-cell-avatar ${avatarClass}">
+                                ${escapeHtml(initials)}
+                            </div>
+                            <div class="user-cell-meta">
+                                <div class="user-cell-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+                                <div class="user-cell-uname">@${escapeHtml(u.username)}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge-role-tag ${roleBadgeClass}">
+                            <i class="fa-solid ${roleIcon}"></i>
+                            <span>${roleBadgeLabel}</span>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge-airport-tag ${airportBadgeClass}">
+                            <i class="fa-solid fa-plane-departure" style="font-size: 0.65rem;"></i>
+                            <span>${airportLabel}</span>
+                        </span>
+                    </td>
+                    <td>
+                        <div class="status-toggle-wrap" onclick="handleUserStatusToggle('${escapeHtml(u.username)}', ${isActive}, ${isSystem})">
+                            <label class="switch-ui" onclick="event.preventDefault();">
+                                <input type="checkbox" ${isActive ? 'checked' : ''} ${isSystem ? 'disabled' : ''}>
+                                <span class="switch-slider"></span>
+                            </label>
+                            <span class="status-pill-text ${isActive ? 'active' : 'inactive'}">
+                                ${isActive ? '✓ Aktif' : '✗ Nonaktif'}
+                            </span>
+                        </div>
+                    </td>
+                    <td style="text-align: center; padding-right: 1.25rem !important;">
+                        <div class="user-actions-cluster">
+                            <button type="button" class="btn-action-icon edit" title="Edit Profil Pengguna" onclick="openEditUserModal('${escapeHtml(u.username)}')">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" class="btn-action-icon delete" title="${isSystem ? 'Akun sistem tidak dapat dihapus' : 'Hapus Akun Pengguna'}" ${isSystem ? 'disabled' : ''} onclick="confirmDeleteUser('${escapeHtml(u.username)}')">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML = html;
+    }
+
+    function filterUsers() {
+        const query = (document.getElementById('userSearchInput')?.value || '').toLowerCase().trim();
+        const roleFilter = (document.getElementById('userFilterRole')?.value || '').toLowerCase();
+        const airportFilter = (document.getElementById('userFilterAirport')?.value || '').toUpperCase();
+        const statusFilter = (document.getElementById('userFilterStatus')?.value || '').toLowerCase();
+
+        const filtered = allUsersList.filter(u => {
+            const nameMatch = (u.name || '').toLowerCase().includes(query) || (u.username || '').toLowerCase().includes(query);
+            if (!nameMatch) return false;
+
+            if (roleFilter) {
+                const uRole = (u.role || 'staff').toLowerCase();
+                if (roleFilter === 'dh' && uRole !== 'dh' && uRole !== 'gm') return false;
+                if (roleFilter === 'staff' && uRole !== 'staff') return false;
+                if (roleFilter === 'admin' && uRole !== 'admin') return false;
+            }
+
+            if (airportFilter) {
+                const uAirport = (u.airport || 'ALL').toUpperCase();
+                if (uAirport !== airportFilter) return false;
+            }
+
+            if (statusFilter) {
+                const isActive = u.is_active !== false;
+                if (statusFilter === 'active' && !isActive) return false;
+                if (statusFilter === 'inactive' && isActive) return false;
+            }
+
+            return true;
+        });
+
+        renderUsersTable(filtered);
+    }
+
+    function resetUserFilters() {
+        if (document.getElementById('userSearchInput')) document.getElementById('userSearchInput').value = '';
+        if (document.getElementById('userFilterRole')) document.getElementById('userFilterRole').value = '';
+        if (document.getElementById('userFilterAirport')) document.getElementById('userFilterAirport').value = '';
+        if (document.getElementById('userFilterStatus')) document.getElementById('userFilterStatus').value = '';
+        renderUsersTable(allUsersList);
+    }
+
+    // --- ADD USER MODAL HANDLERS ---
+    function openAddUserModal() {
+        const form = document.getElementById('formAddUser');
+        if (form) form.reset();
+        const activeCheck = document.getElementById('add_is_active');
+        if (activeCheck) activeCheck.checked = true;
+        const statusLabel = document.getElementById('add_status_label');
+        if (statusLabel) {
+            statusLabel.textContent = 'Akun Langsung Aktif';
+            statusLabel.className = 'status-pill-text active';
+        }
+        const modal = document.getElementById('modalAddUser');
+        if (modal) modal.style.display = 'flex';
+        setTimeout(() => {
+            document.getElementById('add_username')?.focus();
+        }, 150);
+    }
+
+    function closeAddUserModal() {
+        const modal = document.getElementById('modalAddUser');
+        if (modal) modal.style.display = 'none';
+    }
+
+    async function submitAddUser(e) {
+        e.preventDefault();
+        const username = document.getElementById('add_username')?.value.trim();
+        const password = document.getElementById('add_password')?.value;
+        const name = document.getElementById('add_name')?.value.trim();
+        const role = document.getElementById('add_role')?.value;
+        const airport = document.getElementById('add_airport')?.value;
+        const isActive = document.getElementById('add_is_active')?.checked ?? true;
+
+        if (!username || !password || !name) {
+            return Swal.fire('Perhatian', 'Harap isi semua kolom wajib!', 'warning');
+        }
+
+        Swal.fire({
+            title: 'Mendaftarkan Pengguna...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        try {
+            const res = await fetch('/admin/api/users/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username,
+                    password,
+                    name,
+                    role,
+                    airport,
+                    is_active: isActive
+                })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                closeAddUserModal();
+                Swal.fire('Berhasil!', data.message || 'Pengguna baru berhasil ditambahkan.', 'success');
+                fetchUsersList();
+            } else {
+                Swal.fire('Gagal Menambahkan', data.error || 'Terjadi kesalahan sistem', 'error');
+            }
+        } catch (err) {
+            Swal.fire('Error', err.message, 'error');
+        }
+    }
+
+    // --- EDIT USER MODAL HANDLERS ---
+    function openEditUserModal(username) {
+        const user = allUsersList.find(u => u.username === username);
+        if (!user) return Swal.fire('Error', 'Data pengguna tidak ditemukan.', 'error');
+
+        document.getElementById('edit_username').value = user.username;
+        document.getElementById('edit_name').value = user.name || '';
+        document.getElementById('edit_password').value = '';
+
+        const roleSelect = document.getElementById('edit_role');
+        if (roleSelect) {
+            let rVal = (user.role || 'staff').toLowerCase();
+            if (rVal === 'gm') rVal = 'dh';
+            roleSelect.value = rVal;
+        }
+
+        const airportSelect = document.getElementById('edit_airport');
+        if (airportSelect) {
+            airportSelect.value = (user.airport || 'ALL').toUpperCase();
+        }
+
+        const isActive = user.is_active !== false;
+        const isCheck = document.getElementById('edit_is_active');
+        const statusLabel = document.getElementById('edit_status_label');
+        if (isCheck) {
+            isCheck.checked = isActive;
+            isCheck.disabled = (user.is_system === true || user.username === 'admin');
+        }
+        if (statusLabel) {
+            statusLabel.textContent = isActive ? 'Status Akun: Aktif' : 'Status Akun: Nonaktif (Diblokir)';
+            statusLabel.className = isActive ? 'status-pill-text active' : 'status-pill-text inactive';
+        }
+
+        const sub = document.getElementById('editModalSub');
+        if (sub) {
+            sub.textContent = `Mengatur data akun @${user.username}`;
+        }
+
+        const modal = document.getElementById('modalEditUser');
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closeEditUserModal() {
+        const modal = document.getElementById('modalEditUser');
+        if (modal) modal.style.display = 'none';
+    }
+
+    async function submitEditUser(e) {
+        e.preventDefault();
+        const username = document.getElementById('edit_username')?.value.trim();
+        const name = document.getElementById('edit_name')?.value.trim();
+        const role = document.getElementById('edit_role')?.value;
+        const airport = document.getElementById('edit_airport')?.value;
+        const password = document.getElementById('edit_password')?.value;
+        const isActive = document.getElementById('edit_is_active')?.checked ?? true;
+
+        if (!username || !name) {
+            return Swal.fire('Perhatian', 'Nama lengkap tidak boleh kosong!', 'warning');
+        }
+
+        Swal.fire({
+            title: 'Menyimpan Perubahan...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        try {
+            const payload = {
+                username,
+                name,
+                role,
+                airport,
+                is_active: isActive
+            };
+            if (password && password.trim()) {
+                payload.password = password.trim();
+            }
+
+            const res = await fetch('/admin/api/users/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                closeEditUserModal();
+                Swal.fire('Berhasil!', data.message || 'Perubahan data pengguna disimpan.', 'success');
+                fetchUsersList();
+            } else {
+                Swal.fire('Gagal Menyimpan', data.error || 'Terjadi kesalahan sistem', 'error');
+            }
+        } catch (err) {
+            Swal.fire('Error', err.message, 'error');
+        }
+    }
+
+    // --- TOGGLE STATUS & DELETE ACTIONS ---
+    function handleUserStatusToggle(username, currentActive, isSystem) {
+        if (isSystem) {
+            return Swal.fire('Dilindungi', 'Akun administrator sistem utama tidak dapat dinonaktifkan.', 'info');
+        }
+
+        const targetState = !currentActive;
+        const actionWord = targetState ? 'Mengaktifkan' : 'Menonaktifkan';
+        const actionDesc = targetState
+            ? `Pengguna <strong>@${escapeHtml(username)}</strong> akan diizinkan kembali untuk login ke sistem.`
+            : `Pengguna <strong>@${escapeHtml(username)}</strong> akan diblokir dan tidak dapat login ke sistem.`;
+
+        Swal.fire({
+            title: `${actionWord} Akun?`,
+            html: actionDesc,
+            icon: targetState ? 'question' : 'warning',
+            showCancelButton: true,
+            confirmButtonText: targetState ? '<i class="fa-solid fa-check me-1"></i> Ya, Aktifkan' : '<i class="fa-solid fa-ban me-1"></i> Ya, Nonaktifkan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: targetState ? '#16a34a' : '#ea580c'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await fetch('/admin/api/users/toggle-status', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            username,
+                            is_active: targetState
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: data.message || 'Status akun berhasil diperbarui',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        fetchUsersList();
+                    } else {
+                        Swal.fire('Gagal', data.error || 'Gagal mengubah status', 'error');
+                    }
+                } catch (err) {
+                    Swal.fire('Error', err.message, 'error');
+                }
+            }
+        });
+    }
+
+    function confirmDeleteUser(username) {
+        Swal.fire({
+            title: `Hapus Akun @${username}?`,
+            text: 'Akun ini akan dihapus permanen dari daftar otorisasi sistem. Tindakan ini tidak dapat dibatalkan.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fa-solid fa-trash-can me-1"></i> Ya, Hapus Akun',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#dc2626'
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                try {
+                    const resp = await fetch('/admin/api/users/delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username })
+                    });
+                    const data = await resp.json();
+                    if (data.success) {
+                        Swal.fire('Terhapus!', data.message || 'Akun berhasil dihapus.', 'success');
+                        fetchUsersList();
+                    } else {
+                        Swal.fire('Gagal Menghapus', data.error || 'Terjadi kesalahan sistem', 'error');
+                    }
+                } catch (err) {
+                    Swal.fire('Error', err.message, 'error');
+                }
+            }
+        });
+    }
+
+    function togglePasswordVisibility(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (!input || !icon) return;
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
     }
 </script>
 {% endblock %}

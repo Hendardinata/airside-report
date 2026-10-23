@@ -494,7 +494,8 @@
     .topbar-notif-btn {
         position: relative;
         background: transparent;
-        border: 1px solid #e2e8f0;
+        border: none;
+        outline: none;
         width: 40px;
         height: 40px;
         border-radius: 12px;
@@ -502,15 +503,19 @@
         align-items: center;
         justify-content: center;
         color: var(--theme-slate-600);
-        font-size: 1.15rem;
+        font-size: 1.25rem;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .topbar-notif-btn:hover {
         background-color: #f1f5f9;
-        color: var(--theme-slate-900);
-        border-color: #cbd5e1;
+        color: #002b49;
+    }
+
+    .topbar-notif-btn:active {
+        background-color: #e2e8f0;
+        transform: scale(0.96);
     }
 
     .notif-badge-dot {
@@ -1707,98 +1712,96 @@
     }
 
     /* Bottom Wizard Action Footer */
+    /* Bottom Wizard Action Footer (Modern Clean Corporate Icon-Only Grouped Right) */
     .wizard-actions-bar {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
+        gap: 0.75rem;
         margin-top: 2rem;
         padding-top: 1.5rem;
         border-top: 1px solid #f1f5f9;
         box-sizing: border-box;
     }
 
-    .btn-action-batal {
-        background-color: #ffffff;
-        border: 1.5px solid var(--theme-border);
-        border-radius: 12px;
+    .btn-action-batal,
+    .btn-action-next,
+    .btn-action-submit {
+        width: 48px;
         height: 48px;
-        padding: 0 1.65rem;
-        color: var(--theme-slate-900);
-        font-weight: 700;
-        font-size: 0.915rem;
+        min-width: 48px;
+        padding: 0;
         display: inline-flex;
         align-items: center;
-        gap: 0.55rem;
+        justify-content: center;
+        border-radius: 12px;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         text-decoration: none;
+        box-sizing: border-box;
+    }
+
+    .btn-action-batal {
+        background-color: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        color: #475569;
+        font-size: 1.05rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     }
 
     .btn-action-batal:hover {
         background-color: #f8fafc;
-        border-color: var(--theme-border-strong);
+        border-color: #cbd5e1;
+        color: #0f172a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .btn-action-batal:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     }
 
     .btn-action-next {
         background: #90c1e8;
         color: #002b49;
-        border: none;
-        border-radius: 12px;
-        height: 48px;
-        padding: 0 1.85rem;
-        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 0.925rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.55rem;
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45);
-        letter-spacing: 0.2px;
+        border: 1.5px solid #90c1e8;
+        font-size: 1.05rem;
+        box-shadow: 0 3px 12px rgba(144, 193, 232, 0.45);
     }
 
     .btn-action-next:hover {
         background: #7bb5e3;
+        border-color: #7bb5e3;
         color: #001f35;
         transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(144, 193, 232, 0.55);
+        box-shadow: 0 6px 18px rgba(144, 193, 232, 0.55);
     }
 
     .btn-action-next:active {
         transform: translateY(0);
-        box-shadow: 0 2px 8px rgba(144, 193, 232, 0.3);
+        box-shadow: 0 2px 6px rgba(144, 193, 232, 0.3);
     }
 
     .btn-action-submit {
         background: #90c1e8;
         color: #002b49;
-        border: none;
-        border-radius: 12px;
-        height: 48px;
-        padding: 0 2rem;
-        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 0.95rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.65rem;
-        cursor: pointer;
-        box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45);
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        letter-spacing: 0.2px;
+        border: 1.5px solid #90c1e8;
+        font-size: 1.05rem;
+        box-shadow: 0 3px 12px rgba(144, 193, 232, 0.45);
     }
 
     .btn-action-submit:hover {
         background: #7bb5e3;
+        border-color: #7bb5e3;
         color: #001f35;
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(144, 193, 232, 0.55);
+        box-shadow: 0 6px 18px rgba(144, 193, 232, 0.55);
     }
 
     .btn-action-submit:active {
         transform: translateY(0);
-        box-shadow: 0 2px 8px rgba(144, 193, 232, 0.3);
+        box-shadow: 0 2px 6px rgba(144, 193, 232, 0.3);
     }
 
     /* Responsive Adjustments */
@@ -1909,6 +1912,311 @@
         border: 1px solid #bbf7d0;
         color: #166534;
     }
+
+    /* ==========================================================================
+       8. CHECKLIST TABLE & HEADER REDESIGN (100% Match Gambar 2 to 5)
+       ========================================================================== */
+    .report-section-hdr {
+        margin-bottom: 1.25rem;
+    }
+
+    .report-title-clean {
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: #002b49;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin: 0.25rem 0 0.65rem 0;
+    }
+
+    .report-badge-title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0.25rem 0 0.65rem 0;
+    }
+
+    .report-badge-square {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        background-color: #002b49;
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        font-weight: 800;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(0, 43, 73, 0.2);
+    }
+
+    .report-title-bold {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #002b49;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    .report-navy-line {
+        height: 2.5px;
+        background: #002b49;
+        width: 100%;
+        border-radius: 2px;
+        margin-bottom: 0.75rem;
+    }
+
+    .report-table-list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .report-table-row {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 0.65rem;
+        border-bottom: 1px solid #f1f5f9;
+        min-height: 48px;
+        box-sizing: border-box;
+        transition: background-color 0.15s ease;
+    }
+
+    .report-table-row:hover {
+        background-color: #f8fafc;
+    }
+
+    .report-label-cell {
+        width: 44%;
+        min-width: 280px;
+        max-width: 460px;
+        padding-right: 1rem;
+        flex-shrink: 0;
+        box-sizing: border-box;
+    }
+
+    .report-label-cell label {
+        font-size: 0.94rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0;
+        line-height: 1.35;
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    .report-colon-cell {
+        width: 24px;
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #334155;
+        flex-shrink: 0;
+    }
+
+    .report-input-cell {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        min-width: 0;
+    }
+
+    .report-clean-input {
+        width: 100%;
+        max-width: 380px;
+        padding: 0.48rem 0.8rem;
+        font-size: 0.93rem;
+        font-weight: 600;
+        color: #0f172a;
+        background-color: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        outline: none;
+        font-family: inherit;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        box-sizing: border-box;
+    }
+
+    .report-clean-input:hover {
+        border-color: #94a3b8;
+    }
+
+    .report-clean-input:focus {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .report-clean-input::placeholder {
+        color: #94a3b8;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .report-clean-input.input-compact {
+        max-width: 110px;
+    }
+
+    .report-clean-select {
+        appearance: none;
+        background-color: #ffffff;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23334155'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 13px 13px;
+        padding: 0.48rem 2.2rem 0.48rem 0.8rem;
+        font-size: 0.93rem;
+        font-weight: 700;
+        color: #002b49;
+        text-transform: uppercase;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        outline: none;
+        cursor: pointer;
+        max-width: 250px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        box-sizing: border-box;
+    }
+
+    .report-clean-select:focus {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .report-unit-suffix {
+        font-size: 0.93rem;
+        font-weight: 700;
+        color: #0f172a;
+        white-space: nowrap;
+        user-select: none;
+    }
+
+    .report-date-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 380px;
+    }
+
+    .report-date-wrap .field-lead-icon {
+        position: absolute;
+        left: 0.85rem;
+        color: #64748b;
+        font-size: 0.95rem;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .report-date-wrap .report-clean-input {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+        cursor: pointer;
+    }
+
+    .report-date-wrap .field-trail-clear {
+        position: absolute;
+        right: 0.85rem;
+        color: #94a3b8;
+        font-size: 0.95rem;
+        cursor: pointer;
+        z-index: 2;
+        background: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    .report-date-wrap .field-trail-clear:hover {
+        color: #475569;
+    }
+
+    .report-locked-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 380px;
+    }
+
+    .report-locked-wrap .report-clean-input {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+        color: #334155;
+        cursor: default;
+        padding-right: 2.5rem;
+    }
+
+    .report-locked-wrap .field-locked-badge {
+        position: absolute;
+        right: 0.85rem;
+        color: #94a3b8;
+        font-size: 0.9rem;
+        pointer-events: none;
+    }
+
+    .report-wa-preview-card {
+        background-color: #f0fdf4;
+        border: 1.5px solid #86efac;
+        border-radius: 14px;
+        padding: 1.15rem 1.35rem;
+        box-shadow: 0 4px 12px rgba(22, 163, 74, 0.06);
+    }
+
+    .wa-preview-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .wa-preview-title {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: #14532d;
+        display: flex;
+        align-items: center;
+    }
+
+    .wa-preview-body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.84rem;
+        white-space: pre-wrap;
+        background-color: #ffffff;
+        border: 1px solid #bbf7d0;
+        border-radius: 10px;
+        padding: 1rem 1.15rem;
+        color: #14532d;
+        line-height: 1.5;
+        max-height: 280px;
+        overflow-y: auto;
+    }
+
+    @media (max-width: 768px) {
+        .report-table-row {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0.85rem 0.25rem;
+            gap: 0.45rem;
+        }
+        .report-label-cell {
+            width: 100%;
+            min-width: 0;
+            padding-right: 0;
+        }
+        .report-colon-cell {
+            display: none;
+        }
+        .report-input-cell {
+            width: 100%;
+        }
+        .report-clean-input, .report-clean-select, .report-date-wrap, .report-locked-wrap {
+            max-width: 100%;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -1931,7 +2239,11 @@
                 <button type="button" class="topbar-notif-btn" id="topbarNotifBtn" title="Notifikasi Sistem" onclick="toggleNotifDropdown(event)">
                     <i class="fa-regular fa-bell"></i>
                     <span class="notif-badge-dot" id="notifBadgeDot" style="display: none;"></span>
-                    <span class="notif-badge-count" id="notifBadgeCount" style="display: {% if notif_badge_num is defined and notif_badge_num > 0 %}flex{% else %}none{% endif %};">{{ notif_badge_num|default(0) }}</span>
+                    {% if notif_badge_num is defined and notif_badge_num > 0 %}
+                    <span class="notif-badge-count" id="notifBadgeCount">{{ notif_badge_num }}</span>
+                    {% else %}
+                    <span class="notif-badge-count" id="notifBadgeCount" style="display: none;">0</span>
+                    {% endif %}
                 </button>
 
                 <!-- Notification Dropdown Menu -->
@@ -1949,7 +2261,7 @@
                     </div>
                     <div class="notif-list-body" id="notifListBody">
                         <div style="text-align: center; padding: 2.5rem 1rem; color: #94a3b8;">
-                            <i class="fa-solid fa-circle-notch fa-spin fa-lg" style="color: #0284c7;"></i>
+                            <span class="kawung-inline-spin-md"></span>
                             <p style="margin-top: 0.6rem; font-size: 0.8rem; font-weight: 500;">Memuat notifikasi...</p>
                         </div>
                     </div>
@@ -2057,21 +2369,20 @@
 
     <!-- 5-STEP HORIZONTAL STEPPER NAVIGATION -->
     <div class="stepper-nav-container">
-        {% set step_captions = [
-            'Informasi Umum & Pejabat',
-            'Data Operasional',
-            'Fasilitas & Pemeliharaan',
-            'Catatan & Lampiran',
-            'Review & Submit'
+        {% set step_configs = [
+            {'num': '1', 'kicker': 'Langkah 1', 'title': 'UMUM'},
+            {'num': 'A', 'kicker': 'Langkah 2', 'title': 'A. RUNWAY'},
+            {'num': 'B', 'kicker': 'Langkah 3', 'title': 'B. TAXIWAY'},
+            {'num': 'C', 'kicker': 'Langkah 4', 'title': 'C. APRON'},
+            {'num': 'D', 'kicker': 'Langkah 5', 'title': 'Catatan & Kirim'}
         ] %}
         {% for step in schema.steps %}
+        {% set cfg = step_configs[loop.index0] if loop.index0 < step_configs|length else {'num': loop.index, 'kicker': 'Langkah ' ~ loop.index, 'title': step.title} %}
         <div class="stepper-cell step {% if loop.first %}active{% endif %}" id="step-nav-{{ loop.index }}" onclick="nextStep({{ loop.index }})">
-            <div class="step-num-bubble">{{ loop.index }}</div>
+            <div class="step-num-bubble">{{ cfg.num }}</div>
             <div class="step-labels-col">
-                <span class="step-kicker-name">Langkah {{ loop.index }}</span>
-                <span class="step-caption-title">
-                    {{ step_captions[loop.index0] if loop.index0 < step_captions|length else step.title }}
-                </span>
+                <span class="step-kicker-name">{{ cfg.kicker }}</span>
+                <span class="step-caption-title">{{ cfg.title }}</span>
             </div>
         </div>
         {% endfor %}
@@ -2098,81 +2409,133 @@
         </div>
 
         <form id="reportWizard" method="POST" action="/staff/submit" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="report_id" id="editReportId" value="">
 
             {% for step in schema.steps %}
             <div class="wizard-step {% if loop.first %}active{% endif %}" id="step-{{ loop.index }}" {% if not loop.first %}style="display: none;"{% endif %}>
                 
-                <!-- Step Header inside Main Form Card -->
-                <div class="card-step-header">
-                    <div class="card-step-title-wrap">
-                        <div class="step-main-icon-tile">
-                            <i class="fa-solid {% if loop.index == 1 %}fa-file-lines{% elif loop.index == 2 %}fa-road{% elif loop.index == 3 %}fa-plane{% elif loop.index == 4 %}fa-clipboard-list{% else %}fa-circle-check{% endif %}"></i>
-                        </div>
-                        <div>
-                            <h2 class="step-main-title">{{ step.title }}</h2>
-                            <p class="step-main-subtitle">{{ step.subtitle }}</p>
-                        </div>
-                    </div>
-                    <span class="step-counter-pill">Bagian {{ loop.index }} dari {{ schema.steps|length }}</span>
-                </div>
-
-                <!-- Step 1 Specific Layout matching 100% with Reference Mockup -->
+                <!-- Step Header matching reference mockup -->
                 {% if loop.index == 1 %}
-                    <!-- Sub-card 1: Parameter Laporan -->
-                    <div class="form-subcard-section">
-                        <div class="subcard-header-row">
-                            <div class="subcard-icon-box">
-                                <i class="fa-regular fa-calendar-days"></i>
+                <div class="report-section-hdr">
+                    <h2 class="report-title-clean">UMUM</h2>
+                    <div class="report-navy-line"></div>
+                </div>
+                {% else %}
+                <div class="report-section-hdr">
+                    <div class="report-badge-title-row">
+                        <span class="report-badge-square">{% if loop.index == 2 %}A{% elif loop.index == 3 %}B{% elif loop.index == 4 %}C{% else %}D{% endif %}</span>
+                        <h2 class="report-title-bold">{% if loop.index == 2 %}RUNWAY{% elif loop.index == 3 %}TAXIWAY{% elif loop.index == 4 %}APRON{% else %}CATATAN KHUSUS & REVIEW{% endif %}</h2>
+                    </div>
+                    <div class="report-navy-line"></div>
+                </div>
+                {% endif %}
+
+                <!-- Content Rows in Checklist Table Layout (100% Match Gambar 2 to 5) -->
+                <div class="report-table-list">
+                    {% if loop.index == 1 %}
+                        <!-- Sapaan Pembuka -->
+                        <div class="report-table-row">
+                            <div class="report-label-cell">
+                                <label for="input-SAPAAN">Sapaan Pembuka <span class="text-danger">*</span></label>
                             </div>
-                            <div>
-                                <h3 class="subcard-title-text">Parameter Laporan</h3>
-                                <p class="subcard-desc-text">Silakan lengkapi informasi dasar laporan.</p>
+                            <div class="report-colon-cell">:</div>
+                            <div class="report-input-cell">
+                                <select class="report-clean-select" name="SAPAAN" id="input-SAPAAN" required>
+                                    <option value="" disabled selected>-- Pilih Sapaan --</option>
+                                    <option value="Selamat pagi">Selamat pagi</option>
+                                    <option value="Selamat siang">Selamat siang</option>
+                                    <option value="Selamat sore">Selamat sore</option>
+                                    <option value="Selamat malam">Selamat malam</option>
+                                    <option value="Assalamualaikum Wr. Wb">Assalamualaikum Wr. Wb</option>
+                                </select>
                             </div>
                         </div>
 
-                        <!-- Row 1: Tanggal Laporan & Sapaan Pembuka -->
-                        <div class="form-grid-2">
-                            <div class="field-block">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <label class="field-label mb-0" for="input-TANGGAL">
-                                        Tanggal Laporan <span class="text-danger">*</span>
-                                    </label>
-                                    <span class="badge bg-light text-primary border" id="labelActiveMonthBadge" style="font-size:0.75rem; font-weight:600;">
-                                        <i class="fa-solid fa-cloud-arrow-down me-1"></i>Bulan: {{ active_month_label or 'November 2026' }}
-                                    </span>
-                                </div>
-                                <div class="field-input-group">
+                        <!-- Tanggal Laporan -->
+                        <div class="report-table-row">
+                            <div class="report-label-cell">
+                                <label for="input-TANGGAL">Tanggal Laporan <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="report-colon-cell">:</div>
+                            <div class="report-input-cell">
+                                <div class="report-date-wrap">
                                     <i class="fa-regular fa-calendar-days field-lead-icon"></i>
-                                    <input type="text" class="theme-control-input flatpickr-custom-input" name="TANGGAL" id="input-TANGGAL" required value="" readonly placeholder="Pilih Tanggal Laporan" autocomplete="off">
+                                    <input type="text" class="report-clean-input flatpickr-custom-input" name="TANGGAL" id="input-TANGGAL" required value="" readonly placeholder="Pilih Tanggal Laporan" autocomplete="off">
                                     <button type="button" class="field-trail-clear" onclick="clearDateField()" title="Hapus Tanggal">
                                         <i class="fa-regular fa-circle-xmark"></i>
                                     </button>
                                 </div>
-                                <div id="dateStatusAlert" class="date-status-alert" style="display: none;"></div>
+                                <span class="badge bg-light text-primary border ms-2 d-none d-md-inline-block" id="labelActiveMonthBadge" style="font-size:0.75rem; font-weight:600;">
+                                    <i class="fa-solid fa-cloud-arrow-down me-1"></i>Bulan: {{ active_month_label or 'November 2026' }}
+                                </span>
                             </div>
-
-                            <div class="field-block">
-                                <label class="field-label" for="input-SAPAAN">Sapaan Pembuka</label>
-                                <div class="field-input-group">
-                                    <select class="theme-control-input no-icon" name="SAPAAN" id="input-SAPAAN" required>
-                                        <option value="Selamat pagi" selected>Selamat pagi</option>
-                                        <option value="Selamat siang">Selamat siang</option>
-                                        <option value="Selamat sore">Selamat sore</option>
-                                        <option value="Selamat malam">Selamat malam</option>
-                                        <option value="Assalamualaikum Wr Wb">Assalamualaikum Wr Wb</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="report-table-row" id="rowDateAlert" style="display: none; padding-top: 0; padding-bottom: 0.5rem;">
+                            <div class="report-label-cell"></div>
+                            <div class="report-colon-cell"></div>
+                            <div class="report-input-cell">
+                                <div id="dateStatusAlert" class="date-status-alert w-100" style="display: none;"></div>
                             </div>
                         </div>
 
-                        <!-- Row 2: Nomor & Nama Kantor Cabang (Full Width - Terkunci Sesuai Akun Bandara) -->
-                        <div class="form-grid-full">
-                            <div class="field-block">
-                                <label class="field-label" for="input-KANTOR_CABANG">Nomor & Nama Kantor Cabang</label>
-                                <div class="field-input-group">
-                                    <i class="fa-solid fa-location-dot field-lead-icon"></i>
-                                    <input type="text" class="theme-control-input field-locked" name="KANTOR_CABANG" id="input-KANTOR_CABANG"
+                        <!-- Penerima 1 -->
+                        <div class="report-table-row">
+                            <div class="report-label-cell">
+                                <label for="input-PENERIMA_1">Penerima 1 <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="report-colon-cell">:</div>
+                            <div class="report-input-cell">
+                                <input type="text" class="report-clean-input" name="PENERIMA_1" id="input-PENERIMA_1" 
+                                       value="" placeholder="Contoh: Pak DT API" required>
+                            </div>
+                        </div>
+
+                        <!-- Penerima 2 -->
+                        <div class="report-table-row">
+                            <div class="report-label-cell">
+                                <label for="input-PENERIMA_2">Penerima 2 <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="report-colon-cell">:</div>
+                            <div class="report-input-cell">
+                                <input type="text" class="report-clean-input" name="PENERIMA_2" id="input-PENERIMA_2" 
+                                       value="" placeholder="Contoh: Pak GH API" required>
+                            </div>
+                        </div>
+
+                        <!-- Penerima 3 -->
+                        <div class="report-table-row">
+                            <div class="report-label-cell">
+                                <label for="input-PENERIMA_3">Penerima 3 <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="report-colon-cell">:</div>
+                            <div class="report-input-cell">
+                                <input type="text" class="report-clean-input" name="PENERIMA_3" id="input-PENERIMA_3" 
+                                       value="" placeholder="Contoh: Pak Deputy" required>
+                            </div>
+                        </div>
+
+                        <!-- Penerima 4 -->
+                        <div class="report-table-row">
+                            <div class="report-label-cell">
+                                <label for="input-PENERIMA_4">Penerima 4 (opsional)</label>
+                            </div>
+                            <div class="report-colon-cell">:</div>
+                            <div class="report-input-cell">
+                                <input type="text" class="report-clean-input" name="PENERIMA_4" id="input-PENERIMA_4" 
+                                       value="" placeholder="Contoh: Pak DH Regional II (opsional)">
+                            </div>
+                        </div>
+
+                        <!-- Nomor & Nama Kantor Cabang -->
+                        <div class="report-table-row">
+                            <div class="report-label-cell">
+                                <label for="input-KANTOR_CABANG">Nomor & Nama Kantor Cabang <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="report-colon-cell">:</div>
+                            <div class="report-input-cell">
+                                <div class="report-locked-wrap">
+                                    <input type="text" class="report-clean-input field-locked" name="KANTOR_CABANG" id="input-KANTOR_CABANG"
                                            value="{{ airport_info.code if airport_info and airport_info.code else ('1. Kantor Cabang ' ~ (current_user.airport or 'LOP')) }}"
                                            readonly>
                                     <span class="field-locked-badge" title="Terkunci otomatis sesuai bandara penugasan ({{ current_user.airport or 'LOP' }})">
@@ -2181,122 +2544,80 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Sub-card 2: Pejabat Penerima Laporan -->
-                    <div class="form-subcard-section">
-                        <div class="subcard-header-row">
-                            <div class="subcard-icon-box">
-                                <i class="fa-solid fa-id-badge"></i>
-                            </div>
-                            <div>
-                                <h3 class="subcard-title-text">Pejabat Penerima Laporan</h3>
-                                <p class="subcard-desc-text">Masukkan nama pejabat penerima laporan sesuai struktur organisasi.</p>
-                            </div>
-                        </div>
-
-                        <!-- 2x2 Grid with user icons -->
-                        <div class="form-grid-2">
-                            <div class="field-block">
-                                <label class="field-label" for="input-PENERIMA_1">Penerima 1 (Direksi)</label>
-                                <div class="field-input-group">
-                                    <i class="fa-regular fa-user field-lead-icon"></i>
-                                    <input type="text" class="theme-control-input" name="PENERIMA_1" id="input-PENERIMA_1" 
-                                           placeholder="Masukkan nama penerima 1" required>
-                                </div>
-                            </div>
-
-                            <div class="field-block">
-                                <label class="field-label" for="input-PENERIMA_2">Penerima 2 (Group Head)</label>
-                                <div class="field-input-group">
-                                    <i class="fa-regular fa-user field-lead-icon"></i>
-                                    <input type="text" class="theme-control-input" name="PENERIMA_2" id="input-PENERIMA_2" 
-                                           placeholder="Masukkan nama penerima 2" required>
-                                </div>
-                            </div>
-
-                            <div class="field-block">
-                                <label class="field-label" for="input-PENERIMA_3">Penerima 3 (Deputy Regional)</label>
-                                <div class="field-input-group">
-                                    <i class="fa-regular fa-user field-lead-icon"></i>
-                                    <input type="text" class="theme-control-input" name="PENERIMA_3" id="input-PENERIMA_3" 
-                                           placeholder="Masukkan nama penerima 3" required>
-                                </div>
-                            </div>
-
-                            <div class="field-block">
-                                <label class="field-label" for="input-PENERIMA_4">Penerima 4 (Optional)</label>
-                                <div class="field-input-group">
-                                    <i class="fa-regular fa-user field-lead-icon"></i>
-                                    <input type="text" class="theme-control-input" name="PENERIMA_4" id="input-PENERIMA_4" 
-                                           placeholder="-" value="-">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% else %}
-                    <!-- Dynamic Rendering for Steps 2, 3, 4, 5 -->
-                    {% for section in step.sections %}
-                    <div class="form-subcard-section">
-                        <div class="subcard-header-row">
-                            <div class="subcard-icon-box">
-                                <i class="fa-solid {{ section.icon }}"></i>
-                            </div>
-                            <div>
-                                <h3 class="subcard-title-text">{{ section.title }}</h3>
-                            </div>
-                        </div>
-
-                        <div class="form-grid-2">
+                    {% else %}
+                        <!-- Loop over fields for Steps 2, 3, 4, 5 -->
+                        {% for section in step.sections %}
                             {% for field in section.fields %}
-                            <div class="field-block">
-                                <label class="field-label" for="input-{{ field.name }}">{{ field.label }}</label>
-                                <div class="field-input-group">
+                            <div class="report-table-row">
+                                <div class="report-label-cell">
+                                    <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span class="text-danger">*</span>{% endif %}</label>
+                                </div>
+                                <div class="report-colon-cell">:</div>
+                                <div class="report-input-cell">
                                     {% if field.type == 'select' %}
-                                    <select class="theme-control-input no-icon" name="{{ field.name }}" id="input-{{ field.name }}" {% if field.required %}required{% endif %}>
-                                        {% for opt in field.options %}
-                                        <option value="{{ opt }}">{{ opt }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    {% elif field.type == 'date' %}
-                                    <i class="fa-regular fa-calendar-days field-lead-icon"></i>
-                                    <input type="date" class="theme-control-input" name="{{ field.name }}" id="input-{{ field.name }}" {% if field.required %}required{% endif %}>
+                                        <select class="report-clean-select" name="{{ field.name }}" id="input-{{ field.name }}" {% if field.required %}required{% endif %}>
+                                            <option value="" disabled selected>-- Pilih --</option>
+                                            {% for opt in field.options %}
+                                            <option value="{{ opt }}">{{ opt }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% elif field.unit %}
+                                        <div class="d-inline-flex align-items-center gap-2">
+                                            <input type="text" class="report-clean-input input-compact" name="{{ field.name }}" id="input-{{ field.name }}"
+                                                   value="" placeholder="{{ field.placeholder | default('') }}" {% if field.required %}required{% endif %}>
+                                            <span class="report-unit-suffix">{{ field.unit }}</span>
+                                        </div>
                                     {% else %}
-                                    <input type="{{ field.type }}" class="theme-control-input no-icon" name="{{ field.name }}" id="input-{{ field.name }}" 
-                                           placeholder="{{ field.label }}" {% if field.required %}required{% endif %} 
-                                           value="{{ field.default | default('') }}">
+                                        <input type="{{ field.type }}" class="report-clean-input" name="{{ field.name }}" id="input-{{ field.name }}"
+                                               value="" 
+                                               placeholder="{{ field.placeholder | default('') }}" 
+                                               {% if field.required %}required{% endif %}>
                                     {% endif %}
                                 </div>
                             </div>
                             {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <!-- Step 5 Special: WhatsApp Real-Time Live Preview -->
+                {% if loop.index == 5 %}
+                <div class="report-wa-preview-card mt-4">
+                    <div class="wa-preview-header">
+                        <div class="wa-preview-title">
+                            <i class="fab fa-whatsapp text-success me-2"></i>
+                            <strong>Pratinjau Format Laporan WhatsApp</strong>
                         </div>
+                        <button type="button" class="btn btn-sm btn-outline-success" onclick="copyWaPreviewText()" title="Salin Pratinjau Teks">
+                            <i class="fa-regular fa-copy me-1"></i> Salin Teks
+                        </button>
                     </div>
-                    {% endfor %}
+                    <div class="wa-preview-body" id="liveWaPreviewBox">
+                        Memuat pratinjau format WhatsApp...
+                    </div>
+                </div>
                 {% endif %}
 
-                <!-- Wizard Actions Footer (Buttons) -->
+                <!-- Wizard Actions Footer (Modern Clean Corporate Icon-Only Grouped Right) -->
                 <div class="wizard-actions-bar">
                     {% if loop.first %}
-                    <button type="button" class="btn-action-batal" onclick="handleBatalClick()">
+                    <button type="button" class="btn-action-batal" onclick="handleBatalClick()" title="Reset / Batal Formulir" aria-label="Batal">
                         <i class="fa-solid fa-arrow-left"></i>
-                        <span>Batal</span>
                     </button>
                     {% else %}
-                    <button type="button" class="btn-action-batal" onclick="prevStep({{ loop.index - 1 }})">
+                    <button type="button" class="btn-action-batal" onclick="prevStep({{ loop.index - 1 }})" title="Kembali" aria-label="Kembali">
                         <i class="fa-solid fa-arrow-left"></i>
-                        <span>Kembali</span>
                     </button>
                     {% endif %}
 
                     {% if not loop.last %}
-                    <button type="button" class="btn-action-next" onclick="nextStep({{ loop.index + 1 }})">
-                        <span>Selanjutnya</span>
+                    <button type="button" class="btn-action-next" onclick="nextStep({{ loop.index + 1 }})" title="Selanjutnya" aria-label="Selanjutnya">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                     {% else %}
-                    <button type="submit" class="btn-action-submit" id="btnSubmitReport">
+                    <button type="submit" class="btn-action-submit" id="btnSubmitReport" title="Kirim Laporan ke Spreadsheet" aria-label="Kirim Laporan">
                         <i class="fa-solid fa-paper-plane"></i>
-                        <span>Kirim Laporan ke Spreadsheet</span>
                     </button>
                     {% endif %}
                 </div>
@@ -2538,15 +2859,11 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('reportWizard').reset();
-                const dateInput = document.getElementById('input-TANGGAL');
-                if (dateInput) {
-                    const defDate = window.ACTIVE_MONTH_DATA?.next_recommended_date || '';
-                    if (window.staffDatePicker) {
-                        window.staffDatePicker.setDate(defDate, true);
-                    } else {
-                        dateInput.value = defDate;
-                    }
-                    updateDateValidationStatus(defDate, false);
+                if (typeof clearDateField === 'function') {
+                    clearDateField();
+                }
+                if (typeof updateLiveWaPreview === 'function') {
+                    updateLiveWaPreview();
                 }
             }
         });
@@ -2573,18 +2890,22 @@
         if (formCard) formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Load Report For Edit
+    // Load Report For Edit (Revisi Petugas)
     function loadReportForEdit(reportId) {
-        Swal.fire({
-            title: 'Memuat Data Laporan...',
-            text: 'Mengambil data dari lembar kerja sementara.',
-            allowOutsideClick: false,
-            didOpen: () => { Swal.showLoading(); }
-        });
+        if (typeof showKawungLoading === 'function') {
+            showKawungLoading();
+        } else {
+            Swal.fire({
+                title: 'Memuat Data Laporan...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+        }
 
         fetch(`/staff/api/staging-report/${encodeURIComponent(reportId)}`)
             .then(r => r.json())
             .then(res => {
+                if (typeof hideKawungLoading === 'function') hideKawungLoading();
                 Swal.close();
                 if (res.success && res.report) {
                     const rep = res.report;
@@ -2619,7 +2940,8 @@
                     
                     const submitBtn = document.getElementById('btnSubmitReport');
                     if (submitBtn) {
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane me-1"></i> <span>Kirim Ulang ke GM (Hasil Revisi)</span>';
+                        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
+                        submitBtn.title = 'Kirim Ulang ke GM (Hasil Revisi)';
                     }
                     
                     if (typeof nextStep === 'function') {
@@ -2642,6 +2964,8 @@
                 }
             })
             .catch(err => {
+                if (typeof hideKawungLoading === 'function') hideKawungLoading();
+                Swal.close();
                 Swal.fire('Error', 'Gagal terhubung ke server', 'error');
             });
     }
@@ -2706,7 +3030,8 @@
 
         const minDate = res?.min || '2026-11-01';
         const maxDate = res?.max || '2026-11-30';
-        const defaultDate = res?.next_recommended_date || minDate;
+        const editId = document.getElementById('editReportId')?.value;
+        const defaultDate = editId ? (res?.next_recommended_date || minDate) : null;
 
         if (staffDatePicker) {
             staffDatePicker.set('minDate', minDate);
@@ -2723,10 +3048,10 @@
             dateFormat: "Y-m-d",
             altInput: true,
             altFormat: "l, d F Y",
-            altInputClass: "theme-control-input flatpickr-custom-input",
+            altInputClass: "report-clean-input flatpickr-custom-input",
             minDate: minDate,
             maxDate: maxDate,
-            defaultDate: defaultDate,
+            ...(defaultDate ? { defaultDate: defaultDate } : {}),
             disableMobile: true,
             showMonths: 1,
             onReady: function(selectedDates, dateStr, instance) {
@@ -2776,6 +3101,9 @@
         if (refreshIcon && forceRefresh) {
             refreshIcon.classList.add('fa-spin');
         }
+        if (forceRefresh && typeof showKawungLoading === 'function') {
+            showKawungLoading();
+        }
 
         const url = forceRefresh ? '/staff/api/active-month?refresh=1' : '/staff/api/active-month';
 
@@ -2783,6 +3111,7 @@
             .then(r => r.json())
             .then(res => {
                 if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+                if (forceRefresh && typeof hideKawungLoading === 'function') hideKawungLoading();
                 if (!res || !res.success) {
                     console.warn("Gagal memuat status kalender:", res?.error);
                     renderCalendarEmptyState(res?.error || 'Gagal terhubung ke Spreadsheet FIX.');
@@ -2810,9 +3139,9 @@
                 // 2. Inisialisasi / Perbarui Flatpickr Terkunci
                 initStaffDatePicker(res);
 
-                // 3. Set Default Date jika form masih kosong
+                // 3. Set Default Date HANYA jika dalam mode edit draf dan belum ada tanggal
                 const editId = document.getElementById('editReportId')?.value;
-                if (dateInput && !dateInput.value && !editId) {
+                if (editId && dateInput && !dateInput.value) {
                     const defDate = res.next_recommended_date || res.min;
                     if (window.staffDatePicker) {
                         window.staffDatePicker.setDate(defDate, true);
@@ -2822,8 +3151,10 @@
                 }
 
                 // 4. Update Status Banner di Bawah Input
-                if (dateInput) {
+                if (dateInput && dateInput.value) {
                     updateDateValidationStatus(dateInput.value, false);
+                } else if (dateInput) {
+                    updateDateValidationStatus('', false);
                 }
 
                 if (forceRefresh) {
@@ -2838,6 +3169,7 @@
             })
             .catch(err => {
                 if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+                if (forceRefresh && typeof hideKawungLoading === 'function') hideKawungLoading();
                 console.error("Active month error:", err);
             });
     }
@@ -2865,6 +3197,9 @@
             if (typeof updateDateValidationStatus === 'function') {
                 updateDateValidationStatus('', false);
             }
+            if (typeof updateLiveWaPreview === 'function') {
+                updateLiveWaPreview();
+            }
         }
     }
 
@@ -2872,6 +3207,75 @@
         if (window.ACTIVE_MONTH_DATA && window.ACTIVE_MONTH_DATA.next_recommended_date) {
             selectCalendarDate(window.ACTIVE_MONTH_DATA.next_recommended_date, false);
         }
+    }
+
+    function showPendingDateModal(dateStr, res) {
+        const formattedSelected = formatIndonesianDate(dateStr);
+        const recDate = res?.next_recommended_date;
+        const formattedRec = recDate ? formatIndonesianDate(recDate) : '-';
+
+        // 1. Otomatis langsung set tanggal pada formulir & kalender ke tanggal rekomendasi
+        if (recDate && recDate !== dateStr) {
+            const dateInput = document.getElementById('input-TANGGAL');
+            if (window.staffDatePicker) {
+                window.staffDatePicker.setDate(recDate, false);
+            } else if (dateInput) {
+                dateInput.value = recDate;
+            }
+            updateDateValidationStatus(recDate, false);
+        }
+
+        // 2. Tampilkan notifikasi eksekutif tanpa tombol pertanyaan (auto-close & clean)
+        Swal.fire({
+            customClass: {
+                popup: 'swal-corp-popup'
+            },
+            buttonsStyling: false,
+            showConfirmButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
+            timer: 3500,
+            timerProgressBar: true,
+            html: `
+                <div class="swal-corp-icon-tile icon-warning-corp" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #d97706; border: 1.5px solid #fde68a;">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                </div>
+                <h3 class="swal-corp-title">Laporan Sedang Ditelaah DH</h3>
+                <div class="swal-corp-sub">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Database Staging (Menunggu Telaah Department Head)
+                </div>
+
+                <div class="swal-corp-card">
+                    <div class="swal-corp-card-header">
+                        <span class="swal-corp-card-label">Tanggal Dipilih</span>
+                        <span class="swal-corp-status-tag" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-hourglass-half"></i> Sedang Ditelaah</span>
+                    </div>
+                    <div class="swal-corp-card-date">${formattedSelected}</div>
+                </div>
+
+                <div class="swal-corp-info-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <div>
+                        Laporan untuk tanggal ini <strong>sudah tersimpan di Staging</strong> dan saat ini sedang dalam peninjauan oleh <strong>Department Head (DH)</strong>. Sistem membatasi pengisian baru pada tanggal ini untuk mencegah duplikasi.
+                    </div>
+                </div>
+
+                ${recDate ? `
+                <div class="swal-corp-rec-box" style="margin-bottom: 0.4rem; background: #f0fdf4; border: 1.5px solid #86efac;">
+                    <div class="swal-corp-rec-label" style="display: flex; justify-content: space-between; align-items: center; color: #15803d;">
+                        <span><i class="fa-solid fa-arrow-right-arrow-left me-1"></i> Otomatis Dialihkan Ke</span>
+                        <span style="font-size: 0.68rem; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">Tersedia</span>
+                    </div>
+                    <div class="swal-corp-rec-value" style="font-size: 1.12rem; color: #0f172a; font-weight: 800; margin-top: 0.35rem;">
+                        ${formattedRec}
+                    </div>
+                </div>
+                <div style="font-size: 0.76rem; color: #64748b; text-align: center; margin-top: 0.5rem;">
+                    <i class="fa-regular fa-clock me-1"></i>Tanggal formulir telah disesuaikan otomatis ke tanggal rekomendasi berikutnya.
+                </div>
+                ` : ''}
+            `
+        });
     }
 
     function showDuplicateDateModal(dateStr, res) {
@@ -2945,10 +3349,13 @@
 
     function updateDateValidationStatus(dateStr, triggerModal = false) {
         const alertBox = document.getElementById('dateStatusAlert');
+        const rowAlert = document.getElementById('rowDateAlert');
+        if (rowAlert) rowAlert.style.display = dateStr ? 'flex' : 'none';
         if (!alertBox) return;
 
         if (!dateStr) {
             alertBox.style.display = 'none';
+            if (rowAlert) rowAlert.style.display = 'none';
             return;
         }
 
@@ -2956,6 +3363,7 @@
         const res = window.ACTIVE_MONTH_DATA;
         if (!res) {
             alertBox.style.display = 'none';
+            if (rowAlert) rowAlert.style.display = 'none';
             return;
         }
 
@@ -2984,19 +3392,36 @@
             }
             return;
         } else if (pendingDates.has(dateStr)) {
-            alertBox.classList.add('alert-pending');
-            alertBox.innerHTML = `
-                <i class="fa-solid fa-hourglass-half text-amber-600 fa-lg"></i>
-                <div>
-                    <strong>Menunggu Telaah GM:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> saat ini sudah tersimpan di Staging dan menunggu persetujuan General Manager.
-                </div>
-            `;
+            // Otomatis langsung alihkan ke tanggal yang disarankan jika bukan dalam mode edit draf
+            const recDate = res.next_recommended_date;
+            if (!editId && recDate && recDate !== dateStr) {
+                const dateInput = document.getElementById('input-TANGGAL');
+                if (window.staffDatePicker) {
+                    window.staffDatePicker.setDate(recDate, false);
+                } else if (dateInput) {
+                    dateInput.value = recDate;
+                }
+                updateDateValidationStatus(recDate, false);
+            }
+
+            if (triggerModal && !editId) {
+                showPendingDateModal(dateStr, res);
+            } else {
+                alertBox.classList.add('alert-pending');
+                alertBox.innerHTML = `
+                    <i class="fa-solid fa-hourglass-half text-amber-600 fa-lg"></i>
+                    <div>
+                        <strong>Menunggu Telaah DH:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> saat ini sudah tersimpan di Staging dan menunggu persetujuan Department Head.
+                    </div>
+                `;
+            }
+            return;
         } else if (revisionDates.has(dateStr)) {
             alertBox.classList.add('alert-revision');
             alertBox.innerHTML = `
                 <i class="fa-solid fa-pencil text-purple-600 fa-lg"></i>
                 <div>
-                    <strong>Perlu Revisi:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> memiliki catatan perbaikan dari GM. Anda dapat mengedit draf tersebut.
+                    <strong>Perlu Revisi:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> memiliki catatan perbaikan dari DH. Anda dapat mengedit draf tersebut.
                 </div>
             `;
         } else {
@@ -3044,14 +3469,195 @@
         }
 
         const res = window.ACTIVE_MONTH_DATA;
-        if (res && res.filled_dates && !editId) {
-            if (res.filled_dates.includes(val)) {
+        if (res && !editId) {
+            const filled = res.filled_dates || [];
+            const pending = res.staging_pending_dates || [];
+            if (filled.includes(val)) {
                 showDuplicateDateModal(val, res);
+                return false;
+            }
+            if (pending.includes(val)) {
+                showPendingDateModal(val, res);
                 return false;
             }
         }
         return true;
     };
+
+    // Batal & Reset Formulir
+    function handleBatalClick() {
+        Swal.fire({
+            title: 'Batal Pengisian?',
+            text: 'Formulir input akan di-reset ke data awal.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Reset',
+            cancelButtonText: 'Lanjutkan',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#64748b'
+        }).then((res) => {
+            if (res.isConfirmed) {
+                cancelEditMode();
+            }
+        });
+    }
+
+    // Real-Time WhatsApp Live Preview
+    function updateLiveWaPreview() {
+        const v = (id) => {
+            const el = document.getElementById('input-' + id) || document.querySelector(`[name="${id}"]`);
+            if (!el) return '-';
+            const val = (el.value || '').trim();
+            return val || '-';
+        };
+
+        const f_titik = (val) => {
+            if (!val || val === '-') return '-';
+            if (String(val).toLowerCase().includes('titik')) return val;
+            return `${val} titik`;
+        };
+
+        const f_percent = (val) => {
+            if (!val || val === '-') return '-';
+            let s = String(val).trim();
+            if (!s.endsWith('%')) {
+                try {
+                    parseFloat(s.replace(',', '.'));
+                    return `${s}%`;
+                } catch(e) {}
+            }
+            return s;
+        };
+
+        const sapaan = v('SAPAAN') !== '-' ? v('SAPAAN') : '-';
+        const tgl = v('TANGGAL') !== '-' ? v('TANGGAL') : '-';
+        
+        let penerimaArr = [];
+        ['PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4'].forEach((pk) => {
+            const p = v(pk);
+            if (p && p !== '-') penerimaArr.push(p);
+        });
+        if (penerimaArr.length === 0) penerimaArr = ['-'];
+        const penerimaStr = penerimaArr.map((p, i) => `${i + 1}. ${p}`).join('\n');
+
+        const cabang = v('KANTOR_CABANG') !== '-' ? v('KANTOR_CABANG') : '1. Kantor Cabang LOP';
+
+        let catatanStr = '';
+        let cIdx = 1;
+        for (let i = 1; i <= 7; i++) {
+            const c = v('CATATAN_' + i);
+            if (c && c !== '-') {
+                catatanStr += `${cIdx}. ${c}\n`;
+                cIdx++;
+            }
+        }
+        if (!catatanStr) catatanStr = '-\n';
+
+        const formatDamage = (bel, dip) => {
+            const parts = [];
+            if (bel && dip && bel !== '-' && dip !== '-') {
+                return `Jenis kerusakan : \n- ${bel}, ${dip}\n`;
+            } else if (bel && bel !== '-') {
+                return `Jenis kerusakan : \n- ${bel}\n`;
+            } else if (dip && dip !== '-') {
+                return `Jenis kerusakan : \n- ${dip}\n`;
+            }
+            return '';
+        };
+
+        const rwDamage = formatDamage(v('RUNWAY_JENIS_BELUM'), v('RUNWAY_JENIS_DIPERBAIKI'));
+        const twyDamage = formatDamage(v('TWY_JENIS_BELUM'), v('TWY_JENIS_DIPERBAIKI'));
+        const apnDamage = formatDamage(v('APN_JENIS_BELUM'), v('APN_JENIS_DIPERBAIKI'));
+
+        const text = `*Assalamu’alaikum Wr. Wb*
+*${sapaan}*
+
+Kepada Yth. :
+${penerimaStr}
+
+Mohon izin,  menyampaikan Laporan Harian Kondisi Fasilitas Sisi Udara di PT Angkasa Pura Indonesia 
+Tanggal : *${tgl}*
+
+Region II
+${cabang}
+*A. RUNWAY*
+•  Kondisi keseluruhan runway : ${v('RUNWAY_KONDISI')}
+•  Performance pavement : ${f_percent(v('RUNWAY_PCI'))}
+Jml Titik Rusak : ${f_titik(v('RUNWAY_TITIK_RUSAK'))}
+${rwDamage}Jml titik yang sudah diperbaiki : ${f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
+Jml titik yang belum diperbaiki : ${f_titik(v('RUNWAY_TITIK_BELUM'))}
+Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
+•  Marka :
+       Standar : ${v('RUNWAY_MARKA_STD')}
+       Realisasi : ${v('RUNWAY_MARKA_REALISASI')}
+       Performance : ${f_percent(v('RUNWAY_MARKA_PERF'))}
+•  Standing Water :
+       Pengukuran : ${v('RUNWAY_STANDING_WATER')}
+       Performance : ${f_percent(v('RUNWAY_WATER_PERF'))}
+•  Rubber Removal :  
+       Standar ketentuan : ${v('RUNWAY_RUBBER_STD')}
+       Realisasi : ${v('RUNWAY_RUBBER_REAL')}
+       Nilai Skid : ${v('RUNWAY_RUBBER_SKID')}
+
+*B. TAXIWAY*
+•  Kondisi keseluruhan Taxiway : ${v('TAXIWAY_STATUS')}
+•  Performance pavement : ${f_percent(v('TAXIWAY_PCI'))}
+Jml Titik Rusak : ${f_titik(v('TWY_TITIK_RUSAK'))}
+${twyDamage}Jml titik yang sudah diperbaiki : ${f_titik(v('TWY_TITIK_DIPERBAIKI'))}
+Jml titik yang belum diperbaiki : ${f_titik(v('TWY_TITIK_BELUM'))}
+Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
+•  Marka :
+       Standar : ${v('TWY_MARKA_STD')}
+       Realisasi : ${v('TWY_MARKA_REALISASI')}
+       Performance : ${f_percent(v('TWY_MARKA_PERF'))}
+•  Standing Water : 
+       Pengukuran : ${v('TWY_STANDING_WATER')}
+       Performance : ${f_percent(v('TWY_WATER_PERF'))}
+
+*C. APRON*
+•  Kondisi keseluruhan. Apron : ${v('APRON_KONDISI')}
+•  Performance pavement : ${f_percent(v('APRON_PCI'))}
+Jumlah Lokasi Perbaikan : ${f_titik(v('APN_TITIK_RUSAK'))}
+${apnDamage}Realisasi Perbaikan : ${f_titik(v('APN_TITIK_DIPERBAIKI'))}
+Rencana Perbaikan : ${f_titik(v('APN_TITIK_BELUM'))}
+Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
+•  Marka :
+       Standar : ${v('APN_MARKA_STD')}
+       Realisasi : ${v('APN_MARKA_REALISASI')}
+       Performance : ${f_percent(v('APN_MARKA_PERF'))}
+•  Standing Water :
+       Pengukuran : ${v('APN_STANDING_WATER')}
+       Performance : ${f_percent(v('APN_WATER_PERF'))}
+
+d. Pemotongan Rumput
+       Standar : ${v('RUMPUT_STD')}
+       Realisasi : ${v('RUMPUT_REALISASI')}
+       Performance : ${f_percent(v('RUMPUT_PERF'))}
+
+Catatan Khusus : 
+${catatanStr.trim()}`;
+
+        const previewBox = document.getElementById('liveWaPreviewBox');
+        if (previewBox) {
+            previewBox.textContent = text;
+        }
+        window.CURRENT_WA_TEXT = text;
+    }
+
+    function copyWaPreviewText() {
+        if (!window.CURRENT_WA_TEXT) updateLiveWaPreview();
+        if (navigator.clipboard && window.CURRENT_WA_TEXT) {
+            navigator.clipboard.writeText(window.CURRENT_WA_TEXT).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Teks Disalin!',
+                    text: 'Format laporan WhatsApp berhasil disalin ke papan klip.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            });
+        }
+    }
 
     // Listeners pada dateInput
     document.addEventListener("DOMContentLoaded", function() {
@@ -3092,11 +3698,21 @@
                     }
                 }
                 updateDateValidationStatus(this.value, true);
+                updateLiveWaPreview();
             });
             dateInput.addEventListener('input', function() {
                 updateDateValidationStatus(this.value, true);
+                updateLiveWaPreview();
             });
         }
+
+        // Live WhatsApp preview listener on all form inputs
+        const reportForm = document.getElementById('reportWizard');
+        if (reportForm) {
+            reportForm.addEventListener('input', updateLiveWaPreview);
+            reportForm.addEventListener('change', updateLiveWaPreview);
+        }
+        updateLiveWaPreview();
 
         // Fetch Data Status Bulan Aktif
         fetchActiveMonthData(false);

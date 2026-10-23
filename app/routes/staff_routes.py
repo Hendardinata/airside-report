@@ -9,7 +9,7 @@ bp = Blueprint('staff', __name__)
 def require_login():
     user_id = session.get('user_id')
     user = USERS.get(user_id) if user_id else None
-    if not user or user.get('role') != 'staff':
+    if not user or user.get('role') != 'staff' or not user.get('is_active', True):
         if request.path.startswith('/staff/api/') or request.is_json or request.method == 'POST':
             return jsonify({"status": "error", "message": "Unauthorized. Sesi login petugas diperlukan."}), 401
         return redirect(url_for('auth.index'))
@@ -39,7 +39,13 @@ def generate_wa_message(data, airport_code):
                 pass
         return s
     
+    import re
     tgl = v('TANGGAL')
+    if not re.match(r'^\d{4}-\d{2}-\d{2}$', tgl):
+        tgl_alt = v('TANGGAL_LAPORAN')
+        if re.match(r'^\d{4}-\d{2}-\d{2}$', tgl_alt):
+            tgl = tgl_alt
+
     try:
         from datetime import datetime
         dt = datetime.strptime(tgl.split('T')[0], '%Y-%m-%d')
@@ -193,7 +199,7 @@ def dashboard():
     staging_reports = get_staging_reports(airport_code)
     
     from app.services.notification_service import get_notifications
-    user_notifs = get_notifications(airport_code, role='staff')
+    user_notifs = get_notifications(airport_code, role='staff', username=user.get('username'))
     unread_notifs = sum(1 for n in user_notifs if not n.get('is_read'))
     total_notifs = len(user_notifs)
     notif_badge_num = unread_notifs if unread_notifs > 0 else total_notifs
@@ -313,7 +319,7 @@ def submit():
                 if tgl_str in staging_pending:
                     return jsonify({
                         "status": "error",
-                        "message": f"DITOLAK: Laporan untuk tanggal {tgl_str} saat ini SUDAH ADA di Staging dan sedang MENUNGGU TELAAH GM! Harap menunggu GM menyelesaikan verifikasi atau memberikan catatan koreksi."
+                        "message": f"DITOLAK: Laporan untuk tanggal {tgl_str} saat ini SUDAH ADA di Staging dan sedang MENUNGGU TELAAH DH! Harap menunggu Department Head menyelesaikan verifikasi atau memberikan catatan koreksi."
                     })
             else:
                 # Jika sedang mengedit draf, pastikan tanggal tidak bertabrakan dengan tanggal lain yang sudah FIX
@@ -328,11 +334,15 @@ def submit():
         print(f"Warning saat validasi duplikasi tanggal staff submit: {check_err}")
 
     try:
+        sender_name = user.get('name', f"Petugas {airport_code}")
+        sender_username = user.get('username', '')
+
         # Simpan ke spreadsheet staging khusus bandara ini
         staging_res = save_report_to_staging(
             airport_code=airport_code,
             form_data=data,
-            user_name=user.get('name', f"Petugas {airport_code}"),
+            user_name=sender_name,
+            user_username=sender_username,
             report_id=report_id
         )
         
@@ -343,18 +353,16 @@ def submit():
         except Exception:
             pass
 
-        gm_phone = config.get('gm_phone', '')
-        if not gm_phone:
-            gm_phone = config.get('pic_phone', '')
+        dh_phone = config.get('dh_phone') or config.get('gm_phone') or config.get('pic_phone', '')
             
         action_text = "diperbarui (hasil revisi)" if staging_res.get('action') == 'updated' else "berhasil disimpan"
         
-        gm_message = (
+        dh_message = (
             f"*Laporan Harian Fasilitas Sisi Udara*\n"
             f"Cabang: *{airport_code}*\n"
             f"Tanggal: *{tgl_str}*\n"
-            f"Petugas Pelapor: *{user.get('name', 'Petugas')}*\n\n"
-            f"Mohon izin menyampaikan kepada Yth. General Manager {airport_code}, bahwa laporan harian airside telah {action_text} di sistem dan siap untuk ditelaah/dikoreksi.\n\n"
+            f"Petugas Pengirim: *{sender_name}* (@{sender_username})\n\n"
+            f"Mohon izin menyampaikan kepada Yth. Department Head {airport_code}, bahwa laporan harian airside telah {action_text} di sistem dan siap untuk ditelaah/dikoreksi.\n\n"
             f"Mohon kesediaan Bapak/Ibu untuk memeriksa di Portal Airside. Terima kasih."
         )
         
@@ -363,48 +371,60 @@ def submit():
         if is_updated:
             create_notification(
                 airport_code=airport_code,
-                recipient_role='gm',
+                recipient_role='dh',
+                sender_username=sender_username,
+                sender_name=sender_name,
                 notif_type='pending',
                 title='Laporan Revisi Dikirim',
-                message=f'Petugas {user.get("name", "Petugas")} telah memperbarui laporan tanggal {tgl_str} sesuai catatan koreksi.',
+                message=f'Petugas {sender_name} (@{sender_username}) telah memperbarui laporan tanggal {tgl_str} sesuai catatan koreksi.',
                 report_id=staging_res.get('report_id'),
                 tanggal=tgl_str
             )
             create_notification(
                 airport_code=airport_code,
                 recipient_role='staff',
+                recipient_username=sender_username,
+                sender_username=sender_username,
+                sender_name=sender_name,
                 notif_type='pending',
                 title='Perbaikan Laporan Terkirim',
-                message=f'Laporan tanggal {tgl_str} berhasil dikirim ulang ke General Manager.',
+                message=f'Laporan tanggal {tgl_str} berhasil dikirim ulang ke Department Head.',
                 report_id=staging_res.get('report_id'),
                 tanggal=tgl_str
             )
         else:
             create_notification(
                 airport_code=airport_code,
-                recipient_role='gm',
+                recipient_role='dh',
+                sender_username=sender_username,
+                sender_name=sender_name,
                 notif_type='pending',
                 title='Pengajuan Laporan Baru',
-                message=f'Petugas {user.get("name", "Petugas")} mengajukan laporan harian tanggal {tgl_str} untuk ditelaah.',
+                message=f'Petugas {sender_name} (@{sender_username}) mengajukan laporan harian tanggal {tgl_str} untuk ditelaah.',
                 report_id=staging_res.get('report_id'),
                 tanggal=tgl_str
             )
             create_notification(
                 airport_code=airport_code,
                 recipient_role='staff',
+                recipient_username=sender_username,
+                sender_username=sender_username,
+                sender_name=sender_name,
                 notif_type='pending',
-                title='Laporan Diajukan ke GM',
-                message=f'Laporan tanggal {tgl_str} tersimpan di Staging dan menunggu telaah General Manager.',
+                title='Laporan Diajukan ke DH',
+                message=f'Laporan tanggal {tgl_str} tersimpan di Staging dan menunggu telaah Department Head.',
                 report_id=staging_res.get('report_id'),
                 tanggal=tgl_str
             )
 
         return jsonify({
             "status": "success", 
-            "message": f"Data berhasil disimpan ke Spreadsheet Staging {airport_code} dan dikirim ke General Manager untuk ditelaah!",
+            "message": f"Data berhasil disimpan ke Spreadsheet Staging {airport_code} dan dikirim ke Department Head untuk ditelaah!",
             "report_id": staging_res.get('report_id'),
-            "gm_phone": gm_phone,
-            "gm_message": gm_message,
+            "dh_phone": dh_phone,
+            "gm_phone": dh_phone,
+            "dh_message": dh_message,
+            "gm_message": dh_message,
             "airport_code": airport_code
         })
     except Exception as e:
@@ -416,7 +436,7 @@ def api_notifications():
     user = USERS.get(session['user_id'])
     airport_code = user.get('airport', 'LOP')
     from app.services.notification_service import get_notifications
-    notifs = get_notifications(airport_code, role='staff')
+    notifs = get_notifications(airport_code, role='staff', username=user.get('username'))
     unread_count = sum(1 for n in notifs if not n.get('is_read'))
     return jsonify({
         "success": True,
@@ -432,7 +452,7 @@ def api_notifications_mark_read():
     from app.services.notification_service import mark_notification_as_read, mark_all_as_read
     
     if data.get('mark_all'):
-        mark_all_as_read(airport_code, role='staff')
+        mark_all_as_read(airport_code, role='staff', username=user.get('username'))
     elif data.get('notif_id'):
         mark_notification_as_read(data.get('notif_id'))
     return jsonify({"success": True})

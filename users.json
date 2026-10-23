@@ -1,0 +1,156 @@
+{
+    "admin": {
+        "username": "admin",
+        "name": "Admin Regional",
+        "role": "admin",
+        "airport": null,
+        "password_hash": "pbkdf2:sha256:600000$nEjkMHu6z11wMGul$fde63a9aebe55959c6d94e3729a3fec6c9f20ffe58e89a5683d14eaa6c8b4d6b",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "lop": {
+        "username": "lop",
+        "name": "Petugas LOP",
+        "role": "staff",
+        "airport": "LOP",
+        "password_hash": "pbkdf2:sha256:600000$VMfKvknrbjrtFgjd$1dd126315883e67414b42ef3526998633b87b050c462a5ef48df6d8beff6536f",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "dps": {
+        "username": "dps",
+        "name": "Petugas DPS",
+        "role": "staff",
+        "airport": "DPS",
+        "password_hash": "pbkdf2:sha256:600000$h4xGf7Kd62hjCPKR$2310848abf2ab6c8f93e119995dba4d4ba3fc6853b3cb508010af1c8e52aa88f",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "bwx": {
+        "username": "bwx",
+        "name": "Petugas BWX",
+        "role": "staff",
+        "airport": "BWX",
+        "password_hash": "pbkdf2:sha256:600000$DkG5HKHnP517GE3D$da89d5208ffc0ff60924985e14a34d1bc82dc57b3d2c892e93df42f5d18ac94a",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "koe": {
+        "username": "koe",
+        "name": "Petugas KOE",
+        "role": "staff",
+        "airport": "KOE",
+        "password_hash": "pbkdf2:sha256:600000$vnJ9PpWUO8kYkR2M$a4b0869bccd70b035df2cc3fd9e327814c06c3525b1c4f17e76a67d0757278f8",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "dh_lop": {
+        "username": "dh_lop",
+        "name": "Department Head LOP",
+        "role": "dh",
+        "airport": "LOP",
+        "password_hash": "pbkdf2:sha256:600000$o9JMOCy252pK2Asx$96c3e4236f29a3460f5b9d0b6e6b44004b4c17208013f7f2d45d2fb4c5bd6a11",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "dh_dps": {
+        "username": "dh_dps",
+        "name": "Department Head DPS",
+        "role": "dh",
+        "airport": "DPS",
+        "password_hash": "pbkdf2:sha256:600000$FjunR7o8vxTiR4bJ$29944a09f11a4f5e9f053d4469d1776b4864345071b8c50df21a77499b397eed",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "dh_bwx": {
+        "username": "dh_bwx",
+        "name": "Department Head BWX",
+        "role": "dh",
+        "airport": "BWX",
+        "password_hash": "pbkdf2:sha256:600000$df8x5frocqAmIHLW$58ac2e847d115f9f5e93ad8eb98d91c49daf7e3df79e8689f75447490ab13d33",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "dh_koe": {
+        "username": "dh_koe",
+        "name": "Department Head KOE",
+        "role": "dh",
+        "airport": "KOE",
+        "password_hash": "pbkdf2:sha256:600000$QPUUQcZ74SDWK8k8$dc4b5550aacd4bbc4c040c7348a833c5b3f6c20f6aa9e513a6f2dea85ef7b968",
+        "is_active": true,
+        "is_system": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "gm_lop": {
+        "username": "gm_lop",
+        "name": "Department Head LOP",
+        "role": "dh",
+        "airport": "LOP",
+        "password_hash": "pbkdf2:sha256:600000$4g2fckYXaWaBkpB2$83e3f797d0a85886ff867988518ba5fbf187555fe4436c210b093ae9fec60532",
+        "is_active": true,
+        "is_legacy_alias": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "gm_dps": {
+        "username": "gm_dps",
+        "name": "Department Head DPS",
+        "role": "dh",
+        "airport": "DPS",
+        "password_hash": "pbkdf2:sha256:600000$pL9d0e7fvZw7gnnL$f6f625ecb608aa939d42710be41417620704712b74a849ad4dfb8d5064d56223",
+        "is_active": true,
+        "is_legacy_alias": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "gm_bwx": {
+        "username": "gm_bwx",
+        "name": "Department Head BWX",
+        "role": "dh",
+        "airport": "BWX",
+        "password_hash": "pbkdf2:sha256:600000$XS17HHpIY1y38fbo$ded51d11a9935978f02ecd97645fb2711c3e00d503c9f680580f56abbce63247",
+        "is_active": true,
+        "is_legacy_alias": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "gm_koe": {
+        "username": "gm_koe",
+        "name": "Department Head KOE",
+        "role": "dh",
+        "airport": "KOE",
+        "password_hash": "pbkdf2:sha256:600000$TSL9RIsubezrOYQa$70639f9eb5b1ad007be718b0d6e825854185b691a9ddad45b410a46957ddb05e",
+        "is_active": true,
+        "is_legacy_alias": true,
+        "created_at": "2026-10-01 00:00:00",
+        "updated_at": "2026-10-01 00:00:00"
+    },
+    "lop_hendar": {
+        "username": "lop_hendar",
+        "name": "Hendardinata, S.Kom",
+        "role": "staff",
+        "airport": "LOP",
+        "password_hash": "scrypt:32768:8:1$6I1H8vyhSbl4vZCh$31ce8c0d032a07add2e1b49743f1d1e7f729a065c05463c59fb9564cf718e4d0d4a44ecc02670d87a37986c02f6603b38a13833e62b5d6ecfc3cdfc77edfc21f",
+        "is_active": true,
+        "is_system": false,
+        "created_at": "2026-10-22 19:27:09",
+        "updated_at": "2026-10-23 08:41:00"
+    }
+}

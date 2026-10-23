@@ -1337,7 +1337,7 @@
                 </div>
                 <div class="info-item-content">
                     <h4>Identifikasi Peran Otomatis</h4>
-                    <p>Sistem secara otomatis mengenali peran Anda (Petugas Lapangan, General Manager, atau
+                    <p>Sistem secara otomatis mengenali peran Anda (Petugas Lapangan, Department Head, atau
                         Administrator) saat Anda memasukkan username kedinasan.</p>
                 </div>
             </div>
@@ -1407,13 +1407,21 @@
     });
 
     document.getElementById('loginForm').addEventListener('submit', function (e) {
+        if (typeof showKawungLoading === 'function') {
+            showKawungLoading();
+        }
         const btn = document.getElementById('btnSubmit');
-        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Memverifikasi...';
-        btn.style.opacity = '0.85';
-        btn.style.pointerEvents = 'none';
+        if (btn) {
+            btn.innerHTML = '<span class="kawung-inline-spin me-2"></span> Memverifikasi...';
+            btn.style.opacity = '0.85';
+            btn.style.pointerEvents = 'none';
+        }
     });
 
     window.addEventListener('pageshow', function (event) {
+        if (typeof hideKawungLoading === 'function') {
+            hideKawungLoading();
+        }
         const btn = document.getElementById('btnSubmit');
         if (btn) {
             btn.innerHTML = '<span>Login</span>';

@@ -8,78 +8,50 @@ AIRPORTS = {
     'KOE': {'name': 'Kupang', 'id': 'KOE', 'code': '4. Kantor Cabang KOE'}
 }
 
-# Default password '123' disimpan dalam format cryptographic hash (pbkdf2/scrypt)
-# Bukan plaintext lagi!
-USERS = {
-    'admin': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'admin',
-        'name': 'Admin Regional'
-    },
-    'lop': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'staff',
-        'airport': 'LOP',
-        'name': 'Petugas LOP'
-    },
-    'dps': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'staff',
-        'airport': 'DPS',
-        'name': 'Petugas DPS'
-    },
-    'bwx': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'staff',
-        'airport': 'BWX',
-        'name': 'Petugas BWX'
-    },
-    'koe': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'staff',
-        'airport': 'KOE',
-        'name': 'Petugas KOE'
-    },
-    'gm_lop': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'gm',
-        'airport': 'LOP',
-        'name': 'General Manager LOP'
-    },
-    'gm_dps': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'gm',
-        'airport': 'DPS',
-        'name': 'General Manager DPS'
-    },
-    'gm_bwx': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'gm',
-        'airport': 'BWX',
-        'name': 'General Manager BWX'
-    },
-    'gm_koe': {
-        'password_hash': generate_password_hash('123'),
-        'role': 'gm',
-        'airport': 'KOE',
-        'name': 'General Manager KOE'
-    },
-}
+from app.models.user_store import (
+    load_users,
+    save_users,
+    get_user,
+    get_all_users,
+    add_user,
+    update_user_status,
+    update_user,
+    delete_user,
+    verify_user_password
+)
 
-def verify_user_password(user_record, password):
+class _UserStoreProxy(dict):
     """
-    Verifikasi password menggunakan perbandingan konstan & hash aman.
+    Proxy dictionary agar seluruh kode yang memanggil USERS[key], USERS.get(key),
+    atau 'key' in USERS selalu mendapatkan data akun terbaru dari users.json secara dinamis.
     """
-    if not user_record or not password:
-        return False
-        
-    stored_hash = user_record.get('password_hash')
-    if stored_hash:
-        return check_password_hash(stored_hash, password)
-        
-    # Fallback jika ada password plaintext lama (dengan constant-time compare)
-    legacy_pass = user_record.get('password')
-    if legacy_pass:
-        return hmac.compare_digest(str(legacy_pass), str(password))
-        
-    return False
+    def __getitem__(self, key):
+        return load_users()[str(key).lower()]
+
+    def get(self, key, default=None):
+        if not key:
+            return default
+        return load_users().get(str(key).lower(), default)
+
+    def __contains__(self, key):
+        if not key:
+            return False
+        return str(key).lower() in load_users()
+
+    def keys(self):
+        return load_users().keys()
+
+    def values(self):
+        return load_users().values()
+
+    def items(self):
+        return load_users().items()
+
+    def __iter__(self):
+        return iter(load_users())
+
+    def __len__(self):
+        return len(load_users())
+
+USERS = _UserStoreProxy()
+

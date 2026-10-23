@@ -224,7 +224,7 @@
         })();
     </script>
     
-    <!-- InJourney Custom Loading Spinner (SweetAlert2 & Generic) -->
+    <!-- InJourney Custom Loading Spinner (SweetAlert2 & Global Overlay) -->
     <style>
         @keyframes injourney-spin {
             0% {
@@ -235,44 +235,110 @@
             }
         }
 
-        /* Override SweetAlert2 Default Loading Spinner with InJourney Kawung Motif */
-        div:where(.swal2-container) .swal2-loader,
-        .swal2-loader {
-            display: none;
+        /* Dedicated Fullscreen InJourney Kawung Loading Overlay (Seamless Blend - No Card Frame) */
+        .injourney-global-loader {
+            position: fixed;
+            inset: 0;
+            background: rgba(248, 250, 252, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 999999;
+            display: flex;
             align-items: center;
             justify-content: center;
-            width: 88px !important;
-            height: 88px !important;
-            min-width: 88px !important;
-            min-height: 88px !important;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s ease;
+        }
+
+        .injourney-global-loader.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+        }
+
+        .injourney-loader-card {
+            background: transparent !important;
             border: none !important;
-            border-color: transparent !important;
             border-radius: 0 !important;
-            background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center !important;
-            background-size: contain !important;
-            animation: injourney-spin 1s linear infinite !important;
-            margin: 0 auto !important;
+            padding: 0 !important;
             box-shadow: none !important;
-            filter: drop-shadow(0 8px 20px rgba(0, 51, 102, 0.18));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transform: scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        div:where(.swal2-container) .swal2-loader::before,
-        div:where(.swal2-container) .swal2-loader::after,
-        .swal2-loader::before,
-        .swal2-loader::after {
-            display: none !important;
-            content: none !important;
-            border: none !important;
+        .injourney-global-loader.show .injourney-loader-card {
+            transform: scale(1);
         }
 
-        /* Seamless & Professional Loading Modal: Hide white card, title, text - show ONLY spinner */
+        .injourney-kawung-spinner {
+            width: 82px;
+            height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .injourney-kawung-img {
+            width: 78px;
+            height: 78px;
+            object-fit: contain;
+            animation: injourney-spin 2s linear infinite;
+            filter: drop-shadow(0 6px 16px rgba(0, 43, 73, 0.14));
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .injourney-loader-text {
+            margin-top: 1rem;
+            text-align: center;
+            max-width: 340px;
+        }
+
+        .injourney-loader-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #002b49;
+            margin-bottom: 0.25rem;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .injourney-loader-sub {
+            font-size: 0.8rem;
+            color: #475569;
+            font-weight: 500;
+            line-height: 1.4;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Override SweetAlert2 Default Loading Spinner with Seamless InJourney Kawung Motif */
+        div:where(.swal2-container).swal2-backdrop-show,
+        div:where(.swal2-container):has(.swal2-loading) {
+            background: rgba(248, 250, 252, 0.7) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+        }
+
         div:where(.swal2-container) .swal2-popup.swal2-loading,
         .swal2-popup.swal2-loading {
             background: transparent !important;
             background-color: transparent !important;
+            border-radius: 0 !important;
             box-shadow: none !important;
             border: none !important;
             padding: 0 !important;
+            width: auto !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
             overflow: visible !important;
         }
 
@@ -291,12 +357,40 @@
         .swal2-popup.swal2-loading .swal2-actions {
             background: transparent !important;
             background-color: transparent !important;
-            margin: 0 auto !important;
+            margin: 0 !important;
             padding: 0 !important;
             width: auto !important;
         }
 
-        /* Ensure loader is cleanly displayed when Swal.showLoading() is called */
+        div:where(.swal2-container) .swal2-loader,
+        .swal2-loader {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 78px !important;
+            height: 78px !important;
+            min-width: 78px !important;
+            min-height: 78px !important;
+            border: none !important;
+            border-color: transparent !important;
+            border-radius: 0 !important;
+            background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center !important;
+            background-size: contain !important;
+            animation: injourney-spin 2s linear infinite !important;
+            margin: 0 auto !important;
+            box-shadow: none !important;
+            filter: drop-shadow(0 6px 16px rgba(0, 43, 73, 0.14));
+        }
+
+        div:where(.swal2-container) .swal2-loader::before,
+        div:where(.swal2-container) .swal2-loader::after,
+        .swal2-loader::before,
+        .swal2-loader::after {
+            display: none !important;
+            content: none !important;
+            border: none !important;
+        }
+
         div:where(.swal2-container) .swal2-actions.swal2-loading .swal2-loader,
         div:where(.swal2-container).swal2-loading .swal2-loader,
         .swal2-actions.swal2-loading .swal2-loader,
@@ -304,30 +398,43 @@
             display: block !important;
         }
 
-        /* Soft bright frosted glass backdrop for SweetAlert (not too dark) */
-        div:where(.swal2-container).swal2-backdrop-show {
-            background: rgba(255, 255, 255, 0.65) !important;
-            backdrop-filter: blur(6px) !important;
-            -webkit-backdrop-filter: blur(6px) !important;
+        /* Inline Kawung Spinners for Badges/Buttons/Card Viewers */
+        .kawung-inline-spin {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center;
+            background-size: contain;
+            animation: injourney-spin 2s linear infinite;
         }
-
-        div:where(.swal2-container):has(.swal2-loading) {
-            background: rgba(255, 255, 255, 0.7) !important;
-            backdrop-filter: blur(6px) !important;
-            -webkit-backdrop-filter: blur(6px) !important;
+        .kawung-inline-spin-md {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            vertical-align: middle;
+            background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center;
+            background-size: contain;
+            animation: injourney-spin 2s linear infinite;
         }
-
-        /* InJourney Mini Spinners for Badges/Cards/Buttons */
+        .kawung-inline-spin-lg {
+            display: inline-block;
+            width: 64px;
+            height: 64px;
+            vertical-align: middle;
+            background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center;
+            background-size: contain;
+            animation: injourney-spin 2s linear infinite;
+        }
         .injourney-spinner-sm {
             display: inline-block;
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
             vertical-align: -2px;
             background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center;
             background-size: contain;
-            animation: injourney-spin 1s linear infinite;
+            animation: injourney-spin 2s linear infinite;
         }
-
         .injourney-spinner-md {
             display: inline-block;
             width: 28px;
@@ -335,7 +442,7 @@
             vertical-align: middle;
             background: url("{{ url_for('static', filename='img/logo-kawung.png') }}") no-repeat center center;
             background-size: contain;
-            animation: injourney-spin 1s linear infinite;
+            animation: injourney-spin 2s linear infinite;
         }
     </style>
     
@@ -343,6 +450,19 @@
 </head>
 <body>
     
+    <!-- Global InJourney Kawung Loading Overlay (Blurred Frosted Glass Backdrop) -->
+    <div class="injourney-global-loader" id="injourneyGlobalLoader" aria-hidden="true">
+        <div class="injourney-loader-card">
+            <div class="injourney-kawung-spinner">
+                <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports" class="injourney-kawung-img">
+            </div>
+            <div class="injourney-loader-text" id="injourneyLoaderText" style="display: none;">
+                <div class="injourney-loader-title" id="injourneyLoaderTitle"></div>
+                <div class="injourney-loader-sub" id="injourneyLoaderSub"></div>
+            </div>
+        </div>
+    </div>
+
     {% if not hide_navbar %}
     <nav class="navbar">
         <a href="/" class="navbar-brand-modern">
@@ -375,6 +495,39 @@
     <main class="container">
         {% block content %}{% endblock %}
     </main>
+
+    <!-- Global Kawung Loader Controller Script -->
+    <script>
+        window.showKawungLoading = function(title, sub) {
+            const overlay = document.getElementById('injourneyGlobalLoader');
+            if (!overlay) return;
+            const titleEl = document.getElementById('injourneyLoaderTitle');
+            const subEl = document.getElementById('injourneyLoaderSub');
+            const textWrap = document.getElementById('injourneyLoaderText');
+
+            if (title || sub) {
+                if (titleEl) titleEl.textContent = title || '';
+                if (subEl) subEl.textContent = sub || '';
+                if (textWrap) textWrap.style.display = 'block';
+            } else {
+                if (textWrap) textWrap.style.display = 'none';
+            }
+            overlay.classList.add('show');
+            overlay.setAttribute('aria-hidden', 'false');
+        };
+
+        window.hideKawungLoading = function() {
+            const overlay = document.getElementById('injourneyGlobalLoader');
+            if (overlay) {
+                overlay.classList.remove('show');
+                overlay.setAttribute('aria-hidden', 'true');
+            }
+        };
+
+        // Aliases for unified system access
+        window.showDriveLoading = window.showKawungLoading;
+        window.hideDriveLoading = window.hideKawungLoading;
+    </script>
 
     {% block scripts %}{% endblock %}
 </body>

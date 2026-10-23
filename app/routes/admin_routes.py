@@ -1,5 +1,14 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, jsonify
-from app.models.airport_profiles import USERS
+from app.models.airport_profiles import (
+    USERS,
+    AIRPORTS,
+    get_all_users,
+    get_user,
+    add_user,
+    update_user_status,
+    update_user,
+    delete_user
+)
 from app.models.config_store import update_airport_config, get_airport_config, get_admin_config, update_admin_config
 from app.services.drive_service import create_monthly_sheet
 from app.services.gsheets_service import get_daily_summary
@@ -28,9 +37,9 @@ def empty_trash():
 
 DEFAULT_TEMPLATE_ID = "1-NfvG7t8uhp7NPKygxv_oSDsmzP1GlajIRvkGXKjwuk"
 
+@bp.route('/')
 @bp.route('/dashboard')
 def dashboard():
-    from app.models.airport_profiles import AIRPORTS
     from app.models.config_store import load_config
     user = USERS.get(session['user_id'])
     config = load_config()
@@ -64,7 +73,7 @@ def update_config():
     template_id = request.form.get('templateId')
     target_month_str = request.form.get('targetMonth')
     pic_phone = request.form.get('picPhone', '')
-    gm_phone = request.form.get('gmPhone', '')
+    dh_phone = request.form.get('dhPhone') or request.form.get('gmPhone', '')
     deputy_phone = request.form.get('deputyPhone')
     admin_phone = request.form.get('adminPhone')
     
@@ -73,10 +82,10 @@ def update_config():
     if pic_phone.startswith('0'):
         pic_phone = '62' + pic_phone[1:]
         
-    if gm_phone:
-        gm_phone = ''.join(filter(str.isdigit, gm_phone))
-        if gm_phone.startswith('0'):
-            gm_phone = '62' + gm_phone[1:]
+    if dh_phone:
+        dh_phone = ''.join(filter(str.isdigit, dh_phone))
+        if dh_phone.startswith('0'):
+            dh_phone = '62' + dh_phone[1:]
         
     if deputy_phone is not None:
         deputy_phone = ''.join(filter(str.isdigit, deputy_phone))
@@ -92,7 +101,7 @@ def update_config():
     template_id = extract_drive_id(template_id)
     
     if airport_code:
-        update_airport_config(airport_code, sheet_url, drive_folder, template_id, pic_phone, gm_phone, active_month=target_month_str)
+        update_airport_config(airport_code, sheet_url, drive_folder, template_id, pic_phone, dh_phone=dh_phone, active_month=target_month_str)
         from app.services.gsheets_service import invalidate_calendar_cache
         invalidate_calendar_cache(airport_code)
         
@@ -516,7 +525,7 @@ def api_batch_update_matrix():
         drive_folder = extract_drive_id(item.get('drive_folder'))
         sheet_url = item.get('sheet_url')
         pic_phone = item.get('pic_phone', '')
-        gm_phone = item.get('gm_phone', '')
+        dh_phone = item.get('dh_phone') or item.get('gm_phone', '')
         sheet_name = item.get('sheet_name', '')
         
         branch_active_month = item.get('active_month') or active_month
@@ -529,11 +538,11 @@ def api_batch_update_matrix():
             pic_phone = ''.join(filter(str.isdigit, pic_phone))
             if pic_phone.startswith('0'):
                 pic_phone = '62' + pic_phone[1:]
-        if gm_phone:
-            gm_phone = ''.join(filter(str.isdigit, gm_phone))
-            if gm_phone.startswith('0'):
-                gm_phone = '62' + gm_phone[1:]
-        update_airport_config(code, sheet_url=sheet_url, drive_folder=drive_folder, pic_phone=pic_phone, gm_phone=gm_phone, active_month=branch_active_month)
+        if dh_phone:
+            dh_phone = ''.join(filter(str.isdigit, dh_phone))
+            if dh_phone.startswith('0'):
+                dh_phone = '62' + dh_phone[1:]
+        update_airport_config(code, sheet_url=sheet_url, drive_folder=drive_folder, pic_phone=pic_phone, dh_phone=dh_phone, active_month=branch_active_month)
         
     deputy = admin_data.get('deputy_phone')
     admin_p = admin_data.get('admin_phone')
@@ -600,3 +609,131 @@ def api_init_staging_sheets():
             }
             
     return jsonify({"success": True, "results": results})
+
+
+# ==============================================================================
+# USER MANAGEMENT API (STAF & DEPARTMENT HEAD)
+# ==============================================================================
+
+@bp.route('/api/users', methods=['GET'])
+def api_get_users():
+    """Mengambil daftar seluruh pengguna terdaftar untuk manajemen admin."""
+    users = get_all_users()
+    sanitized = []
+    for u in users:
+        sanitized.append({
+            "username": u.get('username'),
+            "name": u.get('name'),
+            "role": u.get('role'),
+            "airport": u.get('airport'),
+            "is_active": u.get('is_active', True),
+            "is_system": u.get('is_system', False),
+            "created_at": u.get('created_at', ''),
+            "updated_at": u.get('updated_at', '')
+        })
+    return jsonify({
+        "success": True,
+        "users": sanitized,
+        "airports": AIRPORTS
+    })
+
+@bp.route('/api/users/add', methods=['POST'])
+def api_add_user():
+    """Menambahkan akun pengguna baru (Staff atau Department Head)."""
+    data = request.json or {}
+    username = data.get('username')
+    name = data.get('name')
+    role = data.get('role')
+    airport = data.get('airport')
+    password = data.get('password')
+    is_active = data.get('is_active', True)
+
+    try:
+        new_user = add_user(username, name, role, airport, password, is_active=is_active)
+        role_label = "Department Head" if new_user['role'] == 'dh' else "Petugas Sisi Udara"
+        return jsonify({
+            "success": True,
+            "message": f"Pengguna '{new_user['username']}' ({new_user['name']}) berhasil didaftarkan sebagai {role_label} cabang {new_user.get('airport', '-')}.",
+            "user": {
+                "username": new_user['username'],
+                "name": new_user['name'],
+                "role": new_user['role'],
+                "airport": new_user['airport'],
+                "is_active": new_user['is_active']
+            }
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@bp.route('/api/users/toggle-status', methods=['POST'])
+def api_toggle_user_status():
+    """Mengaktifkan atau menonaktifkan akun pengguna."""
+    data = request.json or {}
+    username = data.get('username')
+    is_active = data.get('is_active')
+
+    if not username:
+        return jsonify({"success": False, "error": "Username wajib diisi."}), 400
+
+    try:
+        updated = update_user_status(username, is_active)
+        status_label = "DIAKTIFKAN" if updated['is_active'] else "DINONAKTIFKAN"
+        return jsonify({
+            "success": True,
+            "message": f"Akun '{username.upper()}' ({updated.get('name')}) berhasil {status_label}.",
+            "user": {
+                "username": updated['username'],
+                "name": updated['name'],
+                "is_active": updated['is_active']
+            }
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@bp.route('/api/users/update', methods=['POST'])
+def api_update_user():
+    """Memperbarui data akun pengguna (nama, cabang, role, kata sandi, atau status)."""
+    data = request.json or {}
+    username = data.get('username')
+    name = data.get('name')
+    role = data.get('role')
+    airport = data.get('airport')
+    password = data.get('password')
+    is_active = data.get('is_active')
+
+    if not username:
+        return jsonify({"success": False, "error": "Username wajib diisi."}), 400
+
+    try:
+        updated = update_user(username, name=name, role=role, airport=airport, password=password, is_active=is_active)
+        return jsonify({
+            "success": True,
+            "message": f"Data akun pengguna '{username}' ({updated.get('name')}) berhasil diperbarui.",
+            "user": {
+                "username": updated['username'],
+                "name": updated['name'],
+                "role": updated['role'],
+                "airport": updated['airport'],
+                "is_active": updated['is_active']
+            }
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
+
+@bp.route('/api/users/delete', methods=['POST'])
+def api_delete_user():
+    """Menghapus akun pengguna."""
+    data = request.json or {}
+    username = data.get('username')
+
+    if not username:
+        return jsonify({"success": False, "error": "Username wajib diisi."}), 400
+
+    try:
+        delete_user(username)
+        return jsonify({
+            "success": True,
+            "message": f"Akun pengguna '{username}' berhasil dihapus dari sistem."
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400

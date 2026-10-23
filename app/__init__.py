@@ -1,5 +1,5 @@
 import os
-from flask import Flask, session, request, abort, jsonify, send_from_directory
+from flask import Flask, session, request, abort, jsonify, send_from_directory, redirect
 from config import Config
 import secrets
 import hmac
@@ -45,8 +45,9 @@ def create_app():
             expected_token = session.get('_csrf_token')
 
             if not token or not expected_token or not hmac.compare_digest(str(token), str(expected_token)):
-                if request.is_json or request.path.startswith(('/admin/api/', '/staff/api/', '/gm/api/')):
+                if request.is_json or request.path.startswith(('/admin/', '/staff/', '/gm/')):
                     return jsonify({
+                        "status": "error",
                         "success": False,
                         "error": "Permintaan ditolak: Token CSRF tidak valid atau telah kedaluwarsa. Silakan muat ulang halaman."
                     }), 403
@@ -55,8 +56,9 @@ def create_app():
     # Graceful 403 Forbidden handler
     @app.errorhandler(403)
     def handle_forbidden(e):
-        if request.is_json or request.path.startswith(('/admin/api/', '/staff/api/', '/gm/api/')):
+        if request.is_json or request.path.startswith(('/admin/', '/staff/', '/gm/')):
             return jsonify({
+                "status": "error",
                 "success": False,
                 "error": str(getattr(e, 'description', 'Permintaan ditolak: Token CSRF tidak valid.'))
             }), 403
@@ -92,6 +94,14 @@ def create_app():
     app.register_blueprint(staff_bp, url_prefix='/staff')
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(gm_bp, url_prefix='/gm')
+
+    # Alias URL /dh ke /gm untuk fleksibilitas navigasi Department Head
+    @app.route('/dh')
+    @app.route('/dh/<path:subpath>')
+    def redirect_dh(subpath=""):
+        suffix = f"/{subpath}" if subpath else "/dashboard"
+        return redirect(f"/gm{suffix}")
+
 
     # Direct route for /favicon.ico requests
     @app.route('/favicon.ico')

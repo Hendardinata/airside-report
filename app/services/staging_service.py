@@ -1,5 +1,7 @@
 import os
 import json
+import threading
+import time
 from datetime import datetime
 import gspread
 from app.services.gsheets_service import get_client, sanitize_sheet_value, write_daily_report
@@ -12,6 +14,7 @@ from app.models.config_store import (
 )
 
 DEFAULT_TEMPLATE_ID = "1-NfvG7t8uhp7NPKygxv_oSDsmzP1GlajIRvkGXKjwuk"
+_staging_lock = threading.Lock()
 
 def get_all_form_field_names():
     schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
@@ -42,7 +45,9 @@ def get_staging_headers():
 
 def get_or_create_staging_sheet(airport_code):
     """
-    Membuka atau secara otomatis membuat spreadsheet staging khusus untuk bandara terkait di folder STAGING.
+    Membuka spreadsheet staging khusus untuk bandara terkait di folder STAGING.
+    Prinsip konsistensi: Setiap bandara HANYA memiliki 1 file spreadsheet staging (STAGING_{airport_code}).
+    Sistem TIDAK AKAN PERNAH membuat file baru jika file sudah ada di folder Drive atau di konfigurasi.
     Mengembalikan instance Worksheet 'STAGING_DATA'.
     """
     airport_code = airport_code.upper()
@@ -50,101 +55,207 @@ def get_or_create_staging_sheet(airport_code):
     sheet_url = get_staging_sheet_url(airport_code)
     client = get_client()
 
-    spreadsheet = None
-    if sheet_url:
-        try:
-            spreadsheet = client.open_by_url(sheet_url)
-        except Exception as e:
-            print(f"Warning: URL staging sheet {airport_code} tidak valid atau tidak bisa dibuka: {e}")
-            spreadsheet = None
+    with _staging_lock:
+        spreadsheet = None
 
-    if not spreadsheet:
-        # Cek apakah file STAGING_{airport_code} sudah ada di folder Drive
-        drive_svc = get_drive_service()
-        file_name = f"STAGING_{airport_code}"
-        query = f"name='{file_name}' and '{folder_id}' in parents and trashed=false"
-        try:
-            res = drive_svc.files().list(
-                q=query,
-                spaces='drive',
-                fields='files(id, name, webViewLink, modifiedTime)',
-                orderBy='modifiedTime desc'
-            ).execute()
-            files = res.get('files', [])
-            if files:
-                best_file = None
-                for cand in files:
-                    try:
-                        cand_url = cand.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{cand['id']}/edit"
-                        cand_ss = client.open_by_url(cand_url)
-                        cand_ws = cand_ss.worksheet('STAGING_DATA')
-                        if len(cand_ws.get_all_values()) > 1:
-                            best_file = (cand_url, cand_ss)
-                            break
-                    except Exception:
-                        continue
-
-                if best_file:
-                    sheet_url, spreadsheet = best_file
-                else:
-                    sheet_url = files[0].get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{files[0]['id']}/edit"
+        # 1. Buka melalui sheet_url yang tersimpan di config jika ada (dengan retry jika kendala jaringan)
+        if sheet_url:
+            for attempt in range(3):
+                try:
                     spreadsheet = client.open_by_url(sheet_url)
-                update_staging_sheet_url(airport_code, sheet_url)
-        except Exception as drive_err:
-            print(f"Warning saat mencari staging sheet {airport_code} di Drive: {drive_err}")
+                    break
+                except Exception as e:
+                    if attempt < 2:
+                        time.sleep(1)
+                    else:
+                        print(f"Warning: URL staging sheet {airport_code} ({sheet_url}) gagal dibuka: {e}")
+                        spreadsheet = None
 
-    if not spreadsheet:
-        # Buat file spreadsheet baru di folder STAGING
-        file_name = f"STAGING_{airport_code}"
-        print(f"Membuat file spreadsheet baru '{file_name}' di folder {folder_id}...")
-        drive_svc = get_drive_service()
-        new_url = None
-        
-        # Opsi 1: Coba buat via Drive API secara langsung
-        try:
-            file_metadata = {
-                'name': file_name,
-                'parents': [folder_id],
-                'mimeType': 'application/vnd.google-apps.spreadsheet'
-            }
-            new_file = drive_svc.files().create(body=file_metadata, fields='id, webViewLink').execute()
-            new_url = new_file.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{new_file['id']}/edit"
-        except Exception as create_err:
-            print(f"Gagal buat spreadsheet via Drive API: {create_err}. Mencoba via template Apps Script proxy...")
+        # 2. Jika tidak ada di config atau URL gagal dibuka, cari file fisik di folder Drive
+        if not spreadsheet:
+            drive_svc = get_drive_service()
+            file_name = f"STAGING_{airport_code}"
+            query = f"name='{file_name}' and '{folder_id}' in parents and trashed=false"
             try:
-                new_url = create_monthly_sheet(file_name, folder_id, DEFAULT_TEMPLATE_ID)
-            except Exception as proxy_err:
-                raise Exception(f"Gagal membuat staging sheet {file_name}: {proxy_err}")
+                res = drive_svc.files().list(
+                    q=query,
+                    spaces='drive',
+                    fields='files(id, name, webViewLink, createdTime)',
+                    orderBy='createdTime asc'
+                ).execute()
+                files = res.get('files', [])
+                if files:
+                    # Ambil file pertama yang sah
+                    target_file = files[0]
+                    target_url = target_file.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{target_file['id']}/edit"
+                    for attempt in range(3):
+                        try:
+                            spreadsheet = client.open_by_url(target_url)
+                            sheet_url = target_url
+                            update_staging_sheet_url(airport_code, sheet_url)
+                            break
+                        except Exception as open_err:
+                            if attempt < 2:
+                                time.sleep(1)
+                            else:
+                                raise Exception(f"Gagal membuka spreadsheet staging {file_name} ({target_url}): {open_err}")
 
-        if not new_url:
-            raise Exception(f"Gagal mendapatkan URL spreadsheet staging untuk {airport_code}")
+                    # Jika ditemukan file duplikat berlebih dari masa lalu, lepaskan (unlink) dari folder
+                    if len(files) > 1:
+                        for dup in files[1:]:
+                            try:
+                                drive_svc.files().update(fileId=dup['id'], removeParents=folder_id).execute()
+                                print(f"Otomatis melepaskan duplikasi file staging {dup['name']} ({dup['id']})")
+                            except Exception:
+                                pass
+            except Exception as drive_err:
+                if not spreadsheet:
+                    raise Exception(f"Kesalahan saat mencari staging sheet {airport_code} di Google Drive: {drive_err}")
 
-        sheet_url = new_url
-        update_staging_sheet_url(airport_code, sheet_url)
-        spreadsheet = client.open_by_url(sheet_url)
+        # 3. HANYA JIKA BENAR-BENAR BELUM ADA FILE DI GOOGLE DRIVE (folder kosong):
+        if not spreadsheet:
+            file_name = f"STAGING_{airport_code}"
+            print(f"Membuat 1 file spreadsheet staging baru '{file_name}' di folder {folder_id}...")
+            drive_svc = get_drive_service()
+            new_url = None
+            
+            try:
+                file_metadata = {
+                    'name': file_name,
+                    'parents': [folder_id],
+                    'mimeType': 'application/vnd.google-apps.spreadsheet'
+                }
+                new_file = drive_svc.files().create(body=file_metadata, fields='id, webViewLink').execute()
+                new_url = new_file.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{new_file['id']}/edit"
+            except Exception as create_err:
+                print(f"Gagal buat spreadsheet via Drive API: {create_err}. Mencoba via template Apps Script proxy...")
+                try:
+                    new_url = create_monthly_sheet(file_name, folder_id, DEFAULT_TEMPLATE_ID)
+                except Exception as proxy_err:
+                    raise Exception(f"Gagal membuat staging sheet {file_name}: {proxy_err}")
 
-    # Pastikan tab STAGING_DATA ada dan memiliki header lengkap
-    try:
-        worksheet = spreadsheet.worksheet('STAGING_DATA')
-    except gspread.WorksheetNotFound:
-        # Jika sheet1 masih bernama 'Sheet1' atau belum bernama 'STAGING_DATA', kita siapkan
-        sheet1 = spreadsheet.sheet1
+            if not new_url:
+                raise Exception(f"Gagal mendapatkan URL spreadsheet staging untuk {airport_code}")
+
+            sheet_url = new_url
+            update_staging_sheet_url(airport_code, sheet_url)
+            spreadsheet = client.open_by_url(sheet_url)
+
+        # 4. Pastikan tab STAGING_DATA ada dan memiliki header lengkap
         try:
-            sheet1.update_title('STAGING_DATA')
-            worksheet = sheet1
-        except Exception:
-            worksheet = spreadsheet.add_worksheet(title='STAGING_DATA', rows=100, cols=100)
+            worksheet = spreadsheet.worksheet('STAGING_DATA')
+        except gspread.WorksheetNotFound:
+            sheet1 = spreadsheet.sheet1
+            try:
+                sheet1.update_title('STAGING_DATA')
+                worksheet = sheet1
+            except Exception:
+                worksheet = spreadsheet.add_worksheet(title='STAGING_DATA', rows=100, cols=100)
 
-    # Inisialisasi header baris 1 jika masih kosong
-    headers = get_staging_headers()
-    first_row = worksheet.row_values(1)
-    if not first_row or first_row[0] != 'REPORT_ID':
-        sanitized_headers = [sanitize_sheet_value(h) for h in headers]
+        # Inisialisasi header baris 1 dan sinkronisasi otomatis jika kolom berubah
+        headers = get_staging_headers()
+        try:
+            sync_staging_sheet_headers_and_data(worksheet, headers)
+        except Exception as sync_err:
+            print(f"Warning saat sinkronisasi staging headers {airport_code}: {sync_err}")
+
+        return worksheet
+
+def sync_staging_sheet_headers_and_data(worksheet, current_headers):
+    """
+    Memastikan row 1 di worksheet staging selalu sinkron dengan get_staging_headers().
+    Jika baris header lama berbeda dari current_headers, migrasikan data baris yang ada
+    agar urutan kolom tidak tergeser dan data tetap utuh.
+    """
+    try:
+        all_rows = worksheet.get_all_values()
+    except Exception as e:
+        print(f"Error reading rows for staging sync: {e}")
+        return
+
+    sanitized_headers = [sanitize_sheet_value(h) for h in current_headers]
+    if not all_rows or not all_rows[0] or str(all_rows[0][0]).strip() != 'REPORT_ID':
         worksheet.update(values=[sanitized_headers], range_name='A1')
+        return
 
-    return worksheet
+    first_row = all_rows[0]
+    if first_row == current_headers:
+        return
 
-def save_report_to_staging(airport_code, form_data, user_name, report_id=None):
+    # Header berbeda dari schema terkini!
+    old_headers = first_row
+    new_rows = []
+    import re
+    is_date = lambda s: bool(re.match(r'^\d{4}-\d{2}-\d{2}$', str(s).strip()))
+
+    for r in all_rows[1:]:
+        if not r or not any(r):
+            continue
+        c7 = r[7] if len(r) > 7 else ''
+        c8 = r[8] if len(r) > 8 else ''
+        
+        # Pada skema lama: idx 7 adalah TANGGAL, idx 8 adalah SAPAAN
+        # Pada skema baru: idx 7 adalah SAPAAN, idx 8 adalah TANGGAL
+        if is_date(c7) and not is_date(c8):
+            # Baris ini format LAMA
+            row_dict = {}
+            for i, h in enumerate(old_headers):
+                if i < len(r):
+                    row_dict[h] = r[i]
+            migrated_row = [row_dict.get(h, '') for h in current_headers]
+            new_rows.append(migrated_row)
+        else:
+            # Baris ini format BARU (atau sudah sesuai urutan current_headers)
+            padded_row = list(r)
+            if len(padded_row) < len(current_headers):
+                padded_row.extend([''] * (len(current_headers) - len(padded_row)))
+            elif len(padded_row) > len(current_headers):
+                padded_row = padded_row[:len(current_headers)]
+            new_rows.append(padded_row)
+
+    full_table = [sanitized_headers]
+    for r in new_rows:
+        full_table.append([sanitize_sheet_value(v) for v in r])
+
+    worksheet.update(values=full_table, range_name='A1')
+    print(f"Berhasil menyinkronkan {len(current_headers)} header dan {len(new_rows)} baris data di staging sheet.")
+
+def parse_submitted_by(raw_val, airport_code=None):
+    """
+    Mem-parsing teks SUBMITTED_BY untuk mendapatkan nama dan username pengirim.
+    Format yang didukung:
+    1. 'Nama Lengkap (@username)' atau 'Nama Lengkap (username)'
+    2. Jika hanya nama atau username saja, coba lookup ke user_store.
+    Mengembalikan tuple: (clean_name, clean_username)
+    """
+    if not raw_val:
+        return "", ""
+    raw_str = str(raw_val).strip()
+    
+    # Cek pola Nama (@username) atau Nama (username) atau Nama [username]
+    import re
+    m = re.search(r'^(.*?)\s*[\(\[]@?\s*([a-zA-Z0-9_]+)\s*[\)\]]?$', raw_str)
+    if m:
+        c_name = m.group(1).rstrip(' ([@').strip()
+        c_uname = m.group(2).strip().lower()
+        return c_name, c_uname
+        
+    # Jika tidak ada pola kurung, coba cari di user_store berdasarkan kecocokan nama atau username
+    try:
+        from app.models.airport_profiles import USERS
+        for u in USERS.values():
+            if airport_code and u.get('airport') and u.get('airport').upper() != str(airport_code).upper():
+                continue
+            if u.get('role') != 'staff':
+                continue
+            if u.get('name', '').strip().lower() == raw_str.lower() or u.get('username', '').strip().lower() == raw_str.lower():
+                return u.get('name', raw_str), u.get('username')
+    except Exception as e:
+        print(f"Warning lookup user in parse_submitted_by: {e}")
+
+    return raw_str, ""
+
+def save_report_to_staging(airport_code, form_data, user_name, report_id=None, user_username=None):
     """
     Menyimpan atau memperbarui data laporan di spreadsheet staging bandara terkait.
     Jika laporan sudah ada (misal sedang revisi), data diperbarui dan status kembali ke PENDING_GM.
@@ -181,19 +292,31 @@ def save_report_to_staging(airport_code, form_data, user_name, report_id=None):
         clean_date = tanggal.replace('-', '')
         report_id = f"REP-{airport_code}-{clean_date}"
 
+    # Format nilai yang disimpan pada kolom SUBMITTED_BY
+    if user_username:
+        clean_u = str(user_username).strip().lower()
+        if f"@{clean_u}" not in str(user_name):
+            stored_submitted_by = f"{user_name} (@{clean_u})"
+        else:
+            stored_submitted_by = user_name
+    else:
+        stored_submitted_by = user_name
+
     # Susun baris data sesuai urutan header
     row_values = []
     for h in headers:
         if h == 'REPORT_ID':
             row_values.append(report_id)
         elif h == 'STATUS':
-            row_values.append('PENDING_GM')
-        elif h == 'CATATAN_GM':
+            row_values.append('PENDING_DH')
+        elif h in ('CATATAN_GM', 'CATATAN_DH'):
             row_values.append('') # Dikosongkan kembali setelah staff memperbaiki
         elif h == 'TANGGAL_LAPORAN':
             row_values.append(tanggal)
         elif h == 'SUBMITTED_BY':
-            row_values.append(user_name)
+            row_values.append(stored_submitted_by)
+        elif h == 'SUBMITTED_BY_USERNAME':
+            row_values.append(user_username or '')
         elif h == 'TIMESTAMP_SUBMIT':
             row_values.append(existing_submit_time)
         elif h == 'TIMESTAMP_UPDATE':
@@ -216,8 +339,10 @@ def save_report_to_staging(airport_code, form_data, user_name, report_id=None):
         "success": True,
         "action": action,
         "report_id": report_id,
-        "status": "PENDING_GM",
-        "tanggal": tanggal
+        "status": "PENDING_DH",
+        "tanggal": tanggal,
+        "submitted_by": user_name,
+        "submitted_by_username": user_username or ""
     }
 
 def get_staging_reports(airport_code):
@@ -250,12 +375,24 @@ def get_staging_reports(airport_code):
             val = row[col_idx] if col_idx < len(row) else ''
             row_dict[h] = val
 
+        raw_status = row_dict.get('STATUS', 'PENDING_DH')
+        display_status = 'PENDING_DH' if raw_status == 'PENDING_GM' else raw_status
+        catatan_val = row_dict.get('CATATAN_DH') or row_dict.get('CATATAN_GM', '')
+
+        raw_sub = row_dict.get('SUBMITTED_BY', '')
+        sub_name, sub_uname = parse_submitted_by(raw_sub, airport_code)
+        if not sub_uname and row_dict.get('SUBMITTED_BY_USERNAME'):
+            sub_uname = row_dict.get('SUBMITTED_BY_USERNAME').strip().lower()
+
         reports.append({
             "report_id": row_dict.get('REPORT_ID', ''),
-            "status": row_dict.get('STATUS', 'PENDING_GM'),
-            "catatan_gm": row_dict.get('CATATAN_GM', ''),
+            "status": display_status,
+            "catatan_gm": catatan_val,
+            "catatan_dh": catatan_val,
             "tanggal": row_dict.get('TANGGAL_LAPORAN', row_dict.get('TANGGAL', '')),
-            "submitted_by": row_dict.get('SUBMITTED_BY', ''),
+            "submitted_by": sub_name or raw_sub,
+            "submitted_by_username": sub_uname or "",
+            "submitted_by_raw": raw_sub,
             "timestamp_submit": row_dict.get('TIMESTAMP_SUBMIT', ''),
             "timestamp_update": row_dict.get('TIMESTAMP_UPDATE', ''),
             "pci_runway": row_dict.get('RUNWAY_PCI', '-'),
@@ -307,6 +444,68 @@ def gm_request_revision(airport_code, report_id, notes):
         "notes": notes
     }
 
+def update_staging_report_by_dh(airport_code, report_id, updated_form_data, dh_name=None, dh_username=None):
+    """
+    Department Head mengoreksi secara mandiri data laporan di spreadsheet staging.
+    Memperbarui nilai form fields namun mempertahankan data asli pelapor (SUBMITTED_BY & TIMESTAMP_SUBMIT).
+    Status laporan dipastikan tetap/kembali ke PENDING_DH.
+    """
+    airport_code = airport_code.upper()
+    worksheet = get_or_create_staging_sheet(airport_code)
+    all_rows = worksheet.get_all_values()
+
+    target_idx = -1
+    target_row = None
+    for idx, row in enumerate(all_rows):
+        if idx > 0 and len(row) > 0 and row[0].strip() == report_id.strip():
+            target_idx = idx + 1
+            target_row = row
+            break
+
+    if target_idx == -1 or not target_row:
+        raise Exception(f"Laporan {report_id} tidak ditemukan di staging {airport_code}.")
+
+    headers = all_rows[0]
+    now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Buat dict data baris lama
+    old_data = {}
+    for col_idx, h in enumerate(headers):
+        val = target_row[col_idx] if col_idx < len(target_row) else ''
+        old_data[h] = val
+
+    # Merge updated_form_data ke data lama
+    merged_data = dict(old_data)
+    for k, v in updated_form_data.items():
+        if k not in ('REPORT_ID', 'TIMESTAMP_SUBMIT', 'SUBMITTED_BY', 'SUBMITTED_BY_USERNAME'):
+            merged_data[k] = v
+
+    # Set metadata koreksi
+    merged_data['STATUS'] = 'PENDING_DH'
+    merged_data['TIMESTAMP_UPDATE'] = now_str
+    
+    # Simpan catatan bahwa telah dikoreksi mandiri oleh DH
+    dh_label = dh_name or 'Department Head'
+    merged_data['CATATAN_DH'] = f"Dikoreksi mandiri oleh DH ({dh_label})"
+    if 'CATATAN_GM' in headers:
+        merged_data['CATATAN_GM'] = merged_data['CATATAN_DH']
+
+    # Susun ulang baris sesuai urutan headers
+    new_row_values = []
+    for h in headers:
+        new_row_values.append(merged_data.get(h, ''))
+
+    sanitized_row = [sanitize_sheet_value(v) for v in new_row_values]
+    worksheet.update(values=[sanitized_row], range_name=f"A{target_idx}")
+
+    return {
+        "success": True,
+        "report_id": report_id,
+        "status": "PENDING_DH",
+        "timestamp_update": now_str,
+        "updated_data": merged_data
+    }
+
 def gm_approve_report(airport_code, report_id):
     """
     GM menyetujui laporan:
@@ -334,6 +533,32 @@ def gm_approve_report(airport_code, report_id):
     for col_idx, h in enumerate(headers):
         val = target_row[col_idx] if col_idx < len(target_row) else ''
         form_data[h] = val
+
+    # Defensive self-healing untuk TANGGAL & SAPAAN
+    import re
+    date_regex = r'^\d{4}-\d{2}-\d{2}$'
+    raw_tanggal = str(form_data.get('TANGGAL', '')).strip()
+    if not re.match(date_regex, raw_tanggal):
+        # 1. Cek apakah tertukar dengan SAPAAN
+        if re.match(date_regex, str(form_data.get('SAPAAN', '')).strip()):
+            real_date = str(form_data['SAPAAN']).strip()
+            form_data['SAPAAN'] = raw_tanggal
+            form_data['TANGGAL'] = real_date
+        # 2. Cek TANGGAL_LAPORAN
+        elif re.match(date_regex, str(form_data.get('TANGGAL_LAPORAN', '')).strip()):
+            form_data['TANGGAL'] = str(form_data['TANGGAL_LAPORAN']).strip()
+        # 3. Cek report_id (misal REP-LOP-20261116)
+        else:
+            m = re.search(r'(\d{4})(\d{2})(\d{2})', str(report_id))
+            if m:
+                form_data['TANGGAL'] = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+
+    raw_sub = form_data.get('SUBMITTED_BY', '')
+    sub_name, sub_uname = parse_submitted_by(raw_sub, airport_code)
+    if not sub_uname and form_data.get('SUBMITTED_BY_USERNAME'):
+        sub_uname = form_data.get('SUBMITTED_BY_USERNAME').strip().lower()
+    form_data['_submitted_by_name'] = sub_name or raw_sub
+    form_data['_submitted_by_username'] = sub_uname or ''
 
     # Dapatkan URL spreadsheet produksi yang saat ini berjalan untuk cabang ini
     airport_conf = get_airport_config(airport_code)

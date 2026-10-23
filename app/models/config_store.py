@@ -48,6 +48,9 @@ def load_config():
             if 'gm_phone' not in config['airports'][code]:
                 config['airports'][code]['gm_phone'] = ""
                 modified = True
+            if 'dh_phone' not in config['airports'][code]:
+                config['airports'][code]['dh_phone'] = config['airports'][code].get('gm_phone', "")
+                modified = True
         
         if 'admin' not in config:
             config['admin'] = {"master_sheet_url": "", "deputy_phone": "", "admin_phone": ""}
@@ -70,9 +73,12 @@ def save_config(config_data):
 
 def get_airport_config(airport_code):
     config = load_config()
-    return config['airports'].get(airport_code, {})
+    conf = config['airports'].get(airport_code, {})
+    if conf and not conf.get('dh_phone'):
+        conf['dh_phone'] = conf.get('gm_phone', '')
+    return conf
 
-def update_airport_config(airport_code, sheet_url=None, drive_folder=None, template_id=None, pic_phone=None, gm_phone=None, active_month=None):
+def update_airport_config(airport_code, sheet_url=None, drive_folder=None, template_id=None, pic_phone=None, gm_phone=None, dh_phone=None, active_month=None):
     config = load_config()
     if airport_code in config['airports']:
         if sheet_url is not None:
@@ -83,8 +89,11 @@ def update_airport_config(airport_code, sheet_url=None, drive_folder=None, templ
             config['airports'][airport_code]['template_id'] = template_id
         if pic_phone is not None:
             config['airports'][airport_code]['pic_phone'] = pic_phone
-        if gm_phone is not None:
-            config['airports'][airport_code]['gm_phone'] = gm_phone
+        
+        target_dh_phone = dh_phone if dh_phone is not None else gm_phone
+        if target_dh_phone is not None:
+            config['airports'][airport_code]['dh_phone'] = target_dh_phone
+            config['airports'][airport_code]['gm_phone'] = target_dh_phone
         if active_month is not None:
             config['airports'][airport_code]['active_month'] = str(active_month).strip()
             config['active_month'] = str(active_month).strip()
