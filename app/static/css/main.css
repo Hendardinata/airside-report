@@ -2,7 +2,7 @@
 
 :root {
   /* InJourney Theme Colors */
-  --primary-color: #90c1e8; /* InJourney Sky Blue */
+  --primary-color: #00B7CD; /* InJourney Cyan */
   --secondary-color: #0284c7; /* Aviation Azure */
   --accent-color: #f0f9ff;
   --bg-color: #f8fafc;
@@ -70,17 +70,16 @@ a.btn {
   text-decoration: none !important;
 }
 
-/* Navbar (Ultra-Modern Glass App Bar) */
+/* Navbar (Ultra-Modern Clean App Bar) */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 2rem;
-  background-color: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: #ffffff;
+  background-image: none;
   border-bottom: 1px solid rgba(226, 232, 240, 0.85);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -102,13 +101,13 @@ a.btn {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: #90c1e8;
+  background: #00B7CD;
   color: #002b49;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.05rem;
-  box-shadow: 0 3px 8px rgba(144, 193, 232, 0.45);
+  box-shadow: 0 3px 8px rgba(0, 183, 205, 0.45);
   flex-shrink: 0;
 }
 
@@ -160,7 +159,7 @@ a.btn {
 
 .user-avatar-mini {
   font-size: 1.1rem;
-  color: #0284c7;
+  color: #00B7CD;
   display: flex;
   align-items: center;
 }
@@ -272,15 +271,17 @@ select.form-control {
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: #002b49;
+  color: var(--white);
+  border: none;
   font-weight: 700;
 }
 
 .btn-primary:hover {
-  background-color: #7bb5e3;
-  color: #001f35;
+  background-color: #009eb2;
+  color: var(--white);
+  border: none;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(144, 193, 232, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 183, 205, 0.45);
 }
 
 .btn-secondary {
@@ -553,17 +554,408 @@ div:where(.swal2-container).swal2-loading .swal2-loader,
   display: block !important;
 }
 
-/* Soft bright frosted glass backdrop for SweetAlert (not too dark) */
-div:where(.swal2-container).swal2-backdrop-show {
-  background: rgba(255, 255, 255, 0.65) !important;
-  backdrop-filter: blur(6px) !important;
-  -webkit-backdrop-filter: blur(6px) !important;
+/* ==========================================================================
+   EXECUTIVE CORPORATE SWEETALERT & POPUP THEMING (100% UNIFIED)
+   ========================================================================== */
+div:where(.swal2-container).swal2-backdrop-show,
+.swal2-backdrop-show {
+  background: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
 }
 
 div:where(.swal2-container):has(.swal2-loading) {
-  background: rgba(255, 255, 255, 0.7) !important;
-  backdrop-filter: blur(6px) !important;
-  -webkit-backdrop-filter: blur(6px) !important;
+  background: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* Modal Popup Box */
+div:where(.swal2-container) .swal2-popup,
+.swal2-popup,
+.swal2-popup.swal-corp-popup {
+  border-radius: 24px !important;
+  padding: 2.25rem 2.25rem 2rem 2.25rem !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+  background: #ffffff !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  max-width: 460px !important;
+  width: 92% !important;
+  box-sizing: border-box !important;
+}
+
+/* Strictly hide swal2-icon if SweetAlert hides it or if it lacks an icon type */
+div:where(.swal2-container) .swal2-icon[style*="display: none"],
+div:where(.swal2-container) .swal2-icon:not(.swal2-warning):not(.swal2-success):not(.swal2-error):not(.swal2-info):not(.swal2-question),
+.swal2-icon[style*="display: none"] {
+  display: none !important;
+}
+
+/* Top Squircle Icon Badges for Active Icons & Custom Icon Tiles */
+div:where(.swal2-container) .swal2-icon.swal2-warning:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-icon.swal2-success:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-icon.swal2-error:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-icon.swal2-info:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-icon.swal2-question:not([style*="display: none"]),
+.swal-corp-icon-tile {
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+  min-height: 64px !important;
+  margin: 0 auto 1.25rem auto !important;
+  border-radius: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  border-width: 1.5px !important;
+  border-style: solid !important;
+  font-size: 1.75rem !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Clear and hide ALL default fragile Swal2 internal line artifacts, spans, and rings */
+div:where(.swal2-container) .swal2-icon *,
+.swal2-icon * {
+  display: none !important;
+}
+
+/* 1. Warning Icon (Amber Squircle) */
+div:where(.swal2-container) .swal2-icon.swal2-warning,
+.swal2-icon.swal2-warning,
+.swal-corp-icon-tile.icon-warning-corp {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+  border-color: #fde68a !important;
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-warning::after {
+  content: "" !important;
+  display: block !important;
+  width: 32px !important;
+  height: 32px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23d97706' d='M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .3-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z'/%3E%3C/svg%3E") !important;
+}
+
+/* 2. Success Icon (Emerald Squircle) */
+div:where(.swal2-container) .swal2-icon.swal2-success,
+.swal2-icon.swal2-success,
+.swal-corp-icon-tile.icon-success-corp {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+  border-color: #bbf7d0 !important;
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.15) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-success::after {
+  content: "" !important;
+  display: block !important;
+  width: 32px !important;
+  height: 32px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2316a34a' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/%3E%3C/svg%3E") !important;
+}
+
+/* 3. Error Icon (Rose Squircle) */
+div:where(.swal2-container) .swal2-icon.swal2-error,
+.swal2-icon.swal2-error,
+.swal-corp-icon-tile.icon-error-corp {
+  background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%) !important;
+  border-color: #fecdd3 !important;
+  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.15) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-error::after {
+  content: "" !important;
+  display: block !important;
+  width: 32px !important;
+  height: 32px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23e11d48' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3E%3C/svg%3E") !important;
+}
+
+/* 4. Info Icon (Cyan Squircle) */
+div:where(.swal2-container) .swal2-icon.swal2-info,
+.swal2-icon.swal2-info,
+.swal-corp-icon-tile.icon-info-corp {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+  border-color: #bae6fd !important;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-info::after {
+  content: "" !important;
+  display: block !important;
+  width: 32px !important;
+  height: 32px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%230284c7' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+}
+
+/* 5. Question Icon (Purple Squircle) */
+div:where(.swal2-container) .swal2-icon.swal2-question,
+.swal2-icon.swal2-question,
+.swal-corp-icon-tile.icon-question-corp {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%) !important;
+  border-color: #ddd6fe !important;
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-question::after {
+  content: "" !important;
+  display: block !important;
+  width: 32px !important;
+  height: 32px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%237c3aed' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6s-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.3-6.7-15.1-15.1-15.1H222.6c-5.7 0-10.8 3.6-12.7 9l-7.7 21.6c-4.4 12.5-18.1 19.1-30.6 14.6s-19.1-18.1-14.6-30.6l12.8-35.9zM256 336a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+}
+
+/* Custom HTML icon tiles with inner FontAwesome icon */
+.swal-corp-icon-tile i {
+  font-size: 1.85rem !important;
+  line-height: 1 !important;
+}
+
+/* Title */
+div:where(.swal2-container) .swal2-title,
+.swal2-title,
+.swal-corp-title {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  color: #002b49 !important;
+  margin: 0 0 0.35rem 0 !important;
+  padding: 0 !important;
+  letter-spacing: -0.35px !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+}
+
+/* Subtitle Tag */
+.swal-corp-sub,
+.swal-corp-subtitle {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+  margin: 0.2rem 0 1.15rem 0 !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.4rem !important;
+}
+
+/* Body Text & HTML Container */
+div:where(.swal2-container) .swal2-html-container,
+.swal2-html-container {
+  font-size: 0.92rem !important;
+  color: #475569 !important;
+  line-height: 1.55 !important;
+  text-align: center !important;
+  margin: 0.5rem 0 1.35rem 0 !important;
+  padding: 0 !important;
+  font-weight: 400 !important;
+}
+
+/* Actions Bar */
+div:where(.swal2-container) .swal2-actions,
+.swal2-actions,
+.swal-corp-actions-bar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+  margin: 1.25rem 0 0 0 !important;
+  padding: 0 !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+/* Strictly hide buttons or actions that SweetAlert marks as display:none or hidden */
+div:where(.swal2-container) .swal2-actions[style*="display: none"],
+div:where(.swal2-container) .swal2-actions:not(:has(button:not([style*="display: none"]))),
+div:where(.swal2-container) .swal2-actions button[style*="display: none"],
+div:where(.swal2-container) .swal2-actions button.swal2-hide,
+div:where(.swal2-container) .swal2-actions button[aria-hidden="true"],
+.swal2-actions[style*="display: none"],
+.swal2-actions button[style*="display: none"],
+.swal2-actions button[aria-hidden="true"] {
+  display: none !important;
+}
+
+/* Base button styling for visible styled buttons */
+div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+.swal-corp-btn-primary,
+.swal-corp-btn-secondary {
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  padding: 0 1.25rem !important;
+  border-radius: 14px !important;
+  font-family: inherit !important;
+  font-size: 0.92rem !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-decoration: none !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  flex: 1 1 0px !important;
+  min-width: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+}
+
+/* Single-button alert: confirm button spans 100% width symmetrically */
+div:where(.swal2-container) .swal2-actions:not(:has(button.swal2-cancel:not([style*="display: none"]))):not(:has(button.swal2-deny:not([style*="display: none"]))) button.swal2-confirm:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-actions > button.swal2-styled:only-of-type,
+.swal-corp-actions-bar:not(:has(.swal-corp-btn-secondary)) .swal-corp-btn-primary {
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Primary / Confirm Button (Flagship #00B7CD - No Border & Pure White Text) */
+div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+.swal-corp-btn-primary {
+  background: #00B7CD !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35) !important;
+}
+
+div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):hover,
+.swal-corp-btn-primary:hover {
+  background: #009eb2 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):active,
+.swal-corp-btn-primary:active {
+  transform: translateY(0) !important;
+}
+
+/* Secondary / Cancel Button (Crisp White Card with outline) */
+div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+.swal-corp-btn-secondary {
+  background: #ffffff !important;
+  color: #475569 !important;
+  border: 1.5px solid #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):hover,
+.swal-corp-btn-secondary:hover {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+  border-color: #94a3b8 !important;
+  transform: translateY(-1px) !important;
+}
+
+div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):active,
+.swal-corp-btn-secondary:active {
+  transform: translateY(0) !important;
+}
+
+/* Deny Button (only visible if explicitly configured) */
+div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]) {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  border: 1.5px solid #fecdd3 !important;
+  font-weight: 700 !important;
+}
+
+div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]):hover {
+  background: #fecdd3 !important;
+  color: #991b1b !important;
+}
+
+/* Danger Confirm Button Override */
+div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"],
+div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"],
+div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"],
+div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"],
+div:where(.swal2-container) button.swal2-confirm[style*="#d33"] {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border: 2px solid #991b1b !important;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
+}
+div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"]:hover,
+div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"]:hover,
+div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"]:hover,
+div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"]:hover,
+div:where(.swal2-container) button.swal2-confirm[style*="#d33"]:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+  border-color: #7f1d1d !important;
+}
+
+/* Inputs & Select in Swal */
+div:where(.swal2-container) .swal2-input,
+div:where(.swal2-container) .swal2-textarea,
+div:where(.swal2-container) .swal2-select {
+  border-radius: 12px !important;
+  border: 1.5px solid #cbd5e1 !important;
+  font-size: 0.9rem !important;
+  color: #0f172a !important;
+  box-shadow: none !important;
+  margin: 0.5rem 0 1rem 0 !important;
+  font-family: inherit !important;
+}
+
+div:where(.swal2-container) .swal2-input:focus,
+div:where(.swal2-container) .swal2-textarea:focus,
+div:where(.swal2-container) .swal2-select:focus {
+  border-color: #00B7CD !important;
+  box-shadow: 0 0 0 3px rgba(0, 183, 205, 0.2) !important;
+}
+
+/* Close Button */
+div:where(.swal2-container) .swal2-close,
+.swal2-close {
+  color: #94a3b8 !important;
+  font-size: 1.4rem !important;
+  transition: all 0.15s ease !important;
+  top: 0.9rem !important;
+  right: 0.9rem !important;
+  border-radius: 50% !important;
+  width: 34px !important;
+  height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+}
+
+div:where(.swal2-container) .swal2-close:hover,
+.swal2-close:hover {
+  color: #0f172a !important;
+  background-color: transparent !important;
+  transform: scale(1.15) !important;
+}
+
+/* Timer Progress Bar */
+div:where(.swal2-container) .swal2-timer-progress-bar,
+.swal2-timer-progress-bar {
+  background: linear-gradient(90deg, #00B7CD 0%, #0284c7 100%) !important;
+  height: 3px !important;
 }
 
 /* Small inline InJourney Spinner */

@@ -50,9 +50,14 @@ def dashboard():
     for r in reports:
         r['tanggal_indo'] = format_indo_date(r.get('tanggal'))
     
-    # Hitung statistik
+    # Hitung statistik staging
     pending_count = sum(1 for r in reports if r.get('status') in ('PENDING_DH', 'PENDING_GM'))
     revisi_count = sum(1 for r in reports if r.get('status') == 'REVISI')
+
+    # Ambil laporan yang telah disetujui & masuk ke Spreadsheet Produksi Utama
+    from app.services.gsheets_service import get_production_approved_reports
+    approved_reports = get_production_approved_reports(airport_code)
+    approved_count = len(approved_reports)
     
     import os, json
     schema = {}
@@ -92,6 +97,8 @@ def dashboard():
         reports=reports,
         pending_count=pending_count,
         revisi_count=revisi_count,
+        approved_reports=approved_reports,
+        approved_count=approved_count,
         schema=schema,
         notif_badge_num=notif_badge_num,
         unread_notifs_count=unread_notifs,
@@ -108,11 +115,23 @@ def api_reports():
     reports = get_staging_reports(airport_code)
     return jsonify({"success": True, "reports": reports})
 
+@bp.route('/api/approved-reports', methods=['GET'])
+def api_approved_reports():
+    user = USERS.get(session['user_id'])
+    airport_code = user.get('airport', 'LOP')
+    from app.services.gsheets_service import get_production_approved_reports
+    reports = get_production_approved_reports(airport_code)
+    return jsonify({"success": True, "reports": reports, "count": len(reports)})
+
 @bp.route('/api/report/<report_id>', methods=['GET'])
 def api_report_detail(report_id):
     user = USERS.get(session['user_id'])
     airport_code = user.get('airport', 'LOP')
     report = get_staging_report_by_id(airport_code, report_id)
+    if not report:
+        from app.services.gsheets_service import get_production_report_by_id
+        report = get_production_report_by_id(airport_code, report_id)
+
     if not report:
         return jsonify({"success": False, "error": "Laporan tidak ditemukan"}), 404
     return jsonify({"success": True, "report": report})

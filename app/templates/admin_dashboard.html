@@ -21,8 +21,8 @@
         --theme-blue-hover: #0369a1;
         --theme-blue-light: #f0f9ff;
         --theme-blue-border: #bae6fd;
-        --theme-btn-gradient: #90c1e8;
-        --theme-btn-gradient-hover: #7bb5e3;
+        --theme-btn-gradient: #00B7CD;
+        --theme-btn-gradient-hover: #009eb2;
         --theme-cyan: #0284c7;
         --theme-slate-900: #0f172a;
         --theme-slate-700: #334155;
@@ -50,6 +50,413 @@
         color: var(--theme-slate-900) !important;
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
+    }
+
+    /* ==========================================================================
+       EXECUTIVE CORPORATE SWEETALERT & POPUP THEMING (100% UNIFIED)
+       ========================================================================== */
+    div:where(.swal2-container).swal2-backdrop-show,
+    .swal2-backdrop-show {
+        background: rgba(15, 23, 42, 0.45) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    div:where(.swal2-container):has(.swal2-loading) {
+        background: rgba(15, 23, 42, 0.45) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    /* Modal Popup Box */
+    div:where(.swal2-container) .swal2-popup,
+    .swal2-popup,
+    .swal2-popup.swal-corp-popup {
+        border-radius: 24px !important;
+        padding: 2.25rem 2.25rem 2rem 2.25rem !important;
+        box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+        background: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        max-width: 460px !important;
+        width: 92% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Strictly hide swal2-icon if SweetAlert hides it or if it lacks an icon type */
+    div:where(.swal2-container) .swal2-icon[style*="display: none"],
+    div:where(.swal2-container) .swal2-icon:not(.swal2-warning):not(.swal2-success):not(.swal2-error):not(.swal2-info):not(.swal2-question),
+    .swal2-icon[style*="display: none"] {
+        display: none !important;
+    }
+
+    /* Top Squircle Icon Badges for Active Icons & Custom Icon Tiles */
+    div:where(.swal2-container) .swal2-icon.swal2-warning:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-success:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-error:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-info:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-question:not([style*="display: none"]),
+    .swal-corp-icon-tile {
+        width: 64px !important;
+        height: 64px !important;
+        min-width: 64px !important;
+        min-height: 64px !important;
+        margin: 0 auto 1.25rem auto !important;
+        border-radius: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        border-width: 1.5px !important;
+        border-style: solid !important;
+        font-size: 1.75rem !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    /* Clear and hide ALL default fragile Swal2 internal line artifacts, spans, and rings */
+    div:where(.swal2-container) .swal2-icon *,
+    .swal2-icon * {
+        display: none !important;
+    }
+
+    /* 1. Warning Icon (Amber Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-warning,
+    .swal2-icon.swal2-warning,
+    .swal-corp-icon-tile.icon-warning-corp {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+        border-color: #fde68a !important;
+        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-warning::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23d97706' d='M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .3-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 2. Success Icon (Emerald Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-success,
+    .swal2-icon.swal2-success,
+    .swal-corp-icon-tile.icon-success-corp {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+        border-color: #bbf7d0 !important;
+        box-shadow: 0 4px 16px rgba(22, 163, 74, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-success::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2316a34a' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 3. Error Icon (Rose Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-error,
+    .swal2-icon.swal2-error,
+    .swal-corp-icon-tile.icon-error-corp {
+        background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%) !important;
+        border-color: #fecdd3 !important;
+        box-shadow: 0 4px 16px rgba(225, 29, 72, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-error::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23e11d48' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 4. Info Icon (Cyan Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-info,
+    .swal2-icon.swal2-info,
+    .swal-corp-icon-tile.icon-info-corp {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+        border-color: #bae6fd !important;
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-info::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%230284c7' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 5. Question Icon (Purple Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-question,
+    .swal2-icon.swal2-question,
+    .swal-corp-icon-tile.icon-question-corp {
+        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%) !important;
+        border-color: #ddd6fe !important;
+        box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-question::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%237c3aed' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6s-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.3-6.7-15.1-15.1-15.1H222.6c-5.7 0-10.8 3.6-12.7 9l-7.7 21.6c-4.4 12.5-18.1 19.1-30.6 14.6s-19.1-18.1-14.6-30.6l12.8-35.9zM256 336a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* Custom HTML icon tiles with inner FontAwesome icon */
+    .swal-corp-icon-tile i {
+        font-size: 1.85rem !important;
+        line-height: 1 !important;
+    }
+
+    /* Title */
+    div:where(.swal2-container) .swal2-title,
+    .swal2-title,
+    .swal-corp-title {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-size: 1.35rem !important;
+        font-weight: 800 !important;
+        color: #002b49 !important;
+        margin: 0 0 0.35rem 0 !important;
+        padding: 0 !important;
+        letter-spacing: -0.35px !important;
+        line-height: 1.25 !important;
+        text-align: center !important;
+    }
+
+    /* Subtitle Tag */
+    .swal-corp-sub,
+    .swal-corp-subtitle {
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #64748b !important;
+        margin: 0.2rem 0 1.15rem 0 !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.4rem !important;
+    }
+
+    /* Body Text & HTML Container */
+    div:where(.swal2-container) .swal2-html-container,
+    .swal2-html-container {
+        font-size: 0.92rem !important;
+        color: #475569 !important;
+        line-height: 1.55 !important;
+        text-align: center !important;
+        margin: 0.5rem 0 1.35rem 0 !important;
+        padding: 0 !important;
+        font-weight: 400 !important;
+    }
+
+    /* Actions Bar */
+    div:where(.swal2-container) .swal2-actions,
+    .swal2-actions,
+    .swal-corp-actions-bar {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+        margin: 1.25rem 0 0 0 !important;
+        padding: 0 !important;
+        align-items: stretch !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Strictly hide buttons or actions that SweetAlert marks as display:none or hidden */
+    div:where(.swal2-container) .swal2-actions[style*="display: none"],
+    div:where(.swal2-container) .swal2-actions:not(:has(button:not([style*="display: none"]))),
+    div:where(.swal2-container) .swal2-actions button[style*="display: none"],
+    div:where(.swal2-container) .swal2-actions button.swal2-hide,
+    div:where(.swal2-container) .swal2-actions button[aria-hidden="true"],
+    .swal2-actions[style*="display: none"],
+    .swal2-actions button[style*="display: none"],
+    .swal2-actions button[aria-hidden="true"] {
+        display: none !important;
+    }
+
+    /* Base button styling for visible styled buttons */
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+    .swal-corp-btn-primary,
+    .swal-corp-btn-secondary {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        padding: 0 1.25rem !important;
+        border-radius: 14px !important;
+        font-family: inherit !important;
+        font-size: 0.92rem !important;
+        cursor: pointer !important;
+        box-sizing: border-box !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        text-decoration: none !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        flex: 1 1 0px !important;
+        min-width: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Single-button alert: confirm button spans 100% width symmetrically */
+    div:where(.swal2-container) .swal2-actions:not(:has(button.swal2-cancel:not([style*="display: none"]))):not(:has(button.swal2-deny:not([style*="display: none"]))) button.swal2-confirm:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-actions > button.swal2-styled:only-of-type,
+    .swal-corp-actions-bar:not(:has(.swal-corp-btn-secondary)) .swal-corp-btn-primary {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Primary / Confirm Button (Flagship #00B7CD - No Border & Pure White Text) */
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+    .swal-corp-btn-primary {
+        background: #00B7CD !important;
+        color: #ffffff !important;
+        border: none !important;
+        font-weight: 800 !important;
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):hover,
+    .swal-corp-btn-primary:hover {
+        background: #009eb2 !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):active,
+    .swal-corp-btn-primary:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Secondary / Cancel Button (Crisp White Card with outline) */
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+    .swal-corp-btn-secondary {
+        background: #ffffff !important;
+        color: #475569 !important;
+        border: 1.5px solid #cbd5e1 !important;
+        font-weight: 700 !important;
+    }
+
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):hover,
+    .swal-corp-btn-secondary:hover {
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        border-color: #94a3b8 !important;
+        transform: translateY(-1px) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):active,
+    .swal-corp-btn-secondary:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Deny Button (only visible if explicitly configured) */
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]) {
+        background: #fee2e2 !important;
+        color: #b91c1c !important;
+        border: 1.5px solid #fecdd3 !important;
+        font-weight: 700 !important;
+    }
+
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]):hover {
+        background: #fecdd3 !important;
+        color: #991b1b !important;
+    }
+
+    /* Danger Confirm Button Override */
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"],
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#d33"] {
+        background: #ef4444 !important;
+        color: #ffffff !important;
+        border: 2px solid #991b1b !important;
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
+    }
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#d33"]:hover {
+        background: #dc2626 !important;
+        color: #ffffff !important;
+        border-color: #7f1d1d !important;
+    }
+
+    /* Inputs & Select in Swal */
+    div:where(.swal2-container) .swal2-input,
+    div:where(.swal2-container) .swal2-textarea,
+    div:where(.swal2-container) .swal2-select {
+        border-radius: 12px !important;
+        border: 1.5px solid #cbd5e1 !important;
+        font-size: 0.9rem !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+        margin: 0.5rem 0 1rem 0 !important;
+        font-family: inherit !important;
+    }
+
+    div:where(.swal2-container) .swal2-input:focus,
+    div:where(.swal2-container) .swal2-textarea:focus,
+    div:where(.swal2-container) .swal2-select:focus {
+        border-color: #00B7CD !important;
+        box-shadow: 0 0 0 3px rgba(0, 183, 205, 0.2) !important;
+    }
+
+    /* Close Button */
+    div:where(.swal2-container) .swal2-close,
+    .swal2-close,
+    .swal-corp-popup .swal2-close {
+        color: #94a3b8 !important;
+        font-size: 1.4rem !important;
+        transition: all 0.15s ease !important;
+        top: 0.9rem !important;
+        right: 0.9rem !important;
+        border-radius: 50% !important;
+        width: 34px !important;
+        height: 34px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+
+    div:where(.swal2-container) .swal2-close:hover,
+    .swal2-close:hover,
+    .swal-corp-popup .swal2-close:hover {
+        color: #0f172a !important;
+        background-color: transparent !important;
+        transform: scale(1.15) !important;
+    }
+
+    /* Timer Progress Bar */
+    div:where(.swal2-container) .swal2-timer-progress-bar,
+    .swal2-timer-progress-bar,
+    .swal-corp-popup .swal2-timer-progress-bar {
+        background: linear-gradient(90deg, #00B7CD 0%, #0284c7 100%) !important;
+        height: 3px !important;
     }
 
     main.container,
@@ -98,7 +505,7 @@
         display: flex;
         align-items: center;
         gap: 0.85rem;
-        border-bottom: 1px solid var(--theme-border);
+        border-bottom: 1px solid var(--theme-border, #e2e8f0);
         background: #ffffff;
     }
 
@@ -169,12 +576,12 @@
 
     .sidebar-menu-btn:hover {
         background-color: #f8fafc;
-        color: var(--theme-navy);
+        color: #00B7CD;
     }
 
     .sidebar-menu-btn.active {
-        background-color: #f0f7ff;
-        color: #0284c7;
+        background-color: rgba(0, 183, 205, 0.08);
+        color: #00B7CD;
         font-weight: 700;
     }
 
@@ -186,7 +593,7 @@
         bottom: 6px;
         width: 3.5px;
         border-radius: 0 4px 4px 0;
-        background-color: #0284c7;
+        background-color: #00B7CD;
     }
 
     .sidebar-item-icon {
@@ -205,11 +612,11 @@
     }
 
     .sidebar-menu-btn:hover .sidebar-item-icon {
-        color: #0284c7;
+        color: #00B7CD;
     }
 
     .sidebar-menu-btn.active .sidebar-item-icon {
-        color: #0284c7;
+        color: #00B7CD;
     }
 
     .sidebar-item-title {
@@ -244,10 +651,23 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background-color: var(--theme-green);
-        box-shadow: 0 0 0 2px var(--theme-green-border);
+        background-color: #00B7CD;
+        box-shadow: 0 0 0 2px rgba(0, 183, 205, 0.25);
         display: inline-block;
         margin-right: 0.4rem;
+    }
+
+    .gdrive-status-logo {
+        width: 17px;
+        height: 15px;
+        flex-shrink: 0;
+        margin-right: 0.45rem;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.08));
+    }
+
+    .system-status-indicator:hover .gdrive-status-logo {
+        transform: scale(1.12);
     }
 
     /* Backdrop overlay for mobile drawer */
@@ -279,7 +699,8 @@
         width: 100%;
         height: 72px;
         background-color: #ffffff;
-        border-bottom: 1px solid var(--theme-border);
+        background-image: none;
+        border-bottom: 1px solid var(--theme-border, #e2e8f0);
         box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
         position: sticky;
         top: 0;
@@ -314,20 +735,23 @@
         width: 40px;
         height: 40px;
         border-radius: 10px;
-        border: 1.5px solid var(--theme-border);
-        background: #ffffff;
-        color: var(--theme-slate-700);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #002b49;
         font-size: 1.15rem;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.15s ease;
         flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(0, 43, 73, 0.08);
     }
 
     .btn-sidebar-toggle:hover {
-        background-color: #f1f5f9;
-        color: var(--theme-navy);
+        background-color: #ffffff;
+        color: #002b49;
     }
 
     /* Search Box */
@@ -341,32 +765,38 @@
     .topbar-search-input {
         width: 100%;
         height: 44px;
-        background-color: #ffffff;
-        border: 1.5px solid var(--theme-border);
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1.5px solid rgba(255, 255, 255, 0.9);
         border-radius: 12px;
         padding: 0 1rem 0 2.75rem;
         font-size: 0.88rem;
-        color: var(--theme-slate-900);
+        color: #002b49;
+        font-weight: 500;
         outline: none;
         box-sizing: border-box;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         font-family: inherit;
+        box-shadow: 0 2px 6px rgba(0, 43, 73, 0.06);
     }
 
     .topbar-search-input::placeholder {
-        color: var(--theme-slate-400);
+        color: #00365c;
+        opacity: 0.65;
         font-weight: 400;
     }
 
     .topbar-search-input:focus {
-        border-color: #0284c7;
-        box-shadow: 0 0 0 3.5px rgba(2, 132, 199, 0.15);
+        background-color: #ffffff;
+        border-color: #002b49;
+        box-shadow: 0 0 0 3.5px rgba(0, 43, 73, 0.15);
     }
 
     .topbar-search-icon {
         position: absolute;
         left: 1.05rem;
-        color: var(--theme-slate-400);
+        color: #00365c;
         font-size: 0.95rem;
         pointer-events: none;
     }
@@ -402,23 +832,28 @@
 
     .topbar-notif-btn {
         position: relative;
-        background: transparent;
-        border: none;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
         width: 40px;
         height: 40px;
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--theme-slate-600);
+        color: #002b49;
         font-size: 1.25rem;
         cursor: pointer;
         transition: all 0.2s ease;
+        box-shadow: 0 2px 6px rgba(0, 43, 73, 0.08);
     }
 
     .topbar-notif-btn:hover {
-        background-color: #f1f5f9;
-        color: var(--theme-slate-900);
+        background-color: #ffffff;
+        color: #002b49;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 43, 73, 0.14);
     }
 
     .notif-badge-dot {
@@ -584,9 +1019,9 @@
     }
 
     .notif-pill.success {
-        background: #f0fdf4;
-        color: #15803d;
-        border: 1px solid #bbf7d0;
+        background: rgba(0, 183, 205, 0.1);
+        color: #00B7CD;
+        border: 1px solid rgba(0, 183, 205, 0.35);
     }
 
     .notif-item-desc {
@@ -661,22 +1096,28 @@
         align-items: center;
         gap: 0.75rem;
         cursor: pointer;
-        padding: 0.35rem 0.5rem;
+        padding: 0.35rem 0.65rem;
         border-radius: 12px;
-        transition: background-color 0.2s ease;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 2px 6px rgba(0, 43, 73, 0.08);
+        transition: all 0.2s ease;
         position: relative;
         user-select: none;
     }
 
     .topbar-user-wrap:hover {
-        background-color: #f8fafc;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 43, 73, 0.14);
     }
 
     .user-avatar-circle {
         width: 38px;
         height: 38px;
         border-radius: 50%;
-        background: var(--theme-btn-gradient);
+        background-color: #00B7CD;
         color: #ffffff;
         font-size: 0.85rem;
         font-weight: 700;
@@ -685,7 +1126,7 @@
         justify-content: center;
         letter-spacing: -0.2px;
         flex-shrink: 0;
-        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+        box-shadow: 0 2px 6px rgba(0, 183, 205, 0.35);
     }
 
     .user-text-col {
@@ -698,17 +1139,18 @@
     .user-name-text {
         font-size: 0.88rem;
         font-weight: 700;
-        color: var(--theme-slate-900);
+        color: #002b49;
     }
 
     .user-role-text {
         font-size: 0.74rem;
-        color: var(--theme-slate-500);
+        font-weight: 600;
+        color: #00365c;
     }
 
     .user-caret-icon {
         font-size: 0.75rem;
-        color: var(--theme-slate-500);
+        color: #002b49;
         margin-left: 0.25rem;
     }
 
@@ -804,15 +1246,16 @@
         position: relative;
         border-radius: 18px;
         overflow: hidden;
-        background-color: #e0f2fe;
+        background-color: #ffffff;
         background-image: url("{{ url_for('static', filename='img/staff-hero-bg.webp') }}");
         background-size: cover;
-        background-position: center right;
+        background-position: right center;
+        background-repeat: no-repeat;
         min-height: 180px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 2rem 2.4rem;
+        padding: 2.25rem 2.6rem;
         border: 1px solid rgba(226, 232, 240, 0.95);
         box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
         box-sizing: border-box;
@@ -824,11 +1267,14 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, 
-            rgba(238, 246, 255, 0.98) 0%, 
-            rgba(238, 246, 255, 0.95) 42%, 
-            rgba(238, 246, 255, 0.52) 72%, 
-            rgba(238, 246, 255, 0.15) 100%);
+        background: 
+            linear-gradient(180deg, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 0.5) 100%),
+            linear-gradient(90deg, 
+                #ffffff 0%, 
+                rgba(255, 255, 255, 0.98) 28%, 
+                rgba(255, 255, 255, 0.88) 45%, 
+                rgba(255, 255, 255, 0.35) 68%, 
+                rgba(255, 255, 255, 0) 86%);
         pointer-events: none;
         z-index: 1;
     }
@@ -1160,6 +1606,13 @@
         color: #112347;
     }
 
+    .date-nav-btn:disabled,
+    .date-nav-btn.disabled {
+        opacity: 0.25;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
     .date-picker-trigger {
         display: flex;
         align-items: center;
@@ -1175,7 +1628,7 @@
     }
 
     .date-icon {
-        color: #2563eb;
+        color: #00B7CD;
         font-size: 0.9rem;
     }
 
@@ -1324,25 +1777,22 @@
         letter-spacing: 0.4px;
         line-height: 1;
         flex-shrink: 0;
+        transition: all 0.2s ease;
     }
 
-    .iata-LOP,
-    .iata-DPS {
-        background-color: #eff6ff;
-        color: #2563eb;
-        border: 1px solid #bfdbfe;
+    /* Status: Sudah Mengirim (Brand #00B7CD) */
+    .iata-badge.success,
+    .iata-badge:not(.warning) {
+        background-color: rgba(0, 183, 205, 0.08);
+        color: #00B7CD;
+        border: 1px solid rgba(0, 183, 205, 0.35);
     }
 
-    .iata-BWX {
-        background-color: #f0fdf4;
-        color: #16a34a;
-        border: 1px solid #bbf7d0;
-    }
-
-    .iata-KOE {
-        background-color: #f5f3ff;
-        color: #7c3aed;
-        border: 1px solid #ddd6fe;
+    /* Status: Belum Mengirim (Identik dengan Gambar 3 / Tombol Belum Mengirim) */
+    .iata-badge.warning {
+        background-color: #fff7ed;
+        color: #c2410c;
+        border: 1px solid #fed7aa;
     }
 
     /* Top Right Status Badge Icon (Status Indicator Only, Not Clickable) */
@@ -1373,7 +1823,7 @@
 
     .card-status-indicator.success,
     .card-status-icon-btn.success {
-        color: #16a34a;
+        color: #00B7CD;
         cursor: default;
         pointer-events: none;
     }
@@ -1468,10 +1918,22 @@
     }
 
     .btn-status-pill.success {
-        background-color: #f0fdf4;
-        color: #15803d;
-        border-color: #bbf7d0;
-        cursor: default;
+        background-color: rgba(0, 183, 205, 0.08);
+        color: #008ea0;
+        border-color: rgba(0, 183, 205, 0.35);
+        cursor: pointer;
+    }
+
+    .btn-status-pill.success i {
+        color: #00B7CD;
+    }
+
+    .btn-status-pill.success:hover {
+        background-color: rgba(0, 183, 205, 0.16);
+        border-color: #00B7CD;
+        color: #00707e;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(0, 183, 205, 0.18);
     }
 
     .btn-wa-reminder span,
@@ -1499,19 +1961,30 @@
         white-space: nowrap;
     }
 
-    /* Quick Access Notification Strip for WhatsApp Message on Rekap page (Single Row) */
+    /* Quick Access Notification Strip for WhatsApp Message on Rekap page (Modern Balinese Aesthetic) */
     .quick-console-strip {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        padding: 0.85rem 1.35rem;
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+        background-color: #0099b8;
+        background-image: linear-gradient(90deg, rgba(0, 32, 60, 0.45) 0%, rgba(0, 110, 150, 0.15) 50%, rgba(0, 32, 60, 0.38) 100%), url("{{ url_for('static', filename='img/Balinese.webp') }}");
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        padding: 0.95rem 1.45rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1.25rem;
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+        box-shadow: 0 8px 24px -4px rgba(0, 162, 191, 0.28), 0 2px 8px rgba(0, 0, 0, 0.08);
         flex-wrap: nowrap;
-        margin-top: 0.25rem;
+        margin-top: 0.5rem;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .quick-console-strip:hover {
+        box-shadow: 0 12px 30px -4px rgba(0, 162, 191, 0.36), 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .strip-left {
@@ -1522,25 +1995,34 @@
     }
 
     .strip-icon-box {
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
-        border-radius: 12px;
-        background: #ecfdf5;
-        border: 1px solid #d1fae5;
-        color: #16a34a;
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        border-radius: 13px;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1.5px solid #ffffff;
+        color: #25D366;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.45rem;
+        font-size: 1.55rem;
         flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(0, 20, 40, 0.18), inset 0 1px 1px #ffffff;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .strip-icon-box:hover {
+        transform: scale(1.08) rotate(4deg);
+        box-shadow: 0 6px 18px rgba(0, 20, 40, 0.25);
     }
 
     .strip-divider {
-        width: 1px;
-        height: 32px;
-        background-color: #e2e8f0;
-        margin: 0 1.15rem;
+        width: 1.5px;
+        height: 36px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.15) 100%);
+        margin: 0 1.25rem;
         flex-shrink: 0;
     }
 
@@ -1554,21 +2036,25 @@
 
     .strip-title {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 0.92rem;
+        font-size: 0.96rem;
         font-weight: 800;
-        color: #112347;
-        margin: 0 0 2px 0;
+        color: #ffffff;
+        margin: 0 0 3px 0;
         line-height: 1.3;
+        letter-spacing: -0.01em;
+        text-shadow: 0 2px 4px rgba(0, 20, 45, 0.55);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     .strip-desc {
-        font-size: 0.8rem;
-        color: #64748b;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.95);
         margin: 0;
         line-height: 1.35;
+        text-shadow: 0 1px 3px rgba(0, 20, 45, 0.45);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1577,54 +2063,100 @@
     .strip-actions {
         display: flex;
         align-items: center;
-        gap: 0.65rem;
+        gap: 0.75rem;
         flex-shrink: 0;
     }
 
     .btn-strip-copy {
         background: #ffffff;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        padding: 0.52rem 1.15rem;
+        border: 1.5px solid rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        padding: 0.58rem 1.25rem;
+        font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 0.84rem;
         font-weight: 700;
-        color: #112347;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        transition: all 0.15s ease;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    .btn-strip-copy:hover {
-        background-color: #f8fafc;
-        border-color: #94a3b8;
-    }
-
-    .btn-strip-open {
-        background: #112347;
-        border: none;
-        border-radius: 8px;
-        padding: 0.52rem 1.25rem;
-        font-size: 0.84rem;
-        font-weight: 700;
-        color: #ffffff;
+        color: #003859;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        transition: all 0.15s ease;
-        box-shadow: 0 2px 6px rgba(17, 35, 71, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 20, 45, 0.15), inset 0 1px 1px #ffffff;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         white-space: nowrap;
         flex-shrink: 0;
     }
 
+    .btn-strip-copy i {
+        color: #00B7CD;
+        font-size: 0.9rem;
+        transition: transform 0.25s ease;
+    }
+
+    .btn-strip-copy:hover {
+        background-color: #f8fafc;
+        color: #00B7CD;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 20, 45, 0.22), inset 0 1px 1px #ffffff;
+        border-color: #ffffff;
+    }
+
+    .btn-strip-copy:hover i {
+        transform: scale(1.15);
+    }
+
+    .btn-strip-copy:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(0, 20, 45, 0.12);
+    }
+
+    .btn-strip-open {
+        background: #ffffff;
+        border: 1.5px solid #ffffff;
+        border-radius: 10px;
+        padding: 0.58rem 1.35rem;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 0.84rem;
+        font-weight: 800;
+        color: #002b49;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 16px rgba(0, 20, 45, 0.18), inset 0 1px 1px #ffffff;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .btn-strip-open i.fa-file-lines {
+        color: #00B7CD;
+        transition: transform 0.25s ease;
+    }
+
+    .btn-strip-open i.fa-arrow-right {
+        color: #002b49;
+        transition: transform 0.25s ease, color 0.25s ease;
+    }
+
     .btn-strip-open:hover {
-        background-color: #0b1833;
-        box-shadow: 0 4px 12px rgba(17, 35, 71, 0.25);
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #008fa3;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 20, 45, 0.26), inset 0 1px 1px #ffffff;
+    }
+
+    .btn-strip-open:hover i.fa-file-lines {
+        transform: scale(1.15);
+    }
+
+    .btn-strip-open:hover i.fa-arrow-right {
+        transform: translateX(4px);
+        color: #008fa3;
+    }
+
+    .btn-strip-open:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(0, 20, 45, 0.15);
     }
 
     /* ==========================================================================
@@ -2258,7 +2790,7 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     }
 
-    .branch-iata-LOP { background-color: #002b49; }
+    .branch-iata-LOP { background-color: #00B7CD; }
     .branch-iata-DPS { background-color: #0284c7; }
     .branch-iata-BWX { background-color: #059669; }
     .branch-iata-KOE { background-color: #4f46e5; }
@@ -2315,9 +2847,9 @@
 
     /* Rollout Parameters Control Strip */
     .rollout-control-strip {
-        margin-top: 1.25rem;
-        padding-top: 1.25rem;
-        border-top: 1px solid #f1f5f9;
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
         display: flex;
         flex-direction: column;
         gap: 0.85rem;
@@ -3045,8 +3577,9 @@
 
     .clean-modal-card {
         background: #ffffff;
-        border-radius: 18px;
-        box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+        border-radius: 24px;
+        box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9);
+        border: 1px solid rgba(226, 232, 240, 0.9);
         max-width: 980px;
         width: 100%;
         max-height: 90vh;
@@ -3056,7 +3589,7 @@
     }
 
     .modal-head {
-        padding: 1.25rem 1.5rem;
+        padding: 1.25rem 1.75rem;
         border-bottom: 1px solid var(--theme-border);
         display: flex;
         justify-content: space-between;
@@ -3066,53 +3599,56 @@
     .modal-title-group {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.85rem;
     }
 
     .modal-icon-badge {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        background: #eff6ff;
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
         color: #0284c7;
-        border: 1px solid #bfdbfe;
+        border: 1.5px solid #bae6fd;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.15);
     }
 
     .modal-title {
-        font-size: 1.15rem;
+        font-size: 1.2rem;
         font-weight: 800;
         color: var(--theme-navy);
         margin: 0 0 0.15rem 0;
     }
 
     .modal-subtitle {
-        font-size: 0.785rem;
+        font-size: 0.8rem;
         color: var(--theme-slate-500);
         margin: 0;
     }
 
     .modal-close-btn {
-        background: #f1f5f9;
+        background: transparent;
         border: none;
-        width: 34px;
-        height: 34px;
-        border-radius: 8px;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--theme-slate-600);
+        color: #94a3b8;
         cursor: pointer;
-        transition: all 0.15s ease;
+        transition: all 0.2s ease;
+        font-size: 1.25rem;
+        padding: 0;
     }
 
     .modal-close-btn:hover {
-        background-color: #e2e8f0;
-        color: var(--theme-navy);
+        background: transparent;
+        color: #0f172a;
+        transform: scale(1.18);
     }
 
     .modal-body {
@@ -3121,7 +3657,7 @@
     }
 
     .modal-footer {
-        padding: 1rem 1.5rem;
+        padding: 1rem 1.75rem;
         border-top: 1px solid var(--theme-border);
         display: flex;
         justify-content: flex-end;
@@ -3135,7 +3671,7 @@
         border: 1.5px solid var(--theme-border-strong);
         color: var(--theme-navy);
         padding: 0.65rem 1.15rem;
-        border-radius: 10px;
+        border-radius: 12px;
         font-weight: 700;
         font-size: 0.85rem;
         cursor: pointer;
@@ -3148,20 +3684,28 @@
     }
 
     .modal-btn-save {
-        background: var(--theme-btn-gradient);
-        color: #ffffff;
+        background: #00B7CD;
         border: none;
-        border-radius: 10px;
-        padding: 0.65rem 1.35rem;
-        font-weight: 700;
-        font-size: 0.88rem;
+        color: #ffffff;
+        border-radius: 14px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 800;
+        font-size: 0.92rem;
         cursor: pointer;
-        box-shadow: 0 3px 10px rgba(2, 132, 199, 0.3);
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
     }
 
     .modal-btn-save:hover {
-        background: var(--theme-btn-gradient-hover);
-        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+        background: #009eb2;
+        color: #ffffff;
+        border: none;
+        box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45);
+        transform: translateY(-1px);
     }
 
     /* ==========================================================================
@@ -3331,7 +3875,7 @@
         border-radius: 50%;
         border: 3px solid transparent;
         border-top-color: #0284c7;
-        border-right-color: #90c1e8;
+        border-right-color: #00B7CD;
         border-bottom-color: rgba(2, 132, 199, 0.15);
         animation: orbitalPulse 1.4s ease-in-out infinite;
     }
@@ -3542,8 +4086,8 @@
         text-transform: uppercase;
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
-    .user-cell-avatar.staff { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
-    .user-cell-avatar.dh { background: linear-gradient(135deg, #7c3aed 0%, #002b49 100%); }
+    .user-cell-avatar.staff { background: linear-gradient(135deg, #00B7CD 0%, #009eb2 100%); }
+    .user-cell-avatar.dh { background: linear-gradient(135deg, #7c3aed 0%, #00B7CD 100%); }
     .user-cell-avatar.admin { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); }
 
     .user-cell-meta {
@@ -3607,7 +4151,7 @@
         border: 1px solid #cbd5e1;
     }
     .badge-airport-tag.lop { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
-    .badge-airport-tag.dps { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+    .badge-airport-tag.dps { background: #eff6ff; color: #00B7CD; border-color: #bfdbfe; }
     .badge-airport-tag.bwx { background: #fff7ed; color: #ea580c; border-color: #fed7aa; }
     .badge-airport-tag.koe { background: #faf5ff; color: #9333ea; border-color: #e9d5ff; }
 
@@ -3783,8 +4327,18 @@
         <!-- Sidebar Footer Status Card -->
         <div class="sidebar-footer-box">
             <div class="system-status-indicator">
-                <span><span class="status-live-dot"></span> Google Drive</span>
-                <span class="text-success font-weight-bold" style="font-size: 0.72rem;">Terkoneksi</span>
+                <span class="d-inline-flex align-items-center">
+                    <svg class="gdrive-status-logo" viewBox="0 0 87.3 78" width="17" height="15" xmlns="http://www.w3.org/2000/svg" aria-label="Google Drive">
+                        <path fill="#0066da" d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L27.5 53H0c0 1.55.4 3.1 1.2 4.5z"/>
+                        <path fill="#00ac47" d="M43.65 25 29.9 1.2c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44A9.06 9.06 0 0 0 0 53h27.5z"/>
+                        <path fill="#ea4335" d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 57.5c.8-1.4 1.2-2.95 1.2-4.5H59.798l5.852 11.5z"/>
+                        <path fill="#00832d" d="M43.65 25 57.4 1.2C56.05.4 54.5 0 52.9 0H34.4c-1.6 0-3.15.45-4.5 1.2z"/>
+                        <path fill="#2684fc" d="M59.8 53H27.5L13.75 76.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z"/>
+                        <path fill="#ffba00" d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h27.45c0-1.55-.4-3.1-1.2-4.5z"/>
+                    </svg>
+                    Google Drive
+                </span>
+                <span class="font-weight-bold" style="color: #00B7CD; font-size: 0.72rem;">Terkoneksi</span>
             </div>
         </div>
     </aside>
@@ -3903,7 +4457,7 @@
                                 <span>Tanggal:</span>
                             </span>
                             <div class="date-stepper-box">
-                                <button type="button" class="date-nav-btn" onclick="shiftDate(-1)" title="Hari Sebelumnya">
+                                <button type="button" class="date-nav-btn" id="dateNavPrev" onclick="shiftDate(-1)" title="Hari Sebelumnya">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
                                 <div class="date-picker-trigger" id="datePickerTriggerBox" onclick="triggerDatePicker(event)" title="Pilih Tanggal">
@@ -3911,7 +4465,7 @@
                                     <span id="dateDisplayFormatted" class="date-formatted-text">Memuat...</span>
                                     <input type="date" class="date-input-hidden" id="filterDate" onchange="onDateChanged()">
                                 </div>
-                                <button type="button" class="date-nav-btn" onclick="shiftDate(1)" title="Hari Berikutnya">
+                                <button type="button" class="date-nav-btn" id="dateNavNext" onclick="shiftDate(1)" title="Hari Berikutnya">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -3944,7 +4498,7 @@
                         <div>
                             <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
-                                <span class="iata-badge iata-LOP">LOP</span>
+                                <span class="iata-badge iata-LOP warning" id="iata-badge-LOP">LOP</span>
                                 <span class="card-status-indicator warning" id="status-icon-LOP">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                 </span>
@@ -3983,7 +4537,7 @@
                         <div>
                             <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
-                                <span class="iata-badge iata-DPS">DPS</span>
+                                <span class="iata-badge iata-DPS warning" id="iata-badge-DPS">DPS</span>
                                 <span class="card-status-indicator warning" id="status-icon-DPS">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                 </span>
@@ -4022,7 +4576,7 @@
                         <div>
                             <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
-                                <span class="iata-badge iata-BWX">BWX</span>
+                                <span class="iata-badge iata-BWX warning" id="iata-badge-BWX">BWX</span>
                                 <span class="card-status-indicator warning" id="status-icon-BWX">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                 </span>
@@ -4061,7 +4615,7 @@
                         <div>
                             <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
-                                <span class="iata-badge iata-KOE">KOE</span>
+                                <span class="iata-badge iata-KOE warning" id="iata-badge-KOE">KOE</span>
                                 <span class="card-status-indicator warning" id="status-icon-KOE">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                 </span>
@@ -4196,14 +4750,6 @@
                         </div>
                         <p class="console-subtitle">Pusat kendali operasional serentak, penerbitan spreadsheet bulanan, dan fleet matriks 4 cabang bandara.</p>
                     </div>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn-outline-action" onclick="loadAllBranchSheets(true)" title="Segarkan daftar spreadsheet dari Google Drive seluruh cabang">
-                            <i class="fa-solid fa-arrows-rotate me-1 text-primary" id="matrixRefreshTopIcon"></i> Segarkan Drive
-                        </button>
-                        <button type="button" class="modal-btn-save" onclick="saveFleetMatrix()">
-                            <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Matriks
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Bagian 1: One-Click Rollout Sheet Massal -->
@@ -4215,60 +4761,14 @@
                             </div>
                             <div>
                                 <h4 class="hub-card-title">Penerbitan Spreadsheet Bulanan Serentak</h4>
-                                <p class="hub-card-desc">Duplikasi master template dan aktifkan spreadsheet periode baru serentak untuk cabang terpilih.</p>
+                                <p class="hub-card-desc">Duplikasi master template dan aktifkan spreadsheet periode baru serentak untuk seluruh cabang bandara (LOP, DPS, BWX, KOE).</p>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <div class="btn-group-toggle-all">
-                                <button type="button" class="btn-toggle-micro" onclick="toggleSelectAllBranches(true)">
-                                    <i class="fa-solid fa-check-double me-1 text-primary"></i> Pilih Semua
-                                </button>
-                                <button type="button" class="btn-toggle-micro" onclick="toggleSelectAllBranches(false)">
-                                    <i class="fa-solid fa-xmark me-1 text-muted"></i> Batal Semua
-                                </button>
-                            </div>
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.825rem;">
+                                <i class="fa-solid fa-layer-group me-1"></i> Otomatis Seluruh Cabang (LOP, DPS, BWX, KOE)
+                            </span>
                         </div>
-                    </div>
-
-                    <!-- 4 Airport Selection Cards (Visual Hero Tiles) -->
-                    <div class="branch-cards-grid">
-                        {% for code in ['LOP', 'DPS', 'BWX', 'KOE'] %}
-                        {% set c = config.airports.get(code, {}) if config and config.airports else {} %}
-                        <div class="branch-select-card selected" id="card-branch-{{ code }}" onclick="toggleBranchSelection('{{ code }}')">
-                            <div class="branch-card-media">
-                                <img src="{{ url_for('static', filename='img/airport-' ~ code|lower ~ '.webp') }}" 
-                                     alt="Bandara {{ code }}" 
-                                     loading="lazy">
-                                <div class="branch-card-media-overlay"></div>
-                                <div class="branch-card-badges">
-                                    <span class="branch-iata-pill branch-iata-{{ code }}">{{ code }}</span>
-                                    <div class="branch-check-pill" onclick="event.stopPropagation()">
-                                        <input type="checkbox" class="custom-check-box" id="check-{{ code }}" checked onclick="event.stopPropagation(); toggleBranchSelection('{{ code }}', this.checked)">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="branch-card-body">
-                                <div class="branch-title-text">
-                                    {% if code == 'LOP' %}Lombok
-                                    {% elif code == 'DPS' %}Bali
-                                    {% elif code == 'BWX' %}Banyuwangi
-                                    {% elif code == 'KOE' %}Kupang
-                                    {% endif %}
-                                </div>
-                                <div class="branch-location-text" title="{% if code == 'LOP' %}Bandara Zainuddin Abdul Madjid (ZAM){% elif code == 'DPS' %}Bandara I Gusti Ngurah Rai (DPS){% elif code == 'BWX' %}Bandara Banyuwangi (BWX){% elif code == 'KOE' %}Bandara El Tari (KOE){% endif %}">
-                                    {% if code == 'LOP' %}Bandara Zainuddin Abdul Madjid (ZAM)
-                                    {% elif code == 'DPS' %}Bandara I Gusti Ngurah Rai (DPS)
-                                    {% elif code == 'BWX' %}Bandara Banyuwangi (BWX)
-                                    {% elif code == 'KOE' %}Bandara El Tari (KOE)
-                                    {% endif %}
-                                </div>
-                                <!-- Hidden bindings for JS compatibility -->
-                                <span id="cardSheetBadge-{{ code }}" class="d-none">
-                                    <span id="cardSheetBadgeText-{{ code }}"></span>
-                                </span>
-                            </div>
-                        </div>
-                        {% endfor %}
                     </div>
 
                     <!-- Rollout Parameters & Execution Strip -->
@@ -4298,14 +4798,14 @@
                                 <label class="form-label-modern d-none d-lg-block">&nbsp;</label>
                                 <button type="button" class="btn-execute-rollout" onclick="executeBatchRollout()">
                                     <i class="fa-solid fa-rocket me-1"></i>
-                                    <span>Terbitkan & Aktifkan Massal</span>
+                                    <span>Terbitkan & Aktifkan Semua Cabang</span>
                                 </button>
                             </div>
                         </div>
 
                         <div class="rollout-micro-hint">
                             <i class="fa-solid fa-circle-info text-primary me-1"></i>
-                            <span>Sistem akan menduplikasi master template ke folder Google Drive cabang terpilih, menyelaraskan form schema, dan langsung mengaktifkannya sebagai spreadsheet aktif di sistem.</span>
+                            <span>Sistem akan menduplikasi master template ke folder Google Drive seluruh cabang (LOP, DPS, BWX, KOE), menyelaraskan form schema, dan langsung mengaktifkannya sebagai spreadsheet aktif.</span>
                         </div>
                     </div>
                 </div>
@@ -4324,24 +4824,35 @@
                         </div>
                     </div>
 
-                    <!-- Bulk Month Quick Sync Toolbar -->
+                    <!-- Bulk Month & Year Quick Sync Toolbar -->
                     <div class="matrix-sync-bar">
                         <div class="matrix-sync-info">
                             <div class="matrix-sync-icon">
                                 <i class="fa-solid fa-sliders"></i>
                             </div>
                             <div>
-                                <span class="matrix-sync-title">Penyelarasan Acuan Bulan Serentak</span>
-                                <span class="matrix-sync-subtitle d-none d-md-inline ms-1">— Selaraskan spreadsheet aktif seluruh cabang secara instan</span>
+                                <span class="matrix-sync-title">Penyelarasan Acuan Serentak (Tahun & Bulan)</span>
+                                <span class="matrix-sync-subtitle d-none d-md-inline ms-1">— Filter spreadsheet per tahun dari Drive, lalu selaraskan bulan serentak</span>
                             </div>
                         </div>
-                        <div class="matrix-sync-control">
-                            <div class="input-with-icon" style="width: 220px;">
-                                <i class="fa-regular fa-calendar-check input-icon text-primary"></i>
-                                <select id="matrixBulkMonthSelect" class="table-input with-icon" style="font-weight: 700; color: #002b49;" onchange="applyBulkMonthSelection(this.value)">
-                                    <option value="">-- Pilih Acuan Bulan --</option>
+                        <div class="matrix-sync-control d-flex align-items-center gap-2 flex-wrap">
+                            {% set cur_year = config.active_year if config and config.active_year else (config.active_month.split('-')[0] if config and config.active_month else '2026') %}
+                            {% set cur_month_label = config.active_month_label if config and config.active_month_label else 'Bulan NOV 2026' %}
+                            <div class="input-with-icon" style="width: 175px;" title="Tahun Acuan Spreadsheet yang ditemukan di Google Drive">
+                                <i class="fa-solid fa-calendar-days input-icon text-primary"></i>
+                                <select id="matrixYearSelect" class="table-input with-icon" style="font-weight: 700; color: #002b49;" onchange="onMatrixYearChanged(this.value)">
+                                    <option value="{{ cur_year }}" selected>Tahun {{ cur_year }}</option>
                                 </select>
                             </div>
+                            <div class="input-with-icon" style="width: 220px;" title="Selaraskan spreadsheet seluruh cabang ke bulan ini">
+                                <i class="fa-regular fa-calendar-check input-icon text-success"></i>
+                                <select id="matrixBulkMonthSelect" class="table-input with-icon" style="font-weight: 700; color: #002b49;" onchange="applyBulkMonthSelection(this.value)">
+                                    <option value="{{ cur_month_label.replace('Bulan ', '') }}" selected>{{ cur_month_label }}</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn-table-action" onclick="loadAllBranchSheets(true)" title="Segarkan Daftar Spreadsheet Seluruh Cabang dari Google Drive">
+                                <i class="fa-solid fa-arrows-rotate" id="matrixRefreshTopIcon"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -4392,10 +4903,11 @@
                                             <select class="table-input matrix-sheet-select" id="matrixSheetSelect-{{ code }}" 
                                                     data-code="{{ code }}" 
                                                     data-active-url="{{ c.sheet_url | default('') }}"
+                                                    data-saved-name="{{ c.sheet_name | default(code ~ ' NOV 2026') }}"
                                                     style="font-weight: 700; color: #002b49;"
                                                     onchange="onMatrixSheetChanged('{{ code }}')">
-                                                <option value="{{ c.sheet_url | default('') }}">
-                                                    {% if c.sheet_url %}-- Memuat spreadsheet {{ code }}... --{% else %}-- Belum ada sheet di Drive --{% endif %}
+                                                <option value="{{ c.sheet_url | default('') }}" selected>
+                                                    {{ c.sheet_name | default(code ~ ' NOV 2026') }}
                                                 </option>
                                             </select>
                                             <a id="matrixOpenSheetLink-{{ code }}" href="{{ c.sheet_url | default('#') }}" target="_blank" 
@@ -4404,7 +4916,7 @@
                                             </a>
                                         </div>
                                         <div class="table-subtext">
-                                            <span id="matrixSheetStatusText-{{ code }}"><i class="fa-solid fa-spinner fa-spin text-primary me-1"></i> Memeriksa Drive...</span>
+                                            <span id="matrixSheetStatusText-{{ code }}"><span style="color: #00B7CD; font-weight: 600;"><i class="fa-solid fa-circle-check me-1"></i>Aktif Terhubung</span></span>
                                         </div>
                                     </td>
                                     <td>
@@ -4988,7 +5500,7 @@
 
 <!-- Embedded Fleet Config Data (JSON Island) -->
 <script type="application/json" id="fleetConfigData">
-    {{ (config.airports if config and config.airports else {}) | tojson | safe }}
+    {{ (config if config else {}) | tojson | safe }}
 </script>
 
 <script>
@@ -5014,9 +5526,10 @@
         toggleSidebar(false);
 
         // View specific initializations
-        if (viewId === 'batch') {
-            loadAllBranchSheets(false);
-            populateBulkMonthOptions();
+        if (viewId === 'rekap') {
+            applyFleetCalendarBounds(false);
+        } else if (viewId === 'batch') {
+            hydrateFleetMatrixFromSavedConfig();
         } else if (viewId === 'schema') {
             loadFormBuilderSchema();
         } else if (viewId === 'users') {
@@ -5033,7 +5546,7 @@
     }
 
     // --- GLOBAL FLEET DATA & CACHE ---
-    const FLEET_CONFIG = (function() {
+    const FULL_CONFIG = (function() {
         try {
             const el = document.getElementById('fleetConfigData');
             return el ? JSON.parse(el.textContent) : {};
@@ -5041,7 +5554,8 @@
             return {};
         }
     })();
-    window.FLEET_CONFIG = FLEET_CONFIG;
+    window.FULL_CONFIG = FULL_CONFIG;
+    window.FLEET_CONFIG = (FULL_CONFIG && FULL_CONFIG.airports) ? FULL_CONFIG.airports : FULL_CONFIG;
     const AIRPORT_NAMES = {
         'LOP': { city: 'Lombok', fullname: 'Bandara Internasional Zainuddin Abdul Madjid', full: 'Bandara Internasional Zainuddin Abdul Madjid' },
         'DPS': { city: 'Bali', fullname: 'Bandara Internasional I Gusti Ngurah Rai', full: 'Bandara Internasional I Gusti Ngurah Rai' },
@@ -5078,7 +5592,7 @@
                 showCancelButton: true,
                 confirmButtonText: 'Buka Batch Hub',
                 cancelButtonText: 'Batal',
-                confirmButtonColor: '#90c1e8'
+                confirmButtonColor: '#00B7CD'
             }).then(result => {
                 if (result.isConfirmed) {
                     switchAdminView('batch');
@@ -5147,14 +5661,14 @@
                 <div style="text-align: left; font-size: 0.9rem; line-height: 1.6; padding: 0.5rem;">
                     <div style="margin-bottom: 0.35rem;"><strong>Cabang:</strong> ${airportMeta.city} (${airportMeta.fullname})</div>
                     <div style="margin-bottom: 0.35rem;"><strong>Tanggal:</strong> ${formatDateIndonesian(dStr)}</div>
-                    <div style="margin-bottom: 0.35rem;"><strong>Status:</strong> <span style="background:#ecfdf5; color:#16a34a; padding:0.2rem 0.6rem; border-radius:6px; font-weight:700;">✓ Sudah Mengirim</span></div>
+                    <div style="margin-bottom: 0.35rem;"><strong>Status:</strong> <span style="background:rgba(0, 183, 205, 0.1); color:#00B7CD; border:1px solid rgba(0, 183, 205, 0.3); padding:0.2rem 0.6rem; border-radius:6px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Sudah Mengirim</span></div>
                     <div><strong>PCI Runway:</strong> ${info.pci || '-'}</div>
                 </div>
             `,
             icon: 'success',
             showCancelButton: true,
             confirmButtonText: '<i class="fa-solid fa-rotate me-1"></i> Tarik Ulang Data',
-            confirmButtonColor: '#0284c7',
+            confirmButtonColor: '#00B7CD',
             cancelButtonText: 'Tutup'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -5212,7 +5726,7 @@
                 if (info.is_submitted) {
                     html += `
                         <div class="notif-item">
-                            <i class="fa-solid fa-circle-check notif-item-icon text-success"></i>
+                            <i class="fa-solid fa-circle-check notif-item-icon" style="color: #00B7CD;"></i>
                             <div class="notif-item-content">
                                 <div class="notif-item-title">
                                     <span><strong>${code}</strong> - ${meta.city}</span>
@@ -5309,7 +5823,7 @@
             `,
             icon: 'info',
             confirmButtonText: 'Tutup',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         });
     }
 
@@ -5400,8 +5914,10 @@
         }
 
         // Initial Data Fetch
-        fetchRekap();
+        hydrateFleetMatrixFromSavedConfig();
         loadConfig('');
+        applyFleetCalendarBounds(false);
+        fetchRekap();
 
         // If open_batch query parameter present, switch to batch view
         const openBatchAttr = document.getElementById('batchHubModal')?.getAttribute('data-open-batch');
@@ -5421,27 +5937,11 @@
     }
 
     function toggleBranchSelection(code, forcedState) {
-        const cb = document.getElementById(`check-${code}`);
-        const card = document.getElementById(`card-branch-${code}`);
-        if (!cb || !card) return;
-
-        if (forcedState !== undefined) {
-            cb.checked = forcedState;
-        } else {
-            cb.checked = !cb.checked;
-        }
-
-        if (cb.checked) {
-            card.classList.add('selected');
-        } else {
-            card.classList.remove('selected');
-        }
+        // Pembuatan sheet baru kini otomatis langsung ke semua cabang
     }
 
     function toggleSelectAllBranches(forceTrue) {
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
-            toggleBranchSelection(code, forceTrue);
-        });
+        // Pembuatan sheet baru kini otomatis langsung ke semua cabang
     }
 
     function executeBatchRollout() {
@@ -5452,31 +5952,24 @@
             return Swal.fire('Perhatian', 'Harap tentukan Target Periode Bulan terlebih dahulu!', 'warning');
         }
 
-        const selectedAirports = [];
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
-            const cb = document.getElementById(`check-${code}`);
-            if (cb && cb.checked) selectedAirports.push(code);
-        });
-
-        if (selectedAirports.length === 0) {
-            return Swal.fire('Tidak Ada Cabang Dipilih', 'Silakan centang minimal satu bandara cabang untuk diterbitkan sheet barunya!', 'warning');
-        }
+        // Otomatis terapkan pembuatan ke seluruh cabang bandara
+        const selectedAirports = ['LOP', 'DPS', 'BWX', 'KOE'];
 
         Swal.fire({
-            title: 'Terbitkan Sheet Massal?',
-            html: `Sistem akan membuat file spreadsheet baru untuk bulan <b>${targetMonth}</b> pada cabang:<br><br>
-                   <span class="badge bg-primary text-white p-2" style="font-size: 0.95rem;">${selectedAirports.join(' • ')}</span><br><br>
+            title: 'Terbitkan Sheet ke Semua Cabang?',
+            html: `Sistem akan membuat file spreadsheet baru untuk bulan <b>${targetMonth}</b> serentak pada <b>seluruh cabang</b>:<br><br>
+                   <span class="badge bg-primary text-white p-2" style="font-size: 0.95rem;">Lombok (LOP) • Bali (DPS) • Banyuwangi (BWX) • Kupang (KOE)</span><br><br>
                    Seluruh sheet baru akan <b>otomatis langsung diaktifkan</b> di sistem begitu selesai dibuat.`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: '<i class="fa-solid fa-rocket me-1"></i> Ya, Terbitkan & Aktifkan!',
+            confirmButtonText: '<i class="fa-solid fa-rocket me-1"></i> Ya, Terbitkan & Aktifkan Semua!',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(result => {
             if (result.isConfirmed) {
                 Swal.fire({
-                    title: 'Memproses Batch Rollout...',
-                    html: `Menduplikasi template master, mengatur hak akses, menyelaraskan form kolom, dan mengaktifkan spreadsheet...<br><br>
+                    title: 'Memproses Batch Rollout Seluruh Cabang...',
+                    html: `Menduplikasi template master, mengatur hak akses, menyelaraskan form kolom, dan mengaktifkan spreadsheet untuk seluruh cabang...<br><br>
                            <small class="text-muted">Proses ini membutuhkan waktu beberapa detik per cabang.</small>`,
                     allowOutsideClick: false,
                     didOpen: () => { Swal.showLoading(); }
@@ -5511,7 +6004,7 @@
                             html: htmlContent,
                             icon: 'success',
                             confirmButtonText: 'Selesai & Segarkan Halaman',
-                            confirmButtonColor: '#90c1e8'
+                            confirmButtonColor: '#00B7CD'
                         }).then(() => {
                             location.reload();
                         });
@@ -5527,7 +6020,9 @@
     }
 
     function saveFleetMatrix() {
+        const yearSelect = document.getElementById('matrixYearSelect');
         const bulkSelect = document.getElementById('matrixBulkMonthSelect');
+        let selectedYear = yearSelect ? yearSelect.value : (window.fleetSelectedYear || '2026');
         let bulkMonth = bulkSelect ? bulkSelect.value : '';
         let detectedActiveMonth = '';
 
@@ -5541,8 +6036,14 @@
             };
             if (mParts.length === 2 && mMap[mParts[0].toUpperCase()]) {
                 detectedActiveMonth = `${mParts[1]}-${mMap[mParts[0].toUpperCase()]}`;
+                if (!selectedYear) selectedYear = mParts[1];
             }
         }
+        if (!detectedActiveMonth && selectedYear) {
+            detectedActiveMonth = `${selectedYear}-11`;
+        }
+
+        const activeMonthLabel = bulkMonth ? (bulkMonth.startsWith('Bulan') ? bulkMonth : `Bulan ${bulkMonth}`) : `Bulan NOV ${selectedYear}`;
 
         const airportsData = {};
         ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
@@ -5551,11 +6052,24 @@
             const activeOpt = selectEl && selectEl.selectedIndex >= 0 ? selectEl.options[selectEl.selectedIndex] : null;
             const sheetName = activeOpt ? (activeOpt.getAttribute('data-name') || activeOpt.textContent || '') : '';
             
+            let branchActiveMonth = detectedActiveMonth;
+            if (sheetName) {
+                const match = sheetName.match(/(JAN|FEB|MAR|APR|MEI|JUN|JUL|AGS|SEP|OKT|NOV|DES)[_\s\-]+(20\d\d)/i);
+                if (match) {
+                    const mMap = {
+                        'JAN': '01', 'FEB': '02', 'MAR': '03', 'APR': '04', 'MEI': '05',
+                        'JUN': '06', 'JUL': '07', 'AGS': '08', 'SEP': '09', 'OKT': '10',
+                        'NOV': '11', 'DES': '12'
+                    };
+                    branchActiveMonth = `${match[2]}-${mMap[match[1].toUpperCase()]}`;
+                }
+            }
+
             airportsData[code] = {
                 drive_folder: document.getElementById(`matrixFolder-${code}`)?.value?.trim() || '',
                 sheet_url: currentUrl.trim(),
                 sheet_name: sheetName.trim(),
-                active_month: detectedActiveMonth,
+                active_month: branchActiveMonth,
                 pic_phone: document.getElementById(`matrixPic-${code}`)?.value?.trim() || '',
                 gm_phone: document.getElementById(`matrixGM-${code}`)?.value?.trim() || '',
                 dh_phone: document.getElementById(`matrixGM-${code}`)?.value?.trim() || ''
@@ -5580,17 +6094,47 @@
             body: JSON.stringify({
                 airports: airportsData,
                 admin: adminData,
-                active_month: detectedActiveMonth
+                active_month: detectedActiveMonth,
+                active_year: selectedYear,
+                active_month_label: activeMonthLabel
             })
         })
         .then(r => r.json())
         .then(data => {
             if (data.success) {
+                // Perbarui memori global dan atribut data
+                if (!window.FULL_CONFIG) window.FULL_CONFIG = {};
+                window.FULL_CONFIG.active_year = selectedYear;
+                window.FULL_CONFIG.active_month_label = activeMonthLabel;
+                window.FULL_CONFIG.active_month = detectedActiveMonth;
+                if (!window.FULL_CONFIG.airports) window.FULL_CONFIG.airports = {};
+
                 ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
                     const s = document.getElementById(`matrixSheetSelect-${code}`);
-                    if (s) s.setAttribute('data-active-url', s.value);
+                    if (s) {
+                        s.setAttribute('data-active-url', s.value);
+                        const opt = s.options[s.selectedIndex];
+                        const name = opt ? (opt.getAttribute('data-name') || opt.textContent || '') : '';
+                        s.setAttribute('data-saved-name', name);
+                    }
+                    window.FULL_CONFIG.airports[code] = {
+                        ...(window.FULL_CONFIG.airports[code] || {}),
+                        ...airportsData[code]
+                    };
+                    if (window.FLEET_CONFIG) {
+                        window.FLEET_CONFIG[code] = window.FULL_CONFIG.airports[code];
+                    }
                 });
-                Swal.fire('Berhasil Disimpan!', data.message, 'success');
+                applyFleetCalendarBounds(true);
+
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Matriks 4 Cabang Berhasil Disimpan!',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
             } else {
                 Swal.fire('Gagal', data.error, 'error');
             }
@@ -5637,7 +6181,129 @@
         }
     }
 
-    async function loadSheetsForBranch(code, isManual = false) {
+    // =========================================================================
+    // IN-MEMORY STORE UNTUK PARTISI TAHUN FLEET MATRIX (SKALABILITAS 2026-2030)
+    // =========================================================================
+    window.fleetRawFiles = { 'LOP': [], 'DPS': [], 'BWX': [], 'KOE': [] };
+    window.fleetAvailableYears = [];
+    window.fleetSelectedYear = '';
+
+    function saveDriveCacheToLocalStorage() {
+        try {
+            localStorage.setItem('fleet_matrix_drive_cache', JSON.stringify({
+                timestamp: Date.now(),
+                files: window.fleetRawFiles
+            }));
+        } catch (e) {
+            console.warn('Gagal menyimpan cache drive ke local storage:', e);
+        }
+    }
+
+    function hydrateFleetMatrixFromSavedConfig() {
+        const fullCfg = window.FULL_CONFIG || {};
+        const airports = fullCfg.airports || window.FLEET_CONFIG || {};
+        const savedYear = fullCfg.active_year || (fullCfg.active_month ? fullCfg.active_month.split('-')[0] : '2026');
+        const savedMonthLabel = fullCfg.active_month_label || 'Bulan NOV 2026';
+        const monthClean = savedMonthLabel.replace(/^Bulan\s+/i, '').trim();
+
+        window.fleetSelectedYear = savedYear;
+
+        // 1. Instan set Toolbar Penyelarasan
+        const yearSelect = document.getElementById('matrixYearSelect');
+        if (yearSelect && (!yearSelect.value || yearSelect.options.length <= 1)) {
+            yearSelect.innerHTML = `<option value="${savedYear}" selected>Tahun ${savedYear}</option>`;
+        }
+
+        const bulkSelect = document.getElementById('matrixBulkMonthSelect');
+        if (bulkSelect && (!bulkSelect.value || bulkSelect.options.length <= 1)) {
+            bulkSelect.innerHTML = `<option value="${monthClean}" selected>${savedMonthLabel}</option>`;
+        }
+
+        // 2. Instan set ke-4 cabang dari konfigurasi tersimpan
+        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+            const branch = airports[code] || {};
+            const select = document.getElementById(`matrixSheetSelect-${code}`);
+            const statusText = document.getElementById(`matrixSheetStatusText-${code}`);
+            const folderInput = document.getElementById(`matrixFolder-${code}`);
+
+            if (folderInput && branch.drive_folder) {
+                folderInput.value = branch.drive_folder;
+                const folderLink = document.getElementById(`matrixOpenFolderLink-${code}`);
+                if (folderLink) {
+                    folderLink.href = `https://drive.google.com/drive/folders/${branch.drive_folder}`;
+                    folderLink.classList.remove('d-none');
+                }
+            }
+
+            if (select) {
+                const sheetUrl = branch.sheet_url || '';
+                const sheetName = branch.sheet_name || `${code} ${monthClean}`;
+                select.setAttribute('data-active-url', sheetUrl);
+                select.setAttribute('data-saved-name', sheetName);
+
+                if (select.options.length <= 1) {
+                    select.innerHTML = `<option value="${sheetUrl}" selected>${sheetName}</option>`;
+                }
+                updateMatrixSheetUI(code, sheetUrl, sheetName);
+            }
+
+            if (statusText) {
+                statusText.innerHTML = '<span style="color: #00B7CD; font-weight: 600;"><i class="fa-solid fa-circle-check me-1"></i>Aktif Terhubung</span>';
+            }
+        });
+
+        // 3. Cek apakah ada cache file Google Drive di LocalStorage (< 24 jam)
+        let hasValidCache = false;
+        try {
+            const cachedStr = localStorage.getItem('fleet_matrix_drive_cache');
+            if (cachedStr) {
+                const parsed = JSON.parse(cachedStr);
+                const maxAge = 24 * 60 * 60 * 1000; // 24 jam
+                const files = parsed.files || {};
+                const fileCount = Object.values(files).reduce((acc, arr) => acc + (arr ? arr.length : 0), 0);
+
+                if (parsed && parsed.timestamp && (Date.now() - parsed.timestamp < maxAge) && fileCount > 0) {
+                    window.fleetRawFiles = files;
+                    discoverAvailableYears();
+                    ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+                        renderBranchSheetOptions(code, window.fleetSelectedYear);
+                    });
+                    populateBulkMonthOptions(window.fleetSelectedYear);
+                    hasValidCache = true;
+                }
+            }
+        } catch (e) {
+            console.warn('Gagal membaca cache drive local:', e);
+        }
+
+        // 4. Jika cache belum ada di browser atau kosong, langsung jalankan fetch dari Drive di background secara senyap!
+        if (!hasValidCache) {
+            loadAllBranchSheets(false, /* isSilent = */ true);
+        } else {
+            // Stale-While-Revalidate: Jika cache > 10 menit, perbarui di background tanpa spinner
+            try {
+                const parsed = JSON.parse(localStorage.getItem('fleet_matrix_drive_cache') || '{}');
+                if (parsed.timestamp && (Date.now() - parsed.timestamp > 10 * 60 * 1000)) {
+                    loadAllBranchSheets(false, /* isSilent = */ true);
+                }
+            } catch (e) { }
+        }
+    }
+
+    function extractYearFromFileName(fileName) {
+        if (!fileName) return null;
+        // 1. Cek pola baku: [KODE]_[BULAN]_[TAHUN] (contoh: LOP_NOV_2026 atau LOP NOV 2026)
+        const matchWithMonth = fileName.match(/(?:JAN|FEB|MAR|APR|MEI|JUN|JUL|AGS|SEP|OKT|NOV|DES)[_\s\-]+(20\d{2})(?:[_\s\.\-]|$)/i);
+        if (matchWithMonth) return matchWithMonth[1];
+
+        // 2. Cek pola umum: 4 digit tahun 20xx yang terpisah
+        const generalYearMatch = fileName.match(/(?:^|[_\s\-])(20\d{2})(?:[_\s\.\-]|$)/);
+        if (generalYearMatch) return generalYearMatch[1];
+
+        return null;
+    }
+
+    async function loadSheetsForBranch(code, isManual = false, isSilent = false) {
         const select = document.getElementById(`matrixSheetSelect-${code}`);
         const statusText = document.getElementById(`matrixSheetStatusText-${code}`);
         const refreshIcon = document.getElementById(`matrixRefreshIcon-${code}`);
@@ -5648,6 +6314,7 @@
         const cleanFolder = extractDriveIdFromText(folderInput ? folderInput.value : '');
 
         if (!cleanFolder) {
+            window.fleetRawFiles[code] = [];
             select.innerHTML = '<option value="">-- Folder Drive Belum Diatur --</option>';
             if (currentActiveUrl) {
                 const opt = document.createElement('option');
@@ -5661,22 +6328,214 @@
             return;
         }
 
-        if (refreshIcon) refreshIcon.classList.add('fa-spin');
-        if (statusText) statusText.innerHTML = '<span class="text-primary"><i class="fa-solid fa-spinner fa-spin me-1"></i>Membaca Drive...</span>';
+        if (refreshIcon && isManual) refreshIcon.classList.add('fa-spin');
+        if (statusText && isManual) statusText.innerHTML = '<span class="text-primary"><i class="fa-solid fa-spinner fa-spin me-1"></i>Membaca Drive...</span>';
 
         try {
             const res = await fetch(`/admin/api/list-sheets?airportCode=${code}&driveFolder=${encodeURIComponent(cleanFolder)}`);
             const data = await res.json();
 
-            select.innerHTML = '';
+            if (data.success && data.files) {
+                window.fleetRawFiles[code] = data.files;
+            } else {
+                window.fleetRawFiles[code] = [];
+            }
 
-            if (data.success && data.files && data.files.length > 0) {
-                const defOpt = document.createElement('option');
-                defOpt.value = '';
-                defOpt.textContent = `-- Pilih dari ${data.files.length} Spreadsheet di Drive --`;
-                select.appendChild(defOpt);
+            if (isManual) {
+                saveDriveCacheToLocalStorage();
+                discoverAvailableYears();
+                renderBranchSheetOptions(code, window.fleetSelectedYear);
+                populateBulkMonthOptions(window.fleetSelectedYear);
 
-                data.files.forEach(f => {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: `Spreadsheet ${code} diperbarui (${window.fleetRawFiles[code].length} file total)`,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        } catch (err) {
+            console.error(`Error loading sheets for ${code}:`, err);
+            if (statusText && isManual) statusText.innerHTML = '<span class="text-danger"><i class="fa-solid fa-circle-xmark me-1"></i>Gagal memuat Drive</span>';
+        } finally {
+            if (refreshIcon && isManual) refreshIcon.classList.remove('fa-spin');
+        }
+    }
+
+    async function loadAllBranchSheets(isManual = false, isSilent = false) {
+        const refreshTopIcon = document.getElementById('matrixRefreshTopIcon');
+        if (refreshTopIcon && isManual) refreshTopIcon.classList.add('fa-spin');
+
+        const codes = ['LOP', 'DPS', 'BWX', 'KOE'];
+        await Promise.all(codes.map(code => loadSheetsForBranch(code, false, isSilent)));
+        saveDriveCacheToLocalStorage();
+
+        if (refreshTopIcon && isManual) refreshTopIcon.classList.remove('fa-spin');
+
+        // Temukan seluruh tahun yang tersedia dari ekor file di Drive
+        discoverAvailableYears();
+
+        // Render isi dropdown seluruh cabang berdasarkan tahun yang aktif
+        codes.forEach(code => {
+            renderBranchSheetOptions(code, window.fleetSelectedYear);
+        });
+
+        // Isi pilihan acuan bulan serentak khusus tahun aktif
+        populateBulkMonthOptions(window.fleetSelectedYear);
+
+        if (isManual) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: `Drive seluruh cabang disinkronkan (${window.fleetAvailableYears.length} tahun terdeteksi)`,
+                showConfirmButton: false,
+                timer: 2000
+            });
+        }
+    }
+
+    function discoverAvailableYears() {
+        const yearsSet = new Set();
+        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+            (window.fleetRawFiles[code] || []).forEach(f => {
+                const y = extractYearFromFileName(f.name);
+                if (y) yearsSet.add(y);
+            });
+        });
+
+        // Sertakan tahun aktif dari config jika ada
+        const fullCfg = window.FULL_CONFIG || {};
+        if (fullCfg.active_year) {
+            yearsSet.add(fullCfg.active_year.toString());
+        }
+
+        // Jika Drive masih kosong, gunakan tahun berjalan
+        if (yearsSet.size === 0) {
+            yearsSet.add(new Date().getFullYear().toString());
+        }
+
+        // Urutkan tahun terbaru di atas (descending)
+        window.fleetAvailableYears = Array.from(yearsSet).sort().reverse();
+
+        const yearSelect = document.getElementById('matrixYearSelect');
+        if (yearSelect) {
+            const currentVal = yearSelect.value;
+            yearSelect.innerHTML = '';
+            window.fleetAvailableYears.forEach(y => {
+                const opt = document.createElement('option');
+                opt.value = y;
+                opt.textContent = `Tahun ${y}`;
+                yearSelect.appendChild(opt);
+            });
+            if (currentVal && window.fleetAvailableYears.includes(currentVal)) {
+                yearSelect.value = currentVal;
+            }
+        }
+
+        // Tentukan tahun acuan yang terpilih
+        if (!window.fleetSelectedYear || !window.fleetAvailableYears.includes(window.fleetSelectedYear)) {
+            const savedYear = fullCfg.active_year;
+            if (savedYear && window.fleetAvailableYears.includes(savedYear)) {
+                window.fleetSelectedYear = savedYear;
+            } else {
+                const currentYearStr = new Date().getFullYear().toString();
+                if (window.fleetAvailableYears.includes(currentYearStr)) {
+                    window.fleetSelectedYear = currentYearStr;
+                } else {
+                    window.fleetSelectedYear = window.fleetAvailableYears[0];
+                }
+            }
+        }
+
+        if (yearSelect && window.fleetSelectedYear) {
+            yearSelect.value = window.fleetSelectedYear;
+        }
+    }
+
+    function onMatrixYearChanged(selectedYear) {
+        if (!selectedYear) return;
+        window.fleetSelectedYear = selectedYear;
+
+        // Render ulang dropdown seluruh cabang agar hanya memuat file tahun bersangkutan
+        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+            renderBranchSheetOptions(code, selectedYear);
+        });
+
+        // Perbarui dropdown bulan serentak
+        populateBulkMonthOptions(selectedYear);
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'info',
+            title: `Menampilkan spreadsheet tahun ${selectedYear}`,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+
+    function renderBranchSheetOptions(code, selectedYear) {
+        const select = document.getElementById(`matrixSheetSelect-${code}`);
+        const statusText = document.getElementById(`matrixSheetStatusText-${code}`);
+        const folderInput = document.getElementById(`matrixFolder-${code}`);
+        if (!select) return;
+
+        const currentActiveUrl = select.getAttribute('data-active-url') || select.value || '';
+        const savedName = select.getAttribute('data-saved-name') || '';
+        const cleanFolder = extractDriveIdFromText(folderInput ? folderInput.value : '');
+
+        if (!cleanFolder) {
+            select.innerHTML = '<option value="">-- Folder Drive Belum Diatur --</option>';
+            if (currentActiveUrl) {
+                const opt = document.createElement('option');
+                opt.value = currentActiveUrl;
+                opt.textContent = savedName || "Sheet Eksternal / Manual (Aktif)";
+                select.appendChild(opt);
+                select.value = currentActiveUrl;
+            }
+            if (statusText) statusText.innerHTML = '<span class="text-warning"><i class="fa-solid fa-triangle-exclamation me-1"></i>Folder belum diatur</span>';
+            updateMatrixSheetUI(code, select.value, currentActiveUrl ? (savedName || 'Sheet Eksternal') : '');
+            return;
+        }
+
+        const allFiles = window.fleetRawFiles[code] || [];
+        
+        // Filter file yang memiliki ekor tahun sesuai selectedYear
+        const matchingFiles = allFiles.filter(f => {
+            const y = extractYearFromFileName(f.name);
+            return y === selectedYear;
+        });
+
+        // File tanpa tag tahun (legacy/kustom)
+        const untaggedFiles = allFiles.filter(f => !extractYearFromFileName(f.name));
+
+        select.innerHTML = '';
+
+        if (matchingFiles.length > 0 || untaggedFiles.length > 0) {
+            const defOpt = document.createElement('option');
+            defOpt.value = '';
+            defOpt.textContent = `-- Pilih Spreadsheet Tahun ${selectedYear} (${matchingFiles.length} file) --`;
+            select.appendChild(defOpt);
+
+            matchingFiles.forEach(f => {
+                const opt = document.createElement('option');
+                opt.value = f.webViewLink || `https://docs.google.com/spreadsheets/d/${f.id}/edit`;
+                let pretty = f.name.replace(/_/g, ' ');
+                opt.textContent = pretty;
+                opt.setAttribute('data-name', pretty);
+                select.appendChild(opt);
+            });
+
+            if (untaggedFiles.length > 0) {
+                const sepOpt = document.createElement('option');
+                sepOpt.disabled = true;
+                sepOpt.textContent = `── Sheet Lainnya / Tanpa Tag Tahun (${untaggedFiles.length}) ──`;
+                select.appendChild(sepOpt);
+
+                untaggedFiles.forEach(f => {
                     const opt = document.createElement('option');
                     opt.value = f.webViewLink || `https://docs.google.com/spreadsheets/d/${f.id}/edit`;
                     let pretty = f.name.replace(/_/g, ' ');
@@ -5684,122 +6543,119 @@
                     opt.setAttribute('data-name', pretty);
                     select.appendChild(opt);
                 });
+            }
 
-                let selectedVal = '';
-                let matchedName = '';
+            let selectedVal = '';
+            let matchedName = '';
 
-                if (currentActiveUrl) {
-                    const optionsArray = Array.from(select.options);
-                    const currentId = extractDriveIdFromText(currentActiveUrl);
-                    const match = optionsArray.find(o => o.value === currentActiveUrl || (currentId && o.value.includes(currentId)));
-                    if (match) {
-                        selectedVal = match.value;
-                        matchedName = match.textContent;
+            // Jika sheet yang sedang aktif saat ini ada di dalam opsi tahun ini, pilih itu
+            if (currentActiveUrl) {
+                const optionsArray = Array.from(select.options);
+                const currentId = extractDriveIdFromText(currentActiveUrl);
+                const match = optionsArray.find(o => o.value === currentActiveUrl || (currentId && o.value && o.value.includes(currentId)));
+                if (match) {
+                    selectedVal = match.value;
+                    matchedName = match.textContent;
+                } else if (matchingFiles.length > 0) {
+                    const nameMatch = savedName ? matchingFiles.find(f => f.name.replace(/_/g, ' ').toUpperCase() === savedName.toUpperCase()) : null;
+                    if (nameMatch) {
+                        selectedVal = nameMatch.webViewLink || `https://docs.google.com/spreadsheets/d/${nameMatch.id}/edit`;
+                        matchedName = nameMatch.name.replace(/_/g, ' ');
                     } else {
-                        const customOpt = document.createElement('option');
-                        customOpt.value = currentActiveUrl;
-                        customOpt.textContent = "Sheet Eksternal / Manual (Aktif)";
-                        select.appendChild(customOpt);
-                        selectedVal = currentActiveUrl;
-                        matchedName = "Sheet Eksternal";
+                        selectedVal = matchingFiles[0].webViewLink || `https://docs.google.com/spreadsheets/d/${matchingFiles[0].id}/edit`;
+                        matchedName = matchingFiles[0].name.replace(/_/g, ' ');
                     }
                 } else {
-                    selectedVal = data.files[0].webViewLink || `https://docs.google.com/spreadsheets/d/${data.files[0].id}/edit`;
-                    matchedName = data.files[0].name.replace(/_/g, ' ');
+                    const customOpt = document.createElement('option');
+                    customOpt.value = currentActiveUrl;
+                    customOpt.textContent = savedName || "Sheet Aktif (Tahun Berbeda)";
+                    select.appendChild(customOpt);
+                    selectedVal = currentActiveUrl;
+                    matchedName = savedName || "Sheet Aktif";
                 }
-
-                select.value = selectedVal;
-                select.setAttribute('data-active-url', selectedVal);
-
-                if (statusText) {
-                    statusText.innerHTML = `<span class="text-success"><i class="fa-solid fa-circle-check me-1"></i>${data.files.length} sheet tersedia</span>`;
-                }
-
-                updateMatrixSheetUI(code, selectedVal, matchedName);
-
-                if (isManual) {
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        icon: 'success',
-                        title: `Spreadsheet ${code} diperbarui (${data.files.length} file)`,
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                }
-            } else {
-                select.innerHTML = '<option value="">-- Belum ada spreadsheet di Drive --</option>';
-                if (currentActiveUrl) {
-                    const opt = document.createElement('option');
-                    opt.value = currentActiveUrl;
-                    opt.textContent = "Sheet Eksternal / Manual (Aktif)";
-                    select.appendChild(opt);
-                    select.value = currentActiveUrl;
-                }
-                if (statusText) statusText.innerHTML = '<span class="text-muted"><i class="fa-solid fa-circle-info me-1"></i>Folder Drive kosong</span>';
-                updateMatrixSheetUI(code, select.value, currentActiveUrl ? 'Sheet Eksternal' : '');
+            } else if (matchingFiles.length > 0) {
+                selectedVal = matchingFiles[0].webViewLink || `https://docs.google.com/spreadsheets/d/${matchingFiles[0].id}/edit`;
+                matchedName = matchingFiles[0].name.replace(/_/g, ' ');
             }
-        } catch (err) {
-            console.error(`Error loading sheets for ${code}:`, err);
-            if (statusText) statusText.innerHTML = '<span class="text-danger"><i class="fa-solid fa-circle-xmark me-1"></i>Gagal memuat Drive</span>';
-        } finally {
-            if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+
+            select.value = selectedVal;
+
+            if (statusText) {
+                statusText.innerHTML = `<span style="color: #00B7CD; font-weight: 600;"><i class="fa-solid fa-circle-check me-1"></i>${matchingFiles.length} sheet (${selectedYear})</span>`;
+            }
+
+            updateMatrixSheetUI(code, selectedVal, matchedName);
+        } else {
+            select.innerHTML = `<option value="">-- Belum ada sheet untuk tahun ${selectedYear} --</option>`;
+            if (currentActiveUrl) {
+                const opt = document.createElement('option');
+                opt.value = currentActiveUrl;
+                opt.textContent = savedName || "Sheet Aktif (Tahun Lain)";
+                select.appendChild(opt);
+                select.value = currentActiveUrl;
+            }
+            if (statusText) {
+                statusText.innerHTML = `<span class="text-muted"><i class="fa-solid fa-circle-info me-1"></i>0 sheet di tahun ${selectedYear}</span>`;
+            }
+            updateMatrixSheetUI(code, select.value, currentActiveUrl ? (savedName || 'Sheet Aktif') : '');
         }
     }
 
-    async function loadAllBranchSheets(isManual = false) {
-        const refreshTopIcon = document.getElementById('matrixRefreshTopIcon');
-        if (refreshTopIcon) refreshTopIcon.classList.add('fa-spin');
-
-        const codes = ['LOP', 'DPS', 'BWX', 'KOE'];
-        await Promise.all(codes.map(code => loadSheetsForBranch(code, false)));
-
-        if (refreshTopIcon) refreshTopIcon.classList.remove('fa-spin');
-        populateBulkMonthOptions();
-
-        if (isManual) {
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'success',
-                title: 'Daftar Spreadsheet seluruh cabang berhasil disinkronkan!',
-                showConfirmButton: false,
-                timer: 2000
-            });
-        }
-    }
-
-    function populateBulkMonthOptions() {
+    function populateBulkMonthOptions(selectedYear) {
         const bulkSelect = document.getElementById('matrixBulkMonthSelect');
         if (!bulkSelect) return;
 
+        const fullCfg = window.FULL_CONFIG || {};
+        const currentYear = selectedYear || window.fleetSelectedYear || fullCfg.active_year || new Date().getFullYear().toString();
         const monthsSet = new Set();
         const monthRegex = /(JAN|FEB|MAR|APR|MEI|JUN|JUL|AGS|SEP|OKT|NOV|DES)[_\s\-]+(20\d\d)/i;
 
         ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
-            const select = document.getElementById(`matrixSheetSelect-${code}`);
-            if (select) {
-                Array.from(select.options).forEach(opt => {
-                    const match = (opt.textContent || '').match(monthRegex);
-                    if (match) {
-                        monthsSet.add(`${match[1].toUpperCase()} ${match[2]}`);
-                    }
-                });
-            }
+            (window.fleetRawFiles[code] || []).forEach(f => {
+                const match = (f.name || '').match(monthRegex);
+                if (match && match[2] === currentYear) {
+                    monthsSet.add(`${match[1].toUpperCase()} ${match[2]}`);
+                }
+            });
         });
 
-        bulkSelect.innerHTML = '<option value="">-- Pilih Acuan Bulan --</option>';
+        // Sertakan bulan aktif tersimpan di config jika tahunnya cocok
+        const savedMonthLabel = fullCfg.active_month_label || '';
+        const savedClean = savedMonthLabel.replace(/^Bulan\s+/i, '').trim();
+        if (savedClean && savedClean.includes(currentYear)) {
+            monthsSet.add(savedClean);
+        }
+
+        const currentBulkVal = bulkSelect.value;
+        bulkSelect.innerHTML = `<option value="">-- Pilih Acuan Bulan (${currentYear}) --</option>`;
+
+        // Urutan standar bulan kalender Indonesia
+        const monthOrder = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN', 'JUL', 'AGS', 'SEP', 'OKT', 'NOV', 'DES'];
+
         if (monthsSet.size === 0) {
-            const currentYear = new Date().getFullYear();
+            // Jika belum ada file bulan yang terdeteksi di Drive untuk tahun ini, berikan bulan standar
             ['OKT', 'NOV', 'DES'].forEach(m => monthsSet.add(`${m} ${currentYear}`));
         }
 
-        Array.from(monthsSet).sort().reverse().forEach(mStr => {
+        const sortedMonths = Array.from(monthsSet).sort((a, b) => {
+            const mA = a.split(' ')[0];
+            const mB = b.split(' ')[0];
+            return monthOrder.indexOf(mB) - monthOrder.indexOf(mA); // Bulan terbaru di atas
+        });
+
+        sortedMonths.forEach(mStr => {
             const opt = document.createElement('option');
             opt.value = mStr;
             opt.textContent = `Bulan ${mStr}`;
             bulkSelect.appendChild(opt);
         });
+
+        // Pertahankan nilai yang terpilih atau defaultkan ke savedClean
+        if (currentBulkVal && monthsSet.has(currentBulkVal)) {
+            bulkSelect.value = currentBulkVal;
+        } else if (savedClean && monthsSet.has(savedClean)) {
+            bulkSelect.value = savedClean;
+        }
     }
 
     function applyBulkMonthSelection(targetPeriod) {
@@ -5807,6 +6663,14 @@
         const tokens = targetPeriod.split(' ');
         const monthTag = tokens[0].toUpperCase();
         const yearTag = tokens[1];
+
+        // Pastikan tahun acuan juga sinkron jika berbeda
+        if (yearTag && yearTag !== window.fleetSelectedYear) {
+            window.fleetSelectedYear = yearTag;
+            const ySelect = document.getElementById('matrixYearSelect');
+            if (ySelect) ySelect.value = yearTag;
+            ['LOP', 'DPS', 'BWX', 'KOE'].forEach(c => renderBranchSheetOptions(c, yearTag));
+        }
 
         let matchCount = 0;
         ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
@@ -5851,7 +6715,7 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Sinkronkan!',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({
@@ -5897,7 +6761,7 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Tarik Sekarang',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({
@@ -6310,7 +7174,7 @@
                 }
             } else {
                 if (hintEl) {
-                    hintEl.innerHTML = `<span style="color:#16a34a; font-weight:600;"><i class="fa-solid fa-circle-check me-1"></i>Sheet untuk ${mStr} ${y} otomatis terpilih di menu spreadsheet!</span>`;
+                    hintEl.innerHTML = `<span style="color:#00B7CD; font-weight:600;"><i class="fa-solid fa-circle-check me-1"></i>Sheet untuk ${mStr} ${y} otomatis terpilih di menu spreadsheet!</span>`;
                 }
             }
         }
@@ -6344,10 +7208,124 @@
         }
     }
 
+    // =========================================================================
+    // DYNAMIC CALENDAR BOUNDS DARI FLEET MATRIX (PENCEGAHAN OVER-RELOAD)
+    // =========================================================================
+    function getFleetActiveMonthBounds() {
+        const fullCfg = window.FULL_CONFIG || {};
+        const airports = fullCfg.airports || window.FLEET_CONFIG || {};
+        const activeMonths = new Set();
+
+        const monthMap = {
+            'JAN': '01', 'FEB': '02', 'MAR': '03', 'APR': '04', 'MEI': '05', 'JUN': '06',
+            'JUL': '07', 'AGS': '08', 'SEP': '09', 'OKT': '10', 'NOV': '11', 'DES': '12'
+        };
+
+        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+            const conf = airports[code] || {};
+            const domSelect = document.getElementById(`matrixSheetSelect-${code}`);
+            let sheetName = conf.sheet_name || '';
+            if (domSelect && domSelect.selectedIndex >= 0) {
+                const opt = domSelect.options[domSelect.selectedIndex];
+                const optName = opt ? (opt.getAttribute('data-name') || opt.textContent || '') : '';
+                if (optName) sheetName = optName;
+            }
+
+            let foundMonth = null;
+            if (sheetName) {
+                const match = sheetName.match(/(JAN|FEB|MAR|APR|MEI|JUN|JUL|AGS|SEP|OKT|NOV|DES)[_\s\-]+(20\d\d)/i);
+                if (match) {
+                    const mNum = monthMap[match[1].toUpperCase()];
+                    foundMonth = `${match[2]}-${mNum}`;
+                }
+            }
+            if (!foundMonth && conf.active_month && /^\d{4}-\d{2}$/.test(conf.active_month)) {
+                foundMonth = conf.active_month;
+            }
+            if (foundMonth) {
+                activeMonths.add(foundMonth);
+            }
+        });
+
+        // Fallback jika belum tersetel
+        if (activeMonths.size === 0) {
+            const globalMonth = fullCfg.active_month || '2026-11';
+            activeMonths.add(globalMonth);
+        }
+
+        const sortedMonths = Array.from(activeMonths).sort();
+        const earliest = sortedMonths[0];
+        const latest = sortedMonths[sortedMonths.length - 1];
+
+        const minDate = `${earliest}-01`;
+        const [lYear, lMonth] = latest.split('-').map(Number);
+        const lastDay = new Date(lYear, lMonth, 0).getDate();
+        const maxDate = `${latest}-${String(lastDay).padStart(2, '0')}`;
+
+        return {
+            activeMonths: sortedMonths,
+            minDate: minDate,
+            maxDate: maxDate
+        };
+    }
+
+    function applyFleetCalendarBounds(triggerFetch = false) {
+        const input = document.getElementById('filterDate');
+        if (!input) return;
+
+        const bounds = getFleetActiveMonthBounds();
+        input.min = bounds.minDate;
+        input.max = bounds.maxDate;
+
+        let curVal = input.value;
+        let wasAdjusted = false;
+
+        if (!curVal || curVal < bounds.minDate) {
+            curVal = bounds.minDate;
+            wasAdjusted = true;
+        } else if (curVal > bounds.maxDate) {
+            curVal = bounds.maxDate;
+            wasAdjusted = true;
+        }
+
+        if (wasAdjusted) {
+            input.value = curVal;
+            updateFormattedDateDisplay(curVal);
+            if (triggerFetch && typeof fetchRekap === 'function') {
+                fetchRekap(false);
+            }
+        }
+
+        const prevBtn = document.getElementById('dateNavPrev');
+        const nextBtn = document.getElementById('dateNavNext');
+
+        if (prevBtn) {
+            const isAtMin = curVal <= bounds.minDate;
+            prevBtn.disabled = isAtMin;
+            prevBtn.classList.toggle('disabled', isAtMin);
+            prevBtn.title = isAtMin ? `Batas awal bulan aktif (${bounds.activeMonths[0]})` : 'Hari Sebelumnya';
+        }
+
+        if (nextBtn) {
+            const isAtMax = curVal >= bounds.maxDate;
+            nextBtn.disabled = isAtMax;
+            nextBtn.classList.toggle('disabled', isAtMax);
+            nextBtn.title = isAtMax ? `Batas akhir bulan aktif (${bounds.activeMonths[bounds.activeMonths.length - 1]})` : 'Hari Berikutnya';
+        }
+    }
+
     function onDateChanged() {
         const input = document.getElementById('filterDate');
         if (!input || !input.value) return;
 
+        const bounds = getFleetActiveMonthBounds();
+        if (input.value < bounds.minDate) {
+            input.value = bounds.minDate;
+        } else if (input.value > bounds.maxDate) {
+            input.value = bounds.maxDate;
+        }
+
+        applyFleetCalendarBounds(false);
         updateFormattedDateDisplay(input.value);
 
         const today = new Date().toISOString().split('T')[0];
@@ -6366,6 +7344,7 @@
     function triggerDatePicker(e) {
         const input = document.getElementById('filterDate');
         if (input) {
+            applyFleetCalendarBounds(false);
             try {
                 if (typeof input.showPicker === 'function') {
                     input.showPicker();
@@ -6382,6 +7361,7 @@
         const input = document.getElementById('filterDate');
         if (!input || !input.value) return;
 
+        const bounds = getFleetActiveMonthBounds();
         const parts = input.value.split('-');
         const dt = new Date(parts[0], parts[1] - 1, parts[2]);
         dt.setDate(dt.getDate() + deltaDays);
@@ -6389,8 +7369,22 @@
         const y = dt.getFullYear();
         const m = String(dt.getMonth() + 1).padStart(2, '0');
         const d = String(dt.getDate()).padStart(2, '0');
-        input.value = `${y}-${m}-${d}`;
+        const nextDateStr = `${y}-${m}-${d}`;
 
+        if (nextDateStr < bounds.minDate || nextDateStr > bounds.maxDate) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'warning',
+                title: `Tanggal dibatasi pada bulan aktif matriks (${bounds.activeMonths.join(', ')})`,
+                showConfirmButton: false,
+                timer: 2000
+            });
+            applyFleetCalendarBounds(false);
+            return;
+        }
+
+        input.value = nextDateStr;
         onDateChanged();
     }
 
@@ -6405,6 +7399,19 @@
         const d = String(dt.getDate()).padStart(2, '0');
         const str = `${y}-${m}-${d}`;
 
+        const bounds = getFleetActiveMonthBounds();
+        if (str < bounds.minDate || str > bounds.maxDate) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: `Tanggal ${type === 'today' ? 'hari ini' : 'kemarin'} (${str}) di luar bulan aktif matriks (${bounds.activeMonths.join(', ')})`,
+                showConfirmButton: false,
+                timer: 2500
+            });
+            return;
+        }
+
         const input = document.getElementById('filterDate');
         if (input) input.value = str;
 
@@ -6413,6 +7420,7 @@
         if (chipToday) chipToday.classList.toggle('active', type === 'today');
         if (chipYesterday) chipYesterday.classList.toggle('active', type === 'yesterday');
 
+        applyFleetCalendarBounds(false);
         updateFormattedDateDisplay(str);
         fetchRekap();
     }
@@ -6548,6 +7556,11 @@
 
                         if (info.is_submitted) {
                             submittedCount++;
+                            const iataBadge = document.getElementById(`iata-badge-${code}`) || document.getElementById(`card-${code}`)?.querySelector('.iata-badge');
+                            if (iataBadge) {
+                                iataBadge.classList.remove('warning');
+                                iataBadge.classList.add('success');
+                            }
                             if (badge) {
                                 badge.className = "status-pill success";
                                 badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Sudah Mengirim`;
@@ -6689,6 +7702,11 @@
                                 branchText += `\n\n`;
                             }
                         } else {
+                            const iataBadge = document.getElementById(`iata-badge-${code}`) || document.getElementById(`card-${code}`)?.querySelector('.iata-badge');
+                            if (iataBadge) {
+                                iataBadge.classList.remove('success');
+                                iataBadge.classList.add('warning');
+                            }
                             if (badge) {
                                 badge.className = "status-pill warning";
                                 badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Belum Mengirim`;
@@ -6808,7 +7826,7 @@ REGION II`;
                 showCancelButton: true,
                 confirmButtonText: 'Buka Konfigurasi',
                 cancelButtonText: 'Batal',
-                confirmButtonColor: '#90c1e8'
+                confirmButtonColor: '#00B7CD'
             }).then(result => {
                 if (result.isConfirmed) {
                     openModal(code);
@@ -6878,7 +7896,7 @@ REGION II`;
                     showCancelButton: true,
                     confirmButtonText: 'Ya, Kirim ke Admin',
                     cancelButtonText: 'Tidak',
-                    confirmButtonColor: '#90c1e8'
+                    confirmButtonColor: '#00B7CD'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         let cleanAdmin = adminPhone.trim().replace(/\D/g, '');
@@ -7222,7 +8240,7 @@ REGION II`;
             showCancelButton: true,
             confirmButtonText: 'Ya, Tarik Sekarang',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(result => {
             if (result.isConfirmed) {
                 Swal.fire({
@@ -7261,7 +8279,7 @@ REGION II`;
             showCancelButton: true,
             confirmButtonText: 'Tarik Data',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(res => {
             if (res.isConfirmed) {
                 showDriveLoading(

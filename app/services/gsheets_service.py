@@ -406,11 +406,18 @@ def get_daily_summary(date_str):
         
         default_url = conf.get('sheet_url')
         drive_folder = conf.get('drive_folder')
+        sheet_name = conf.get('sheet_name', '')
+        branch_active_month = conf.get('active_month', '')
+        target_month_key = f"{year_str}-{dt.month:02d}"
         url = default_url
         
-        # Coba periksa apakah default URL sudah sesuai dengan bulan yang dicari
+        # Coba periksa apakah default URL sudah sesuai dengan bulan yang dicari (cek metadata dulu, 0ms)
         is_url_match = False
-        if url and client:
+        if branch_active_month and branch_active_month == target_month_key:
+            is_url_match = True
+        elif sheet_name and (f"{month_abbr}_{year_str}" in sheet_name.upper() or f"{month_abbr} {year_str}" in sheet_name.upper()):
+            is_url_match = True
+        elif url and client:
             try:
                 sheet_title = client.open_by_url(url).title
                 if f"{month_abbr}_{year_str}" in sheet_title or f"{month_abbr} {year_str}" in sheet_title.upper():
@@ -996,16 +1003,20 @@ import re
 
 _CALENDAR_CACHE = {}
 _CALENDAR_CACHE_TTL = 90  # Cache 90 detik untuk efisiensi kuota API
+_APPROVED_REPORTS_CACHE = {}
+_APPROVED_REPORTS_CACHE_TTL = 90
 
 def invalidate_calendar_cache(airport_code=None):
     """
-    Menghapus cache kalender agar data terbaru dari Google Sheets segera terbaca.
+    Menghapus cache kalender dan cache laporan produksi agar data terbaru dari Google Sheets segera terbaca.
     """
-    global _CALENDAR_CACHE
+    global _CALENDAR_CACHE, _APPROVED_REPORTS_CACHE
     if airport_code:
         _CALENDAR_CACHE.pop(str(airport_code).upper(), None)
+        _APPROVED_REPORTS_CACHE.pop(str(airport_code).upper(), None)
     else:
         _CALENDAR_CACHE.clear()
+        _APPROVED_REPORTS_CACHE.clear()
 
 def normalize_date_str(val):
     """
@@ -1321,3 +1332,149 @@ def get_airport_sheet_calendar_data(airport_code, force_refresh=False):
             "next_recommended_date": f"{year}-{month_idx:02d}-01",
             "counts": {"filled": 0, "staging_pending": 0, "staging_revision": 0, "unfilled": last_day, "total": last_day}
         }
+
+
+def format_indo_date(date_str):
+    if not date_str:
+        return '-'
+    MONTH_NAMES = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+    try:
+        parts = str(date_str).split('T')[0].split('-')
+        if len(parts) == 3:
+            day = int(parts[2])
+            month = int(parts[1])
+            year = parts[0]
+            if 1 <= month <= 12:
+                return f"{day} {MONTH_NAMES[month]} {year}"
+    except Exception:
+        pass
+    return str(date_str)
+
+
+def get_production_approved_reports(airport_code, force_refresh=False):
+    """
+    Mengambil daftar seluruh laporan yang telah disetujui dan tercatat di Spreadsheet Produksi Utama
+    (tab DATABASE_REKAP) untuk bandara yang bersangkutan.
+    """
+    airport_code = str(airport_code).upper()
+    now_ts = time.time()
+
+    if not force_refresh and airport_code in _APPROVED_REPORTS_CACHE:
+        cached = _APPROVED_REPORTS_CACHE[airport_code]
+        if (now_ts - cached['ts']) < _APPROVED_REPORTS_CACHE_TTL:
+            return cached['data']
+
+    from app.models.config_store import get_airport_config
+    config = get_airport_config(airport_code)
+    sheet_url = config.get('sheet_url')
+    if not sheet_url:
+        return []
+
+    try:
+        client = get_client()
+        spreadsheet = client.open_by_url(sheet_url)
+        try:
+            rekap_sheet = spreadsheet.worksheet('DATABASE_REKAP')
+        except gspread.WorksheetNotFound:
+            return []
+
+        all_rows = rekap_sheet.get_all_values()
+        if len(all_rows) < 2:
+            return []
+
+        # Deteksi baris header
+        header_row = []
+        header_row_idx = 0
+        for idx, r in enumerate(all_rows[:5]):
+            clean_row = [str(c).strip().upper() for c in r]
+            if 'TANGGAL' in clean_row or 'KANTOR_CABANG' in clean_row:
+                header_row = [str(c).strip() for c in r]
+                header_row_idx = idx
+                break
+        if not header_row and len(all_rows) > 0:
+            header_row = [str(c).strip() for c in all_rows[0]]
+            header_row_idx = 0
+
+        reports = []
+        for row in all_rows[header_row_idx + 1:]:
+            if not any(str(c).strip() for c in row):
+                continue
+
+            row_dict = {}
+            for c_idx, h_name in enumerate(header_row):
+                if h_name:
+                    row_dict[h_name] = row[c_idx].strip() if c_idx < len(row) else ''
+
+            raw_tgl = row_dict.get('TANGGAL') or row_dict.get('TANGGAL_LAPORAN', '')
+            norm_tgl = normalize_date_str(raw_tgl)
+            if not norm_tgl:
+                continue
+
+            rep_id = row_dict.get('REPORT_ID')
+            if not rep_id or not str(rep_id).strip():
+                clean_d = norm_tgl.replace('-', '')
+                rep_id = f"REP-{airport_code}-{clean_d}"
+            row_dict['REPORT_ID'] = rep_id
+            row_dict['TANGGAL'] = norm_tgl
+
+            raw_sub = row_dict.get('_submitted_by_name') or row_dict.get('SUBMITTED_BY', '')
+            if not raw_sub or raw_sub.strip() == '':
+                raw_sub = f"Petugas {airport_code}"
+
+            raw_user = row_dict.get('_submitted_by_username') or row_dict.get('SUBMITTED_BY_USERNAME', '')
+
+            pci_rw = row_dict.get('RUNWAY_PCI', '-')
+            if pci_rw and pci_rw != '-' and not str(pci_rw).endswith('%') and 'PCI' not in str(pci_rw).upper():
+                pci_rw = f"{pci_rw}% PCI"
+
+            kondisi_rw = row_dict.get('RUNWAY_KONDISI', 'SERVICEABLE')
+
+            reports.append({
+                "report_id": rep_id,
+                "status": "APPROVED",
+                "catatan_gm": row_dict.get('CATATAN_DH') or row_dict.get('CATATAN_GM', ''),
+                "catatan_dh": row_dict.get('CATATAN_DH') or row_dict.get('CATATAN_GM', ''),
+                "tanggal": norm_tgl,
+                "tanggal_indo": format_indo_date(norm_tgl),
+                "submitted_by": raw_sub,
+                "submitted_by_username": raw_user,
+                "submitted_by_raw": raw_sub,
+                "timestamp_submit": row_dict.get('TIMESTAMP', ''),
+                "timestamp_update": row_dict.get('TIMESTAMP', ''),
+                "pci_runway": pci_rw,
+                "kondisi_runway": kondisi_rw,
+                "airport": airport_code,
+                "is_production": True,
+                "data": row_dict
+            })
+
+        # Urutkan berdasarkan tanggal terbaru di atas
+        reports.sort(key=lambda x: str(x.get('tanggal', '')), reverse=True)
+
+        _APPROVED_REPORTS_CACHE[airport_code] = {
+            "ts": now_ts,
+            "data": reports
+        }
+        return reports
+    except Exception as e:
+        print(f"Error fetching approved production reports for {airport_code}: {e}")
+        return []
+
+
+def get_production_report_by_id(airport_code, report_id):
+    """
+    Mengambil 1 laporan spesifik yang telah disetujui berdasarkan REPORT_ID atau tanggal.
+    """
+    if not report_id:
+        return None
+    rep_clean = str(report_id).strip().upper()
+    reports = get_production_approved_reports(airport_code)
+    for r in reports:
+        if str(r.get('report_id', '')).strip().upper() == rep_clean:
+            return r
+        if str(r.get('tanggal', '')).strip() == str(report_id).strip():
+            return r
+        if norm_t := str(r.get('tanggal', '')).replace('-', ''):
+            if norm_t == rep_clean.replace('-', ''):
+                return r
+    return None

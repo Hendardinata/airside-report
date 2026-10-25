@@ -78,7 +78,7 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
             title: 'Form Belum Lengkap!',
             text: 'Masih ada form inputan yang kosong. Mohon lengkapi terlebih dahulu baru kirim.',
             confirmButtonText: 'Mengerti',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(() => {
             if (invalidElement) {
                 const step = invalidElement.closest('.wizard-step');

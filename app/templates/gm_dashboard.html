@@ -16,8 +16,8 @@
         --theme-navy: #002b49;
         --theme-blue: #0284c7;
         --theme-blue-hover: #0369a1;
-        --theme-btn-gradient: #90c1e8;
-        --theme-btn-gradient-hover: #7bb5e3;
+        --theme-btn-gradient: #00B7CD;
+        --theme-btn-gradient-hover: #009eb2;
         --theme-cyan: #0284c7;
         --theme-slate-900: #0f172a;
         --theme-slate-700: #334155;
@@ -45,6 +45,413 @@
         -webkit-font-smoothing: antialiased;
     }
 
+    /* ==========================================================================
+       EXECUTIVE CORPORATE SWEETALERT & POPUP THEMING (100% UNIFIED)
+       ========================================================================== */
+    div:where(.swal2-container).swal2-backdrop-show,
+    .swal2-backdrop-show {
+        background: rgba(15, 23, 42, 0.45) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    div:where(.swal2-container):has(.swal2-loading) {
+        background: rgba(15, 23, 42, 0.45) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    /* Modal Popup Box */
+    div:where(.swal2-container) .swal2-popup,
+    .swal2-popup,
+    .swal2-popup.swal-corp-popup {
+        border-radius: 24px !important;
+        padding: 2.25rem 2.25rem 2rem 2.25rem !important;
+        box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+        background: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        max-width: 460px !important;
+        width: 92% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Strictly hide swal2-icon if SweetAlert hides it or if it lacks an icon type */
+    div:where(.swal2-container) .swal2-icon[style*="display: none"],
+    div:where(.swal2-container) .swal2-icon:not(.swal2-warning):not(.swal2-success):not(.swal2-error):not(.swal2-info):not(.swal2-question),
+    .swal2-icon[style*="display: none"] {
+        display: none !important;
+    }
+
+    /* Top Squircle Icon Badges for Active Icons & Custom Icon Tiles */
+    div:where(.swal2-container) .swal2-icon.swal2-warning:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-success:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-error:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-info:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-question:not([style*="display: none"]),
+    .swal-corp-icon-tile {
+        width: 64px !important;
+        height: 64px !important;
+        min-width: 64px !important;
+        min-height: 64px !important;
+        margin: 0 auto 1.25rem auto !important;
+        border-radius: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        border-width: 1.5px !important;
+        border-style: solid !important;
+        font-size: 1.75rem !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    /* Clear and hide ALL default fragile Swal2 internal line artifacts, spans, and rings */
+    div:where(.swal2-container) .swal2-icon *,
+    .swal2-icon * {
+        display: none !important;
+    }
+
+    /* 1. Warning Icon (Amber Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-warning,
+    .swal2-icon.swal2-warning,
+    .swal-corp-icon-tile.icon-warning-corp {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+        border-color: #fde68a !important;
+        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-warning::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23d97706' d='M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .3-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 2. Success Icon (Emerald Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-success,
+    .swal2-icon.swal2-success,
+    .swal-corp-icon-tile.icon-success-corp {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+        border-color: #bbf7d0 !important;
+        box-shadow: 0 4px 16px rgba(22, 163, 74, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-success::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2316a34a' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 3. Error Icon (Rose Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-error,
+    .swal2-icon.swal2-error,
+    .swal-corp-icon-tile.icon-error-corp {
+        background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%) !important;
+        border-color: #fecdd3 !important;
+        box-shadow: 0 4px 16px rgba(225, 29, 72, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-error::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23e11d48' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 4. Info Icon (Cyan Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-info,
+    .swal2-icon.swal2-info,
+    .swal-corp-icon-tile.icon-info-corp {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+        border-color: #bae6fd !important;
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-info::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%230284c7' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 5. Question Icon (Purple Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-question,
+    .swal2-icon.swal2-question,
+    .swal-corp-icon-tile.icon-question-corp {
+        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%) !important;
+        border-color: #ddd6fe !important;
+        box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-question::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%237c3aed' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6s-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.3-6.7-15.1-15.1-15.1H222.6c-5.7 0-10.8 3.6-12.7 9l-7.7 21.6c-4.4 12.5-18.1 19.1-30.6 14.6s-19.1-18.1-14.6-30.6l12.8-35.9zM256 336a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* Custom HTML icon tiles with inner FontAwesome icon */
+    .swal-corp-icon-tile i {
+        font-size: 1.85rem !important;
+        line-height: 1 !important;
+    }
+
+    /* Title */
+    div:where(.swal2-container) .swal2-title,
+    .swal2-title,
+    .swal-corp-title {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-size: 1.35rem !important;
+        font-weight: 800 !important;
+        color: #002b49 !important;
+        margin: 0 0 0.35rem 0 !important;
+        padding: 0 !important;
+        letter-spacing: -0.35px !important;
+        line-height: 1.25 !important;
+        text-align: center !important;
+    }
+
+    /* Subtitle Tag */
+    .swal-corp-sub,
+    .swal-corp-subtitle {
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #64748b !important;
+        margin: 0.2rem 0 1.15rem 0 !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.4rem !important;
+    }
+
+    /* Body Text & HTML Container */
+    div:where(.swal2-container) .swal2-html-container,
+    .swal2-html-container {
+        font-size: 0.92rem !important;
+        color: #475569 !important;
+        line-height: 1.55 !important;
+        text-align: center !important;
+        margin: 0.5rem 0 1.35rem 0 !important;
+        padding: 0 !important;
+        font-weight: 400 !important;
+    }
+
+    /* Actions Bar */
+    div:where(.swal2-container) .swal2-actions,
+    .swal2-actions,
+    .swal-corp-actions-bar {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+        margin: 1.25rem 0 0 0 !important;
+        padding: 0 !important;
+        align-items: stretch !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Strictly hide buttons or actions that SweetAlert marks as display:none or hidden */
+    div:where(.swal2-container) .swal2-actions[style*="display: none"],
+    div:where(.swal2-container) .swal2-actions:not(:has(button:not([style*="display: none"]))),
+    div:where(.swal2-container) .swal2-actions button[style*="display: none"],
+    div:where(.swal2-container) .swal2-actions button.swal2-hide,
+    div:where(.swal2-container) .swal2-actions button[aria-hidden="true"],
+    .swal2-actions[style*="display: none"],
+    .swal2-actions button[style*="display: none"],
+    .swal2-actions button[aria-hidden="true"] {
+        display: none !important;
+    }
+
+    /* Base button styling for visible styled buttons */
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+    .swal-corp-btn-primary,
+    .swal-corp-btn-secondary {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        padding: 0 1.25rem !important;
+        border-radius: 14px !important;
+        font-family: inherit !important;
+        font-size: 0.92rem !important;
+        cursor: pointer !important;
+        box-sizing: border-box !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        text-decoration: none !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        flex: 1 1 0px !important;
+        min-width: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Single-button alert: confirm button spans 100% width symmetrically */
+    div:where(.swal2-container) .swal2-actions:not(:has(button.swal2-cancel:not([style*="display: none"]))):not(:has(button.swal2-deny:not([style*="display: none"]))) button.swal2-confirm:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-actions > button.swal2-styled:only-of-type,
+    .swal-corp-actions-bar:not(:has(.swal-corp-btn-secondary)) .swal-corp-btn-primary {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Primary / Confirm Button (Flagship #00B7CD - No Border & Pure White Text) */
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+    .swal-corp-btn-primary {
+        background: #00B7CD !important;
+        color: #ffffff !important;
+        border: none !important;
+        font-weight: 800 !important;
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):hover,
+    .swal-corp-btn-primary:hover {
+        background: #009eb2 !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):active,
+    .swal-corp-btn-primary:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Secondary / Cancel Button (Crisp White Card with outline) */
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+    .swal-corp-btn-secondary {
+        background: #ffffff !important;
+        color: #475569 !important;
+        border: 1.5px solid #cbd5e1 !important;
+        font-weight: 700 !important;
+    }
+
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):hover,
+    .swal-corp-btn-secondary:hover {
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        border-color: #94a3b8 !important;
+        transform: translateY(-1px) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):active,
+    .swal-corp-btn-secondary:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Deny Button (only visible if explicitly configured) */
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]) {
+        background: #fee2e2 !important;
+        color: #b91c1c !important;
+        border: 1.5px solid #fecdd3 !important;
+        font-weight: 700 !important;
+    }
+
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]):hover {
+        background: #fecdd3 !important;
+        color: #991b1b !important;
+    }
+
+    /* Danger Confirm Button Override */
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"],
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#d33"] {
+        background: #ef4444 !important;
+        color: #ffffff !important;
+        border: 2px solid #991b1b !important;
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
+    }
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#d33"]:hover {
+        background: #dc2626 !important;
+        color: #ffffff !important;
+        border-color: #7f1d1d !important;
+    }
+
+    /* Inputs & Select in Swal */
+    div:where(.swal2-container) .swal2-input,
+    div:where(.swal2-container) .swal2-textarea,
+    div:where(.swal2-container) .swal2-select {
+        border-radius: 12px !important;
+        border: 1.5px solid #cbd5e1 !important;
+        font-size: 0.9rem !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+        margin: 0.5rem 0 1rem 0 !important;
+        font-family: inherit !important;
+    }
+
+    div:where(.swal2-container) .swal2-input:focus,
+    div:where(.swal2-container) .swal2-textarea:focus,
+    div:where(.swal2-container) .swal2-select:focus {
+        border-color: #00B7CD !important;
+        box-shadow: 0 0 0 3px rgba(0, 183, 205, 0.2) !important;
+    }
+
+    /* Close Button */
+    div:where(.swal2-container) .swal2-close,
+    .swal2-close,
+    .swal-corp-popup .swal2-close {
+        color: #94a3b8 !important;
+        font-size: 1.4rem !important;
+        transition: all 0.15s ease !important;
+        top: 0.9rem !important;
+        right: 0.9rem !important;
+        border-radius: 50% !important;
+        width: 34px !important;
+        height: 34px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+
+    div:where(.swal2-container) .swal2-close:hover,
+    .swal2-close:hover,
+    .swal-corp-popup .swal2-close:hover {
+        color: #0f172a !important;
+        background-color: transparent !important;
+        transform: scale(1.15) !important;
+    }
+
+    /* Timer Progress Bar */
+    div:where(.swal2-container) .swal2-timer-progress-bar,
+    .swal2-timer-progress-bar,
+    .swal-corp-popup .swal2-timer-progress-bar {
+        background: linear-gradient(90deg, #00B7CD 0%, #0284c7 100%) !important;
+        height: 3px !important;
+    }
+
     /* Full width container reset */
     main.container,
     .container,
@@ -62,7 +469,8 @@
         width: 100%;
         height: 72px;
         background-color: #ffffff;
-        border-bottom: 1px solid var(--theme-border);
+        background-image: none;
+        border-bottom: 1px solid var(--theme-border, #e2e8f0);
         box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
         position: sticky;
         top: 0;
@@ -131,8 +539,10 @@
 
     .topbar-notif-btn {
         position: relative;
-        background: transparent;
-        border: none;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
         outline: none;
         width: 40px;
         height: 40px;
@@ -140,19 +550,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--theme-slate-600);
+        color: #002b49;
         font-size: 1.25rem;
         cursor: pointer;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 2px 6px rgba(0, 43, 73, 0.08);
     }
 
     .topbar-notif-btn:hover {
-        background-color: #f1f5f9;
+        background-color: #ffffff;
         color: #002b49;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 43, 73, 0.14);
     }
 
     .topbar-notif-btn:active {
-        background-color: #e2e8f0;
+        background-color: #f1f5f9;
         transform: scale(0.96);
     }
 
@@ -467,27 +880,34 @@
     }
 
     /* User Profile Pill */
+    /* User Profile Pill */
     .topbar-user-wrap {
         display: flex;
         align-items: center;
         gap: 0.75rem;
         cursor: pointer;
-        padding: 0.35rem 0.5rem;
+        padding: 0.35rem 0.65rem;
         border-radius: 12px;
-        transition: background-color 0.2s ease;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 2px 6px rgba(0, 43, 73, 0.08);
+        transition: all 0.2s ease;
         position: relative;
         user-select: none;
     }
 
     .topbar-user-wrap:hover {
-        background-color: #f8fafc;
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 43, 73, 0.14);
     }
 
     .user-avatar-circle {
         width: 38px;
         height: 38px;
         border-radius: 50%;
-        background-color: #002b49;
+        background-color: #00B7CD;
         color: #ffffff;
         font-size: 0.85rem;
         font-weight: 700;
@@ -496,6 +916,7 @@
         justify-content: center;
         letter-spacing: -0.2px;
         flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(0, 183, 205, 0.35);
     }
 
     .user-text-col {
@@ -508,17 +929,18 @@
     .user-name-text {
         font-size: 0.88rem;
         font-weight: 700;
-        color: var(--theme-slate-900);
+        color: #002b49;
     }
 
     .user-role-text {
         font-size: 0.74rem;
-        color: var(--theme-slate-500);
+        font-weight: 600;
+        color: #00365c;
     }
 
     .user-caret-icon {
         font-size: 0.75rem;
-        color: var(--theme-slate-500);
+        color: #002b49;
         margin-left: 0.25rem;
     }
 
@@ -592,31 +1014,35 @@
         position: relative;
         border-radius: 22px;
         overflow: hidden;
-        background-color: #e0f2fe;
+        background-color: #ffffff;
         background-image: url("{{ url_for('static', filename='img/staff-hero-bg.webp') }}");
         background-size: cover;
-        background-position: center right;
-        min-height: 225px;
+        background-position: right center;
+        background-repeat: no-repeat;
+        min-height: 200px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 2.25rem 2.5rem;
+        padding: 2.25rem 2.6rem;
         border: 1px solid rgba(226, 232, 240, 0.9);
         box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
         box-sizing: border-box;
         gap: 1.5rem;
     }
 
-    /* Smooth Gradient Mist Overlay */
+    /* Smooth Gradient Light White Mist Overlay & seamless integration */
     .gm-hero-banner::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg,
-                rgba(238, 246, 255, 0.98) 0%,
-                rgba(238, 246, 255, 0.95) 42%,
-                rgba(238, 246, 255, 0.45) 72%,
-                rgba(238, 246, 255, 0.15) 100%);
+        background: 
+            linear-gradient(180deg, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 0.5) 100%),
+            linear-gradient(90deg,
+                #ffffff 0%,
+                rgba(255, 255, 255, 0.98) 28%,
+                rgba(255, 255, 255, 0.88) 45%,
+                rgba(255, 255, 255, 0.35) 68%,
+                rgba(255, 255, 255, 0) 86%);
         pointer-events: none;
         z-index: 1;
     }
@@ -728,9 +1154,9 @@
     }
 
     .stat-icon-tile.icon-excel {
-        background: #90c1e8;
+        background: #00B7CD;
         color: #002b49;
-        box-shadow: 0 3px 10px rgba(144, 193, 232, 0.45);
+        box-shadow: 0 3px 10px rgba(0, 183, 205, 0.45);
     }
 
     .stat-meta {
@@ -919,6 +1345,12 @@
         background: #ffffff;
     }
 
+    .status-filter-btn.btn-filter-app.active {
+        color: #059669;
+        border-color: #a7f3d0;
+        background: #ffffff;
+    }
+
     .filter-count-badge {
         display: inline-flex;
         align-items: center;
@@ -935,7 +1367,7 @@
     }
 
     .status-filter-btn.active .filter-count-badge {
-        background: #90c1e8;
+        background: #00B7CD;
         color: #002b49;
     }
 
@@ -949,6 +1381,12 @@
         background: #fff7ed;
         color: #ea580c;
         border: 1px solid #fed7aa;
+    }
+
+    .status-filter-btn.btn-filter-app.active .filter-count-badge {
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
     }
 
     @media (max-width: 900px) {
@@ -1114,6 +1552,37 @@
         background-color: #fff7ed;
         border: 1px solid #fed7aa;
         color: #ea580c;
+    }
+
+    .badge-review-pill.pill-app {
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #059669;
+    }
+
+    .badge-report-id.badge-report-id-approved {
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #059669;
+    }
+
+    .badge-staging-tag.badge-prod-tag {
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #059669;
+    }
+
+    .btn-tbl-action.act-detail-approved {
+        background-color: #ecfdf5;
+        border-color: #a7f3d0;
+        color: #059669;
+    }
+
+    .btn-tbl-action.act-detail-approved:hover {
+        background-color: #d1fae5;
+        border-color: #6ee7b7;
+        color: #047857;
+        transform: translateY(-1px);
     }
 
     .petugas-profile-cell {
@@ -1316,14 +1785,14 @@
         width: 46px;
         height: 46px;
         border-radius: 12px;
-        background: #90c1e8;
+        background: #00B7CD;
         color: #002b49;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.25rem;
         flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(144, 193, 232, 0.45);
+        box-shadow: 0 4px 12px rgba(0, 183, 205, 0.45);
     }
 
     .modal-header-heading {
@@ -1382,24 +1851,24 @@
     }
 
     .modal-close-btn {
-        background-color: #f1f5f9;
+        background-color: transparent;
         border: none;
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #64748b;
+        color: #94a3b8;
         cursor: pointer;
-        transition: all 0.18s ease;
-        font-size: 1rem;
+        transition: all 0.2s ease;
+        font-size: 1.25rem;
+        padding: 0;
     }
 
     .modal-close-btn:hover {
-        background-color: #e2e8f0;
+        background-color: transparent;
         color: #0f172a;
-        transform: scale(1.05);
+        transform: scale(1.18);
     }
 
     /* Modal Navigation Tab Bar */
@@ -1485,11 +1954,11 @@
     }
 
     .btn-doc-print:hover {
-        background-color: #003366;
+        background-color: #00B7CD;
         color: #ffffff;
-        border-color: #003366;
+        border-color: #00B7CD;
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 183, 205, 0.35);
     }
 
     /* Clean Document Viewer Modal Frame */
@@ -1519,8 +1988,8 @@
        ========================================================================== */
     .custom-modal-content.modal-revision-dialog {
         max-width: 720px;
-        border-radius: 22px;
-        box-shadow: 0 25px 70px -12px rgba(0, 43, 73, 0.32), 0 0 0 1px rgba(255, 255, 255, 0.95) inset;
+        border-radius: 24px;
+        box-shadow: 0 25px 70px -12px rgba(0, 43, 73, 0.25), 0 0 0 1px rgba(226, 232, 240, 0.95);
         border: 1px solid rgba(226, 232, 240, 0.95);
         overflow: hidden;
         background: #ffffff;
@@ -1547,17 +2016,18 @@
     }
 
     .modal-revision-dialog .modal-title-icon-box {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-        color: #ffffff;
+        width: 52px;
+        height: 52px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        color: #d97706;
+        border: 1.5px solid #fde68a;
+        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.25rem;
+        font-size: 1.35rem;
         flex-shrink: 0;
-        box-shadow: 0 8px 18px -4px rgba(234, 88, 12, 0.38);
         margin-top: 2px;
         transition: transform 0.2s ease;
     }
@@ -1644,27 +2114,27 @@
     }
 
     .modal-revision-dialog .modal-close-btn {
-        background-color: #f1f5f9;
-        border: 1px solid #e2e8f0;
-        width: 38px;
-        height: 38px;
-        border-radius: 12px;
+        background-color: transparent;
+        border: none;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #64748b;
+        color: #94a3b8;
         cursor: pointer;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        font-size: 1.05rem;
+        font-size: 1.25rem;
         flex-shrink: 0;
         margin-left: auto;
+        padding: 0;
     }
 
     .modal-revision-dialog .modal-close-btn:hover {
-        background-color: #fee2e2;
-        border-color: #fca5a5;
-        color: #dc2626;
-        transform: rotate(90deg) scale(1.08);
+        background-color: transparent;
+        border-color: transparent;
+        color: #0f172a;
+        transform: rotate(90deg) scale(1.18);
     }
 
     .modal-revision-dialog .custom-modal-body {
@@ -1840,45 +2310,48 @@
     }
 
     .btn-rev-cancel {
-        background: #f8fafc;
+        background: #ffffff;
         border: 1.5px solid #cbd5e1;
         color: #475569;
-        padding: 0.68rem 1.45rem;
-        border-radius: 12px;
+        padding: 0.75rem 1.45rem;
+        border-radius: 14px;
         font-weight: 700;
-        font-size: 0.88rem;
+        font-size: 0.9rem;
         cursor: pointer;
-        transition: all 0.18s ease;
+        transition: all 0.2s ease;
         font-family: inherit;
     }
 
     .btn-rev-cancel:hover {
-        background: #f1f5f9;
+        background: #f8fafc;
         border-color: #94a3b8;
-        color: #0f172a;
+        color: #1e293b;
+        transform: translateY(-1px);
     }
 
     .btn-rev-submit {
-        background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+        background: #00B7CD;
         border: none;
         color: #ffffff;
-        padding: 0.68rem 1.65rem;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 0.9rem;
+        padding: 0.75rem 1.65rem;
+        border-radius: 14px;
+        font-weight: 800;
+        font-size: 0.92rem;
         cursor: pointer;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         display: inline-flex;
         align-items: center;
         gap: 0.6rem;
-        box-shadow: 0 4px 14px rgba(234, 88, 12, 0.32);
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35);
         font-family: inherit;
     }
 
     .btn-rev-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(234, 88, 12, 0.42);
-        background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45);
+        background: #009eb2;
+        color: #ffffff;
+        border: none;
     }
 
     .btn-rev-submit:active {
@@ -1911,11 +2384,11 @@
     }
 
     .btn-doc-print-action:hover {
-        background-color: #003366;
+        background-color: #00B7CD;
         color: #ffffff;
-        border-color: #003366;
+        border-color: #00B7CD;
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25);
+        box-shadow: 0 4px 12px rgba(0, 183, 205, 0.35);
     }
 
     .btn-doc-close-action {
@@ -2024,14 +2497,14 @@
     }
 
     .btn-sign-approve {
-        background: #003366;
-        box-shadow: 0 4px 14px rgba(0, 51, 102, 0.25);
+        background: #00B7CD;
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35);
     }
 
     .btn-sign-approve:hover {
-        background: #002244;
+        background: #009eb2;
         transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(0, 51, 102, 0.35);
+        box-shadow: 0 6px 18px rgba(0, 183, 205, 0.45);
     }
 
     .btn-sign-approve:active {
@@ -2430,7 +2903,7 @@
 
     .doc-divider-solid {
         height: 3px;
-        background-color: #003366;
+        background-color: #00B7CD;
         margin: 1.35rem 0 2rem 0;
         border-radius: 2px;
         width: 100%;
@@ -2444,13 +2917,13 @@
         margin-top: 2.25rem;
         margin-bottom: 1.15rem;
         padding-bottom: 0.45rem;
-        border-bottom: 1.5px solid #003366;
+        border-bottom: 1.5px solid #00B7CD;
         page-break-after: avoid;
         break-after: avoid;
     }
 
     .doc-section-badge {
-        background-color: #003366;
+        background-color: #00B7CD;
         color: #ffffff;
         font-size: 0.92rem;
         font-weight: 800;
@@ -3012,7 +3485,7 @@
     }
 
     .btn-modal-approve {
-        background: #90c1e8;
+        background: #00B7CD;
         border: none;
         border-radius: 12px;
         height: 48px;
@@ -3020,21 +3493,21 @@
         font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
         font-size: 0.925rem;
         font-weight: 700;
-        color: #002b49;
+        color: #ffffff;
         cursor: pointer;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         display: inline-flex;
         align-items: center;
         gap: 0.65rem;
-        box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45);
+        box-shadow: 0 4px 16px rgba(0, 183, 205, 0.45);
         letter-spacing: 0.2px;
     }
 
     .btn-modal-approve:hover {
-        background: #7bb5e3;
-        color: #001f35;
+        background: #009eb2;
+        color: #ffffff;
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(144, 193, 232, 0.55);
+        box-shadow: 0 8px 24px rgba(0, 183, 205, 0.55);
     }
 
     .btn-modal-approve:active {
@@ -3238,6 +3711,7 @@
     </div>
 
     {% set display_reports = reports if reports else [] %}
+    {% set display_approved = approved_reports if approved_reports else [] %}
 
     <!-- MAIN TABLE CARD -->
     <div class="gm-table-card">
@@ -3248,8 +3722,8 @@
                 </div>
                 <div>
                     <div class="table-header-title-row">
-                        <h2 class="table-header-title">Daftar Pengajuan Laporan Harian</h2>
-                        <span class="badge-staging-tag"><i class="fa-solid fa-layer-group me-1"></i>Sheet Staging</span>
+                        <h2 class="table-header-title" id="tableHeaderTitle">Daftar Pengajuan Laporan Harian</h2>
+                        <span class="badge-staging-tag" id="tableSourceTag"><i class="fa-solid fa-layer-group me-1"></i>Sheet Staging</span>
                     </div>
                     <div class="table-header-subtitle">
                         <span id="reportCountText">Menampilkan {{ display_reports|length }} laporan draf</span>
@@ -3259,7 +3733,7 @@
             <div class="table-header-right">
                 <div class="status-filter-group" id="statusFilterGroup">
                     <button type="button" class="status-filter-btn active" id="filterBtnAll"
-                        onclick="applyStatusFilter('ALL', this)" title="Tampilkan Semua Laporan">
+                        onclick="applyStatusFilter('ALL', this)" title="Tampilkan Semua Laporan Draf">
                         <span>Semua</span>
                         <span class="filter-count-badge" id="filterCountAll">{{ display_reports|length }}</span>
                     </button>
@@ -3274,6 +3748,12 @@
                         <i class="fa-solid fa-rotate-left"></i>
                         <span>Sedang Direvisi</span>
                         <span class="filter-count-badge" id="filterCountRevisi">{{ revisi_count }}</span>
+                    </button>
+                    <button type="button" class="status-filter-btn btn-filter-app" id="filterBtnApproved"
+                        onclick="applyStatusFilter('APPROVED', this)" title="Laporan yang sudah disetujui & tercatat di Spreadsheet Resmi Regional">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Laporan Disetujui</span>
+                        <span class="filter-count-badge" id="filterCountApproved">{{ display_approved|length }}</span>
                     </button>
                 </div>
             </div>
@@ -3294,7 +3774,7 @@
                 <tbody>
                     {% if display_reports %}
                     {% for rep in display_reports %}
-                    <tr class="report-row" id="row-{{ rep.report_id }}" data-report-id="{{ rep.report_id }}"
+                    <tr class="report-row report-row-staging" id="row-{{ rep.report_id }}" data-report-id="{{ rep.report_id }}"
                         data-status="{{ rep.status }}"
                         data-search="{{ rep.tanggal_indo or '' }} {{ rep.tanggal }} {{ rep.report_id }} {{ rep.submitted_by }} {{ rep.submitted_by_username or '' }}">
                         <td>
@@ -3355,6 +3835,42 @@
                             </div>
                         </td>
                     </tr>
+                    {% endif %}
+
+                    {% if display_approved %}
+                    {% for rep in display_approved %}
+                    <tr class="report-row report-row-approved" id="row-{{ rep.report_id }}" data-report-id="{{ rep.report_id }}"
+                        data-status="APPROVED"
+                        data-search="{{ rep.tanggal_indo or '' }} {{ rep.tanggal }} {{ rep.report_id }} {{ rep.submitted_by }} {{ rep.submitted_by_username or '' }}"
+                        style="display: none;">
+                        <td>
+                            <strong class="tgl-primary" data-raw-date="{{ rep.tanggal }}">{{ rep.tanggal_indo or rep.tanggal }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge-report-id badge-report-id-approved">{{ rep.report_id }}</span>
+                        </td>
+                        <td>
+                            <span class="badge-review-pill pill-app">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>DISETUJUI</span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="petugas-profile-cell">
+                                <span class="petugas-name">{{ rep.submitted_by or ('Petugas ' ~ airport_code) }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="table-actions-stack">
+                                <button type="button" class="btn-tbl-action act-detail act-detail-approved"
+                                    onclick="openDetailModal('{{ rep.report_id }}')"
+                                    title="Lihat Dokumen Resmi A4 (Cetak PDF)">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
                     {% endif %}
                 </tbody>
             </table>
@@ -3666,8 +4182,22 @@
         let visibleCount = 0;
 
         rows.forEach(row => {
+            const rowStatus = (row.getAttribute('data-status') || '').toUpperCase();
+            let statusMatch = false;
+            if (currentActiveStatusFilter === 'ALL') {
+                statusMatch = (rowStatus !== 'APPROVED');
+            } else if (currentActiveStatusFilter === 'PENDING_DH' || currentActiveStatusFilter === 'PENDING_GM' || currentActiveStatusFilter === 'PENDING') {
+                statusMatch = (rowStatus !== 'REVISI' && rowStatus !== 'APPROVED');
+            } else if (currentActiveStatusFilter === 'REVISI') {
+                statusMatch = (rowStatus === 'REVISI');
+            } else if (currentActiveStatusFilter === 'APPROVED') {
+                statusMatch = (rowStatus === 'APPROVED' || rowStatus === 'DISETUJUI');
+            }
+
             const searchText = (row.getAttribute('data-search') || '').toLowerCase();
-            if (!query || searchText.includes(query)) {
+            const queryMatch = (!query || searchText.includes(query));
+
+            if (statusMatch && queryMatch) {
                 row.style.display = '';
                 visibleCount++;
             } else {
@@ -3677,7 +4207,11 @@
 
         const countText = document.getElementById('reportCountText');
         if (countText) {
-            countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
+            if (currentActiveStatusFilter === 'APPROVED') {
+                countText.textContent = `Menampilkan ${visibleCount} laporan disetujui`;
+            } else {
+                countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
+            }
         }
     }
 
@@ -3694,9 +4228,27 @@
         } else {
             const targetBtn = document.getElementById(
                 status === 'ALL' ? 'filterBtnAll' :
-                    (status === 'REVISI' ? 'filterBtnRevisi' : 'filterBtnPending')
+                    (status === 'REVISI' ? 'filterBtnRevisi' : 
+                        (status === 'APPROVED' ? 'filterBtnApproved' : 'filterBtnPending'))
             );
             if (targetBtn) targetBtn.classList.add('active');
+        }
+
+        // Update Header Title and Source Tag
+        const tableHeaderTitle = document.getElementById('tableHeaderTitle');
+        const tableSourceTag = document.getElementById('tableSourceTag');
+        if (status === 'APPROVED') {
+            if (tableHeaderTitle) tableHeaderTitle.textContent = 'Daftar Laporan Disetujui & Diterima';
+            if (tableSourceTag) {
+                tableSourceTag.className = 'badge-staging-tag badge-prod-tag';
+                tableSourceTag.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i>Spreadsheet Produksi';
+            }
+        } else {
+            if (tableHeaderTitle) tableHeaderTitle.textContent = 'Daftar Pengajuan Laporan Harian';
+            if (tableSourceTag) {
+                tableSourceTag.className = 'badge-staging-tag';
+                tableSourceTag.innerHTML = '<i class="fa-solid fa-layer-group me-1"></i>Sheet Staging';
+            }
         }
 
         const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
@@ -3706,11 +4258,14 @@
             const rowStatus = (row.getAttribute('data-status') || '').toUpperCase();
             let match = false;
             if (status === 'ALL') {
-                match = true;
+                // Sesuai keputusan pengguna: 'Semua' fokus pada antrean staging (PENDING_DH & REVISI)
+                match = (rowStatus !== 'APPROVED');
             } else if (status === 'PENDING_DH' || status === 'PENDING_GM' || status === 'PENDING') {
-                match = (rowStatus !== 'REVISI');
+                match = (rowStatus !== 'REVISI' && rowStatus !== 'APPROVED');
             } else if (status === 'REVISI') {
                 match = (rowStatus === 'REVISI');
+            } else if (status === 'APPROVED') {
+                match = (rowStatus === 'APPROVED' || rowStatus === 'DISETUJUI');
             } else {
                 match = (rowStatus === status);
             }
@@ -3723,30 +4278,52 @@
             }
         });
 
+        // Hide default static empty row if not in ALL mode or if visibleCount > 0
+        const defaultEmptyRow = document.getElementById('emptyReportsRow');
+        if (defaultEmptyRow) {
+            defaultEmptyRow.style.display = (status === 'ALL' && visibleCount === 0) ? '' : 'none';
+        }
+
         // Check empty state
         const tbody = document.querySelector('#reportsTable tbody');
         let emptyFilterRow = document.getElementById('emptyFilterRow');
 
-        if (rows.length > 0 && visibleCount === 0) {
+        if (visibleCount === 0 && (status !== 'ALL' || !defaultEmptyRow)) {
             if (!emptyFilterRow) {
                 emptyFilterRow = document.createElement('tr');
                 emptyFilterRow.id = 'emptyFilterRow';
-                emptyFilterRow.innerHTML = `
-                <td colspan="5" style="text-align: center; padding: 3.5rem 1rem;">
-                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem;">
-                        <div style="width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.35rem;">
-                            <i class="fa-solid fa-filter-circle-xmark"></i>
-                        </div>
-                        <div style="font-weight: 700; color: #334155; font-size: 0.95rem;">Tidak Ada Laporan dengan Status Ini</div>
-                        <div style="font-size: 0.82rem; color: #94a3b8; max-width: 400px; line-height: 1.45;">
-                            Silakan pilih filter status lain atau klik "Semua" untuk melihat seluruh draf pengajuan.
-                        </div>
-                    </div>
-                </td>
-            `;
                 tbody.appendChild(emptyFilterRow);
+            }
+            emptyFilterRow.style.display = '';
+            
+            if (status === 'APPROVED') {
+                emptyFilterRow.innerHTML = `
+                    <td colspan="5" style="text-align: center; padding: 3.5rem 1rem;">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem;">
+                            <div style="width: 52px; height: 52px; border-radius: 50%; background: #ecfdf5; border: 1px dashed #a7f3d0; display: flex; align-items: center; justify-content: center; color: #059669; font-size: 1.35rem;">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div style="font-weight: 700; color: #065f46; font-size: 0.95rem;">Belum Ada Laporan Disetujui</div>
+                            <div style="font-size: 0.82rem; color: #64748b; max-width: 400px; line-height: 1.45;">
+                                Laporan yang telah diverifikasi dan disetujui akan tercatat di sini dan tersimpan di Spreadsheet Produksi Utama.
+                            </div>
+                        </div>
+                    </td>
+                `;
             } else {
-                emptyFilterRow.style.display = '';
+                emptyFilterRow.innerHTML = `
+                    <td colspan="5" style="text-align: center; padding: 3.5rem 1rem;">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem;">
+                            <div style="width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.35rem;">
+                                <i class="fa-solid fa-filter-circle-xmark"></i>
+                            </div>
+                            <div style="font-weight: 700; color: #334155; font-size: 0.95rem;">Tidak Ada Laporan dengan Status Ini</div>
+                            <div style="font-size: 0.82rem; color: #94a3b8; max-width: 400px; line-height: 1.45;">
+                                Silakan pilih filter status lain atau klik "Semua" untuk melihat seluruh draf pengajuan.
+                            </div>
+                        </div>
+                    </td>
+                `;
             }
         } else if (emptyFilterRow) {
             emptyFilterRow.style.display = 'none';
@@ -3754,7 +4331,15 @@
 
         const countText = document.getElementById('reportCountText');
         if (countText) {
-            countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
+            if (status === 'APPROVED') {
+                countText.textContent = `Menampilkan ${visibleCount} laporan disetujui (Sheet Resmi)`;
+            } else if (status === 'PENDING_DH') {
+                countText.textContent = `Menampilkan ${visibleCount} laporan menunggu telaah`;
+            } else if (status === 'REVISI') {
+                countText.textContent = `Menampilkan ${visibleCount} laporan sedang direvisi`;
+            } else {
+                countText.textContent = `Menampilkan ${visibleCount} laporan draf`;
+            }
         }
     }
 
@@ -3766,16 +4351,21 @@
     // Dynamically refresh filter badge counts
     function refreshFilterCounts() {
         const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
-        let totalAll = rows.length;
+        let totalAll = 0;
         let totalPending = 0;
         let totalRevisi = 0;
+        let totalApproved = 0;
 
         rows.forEach(r => {
             const s = (r.getAttribute('data-status') || '').toUpperCase();
-            if (s === 'REVISI') {
+            if (s === 'APPROVED' || s === 'DISETUJUI') {
+                totalApproved++;
+            } else if (s === 'REVISI') {
                 totalRevisi++;
+                totalAll++;
             } else {
                 totalPending++;
+                totalAll++;
             }
         });
 
@@ -3787,6 +4377,9 @@
 
         const elRevisi = document.getElementById('filterCountRevisi') || document.getElementById('statRevisiCount');
         if (elRevisi) elRevisi.textContent = totalRevisi;
+
+        const elApproved = document.getElementById('filterCountApproved');
+        if (elApproved) elApproved.textContent = totalApproved;
     }
 
 
@@ -3924,46 +4517,7 @@
                     `;
                     }
 
-                    // Extra Fields (if any unmapped fields exist)
-                    const knownFields = new Set([
-                        'TANGGAL', 'SAPAAN', 'KANTOR_CABANG', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4',
-                        'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK', 'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI',
-                        'RUNWAY_TITIK_BELUM', 'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', 'RUNWAY_MARKA_STD', 'RUNWAY_MARKA_REALISASI',
-                        'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER', 'RUNWAY_WATER_PERF', 'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL', 'RUNWAY_RUBBER_SKID',
-                        'TAXIWAY_STATUS', 'TAXIWAY_NAMA', 'TAXIWAY_PCI', 'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI',
-                        'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', 'TWY_MARKA_STD', 'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER',
-                        'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI', 'APN_JENIS_DIPERBAIKI', 'APN_TITIK_BELUM',
-                        'APN_JENIS_BELUM', 'APN_TITIK_BERULANG', 'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER',
-                        'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF',
-                        'CATATAN_1', 'CATATAN_2', 'CATATAN_3', 'CATATAN_4', 'CATATAN_5', 'CATATAN_6', 'CATATAN_7',
-                        'REPORT_ID', 'STATUS', 'CATATAN_GM', 'CATATAN_DH', 'TANGGAL_LAPORAN', 'SUBMITTED_BY', 'TIMESTAMP_SUBMIT', 'TIMESTAMP_UPDATE'
-                    ]);
 
-                    const extraPairs = [];
-                    for (const [k, v] of Object.entries(d)) {
-                        if (!knownFields.has(k) && v && String(v).trim() !== '' && String(v).trim() !== '-') {
-                            extraPairs.push(`
-                            <div class="doc-pair-row">
-                                <div class="doc-pair-key">${k.replace(/_/g, ' ')}</div>
-                                <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${v}</div>
-                            </div>
-                        `);
-                        }
-                    }
-
-                    let extraSectionHtml = '';
-                    if (extraPairs.length > 0) {
-                        extraSectionHtml = `
-                    <div class="doc-section-head">
-                        <div class="doc-section-badge">F</div>
-                        <h2 class="doc-section-heading">PARAMETER & DATA TAMBAHAN</h2>
-                    </div>
-                    <div class="doc-pairs-container">
-                        ${extraPairs.join('')}
-                    </div>
-                    `;
-                    }
 
                     const branchCode = (rep.airport || 'LOP').toUpperCase();
                     const senderName = fmt(rep.submitted_by, 'Petugas Lapangan');
@@ -4331,8 +4885,6 @@
                             </div>` : '').join('')}
                         </div>
 
-                        <!-- F. PARAMETER TAMBAHAN (JIKA ADA) -->
-                        ${extraSectionHtml}
 
                         <!-- LEMBAR PENGESAHAN DOKUMEN -->
                         <div class="doc-sign-wrapper">
@@ -5048,7 +5600,7 @@
             showCancelButton: true,
             confirmButtonText: autoApprove ? '<i class="fa-solid fa-circle-check me-1"></i> Ya, Simpan & Setujui' : '<i class="fa-solid fa-floppy-disk me-1"></i> Ya, Simpan Perubahan',
             cancelButtonText: 'Batal',
-            confirmButtonColor: autoApprove ? '#003366' : '#0284c7',
+            confirmButtonColor: '#00B7CD',
             cancelButtonColor: '#64748b'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -5298,7 +5850,7 @@
             showCancelButton: true,
             confirmButtonText: '<i class="fa-solid fa-circle-check me-1"></i> Ya, Setujui Laporan',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8',
+            confirmButtonColor: '#00B7CD',
             cancelButtonColor: '#64748b'
         }).then((result) => {
             if (result.isConfirmed) {

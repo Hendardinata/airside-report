@@ -515,9 +515,13 @@ def api_batch_update_matrix():
     admin_data = data.get('admin', {})
     
     active_month = data.get('active_month')
-    if active_month:
-        from app.models.config_store import set_active_month
-        set_active_month(active_month)
+    active_year = data.get('active_year')
+    active_month_label = data.get('active_month_label')
+    if not active_year and active_month:
+        active_year = str(active_month).split('-')[0]
+
+    from app.models.config_store import update_fleet_matrix_meta
+    update_fleet_matrix_meta(active_year=active_year, active_month=active_month, active_month_label=active_month_label)
 
     from app.services.gsheets_service import parse_month_year_from_title, invalidate_calendar_cache
 
@@ -528,11 +532,13 @@ def api_batch_update_matrix():
         dh_phone = item.get('dh_phone') or item.get('gm_phone', '')
         sheet_name = item.get('sheet_name', '')
         
-        branch_active_month = item.get('active_month') or active_month
-        if not branch_active_month and sheet_name:
+        branch_active_month = None
+        if sheet_name:
             m_num, y_num = parse_month_year_from_title(sheet_name)
             if m_num and y_num:
                 branch_active_month = f"{y_num}-{m_num:02d}"
+        if not branch_active_month:
+            branch_active_month = item.get('active_month') or active_month
 
         if pic_phone:
             pic_phone = ''.join(filter(str.isdigit, pic_phone))
@@ -542,7 +548,7 @@ def api_batch_update_matrix():
             dh_phone = ''.join(filter(str.isdigit, dh_phone))
             if dh_phone.startswith('0'):
                 dh_phone = '62' + dh_phone[1:]
-        update_airport_config(code, sheet_url=sheet_url, drive_folder=drive_folder, pic_phone=pic_phone, dh_phone=dh_phone, active_month=branch_active_month)
+        update_airport_config(code, sheet_url=sheet_url, drive_folder=drive_folder, pic_phone=pic_phone, dh_phone=dh_phone, active_month=branch_active_month, sheet_name=sheet_name)
         
     deputy = admin_data.get('deputy_phone')
     admin_p = admin_data.get('admin_phone')

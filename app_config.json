@@ -1,5 +1,7 @@
 {
     "active_month": "2026-11",
+    "active_year": "2026",
+    "active_month_label": "Bulan NOV 2026",
     "staging_folder_id": "1qdPtWNaXQK8ZZYt0eq2nxHrRL3IJ8b3L",
     "staging_sheets": {
         "LOP": "https://docs.google.com/spreadsheets/d/1At96OADWeM42YlA2D8NGmJ5ewI9EjRuiM-HRwGOF4ww/edit?usp=drivesdk",
@@ -10,6 +12,7 @@
     "airports": {
         "LOP": {
             "sheet_url": "https://docs.google.com/spreadsheets/d/1dfUmYpGJwXlaZfn3nO_PEw-F50anDe_zWt4nnMZdDmM/edit?usp=drivesdk",
+            "sheet_name": "LOP NOV 2026",
             "active_month": "2026-11",
             "drive_folder": "1tV1DW7a1H74cSF5DgX2Uf4Jj1F5hdhXj",
             "template_id": "",
@@ -19,6 +22,7 @@
         },
         "DPS": {
             "sheet_url": "https://docs.google.com/spreadsheets/d/13n2SeR7y59qe2IgaHylTvy2QPzZZn-n2BdFKwmMIGps/edit?usp=drivesdk",
+            "sheet_name": "DPS NOV 2026",
             "drive_folder": "1K3LCiHS5d-iJRvM9X6zNLFXErcSW-n6q",
             "template_id": "1-NfvG7t8uhp7NPKygxv_oSDsmzP1GlajIRvkGXKjwuk",
             "pic_phone": "6281326488542",
@@ -28,6 +32,7 @@
         },
         "BWX": {
             "sheet_url": "https://docs.google.com/spreadsheets/d/1tlrxtgGp-4l5LHIT-1qMgQET0yEnAsqxzgjFlOItkxg/edit?usp=drivesdk",
+            "sheet_name": "BWX NOV 2026",
             "drive_folder": "1kyWBXKoP7h0j7zoDHjQlUF637eLYhVuM",
             "template_id": "",
             "pic_phone": "6281326488542",
@@ -37,6 +42,7 @@
         },
         "KOE": {
             "sheet_url": "https://docs.google.com/spreadsheets/d/1xknag-fqrkc2_YGKfL_IXx-elyl8AFqYOvjAaO963mc/edit?usp=drivesdk",
+            "sheet_name": "KOE NOV 2026",
             "drive_folder": "1wxFIGk8psBUirOBdvYGPaLSBTvmFtcrE",
             "template_id": "",
             "pic_phone": "6281326488542",

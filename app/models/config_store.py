@@ -38,7 +38,18 @@ def load_config():
             config['staging_sheets'] = {"LOP": "", "DPS": "", "BWX": "", "KOE": ""}
             modified = True
 
+        if 'active_year' not in config:
+            config['active_year'] = config.get('active_month', '').split('-')[0] if config.get('active_month') else "2026"
+            modified = True
+
+        if 'active_month_label' not in config:
+            config['active_month_label'] = "Bulan NOV 2026"
+            modified = True
+
         for code in config.get('airports', {}):
+            if 'sheet_name' not in config['airports'][code]:
+                config['airports'][code]['sheet_name'] = ""
+                modified = True
             if 'active_month' not in config['airports'][code]:
                 config['airports'][code]['active_month'] = ""
                 modified = True
@@ -78,11 +89,13 @@ def get_airport_config(airport_code):
         conf['dh_phone'] = conf.get('gm_phone', '')
     return conf
 
-def update_airport_config(airport_code, sheet_url=None, drive_folder=None, template_id=None, pic_phone=None, gm_phone=None, dh_phone=None, active_month=None):
+def update_airport_config(airport_code, sheet_url=None, drive_folder=None, template_id=None, pic_phone=None, gm_phone=None, dh_phone=None, active_month=None, sheet_name=None):
     config = load_config()
     if airport_code in config['airports']:
         if sheet_url is not None:
             config['airports'][airport_code]['sheet_url'] = sheet_url
+        if sheet_name is not None:
+            config['airports'][airport_code]['sheet_name'] = sheet_name
         if drive_folder is not None:
             config['airports'][airport_code]['drive_folder'] = drive_folder
         if template_id is not None:
@@ -103,6 +116,16 @@ def update_airport_config(airport_code, sheet_url=None, drive_folder=None, templ
             invalidate_calendar_cache(airport_code)
         except Exception:
             pass
+
+def update_fleet_matrix_meta(active_year=None, active_month=None, active_month_label=None):
+    config = load_config()
+    if active_year is not None:
+        config['active_year'] = str(active_year).strip()
+    if active_month is not None:
+        config['active_month'] = str(active_month).strip()
+    if active_month_label is not None:
+        config['active_month_label'] = str(active_month_label).strip()
+    save_config(config)
 
 def get_active_month(airport_code=None):
     config = load_config()

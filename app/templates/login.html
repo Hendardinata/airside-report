@@ -221,22 +221,24 @@
     }
 
     /* ==========================================================================
-       RIGHT ZONE: EXECUTIVE AVIATION LIGHT LOGIN FORM
-       Seamless Open Horizon Form Zone
+       RIGHT ZONE: EXECUTIVE AVIATION LIGHT LOGIN FORM (Image 2 Redesign)
+       100% Identical Visual & Typography Design
        ========================================================================== */
     .zone-right {
         width: 48%;
         height: 100%;
-        padding: 2.75rem 3.75rem 2rem 2.5rem;
+        padding: 2.75rem 3.5rem 2rem 2.75rem;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         position: relative;
         z-index: 2;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
-    /* Centered form wrapper prevents empty void */
+
+    /* Centered form wrapper sits cleanly above backdrop */
     .form-center-wrapper {
         flex: 1;
         display: flex;
@@ -245,27 +247,67 @@
         width: 100%;
         max-width: 405px;
         margin: 0 auto;
+        position: relative;
+        z-index: 2;
     }
 
     .form-header {
         margin-bottom: 1.6rem;
     }
 
+    /* Header Brand Lockup: Stylized Airplane Logo + Dual-tone Heading */
+    .header-brand-lockup {
+        display: flex;
+        align-items: center;
+        gap: 1.1rem;
+        margin-bottom: 0.65rem;
+    }
+
+    .header-plane-icon-wrap {
+        width: 72px;
+        height: 72px;
+        min-width: 72px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .plane-brand-svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .header-brand-content {
+        flex: 1;
+    }
+
     .portal-main-heading {
         font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-        font-size: 2.25rem;
+        font-size: 2.15rem;
         font-weight: 800;
-        color: #002b49;
-        margin: 0 0 0.35rem 0;
-        letter-spacing: -0.5px;
+        margin: 0;
+        letter-spacing: -0.6px;
         line-height: 1.15;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .heading-dark {
+        color: #1e293b; /* Deep slate / dark navy */
+    }
+
+    .heading-blue {
+        color: #00B7CD; /* InJourney Cyan */
     }
 
     .portal-subheading {
-        font-size: 0.86rem;
+        font-size: 0.9rem;
         color: #64748b;
         margin: 0;
-        line-height: 1.45;
+        line-height: 1.5;
+        font-weight: 400;
     }
 
     /* Error Alert */
@@ -290,11 +332,11 @@
 
     .field-caption {
         display: block;
-        font-size: 0.835rem;
-        font-weight: 600;
-        color: #334155;
-        margin-bottom: 0.45rem;
-        letter-spacing: 0.1px;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.1px;
     }
 
     .input-inner-wrap {
@@ -305,9 +347,9 @@
 
     .input-icon-lead {
         position: absolute;
-        left: 1.05rem;
+        left: 1.1rem;
         color: #64748b;
-        font-size: 0.95rem;
+        font-size: 1rem;
         pointer-events: none;
         transition: color 0.2s ease;
         z-index: 2;
@@ -315,11 +357,11 @@
 
     .control-dark-input {
         width: 100%;
-        height: 50px;
-        background: #f8fafc;
-        border: 1.5px solid #cbd5e1;
+        height: 52px;
+        background: #fcfdfe;
+        border: 1.5px solid #dce4ed;
         border-radius: 14px;
-        padding: 0.6rem 1rem 0.6rem 2.85rem;
+        padding: 0.6rem 1rem 0.6rem 2.95rem;
         font-size: 0.925rem;
         font-weight: 500;
         color: #0f172a;
@@ -327,13 +369,13 @@
         box-sizing: border-box;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         font-family: inherit;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) inset;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02) inset;
     }
 
     .control-dark-input::placeholder {
         color: #94a3b8;
         font-weight: 400;
-        font-size: 0.88rem;
+        font-size: 0.89rem;
     }
 
     .control-dark-input:hover {
@@ -342,22 +384,22 @@
     }
 
     .control-dark-input:focus {
-        border-color: #0284c7;
+        border-color: #00B7CD;
         background: #ffffff;
-        box-shadow: 0 0 0 3.5px rgba(2, 132, 199, 0.15);
+        box-shadow: 0 0 0 3.5px rgba(0, 183, 205, 0.18);
     }
 
     .control-dark-input:focus~.input-icon-lead {
-        color: #0284c7;
+        color: #00B7CD;
     }
 
     .peek-pwd-btn {
         position: absolute;
-        right: 0.85rem;
+        right: 0.95rem;
         background: transparent;
         border: none;
         color: #64748b;
-        font-size: 1rem;
+        font-size: 1.05rem;
         cursor: pointer;
         padding: 6px;
         display: flex;
@@ -368,7 +410,7 @@
     }
 
     .peek-pwd-btn:hover {
-        color: #0284c7;
+        color: #00B7CD;
     }
 
     /* Links Row */
@@ -376,55 +418,58 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        margin-top: -0.25rem;
+        margin-top: -0.2rem;
         margin-bottom: 1.35rem;
     }
 
     .help-cred-link {
-        color: #0284c7;
-        font-size: 0.785rem;
+        color: #00B7CD;
+        font-size: 0.84rem;
         font-weight: 600;
         text-decoration: none;
         transition: color 0.15s ease;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
     }
 
     .help-cred-link:hover {
-        color: #0369a1;
+        color: #009eb2;
         text-decoration: underline;
     }
 
-    /* Submit Button */
+    /* Submit Button (Image 2 Exact Vibrant Cyan with Arrow Icon) */
     .submit-portal-btn {
         width: 100%;
-        height: 50px;
-        background: #90c1e8;
+        height: 52px;
+        background: #00B7CD;
         border: none;
         border-radius: 14px;
-        color: #002b49;
+        color: #ffffff;
         font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-        font-size: 1.05rem;
-        font-weight: 700;
+        font-size: 1.02rem;
+        font-weight: 600;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.65rem;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45);
-        letter-spacing: 0.4px;
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35);
+        letter-spacing: 0.2px;
     }
 
     .submit-portal-btn:hover {
-        background: #7bb5e3;
-        color: #001f35;
-        box-shadow: 0 8px 24px rgba(144, 193, 232, 0.55);
+        background: #009eb2;
+        color: #ffffff;
+        box-shadow: 0 8px 24px rgba(0, 183, 205, 0.45);
         transform: translateY(-2px);
     }
 
     .submit-portal-btn:active {
         transform: translateY(0);
-        box-shadow: 0 3px 10px rgba(2, 132, 199, 0.2);
+        box-shadow: 0 3px 10px rgba(0, 183, 205, 0.25);
     }
 
     /* Bottom Sub-Links & Footnote */
@@ -710,29 +755,29 @@
 
         .help-cred-link {
             font-size: 0.785rem;
-            color: #0284c7 !important;
+            color: #00B7CD !important;
             font-weight: 600;
         }
 
         .help-cred-link:hover {
-            color: #0369a1 !important;
+            color: #009eb2 !important;
         }
 
         /* High-Converting Executive Blue Button */
         .submit-portal-btn {
             height: 48px;
             font-size: 0.98rem;
-            font-weight: 700;
+            font-weight: 600;
             border-radius: 12px;
-            background: #90c1e8 !important;
-            color: #002b49 !important;
-            box-shadow: 0 4px 16px rgba(144, 193, 232, 0.45) !important;
+            background: #00B7CD !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35) !important;
         }
 
         .submit-portal-btn:hover {
-            background: #7bb5e3 !important;
-            color: #001f35 !important;
-            box-shadow: 0 8px 24px rgba(144, 193, 232, 0.55) !important;
+            background: #009eb2 !important;
+            color: #ffffff !important;
+            box-shadow: 0 8px 24px rgba(0, 183, 205, 0.45) !important;
         }
 
         /* Unified Bottom Footnote on White Base */
@@ -904,12 +949,24 @@
             margin-bottom: 1.15rem !important;
         }
 
+        .header-brand-lockup {
+            gap: 0.85rem !important;
+            margin-bottom: 0.45rem !important;
+        }
+
+        .header-plane-icon-wrap {
+            width: 54px !important;
+            height: 54px !important;
+            min-width: 54px !important;
+        }
+
         .portal-main-heading {
-            font-size: 1.48rem !important;
+            font-size: 1.55rem !important;
         }
 
         .portal-subheading {
             font-size: 0.82rem !important;
+            margin: 0 !important;
         }
 
         .input-field-group {
@@ -1028,24 +1085,25 @@
         position: absolute;
         top: 1.25rem;
         right: 1.25rem;
-        background: #f1f5f9;
-        border: 1px solid #e2e8f0;
-        color: #64748b;
+        background: transparent;
+        border: none;
+        color: #94a3b8;
         width: 32px;
         height: 32px;
-        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        font-size: 0.95rem;
+        font-size: 1.25rem;
         transition: all 0.2s ease;
+        padding: 0;
     }
 
     .modal-close-btn:hover {
-        background: #fee2e2;
-        border-color: #fecaca;
-        color: #dc2626;
+        background: transparent;
+        border-color: transparent;
+        color: #0f172a;
+        transform: scale(1.18);
     }
 
     .modal-brand-header {
@@ -1151,29 +1209,379 @@
 
     .modal-confirm-btn {
         width: 100%;
-        height: 46px;
-        background: #90c1e8;
+        height: 48px;
+        background: #00B7CD;
         border: none;
-        border-radius: 12px;
-        color: #002b49;
+        border-radius: 14px;
+        color: #ffffff;
         font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
         font-size: 0.95rem;
-        font-weight: 700;
+        font-weight: 800;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        box-shadow: 0 4px 14px rgba(144, 193, 232, 0.45);
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35);
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         letter-spacing: 0.2px;
     }
 
     .modal-confirm-btn:hover {
-        background: #7bb5e3;
-        color: #001f35;
-        box-shadow: 0 6px 20px rgba(144, 193, 232, 0.55);
+        background: #009eb2;
+        color: #ffffff;
+        border: none;
+        box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45);
         transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       EXECUTIVE CORPORATE SWEETALERT & POPUP THEMING (100% UNIFIED)
+       ========================================================================== */
+    div:where(.swal2-container).swal2-backdrop-show,
+    .swal2-backdrop-show {
+        background: rgba(15, 23, 42, 0.45) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    div:where(.swal2-container):has(.swal2-loading) {
+        background: rgba(15, 23, 42, 0.45) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+    }
+
+    div:where(.swal2-container) .swal2-popup,
+    .swal2-popup,
+    .swal2-popup.swal-corp-popup {
+        border-radius: 24px !important;
+        padding: 2.25rem 2.25rem 2rem 2.25rem !important;
+        box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+        background: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        max-width: 460px !important;
+        width: 92% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Strictly hide swal2-icon if SweetAlert hides it or if it lacks an icon type */
+    div:where(.swal2-container) .swal2-icon[style*="display: none"],
+    div:where(.swal2-container) .swal2-icon:not(.swal2-warning):not(.swal2-success):not(.swal2-error):not(.swal2-info):not(.swal2-question),
+    .swal2-icon[style*="display: none"] {
+        display: none !important;
+    }
+
+    /* Top Squircle Icon Badges for Active Icons & Custom Icon Tiles */
+    div:where(.swal2-container) .swal2-icon.swal2-warning:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-success:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-error:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-info:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-icon.swal2-question:not([style*="display: none"]),
+    .swal-corp-icon-tile {
+        width: 64px !important;
+        height: 64px !important;
+        min-width: 64px !important;
+        min-height: 64px !important;
+        margin: 0 auto 1.25rem auto !important;
+        border-radius: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        border-width: 1.5px !important;
+        border-style: solid !important;
+        font-size: 1.75rem !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    /* Clear and hide ALL default fragile Swal2 internal line artifacts, spans, and rings */
+    div:where(.swal2-container) .swal2-icon *,
+    .swal2-icon * {
+        display: none !important;
+    }
+
+    /* 1. Warning Icon (Amber Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-warning,
+    .swal2-icon.swal2-warning,
+    .swal-corp-icon-tile.icon-warning-corp {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+        border-color: #fde68a !important;
+        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-warning::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23d97706' d='M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .3-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 2. Success Icon (Emerald Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-success,
+    .swal2-icon.swal2-success,
+    .swal-corp-icon-tile.icon-success-corp {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+        border-color: #bbf7d0 !important;
+        box-shadow: 0 4px 16px rgba(22, 163, 74, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-success::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2316a34a' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 3. Error Icon (Rose Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-error,
+    .swal2-icon.swal2-error,
+    .swal-corp-icon-tile.icon-error-corp {
+        background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%) !important;
+        border-color: #fecdd3 !important;
+        box-shadow: 0 4px 16px rgba(225, 29, 72, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-error::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23e11d48' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 4. Info Icon (Cyan Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-info,
+    .swal2-icon.swal2-info,
+    .swal-corp-icon-tile.icon-info-corp {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+        border-color: #bae6fd !important;
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-info::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%230284c7' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* 5. Question Icon (Purple Squircle) */
+    div:where(.swal2-container) .swal2-icon.swal2-question,
+    .swal2-icon.swal2-question,
+    .swal-corp-icon-tile.icon-question-corp {
+        background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%) !important;
+        border-color: #ddd6fe !important;
+        box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15) !important;
+    }
+    div:where(.swal2-container) .swal2-icon.swal2-question::after {
+        content: "" !important;
+        display: block !important;
+        width: 32px !important;
+        height: 32px !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%237c3aed' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6s-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.3-6.7-15.1-15.1-15.1H222.6c-5.7 0-10.8 3.6-12.7 9l-7.7 21.6c-4.4 12.5-18.1 19.1-30.6 14.6s-19.1-18.1-14.6-30.6l12.8-35.9zM256 336a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+    }
+
+    /* Custom HTML icon tiles with inner FontAwesome icon */
+    .swal-corp-icon-tile i {
+        font-size: 1.85rem !important;
+        line-height: 1 !important;
+    }
+
+    div:where(.swal2-container) .swal2-title,
+    .swal2-title,
+    .swal-corp-title {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-size: 1.35rem !important;
+        font-weight: 800 !important;
+        color: #002b49 !important;
+        margin: 0 0 0.35rem 0 !important;
+        padding: 0 !important;
+        letter-spacing: -0.35px !important;
+        line-height: 1.25 !important;
+        text-align: center !important;
+    }
+
+    .swal-corp-sub,
+    .swal-corp-subtitle {
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #64748b !important;
+        margin: 0.2rem 0 1.15rem 0 !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.4rem !important;
+    }
+
+    div:where(.swal2-container) .swal2-html-container,
+    .swal2-html-container {
+        font-size: 0.92rem !important;
+        color: #475569 !important;
+        line-height: 1.55 !important;
+        text-align: center !important;
+        margin: 0.5rem 0 1.35rem 0 !important;
+        padding: 0 !important;
+        font-weight: 400 !important;
+    }
+
+    /* Actions Bar */
+    div:where(.swal2-container) .swal2-actions,
+    .swal2-actions,
+    .swal-corp-actions-bar {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+        margin: 1.25rem 0 0 0 !important;
+        padding: 0 !important;
+        align-items: stretch !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Strictly hide buttons or actions that SweetAlert marks as display:none or hidden */
+    div:where(.swal2-container) .swal2-actions[style*="display: none"],
+    div:where(.swal2-container) .swal2-actions:not(:has(button:not([style*="display: none"]))),
+    div:where(.swal2-container) .swal2-actions button[style*="display: none"],
+    div:where(.swal2-container) .swal2-actions button.swal2-hide,
+    div:where(.swal2-container) .swal2-actions button[aria-hidden="true"],
+    .swal2-actions[style*="display: none"],
+    .swal2-actions button[style*="display: none"],
+    .swal2-actions button[aria-hidden="true"] {
+        display: none !important;
+    }
+
+    /* Base button styling for visible styled buttons */
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+    .swal-corp-btn-primary,
+    .swal-corp-btn-secondary {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        padding: 0 1.25rem !important;
+        border-radius: 14px !important;
+        font-family: inherit !important;
+        font-size: 0.92rem !important;
+        cursor: pointer !important;
+        box-sizing: border-box !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        text-decoration: none !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        flex: 1 1 0px !important;
+        min-width: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Single-button alert: confirm button spans 100% width symmetrically */
+    div:where(.swal2-container) .swal2-actions:not(:has(button.swal2-cancel:not([style*="display: none"]))):not(:has(button.swal2-deny:not([style*="display: none"]))) button.swal2-confirm:not([style*="display: none"]),
+    div:where(.swal2-container) .swal2-actions > button.swal2-styled:only-of-type,
+    .swal-corp-actions-bar:not(:has(.swal-corp-btn-secondary)) .swal-corp-btn-primary {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Primary / Confirm Button (Flagship #00B7CD - No Border & Pure White Text) */
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+    .swal-corp-btn-primary {
+        background: #00B7CD !important;
+        color: #ffffff !important;
+        border: none !important;
+        font-weight: 800 !important;
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):hover,
+    .swal-corp-btn-primary:hover {
+        background: #009eb2 !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):active,
+    .swal-corp-btn-primary:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Secondary / Cancel Button (Crisp White Card with outline) */
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+    .swal-corp-btn-secondary {
+        background: #ffffff !important;
+        color: #475569 !important;
+        border: 1.5px solid #cbd5e1 !important;
+        font-weight: 700 !important;
+    }
+
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):hover,
+    .swal-corp-btn-secondary:hover {
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        border-color: #94a3b8 !important;
+        transform: translateY(-1px) !important;
+    }
+
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):active,
+    .swal-corp-btn-secondary:active {
+        transform: translateY(0) !important;
+    }
+
+    /* Deny Button (only visible if explicitly configured) */
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]) {
+        background: #fee2e2 !important;
+        color: #b91c1c !important;
+        border: 1.5px solid #fecdd3 !important;
+        font-weight: 700 !important;
+    }
+
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]):hover {
+        background: #fecdd3 !important;
+        color: #991b1b !important;
+    }
+
+    /* Danger Confirm Button Override */
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"],
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"],
+    div:where(.swal2-container) button.swal2-confirm[style*="#d33"] {
+        background: #ef4444 !important;
+        color: #ffffff !important;
+        border: 2px solid #991b1b !important;
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
+    }
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"]:hover,
+    div:where(.swal2-container) button.swal2-confirm[style*="#d33"]:hover {
+        background: #dc2626 !important;
+        color: #ffffff !important;
+        border-color: #7f1d1d !important;
     }
 </style>
 {% endblock %}
@@ -1216,10 +1624,36 @@
     <div class="zone-right">
         <!-- Vertically Centered Form Container -->
         <div class="form-center-wrapper">
-            <!-- Header Area -->
+            <!-- Header Area (Image 2 Exact Redesign) -->
             <div class="form-header">
-                <h1 class="portal-main-heading">Airside Daily Report</h1>
-                <p class="portal-subheading">Laporan Harian Fasilitas Runway, Taxiway, & Apron</p>
+                <div class="header-brand-lockup">
+                    <div class="header-plane-icon-wrap">
+                        <svg class="plane-brand-svg" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Swoosh loop arc wrapping from rear to underbelly -->
+                            <path d="M 16 30 C 10 34, 6 42, 9 51 C 12 60, 22 65, 34 63 C 46 61, 56 52, 60 40" 
+                                  stroke="#00B7CD" stroke-width="4.8" stroke-linecap="round" fill="none" />
+                            
+                            <!-- Center-Right Airplane Flying Towards Top-Right (42 deg) -->
+                            <g transform="translate(38, 32) rotate(42)">
+                                <!-- Main Fuselage -->
+                                <path d="M 0 -24 C 3 -24, 5.5 -18, 5.5 -4 L 5.5 16 C 5.5 20, 3 24, 0 25 C -3 24, -5.5 20, -5.5 16 L -5.5 -4 C -5.5 -18, -3 -24, 0 -24 Z" fill="#00B7CD" />
+                                
+                                <!-- Swept Main Wings -->
+                                <path d="M 0 -2 L 34 14 L 30 18 L 0 7 L -30 18 L -34 14 Z" fill="#00B7CD" />
+                                
+                                <!-- Tail Horizontal Stabilizers -->
+                                <path d="M 0 16 L 14 23 L 12 25 L 0 21 L -12 25 L -14 23 Z" fill="#00B7CD" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="header-brand-content">
+                        <h1 class="portal-main-heading">
+                            <span class="heading-dark">Laporan Harian</span>
+                            <span class="heading-blue">Airside</span>
+                        </h1>
+                    </div>
+                </div>
+                <p class="portal-subheading">Catat aktivitas runway, taxiway, dan apron<br>dengan mudah dan cepat.</p>
             </div>
 
             <!-- Flashed Alerts -->
@@ -1241,17 +1675,17 @@
 
                 <!-- Username Input -->
                 <div class="input-field-group">
-                    <label class="field-caption" for="username">Username Akun</label>
+                    <label class="field-caption" for="username">Username</label>
                     <div class="input-inner-wrap">
                         <input type="text" id="username" name="username" class="control-dark-input"
-                            placeholder="Masukkan username kedinasan Anda" required autocomplete="username">
+                            placeholder="Masukkan username Anda" required autocomplete="username">
                         <i class="fa-regular fa-user input-icon-lead"></i>
                     </div>
                 </div>
 
                 <!-- Password Input -->
                 <div class="input-field-group">
-                    <label class="field-caption" for="password">Kata Sandi (Password)</label>
+                    <label class="field-caption" for="password">Password</label>
                     <div class="input-inner-wrap">
                         <input type="password" id="password" name="password" class="control-dark-input"
                             style="padding-right: 2.85rem;" placeholder="Masukkan kata sandi Anda" required
@@ -1267,13 +1701,14 @@
                 <!-- Information Link -->
                 <div class="links-sub-row">
                     <a href="javascript:void(0)" onclick="openHelpModal()" class="help-cred-link">
-                        <i class="fa-regular fa-circle-question me-1"></i> Informasi Akses Akun
+                        <i class="fa-regular fa-circle-question"></i> Butuh bantuan akses?
                     </a>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit" class="submit-portal-btn" id="btnSubmit">
-                    <span>Login</span>
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    <span>Masuk</span>
                 </button>
             </form>
         </div>
@@ -1424,7 +1859,7 @@
         }
         const btn = document.getElementById('btnSubmit');
         if (btn) {
-            btn.innerHTML = '<span>Login</span>';
+            btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i><span>Masuk</span>';
             btn.style.opacity = '1';
             btn.style.pointerEvents = 'auto';
         }

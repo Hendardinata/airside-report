@@ -44,16 +44,16 @@
         border-radius: 9999px;
         font-size: 0.725rem;
         font-weight: 700;
-        color: #1d4ed8;
+        color: #009eb2;
         letter-spacing: 0.4px;
         text-transform: uppercase;
     }
 
     .hub-tag-v2 {
-        background: #90c1e8;
+        background: #00B7CD;
         color: #002b49;
         border: none;
-        box-shadow: 0 2px 6px rgba(144, 193, 232, 0.45);
+        box-shadow: 0 2px 6px rgba(0, 183, 205, 0.45);
     }
 
     .hub-title {
@@ -252,8 +252,8 @@
     .btn-rollout-primary {
         height: 44px;
         padding: 0 1.35rem;
-        background: #90c1e8;
-        color: #002b49;
+        background: #00B7CD;
+        color: #ffffff;
         border: none;
         border-radius: 9px;
         font-weight: 700;
@@ -263,16 +263,16 @@
         align-items: center;
         gap: 0.6rem;
         white-space: nowrap;
-        box-shadow: 0 4px 14px rgba(144, 193, 232, 0.45);
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.45);
         transition: all 0.2s ease;
         flex-shrink: 0;
     }
 
     .btn-rollout-primary:hover {
-        background: #7bb5e3;
-        color: #001f35;
+        background: #009eb2;
+        color: #ffffff;
         transform: translateY(-2px);
-        box-shadow: 0 7px 18px rgba(144, 193, 232, 0.55);
+        box-shadow: 0 7px 18px rgba(0, 183, 205, 0.55);
         filter: brightness(1.05);
     }
 
@@ -723,46 +723,7 @@
             </div>
         </div>
 
-        <!-- 4 Branch Cards Selection Matrix -->
-        <div class="branch-cards-grid">
-            {% for code in ['LOP', 'DPS', 'BWX', 'KOE'] %}
-            {% set c = config.airports.get(code, {}) %}
-            <div class="branch-select-card selected" id="batchCard-{{ code }}" onclick="toggleBranchSelection('{{ code }}')">
-                <div class="branch-card-top">
-                    <div style="min-width: 0; flex: 1; overflow: hidden; padding-right: 0.25rem;">
-                        <span class="branch-code-badge">{{ code }}</span>
-                        <div class="branch-name-text">
-                            {% if code == 'LOP' %}Lombok (ZAM)
-                            {% elif code == 'DPS' %}Bali (DPS)
-                            {% elif code == 'BWX' %}Banyuwangi (BWX)
-                            {% elif code == 'KOE' %}Kupang (El Tari)
-                            {% endif %}
-                        </div>
-                    </div>
-                    <input type="checkbox" class="custom-check-box branch-checkbox" id="check-{{ code }}" value="{{ code }}" checked onclick="event.stopPropagation()">
-                </div>
 
-                <div style="min-width: 0; width: 100%; overflow: hidden;">
-                    <span class="control-label-micro" style="font-size: 0.65rem; margin-bottom: 0.2rem;">Folder Tujuan Drive:</span>
-                    <span class="branch-folder-hint" title="{{ c.drive_folder | default('Belum diatur') }}">
-                        <i class="fas fa-folder text-warning"></i>
-                        <span>{{ c.drive_folder | default('Folder Belum Diatur') }}</span>
-                    </span>
-
-                    <span class="branch-active-sheet-badge {% if not c.sheet_url %}empty{% endif %}" id="cardSheetBadge-{{ code }}">
-                        <i class="fas fa-table"></i>
-                        <span id="cardSheetBadgeText-{{ code }}">
-                            {% if c.sheet_url %}
-                                Aktif Terhubung
-                            {% else %}
-                                Belum Ada Sheet
-                            {% endif %}
-                        </span>
-                    </span>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
     </div>
 
     <!-- ======================================================================
@@ -781,7 +742,7 @@
             </div>
 
             <div>
-                <button type="button" class="btn btn-primary" onclick="saveFleetMatrix()" style="background: #90c1e8; color: #002b49; font-weight: 700; border: none;">
+                <button type="button" class="btn btn-primary" onclick="saveFleetMatrix()" style="background: #00B7CD; color: #ffffff; font-weight: 700; border: none;">
                     <i class="fas fa-floppy-disk me-1"></i> Simpan Perubahan Matriks
                 </button>
             </div>
@@ -798,7 +759,10 @@
                     <div class="matrix-toolbar-desc">Pilih bulan acuan untuk menyelaraskan spreadsheet aktif di ke-4 cabang sekaligus tanpa perlu memilih satu per satu.</div>
                 </div>
             </div>
-            <div class="matrix-toolbar-controls">
+            <div class="matrix-toolbar-controls" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <select id="matrixYearSelect" class="table-input" style="height: 38px; min-width: 150px; font-weight: 700; color: #003366; cursor: pointer;" onchange="onMatrixYearChanged(this.value)">
+                    <option value="">-- Tahun Acuan --</option>
+                </select>
                 <select id="matrixBulkMonthSelect" class="table-input" style="height: 38px; min-width: 195px; font-weight: 700; color: #003366; cursor: pointer;" onchange="applyBulkMonthSelection(this.value)">
                     <option value="">-- Pilih Acuan Bulan --</option>
                 </select>
@@ -1023,28 +987,19 @@
             return Swal.fire('Perhatian', 'Harap pilih Target Periode Bulan terlebih dahulu!', 'warning');
         }
 
-        const selectedAirports = [];
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
-            const cb = document.getElementById(`check-${code}`);
-            if (cb && cb.checked) {
-                selectedAirports.push(code);
-            }
-        });
-
-        if (selectedAirports.length === 0) {
-            return Swal.fire('Tidak Ada Cabang Dipilih', 'Silakan centang minimal satu bandara cabang untuk diterbitkan sheet barunya!', 'warning');
-        }
+        // Otomatis terapkan ke seluruh cabang bandara
+        const selectedAirports = ['LOP', 'DPS', 'BWX', 'KOE'];
 
         Swal.fire({
-            title: 'Terbitkan Sheet Massal?',
-            html: `Sistem akan membuat file spreadsheet baru untuk bulan <b>${targetMonth}</b> pada cabang:<br><br>
-                   <span class="badge bg-primary text-white p-2">${selectedAirports.join(' • ')}</span><br><br>
+            title: 'Terbitkan Sheet ke Semua Cabang?',
+            html: `Sistem akan membuat file spreadsheet baru untuk bulan <b>${targetMonth}</b> serentak pada <b>seluruh cabang</b>:<br><br>
+                   <span class="badge bg-primary text-white p-2">Lombok (LOP) • Bali (DPS) • Banyuwangi (BWX) • Kupang (KOE)</span><br><br>
                    Seluruh sheet baru akan <b>otomatis langsung diaktifkan</b> di sistem begitu selesai dibuat.`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-rocket me-1"></i> Ya, Terbitkan & Aktifkan!',
+            confirmButtonText: '<i class="fas fa-rocket me-1"></i> Ya, Terbitkan & Aktifkan Semua!',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8',
+            confirmButtonColor: '#00B7CD',
             cancelButtonColor: '#64748b'
         }).then((res) => {
             if (res.isConfirmed) {
@@ -1096,7 +1051,7 @@
                             html: htmlContent,
                             icon: 'success',
                             confirmButtonText: 'Selesai & Segarkan Halaman',
-                            confirmButtonColor: '#90c1e8'
+                            confirmButtonColor: '#00B7CD'
                         }).then(() => {
                             location.reload();
                         });
@@ -1620,7 +1575,7 @@
             showCancelButton: true,
             confirmButtonText: 'Terapkan Link',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(result => {
             if (result.isConfirmed && result.value) {
                 const manualUrl = result.value.trim();
@@ -1652,7 +1607,7 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Sinkronkan!',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({
@@ -1698,7 +1653,7 @@
             showCancelButton: true,
             confirmButtonText: 'Ya, Tarik Sekarang',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#90c1e8'
+            confirmButtonColor: '#00B7CD'
         }).then(res => {
             if (res.isConfirmed) {
                 Swal.fire({
