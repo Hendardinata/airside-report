@@ -800,7 +800,7 @@ div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
   height: 48px !important;
   min-height: 48px !important;
   max-height: 48px !important;
-  padding: 0 1.25rem !important;
+  padding: 0 0.75rem !important;
   border-radius: 14px !important;
   font-family: inherit !important;
   font-size: 0.92rem !important;
@@ -808,14 +808,14 @@ div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
   box-sizing: border-box !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   text-decoration: none !important;
-  line-height: 1 !important;
+  line-height: 1.15 !important;
   margin: 0 !important;
   flex: 1 1 0px !important;
   min-width: 0 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 0.5rem !important;
+  gap: 0.45rem !important;
 }
 
 /* Single-button alert: confirm button spans 100% width symmetrically */

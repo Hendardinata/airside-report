@@ -3723,21 +3723,15 @@
                 <div>
                     <div class="table-header-title-row">
                         <h2 class="table-header-title" id="tableHeaderTitle">Daftar Pengajuan Laporan Harian</h2>
-                        <span class="badge-staging-tag" id="tableSourceTag"><i class="fa-solid fa-layer-group me-1"></i>Sheet Staging</span>
                     </div>
                     <div class="table-header-subtitle">
-                        <span id="reportCountText">Menampilkan {{ display_reports|length }} laporan draf</span>
+                        <span id="reportCountText">Menampilkan {{ pending_count }} laporan menunggu telaah</span>
                     </div>
                 </div>
             </div>
             <div class="table-header-right">
                 <div class="status-filter-group" id="statusFilterGroup">
-                    <button type="button" class="status-filter-btn active" id="filterBtnAll"
-                        onclick="applyStatusFilter('ALL', this)" title="Tampilkan Semua Laporan Draf">
-                        <span>Semua</span>
-                        <span class="filter-count-badge" id="filterCountAll">{{ display_reports|length }}</span>
-                    </button>
-                    <button type="button" class="status-filter-btn btn-filter-pend" id="filterBtnPending"
+                    <button type="button" class="status-filter-btn btn-filter-pend active" id="filterBtnPending"
                         onclick="applyStatusFilter('PENDING_DH', this)" title="Laporan Menunggu Telaah DH">
                         <i class="fa-solid fa-hourglass-half"></i>
                         <span>Menunggu Telaah</span>
@@ -4216,7 +4210,7 @@
     }
 
     // Filter by Status Review (Segmented Filter Control)
-    let currentActiveStatusFilter = 'ALL';
+    let currentActiveStatusFilter = 'PENDING_DH';
 
     function applyStatusFilter(status, btnElement) {
         currentActiveStatusFilter = status;
@@ -4227,28 +4221,20 @@
             btnElement.classList.add('active');
         } else {
             const targetBtn = document.getElementById(
-                status === 'ALL' ? 'filterBtnAll' :
-                    (status === 'REVISI' ? 'filterBtnRevisi' : 
-                        (status === 'APPROVED' ? 'filterBtnApproved' : 'filterBtnPending'))
+                status === 'REVISI' ? 'filterBtnRevisi' : 
+                    (status === 'APPROVED' ? 'filterBtnApproved' : 'filterBtnPending')
             );
             if (targetBtn) targetBtn.classList.add('active');
         }
 
-        // Update Header Title and Source Tag
+        // Update Header Title
         const tableHeaderTitle = document.getElementById('tableHeaderTitle');
-        const tableSourceTag = document.getElementById('tableSourceTag');
         if (status === 'APPROVED') {
             if (tableHeaderTitle) tableHeaderTitle.textContent = 'Daftar Laporan Disetujui & Diterima';
-            if (tableSourceTag) {
-                tableSourceTag.className = 'badge-staging-tag badge-prod-tag';
-                tableSourceTag.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i>Spreadsheet Produksi';
-            }
+        } else if (status === 'REVISI') {
+            if (tableHeaderTitle) tableHeaderTitle.textContent = 'Daftar Laporan Sedang Direvisi';
         } else {
             if (tableHeaderTitle) tableHeaderTitle.textContent = 'Daftar Pengajuan Laporan Harian';
-            if (tableSourceTag) {
-                tableSourceTag.className = 'badge-staging-tag';
-                tableSourceTag.innerHTML = '<i class="fa-solid fa-layer-group me-1"></i>Sheet Staging';
-            }
         }
 
         const rows = document.querySelectorAll('#reportsTable tbody tr.report-row');
@@ -4278,17 +4264,17 @@
             }
         });
 
-        // Hide default static empty row if not in ALL mode or if visibleCount > 0
+        // Hide default static empty row if not in PENDING_DH mode or if visibleCount > 0
         const defaultEmptyRow = document.getElementById('emptyReportsRow');
         if (defaultEmptyRow) {
-            defaultEmptyRow.style.display = (status === 'ALL' && visibleCount === 0) ? '' : 'none';
+            defaultEmptyRow.style.display = (status === 'PENDING_DH' && visibleCount === 0) ? '' : 'none';
         }
 
         // Check empty state
         const tbody = document.querySelector('#reportsTable tbody');
         let emptyFilterRow = document.getElementById('emptyFilterRow');
 
-        if (visibleCount === 0 && (status !== 'ALL' || !defaultEmptyRow)) {
+        if (visibleCount === 0 && (status !== 'PENDING_DH' || !defaultEmptyRow)) {
             if (!emptyFilterRow) {
                 emptyFilterRow = document.createElement('tr');
                 emptyFilterRow.id = 'emptyFilterRow';
@@ -4310,16 +4296,30 @@
                         </div>
                     </td>
                 `;
-            } else {
+            } else if (status === 'REVISI') {
                 emptyFilterRow.innerHTML = `
                     <td colspan="5" style="text-align: center; padding: 3.5rem 1rem;">
                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem;">
-                            <div style="width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.35rem;">
-                                <i class="fa-solid fa-filter-circle-xmark"></i>
+                            <div style="width: 52px; height: 52px; border-radius: 50%; background: #fffbeb; border: 1px dashed #fcd34d; display: flex; align-items: center; justify-content: center; color: #d97706; font-size: 1.35rem;">
+                                <i class="fa-solid fa-rotate-left"></i>
                             </div>
-                            <div style="font-weight: 700; color: #334155; font-size: 0.95rem;">Tidak Ada Laporan dengan Status Ini</div>
-                            <div style="font-size: 0.82rem; color: #94a3b8; max-width: 400px; line-height: 1.45;">
-                                Silakan pilih filter status lain atau klik "Semua" untuk melihat seluruh draf pengajuan.
+                            <div style="font-weight: 700; color: #92400e; font-size: 0.95rem;">Tidak Ada Laporan Sedang Direvisi</div>
+                            <div style="font-size: 0.82rem; color: #64748b; max-width: 400px; line-height: 1.45;">
+                                Tidak ada draf laporan yang sedang dalam proses perbaikan oleh petugas.
+                            </div>
+                        </div>
+                    </td>
+                `;
+            } else {
+                emptyFilterRow.innerHTML = `
+                    <td colspan="5" style="text-align: center; padding: 3.5rem 1rem;">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;">
+                            <div style="width: 56px; height: 56px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem;">
+                                <i class="fa-solid fa-clipboard-check"></i>
+                            </div>
+                            <div style="font-weight: 700; color: #334155; font-size: 1rem;">Tidak Ada Antrean Laporan Menunggu Telaah</div>
+                            <div style="font-size: 0.85rem; color: #94a3b8; max-width: 400px; line-height: 1.5;">
+                                Semua laporan telah diverifikasi dan disetujui, atau belum ada pengajuan baru dari petugas sisi udara.
                             </div>
                         </div>
                     </td>
@@ -6044,6 +6044,7 @@
     // Auto fetch notifications on load & format dates
     document.addEventListener("DOMContentLoaded", function () {
         formatTableDates();
+        applyStatusFilter('PENDING_DH', document.getElementById('filterBtnPending'));
         fetchNotifications();
         setInterval(fetchNotifications, 30000);
     });
