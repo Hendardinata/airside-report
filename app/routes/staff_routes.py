@@ -117,6 +117,7 @@ Region II
 {cabang_str}
 *A. RUNWAY*
 •  Kondisi keseluruhan runway : {v('RUNWAY_KONDISI')}
+•  Performance pavement : {f_percent(v('RUNWAY_PCI'))}
 Jml Titik Rusak : {f_titik(v('RUNWAY_TITIK_RUSAK'))}
 {rw_damage_str}Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
 Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
@@ -135,6 +136,7 @@ Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
 
 *B. TAXIWAY*
 •  Kondisi keseluruhan Taxiway : {v('TAXIWAY_STATUS')}
+•  Performance pavement : {f_percent(v('TAXIWAY_PCI'))}
 Jml Titik Rusak : {f_titik(v('TWY_TITIK_RUSAK'))}
 {twy_damage_str}Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
 Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
@@ -149,6 +151,7 @@ Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
 
 *C. APRON*
 •  Kondisi keseluruhan. Apron : {v('APRON_KONDISI')}
+•  Performance pavement : {f_percent(v('APRON_PCI'))}
 Jumlah Lokasi Perbaikan : {f_titik(v('APN_TITIK_RUSAK'))}
 {apn_damage_str}Realisasi Perbaikan : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
 Rencana Perbaikan : {f_titik(v('APN_TITIK_BELUM'))}

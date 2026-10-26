@@ -87,6 +87,13 @@
               "required": true
             },
             {
+              "name": "RUNWAY_PCI",
+              "label": "Performance pavement",
+              "type": "text",
+              "placeholder": "Contoh: 100%",
+              "required": true
+            },
+            {
               "name": "RUNWAY_TITIK_RUSAK",
               "label": "Jml Titik Rusak",
               "type": "text",
@@ -213,6 +220,13 @@
               "required": true
             },
             {
+              "name": "TAXIWAY_PCI",
+              "label": "Performance pavement",
+              "type": "text",
+              "placeholder": "Contoh: 100%",
+              "required": true
+            },
+            {
               "name": "TWY_TITIK_RUSAK",
               "label": "Jml Titik Rusak",
               "type": "text",
@@ -310,6 +324,13 @@
               "label": "Kondisi keseluruhan Apron",
               "type": "text",
               "placeholder": "Contoh: SERVICEABLE",
+              "required": true
+            },
+            {
+              "name": "APRON_PCI",
+              "label": "Performance pavement",
+              "type": "text",
+              "placeholder": "Contoh: 100%",
               "required": true
             },
             {
