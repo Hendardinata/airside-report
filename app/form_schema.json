@@ -11,12 +11,6 @@
           "title": "Data Laporan",
           "fields": [
             {
-              "name": "TANGGAL",
-              "label": "Tanggal Laporan",
-              "type": "date",
-              "required": true
-            },
-            {
               "name": "SAPAAN",
               "label": "Sapaan Pembuka",
               "type": "select",
@@ -30,10 +24,9 @@
               "required": true
             },
             {
-              "name": "KANTOR_CABANG",
-              "label": "Nomor & Nama Kantor Cabang",
-              "type": "text",
-              "placeholder": "Contoh: 1. Kantor Cabang LOP",
+              "name": "TANGGAL",
+              "label": "Tanggal Laporan",
+              "type": "date",
               "required": true
             }
           ]
@@ -69,6 +62,19 @@
               "type": "text",
               "placeholder": "Contoh: Pak DH Regional II",
               "required": false
+            }
+          ]
+        },
+        {
+          "icon": "fa-building",
+          "title": "Kantor Cabang",
+          "fields": [
+            {
+              "name": "KANTOR_CABANG",
+              "label": "Nomor & Nama Kantor Cabang",
+              "type": "text",
+              "placeholder": "Contoh: 1. Kantor Cabang LOP",
+              "required": true
             }
           ]
         }

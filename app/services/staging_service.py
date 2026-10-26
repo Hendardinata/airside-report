@@ -41,7 +41,18 @@ def get_staging_headers():
         'TIMESTAMP_SUBMIT',
         'TIMESTAMP_UPDATE'
     ]
-    return control_headers + get_all_form_field_names()
+    core_form_fields = [
+        'SAPAAN',
+        'TANGGAL',
+        'PENERIMA_1',
+        'PENERIMA_2',
+        'PENERIMA_3',
+        'PENERIMA_4',
+        'KANTOR_CABANG'
+    ]
+    all_fields = get_all_form_field_names()
+    other_fields = [f for f in all_fields if f not in core_form_fields and f not in control_headers]
+    return control_headers + core_form_fields + other_fields
 
 def get_or_create_staging_sheet(airport_code):
     """
@@ -70,6 +81,30 @@ def get_or_create_staging_sheet(airport_code):
                     else:
                         print(f"Warning: URL staging sheet {airport_code} ({sheet_url}) gagal dibuka: {e}")
                         spreadsheet = None
+
+        # Jika spreadsheet berhasil dibuka, periksa dan bersihkan file duplikat berlebih di folder Drive
+        if spreadsheet:
+            try:
+                drive_svc = get_drive_service()
+                file_name = f"STAGING_{airport_code}"
+                query = f"name='{file_name}' and '{folder_id}' in parents and trashed=false"
+                res = drive_svc.files().list(
+                    q=query,
+                    spaces='drive',
+                    fields='files(id, name)'
+                ).execute()
+                drive_files = res.get('files', [])
+                current_id = spreadsheet.id
+                if len(drive_files) > 1:
+                    for f in drive_files:
+                        if f['id'] != current_id:
+                            try:
+                                drive_svc.files().update(fileId=f['id'], removeParents=folder_id).execute()
+                                print(f"Otomatis melepaskan duplikasi file staging {f['name']} ({f['id']}) dari folder.")
+                            except Exception as unl_e:
+                                print(f"Warning melepaskan duplikat: {unl_e}")
+            except Exception as dup_check_err:
+                pass
 
         # 2. Jika tidak ada di config atau URL gagal dibuka, cari file fisik di folder Drive
         if not spreadsheet:
@@ -165,7 +200,8 @@ def sync_staging_sheet_headers_and_data(worksheet, current_headers):
     """
     Memastikan row 1 di worksheet staging selalu sinkron dengan get_staging_headers().
     Jika baris header lama berbeda dari current_headers, migrasikan data baris yang ada
-    agar urutan kolom tidak tergeser dan data tetap utuh.
+    secara dinamis berdasarkan NAMA HEADER (bukan index posisi), agar urutan kolom
+    tidak tergeser dan data tetap utuh.
     """
     try:
         all_rows = worksheet.get_all_values()
@@ -179,46 +215,44 @@ def sync_staging_sheet_headers_and_data(worksheet, current_headers):
         return
 
     first_row = all_rows[0]
-    if first_row == current_headers:
-        return
+    import re
+    date_regex = r'^\d{4}-\d{2}-\d{2}$'
+    is_date = lambda s: bool(re.match(date_regex, str(s).strip()))
 
-    # Header berbeda dari schema terkini!
+    need_update = (first_row != current_headers)
     old_headers = first_row
     new_rows = []
-    import re
-    is_date = lambda s: bool(re.match(r'^\d{4}-\d{2}-\d{2}$', str(s).strip()))
 
     for r in all_rows[1:]:
         if not r or not any(r):
             continue
-        c7 = r[7] if len(r) > 7 else ''
-        c8 = r[8] if len(r) > 8 else ''
-        
-        # Pada skema lama: idx 7 adalah TANGGAL, idx 8 adalah SAPAAN
-        # Pada skema baru: idx 7 adalah SAPAAN, idx 8 adalah TANGGAL
-        if is_date(c7) and not is_date(c8):
-            # Baris ini format LAMA
-            row_dict = {}
-            for i, h in enumerate(old_headers):
-                if i < len(r):
-                    row_dict[h] = r[i]
-            migrated_row = [row_dict.get(h, '') for h in current_headers]
-            new_rows.append(migrated_row)
-        else:
-            # Baris ini format BARU (atau sudah sesuai urutan current_headers)
-            padded_row = list(r)
-            if len(padded_row) < len(current_headers):
-                padded_row.extend([''] * (len(current_headers) - len(padded_row)))
-            elif len(padded_row) > len(current_headers):
-                padded_row = padded_row[:len(current_headers)]
-            new_rows.append(padded_row)
+        row_dict = {}
+        for i, h in enumerate(old_headers):
+            if i < len(r):
+                row_dict[h] = r[i]
 
-    full_table = [sanitized_headers]
-    for r in new_rows:
-        full_table.append([sanitize_sheet_value(v) for v in r])
+        # Self-healing jika TANGGAL dan SAPAAN tertukar
+        val_tgl = str(row_dict.get('TANGGAL', '')).strip()
+        val_sap = str(row_dict.get('SAPAAN', '')).strip()
+        if is_date(val_sap) and not is_date(val_tgl):
+            row_dict['TANGGAL'] = val_sap
+            row_dict['SAPAAN'] = val_tgl
+            need_update = True
 
-    worksheet.update(values=full_table, range_name='A1')
-    print(f"Berhasil menyinkronkan {len(current_headers)} header dan {len(new_rows)} baris data di staging sheet.")
+        # Self-healing jika TANGGAL_LAPORAN kosong atau bukan tanggal
+        if not is_date(row_dict.get('TANGGAL_LAPORAN', '')) and is_date(row_dict.get('TANGGAL', '')):
+            row_dict['TANGGAL_LAPORAN'] = row_dict['TANGGAL']
+            need_update = True
+
+        migrated_row = [row_dict.get(h, '') for h in current_headers]
+        new_rows.append(migrated_row)
+
+    if need_update:
+        full_table = [sanitized_headers]
+        for r in new_rows:
+            full_table.append([sanitize_sheet_value(v) for v in r])
+        worksheet.update(values=full_table, range_name='A1')
+        print(f"Berhasil menyinkronkan {len(current_headers)} header dan {len(new_rows)} baris data di staging sheet.")
 
 def parse_submitted_by(raw_val, airport_code=None):
     """
@@ -267,6 +301,18 @@ def save_report_to_staging(airport_code, form_data, user_name, report_id=None, u
     
     tanggal = form_data.get('TANGGAL', datetime.now().strftime('%Y-%m-%d'))
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Defensive check jika TANGGAL dan SAPAAN tertukar di form_data
+    import re
+    date_regex = r'^\d{4}-\d{2}-\d{2}$'
+    val_tgl = str(form_data.get('TANGGAL', '')).strip()
+    val_sap = str(form_data.get('SAPAAN', '')).strip()
+    if re.match(date_regex, val_sap) and not re.match(date_regex, val_tgl):
+        form_data['TANGGAL'] = val_sap
+        form_data['SAPAAN'] = val_tgl
+        tanggal = val_sap
+    elif re.match(date_regex, val_tgl):
+        tanggal = val_tgl
 
     # Cari index baris jika report_id diberikan atau jika sudah ada laporan di tanggal yang sama
     target_row_index = -1
@@ -379,6 +425,20 @@ def get_staging_reports(airport_code):
         display_status = 'PENDING_DH' if raw_status == 'PENDING_GM' else raw_status
         catatan_val = row_dict.get('CATATAN_DH') or row_dict.get('CATATAN_GM', '')
 
+        # Self-healing jika TANGGAL dan SAPAAN tertukar di row_dict
+        import re
+        date_pattern = r'^\d{4}-\d{2}-\d{2}$'
+        val_tgl = str(row_dict.get('TANGGAL', '')).strip()
+        val_sap = str(row_dict.get('SAPAAN', '')).strip()
+        val_tgl_lap = str(row_dict.get('TANGGAL_LAPORAN', '')).strip()
+
+        if re.match(date_pattern, val_sap) and not re.match(date_pattern, val_tgl):
+            row_dict['TANGGAL'] = val_sap
+            row_dict['SAPAAN'] = val_tgl
+            val_tgl = val_sap
+
+        real_date = val_tgl if re.match(date_pattern, val_tgl) else (val_tgl_lap if re.match(date_pattern, val_tgl_lap) else '')
+
         raw_sub = row_dict.get('SUBMITTED_BY', '')
         sub_name, sub_uname = parse_submitted_by(raw_sub, airport_code)
         if not sub_uname and row_dict.get('SUBMITTED_BY_USERNAME'):
@@ -389,7 +449,7 @@ def get_staging_reports(airport_code):
             "status": display_status,
             "catatan_gm": catatan_val,
             "catatan_dh": catatan_val,
-            "tanggal": row_dict.get('TANGGAL_LAPORAN', row_dict.get('TANGGAL', '')),
+            "tanggal": real_date or row_dict.get('TANGGAL_LAPORAN', row_dict.get('TANGGAL', '')),
             "submitted_by": sub_name or raw_sub,
             "submitted_by_username": sub_uname or "",
             "submitted_by_raw": raw_sub,

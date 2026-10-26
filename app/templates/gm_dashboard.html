@@ -4536,9 +4536,20 @@
                     currentLoadedReportData = res.report;
                     const rep = res.report;
                     const d = rep.data || {};
-                    currentActiveReportDate = rep.tanggal;
 
-                    const formattedDate = formatIndonesianDate(d.TANGGAL || rep.tanggal);
+                    // Client-side self-healing jika SAPAAN dan TANGGAL tertukar
+                    const isDateStr = s => /^\d{4}-\d{2}-\d{2}$/.test(String(s || '').trim());
+                    if (isDateStr(d.SAPAAN) && !isDateStr(d.TANGGAL)) {
+                        const temp = d.SAPAAN;
+                        d.SAPAAN = d.TANGGAL;
+                        d.TANGGAL = temp;
+                    }
+                    if (isDateStr(rep.tanggal) && !isDateStr(d.TANGGAL)) {
+                        d.TANGGAL = rep.tanggal;
+                    }
+                    const activeReportDate = isDateStr(d.TANGGAL) ? d.TANGGAL : (isDateStr(rep.tanggal) ? rep.tanggal : (d.TANGGAL || rep.tanggal));
+                    currentActiveReportDate = activeReportDate;
+                    const formattedDate = formatIndonesianDate(activeReportDate);
                     const isRevisi = String(rep.status || '').toUpperCase() === 'REVISI';
                     const isApproved = String(rep.status || '').toUpperCase() === 'APPROVED';
 
@@ -5156,7 +5167,18 @@
                     const sel = (val, target) => (String(val || '').toLowerCase().trim() === String(target).toLowerCase().trim() ? 'selected' : '');
                     const fmt = (val, fallback = '-') => (val !== undefined && val !== null && String(val).trim() !== '' ? String(val).trim() : fallback);
 
-                    const formattedDate = formatIndonesianDate(d.TANGGAL || rep.tanggal);
+                    // Client-side self-healing jika SAPAAN dan TANGGAL tertukar
+                    const isDateStr = s => /^\d{4}-\d{2}-\d{2}$/.test(String(s || '').trim());
+                    if (isDateStr(d.SAPAAN) && !isDateStr(d.TANGGAL)) {
+                        const temp = d.SAPAAN;
+                        d.SAPAAN = d.TANGGAL;
+                        d.TANGGAL = temp;
+                    }
+                    if (isDateStr(rep.tanggal) && !isDateStr(d.TANGGAL)) {
+                        d.TANGGAL = rep.tanggal;
+                    }
+                    const activeReportDate = isDateStr(d.TANGGAL) ? d.TANGGAL : (isDateStr(rep.tanggal) ? rep.tanggal : (d.TANGGAL || rep.tanggal));
+                    const formattedDate = formatIndonesianDate(activeReportDate);
                     const branchCode = (rep.airport || 'LOP').toUpperCase();
                     const senderName = fmt(rep.submitted_by, 'Petugas Lapangan');
 
