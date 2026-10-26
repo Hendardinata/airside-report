@@ -7615,13 +7615,13 @@
                                 branchText += `•  Kondisi keseluruhan runway : ${vClean(rd[8])}\n`;
                                 branchText += `•  Performance pavement : ${fPercent(rd[9])}\n`;
                                 branchText += `Jml Titik Rusak : ${fTitik(rd[10])}\n`;
-                                if (vClean(rd[12]) !== "-") {
+                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[11])}\n`;
+                                if (vClean(rd[12]) !== "-" && vClean(rd[12]).toLowerCase() !== "nihil") {
                                     branchText += `Jenis kerusakan : \n- ${vClean(rd[12])}\n`;
                                 }
-                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[11])}\n`;
                                 branchText += `Jml titik yang belum diperbaiki : ${fTitik(rd[13])}\n`;
-                                if (vClean(rd[14]) !== "-") {
-                                    branchText += `- Jenis kerusakan : ${vClean(rd[14])}\n`;
+                                if (vClean(rd[14]) !== "-" && vClean(rd[14]).toLowerCase() !== "nihil") {
+                                    branchText += `Jenis kerusakan yang belum diperbaiki : \n- ${vClean(rd[14])}\n`;
                                 }
                                 branchText += `Jml titik rusak berulang > 1x : ${fTitik(rd[15])}\n`;
                                 branchText += `•  Marka :\n`;
@@ -7642,13 +7642,13 @@
                                 branchText += `•  Kondisi keseluruhan Taxiway${twyKet} : ${vClean(rd[25])}\n`;
                                 branchText += `•  Performance pavement : ${fPercent(rd[26])}\n`;
                                 branchText += `Jml Titik Rusak : ${fTitik(rd[27])}\n`;
-                                if (vClean(rd[29]) !== "-") {
+                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[28])}\n`;
+                                if (vClean(rd[29]) !== "-" && vClean(rd[29]).toLowerCase() !== "nihil") {
                                     branchText += `Jenis kerusakan : \n- ${vClean(rd[29])}\n`;
                                 }
-                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[28])}\n`;
                                 branchText += `Jml titik yang belum diperbaiki : ${fTitik(rd[30])}\n`;
-                                if (vClean(rd[31]) !== "-") {
-                                    branchText += `- Jenis kerusakan : ${vClean(rd[31])}\n`;
+                                if (vClean(rd[31]) !== "-" && vClean(rd[31]).toLowerCase() !== "nihil") {
+                                    branchText += `Jenis kerusakan yang belum diperbaiki : \n- ${vClean(rd[31])}\n`;
                                 }
                                 branchText += `Jml titik rusak berulang > 1x : ${fTitik(rd[32])}\n`;
                                 branchText += `•  Marka :\n`;
@@ -7659,16 +7659,16 @@
                                 branchText += `      Pengukuran : ${vClean(rd[36])}\n\n`;
 
                                 branchText += `*C. APRON*\n`;
-                                branchText += `•  Kondisi keseluruhan. Apron : ${vClean(rd[37])}\n`;
+                                branchText += `•  Kondisi keseluruhan Apron : ${vClean(rd[37])}\n`;
                                 branchText += `•  Performance pavement : ${fPercent(rd[38])}\n`;
                                 branchText += `Jml Titik Rusak : ${fTitik(rd[39])}\n`;
-                                if (vClean(rd[41]) !== "-") {
+                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[40])}\n`;
+                                if (vClean(rd[41]) !== "-" && vClean(rd[41]).toLowerCase() !== "nihil") {
                                     branchText += `Jenis kerusakan : \n- ${vClean(rd[41])}\n`;
                                 }
-                                branchText += `Jml titik yang sudah diperbaiki : ${fTitik(rd[40])}\n`;
                                 branchText += `Jml titik yang belum diperbaiki : ${fTitik(rd[42])}\n`;
-                                if (vClean(rd[43]) !== "-") {
-                                    branchText += `- Jenis kerusakan : ${vClean(rd[43])}\n`;
+                                if (vClean(rd[43]) !== "-" && vClean(rd[43]).toLowerCase() !== "nihil") {
+                                    branchText += `Jenis kerusakan yang belum diperbaiki : \n- ${vClean(rd[43])}\n`;
                                 }
                                 branchText += `Jml titik rusak berulang > 1x : ${fTitik(rd[44])}\n`;
                                 branchText += `•  Marka :\n`;
@@ -7678,7 +7678,7 @@
                                 branchText += `•  Standing Water :\n`;
                                 branchText += `      Pengukuran : ${vClean(rd[48])}\n\n`;
 
-                                branchText += `d. Pemotongan Rumput\n`;
+                                branchText += `•  Pemeliharaan Potong Rumput :\n`;
                                 branchText += `      Standar : ${vClean(rd[49])}\n`;
                                 branchText += `      Realisasi : ${vClean(rd[50])}\n`;
                                 branchText += `      Performance : ${fPercent(rd[51])}\n\n`;

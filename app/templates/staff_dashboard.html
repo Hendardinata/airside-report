@@ -3854,8 +3854,16 @@
             return s;
         };
 
-        const sapaan = v('SAPAAN') !== '-' ? v('SAPAAN') : '-';
-        const tgl = v('TANGGAL') !== '-' ? v('TANGGAL') : '-';
+        const sapaanRaw = v('SAPAAN') !== '-' ? v('SAPAAN') : 'Selamat Pagi';
+        let greetingBlock = `*Assalamu’alaikum Wr. Wb*\n*${sapaanRaw}*`;
+        if (sapaanRaw.toLowerCase().includes('assalamu')) {
+            greetingBlock = `*${sapaanRaw}*`;
+        }
+
+        let tgl = v('TANGGAL') !== '-' ? v('TANGGAL') : '-';
+        if (tgl !== '-' && typeof formatIndonesianDate === 'function') {
+            tgl = formatIndonesianDate(tgl);
+        }
         
         let penerimaArr = [];
         ['PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4'].forEach((pk) => {
@@ -3878,24 +3886,14 @@
         }
         if (!catatanStr) catatanStr = '-\n';
 
-        const formatDamage = (bel, dip) => {
-            const parts = [];
-            if (bel && dip && bel !== '-' && dip !== '-') {
-                return `Jenis kerusakan : \n- ${bel}, ${dip}\n`;
-            } else if (bel && bel !== '-') {
-                return `Jenis kerusakan : \n- ${bel}\n`;
-            } else if (dip && dip !== '-') {
-                return `Jenis kerusakan : \n- ${dip}\n`;
-            }
-            return '';
+        const formatSingleDamage = (label, val) => {
+            if (!val || val === '-' || val.trim().toLowerCase() === 'nihil') return '';
+            const vClean = val.trim();
+            if (vClean.startsWith('-')) return `${label} : \n${vClean}\n`;
+            return `${label} : \n- ${vClean}\n`;
         };
 
-        const rwDamage = formatDamage(v('RUNWAY_JENIS_BELUM'), v('RUNWAY_JENIS_DIPERBAIKI'));
-        const twyDamage = formatDamage(v('TWY_JENIS_BELUM'), v('TWY_JENIS_DIPERBAIKI'));
-        const apnDamage = formatDamage(v('APN_JENIS_BELUM'), v('APN_JENIS_DIPERBAIKI'));
-
-        const text = `*Assalamu’alaikum Wr. Wb*
-*${sapaan}*
+        const text = `${greetingBlock}
 
 Kepada Yth. :
 ${penerimaStr}
@@ -3909,9 +3907,9 @@ ${cabang}
 •  Kondisi keseluruhan runway : ${v('RUNWAY_KONDISI')}
 •  Performance pavement : ${f_percent(v('RUNWAY_PCI'))}
 Jml Titik Rusak : ${f_titik(v('RUNWAY_TITIK_RUSAK'))}
-${rwDamage}Jml titik yang sudah diperbaiki : ${f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
-Jml titik yang belum diperbaiki : ${f_titik(v('RUNWAY_TITIK_BELUM'))}
-Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
+Jml titik yang sudah diperbaiki : ${f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
+${formatSingleDamage('Jenis kerusakan', v('RUNWAY_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : ${f_titik(v('RUNWAY_TITIK_BELUM'))}
+${formatSingleDamage('Jenis kerusakan yang belum diperbaiki', v('RUNWAY_JENIS_BELUM'))}Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
 •  Marka :
        Standar : ${v('RUNWAY_MARKA_STD')}
        Realisasi : ${v('RUNWAY_MARKA_REALISASI')}
@@ -3928,9 +3926,9 @@ Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
 •  Kondisi keseluruhan Taxiway : ${v('TAXIWAY_STATUS')}
 •  Performance pavement : ${f_percent(v('TAXIWAY_PCI'))}
 Jml Titik Rusak : ${f_titik(v('TWY_TITIK_RUSAK'))}
-${twyDamage}Jml titik yang sudah diperbaiki : ${f_titik(v('TWY_TITIK_DIPERBAIKI'))}
-Jml titik yang belum diperbaiki : ${f_titik(v('TWY_TITIK_BELUM'))}
-Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
+Jml titik yang sudah diperbaiki : ${f_titik(v('TWY_TITIK_DIPERBAIKI'))}
+${formatSingleDamage('Jenis kerusakan', v('TWY_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : ${f_titik(v('TWY_TITIK_BELUM'))}
+${formatSingleDamage('Jenis kerusakan yang belum diperbaiki', v('TWY_JENIS_BELUM'))}Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
 •  Marka :
        Standar : ${v('TWY_MARKA_STD')}
        Realisasi : ${v('TWY_MARKA_REALISASI')}
@@ -3940,12 +3938,12 @@ Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
        Performance : ${f_percent(v('TWY_WATER_PERF'))}
 
 *C. APRON*
-•  Kondisi keseluruhan. Apron : ${v('APRON_KONDISI')}
+•  Kondisi keseluruhan Apron : ${v('APRON_KONDISI')}
 •  Performance pavement : ${f_percent(v('APRON_PCI'))}
-Jumlah Lokasi Perbaikan : ${f_titik(v('APN_TITIK_RUSAK'))}
-${apnDamage}Realisasi Perbaikan : ${f_titik(v('APN_TITIK_DIPERBAIKI'))}
-Rencana Perbaikan : ${f_titik(v('APN_TITIK_BELUM'))}
-Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
+Jml Titik Rusak : ${f_titik(v('APN_TITIK_RUSAK'))}
+Jml titik yang sudah diperbaiki : ${f_titik(v('APN_TITIK_DIPERBAIKI'))}
+${formatSingleDamage('Jenis kerusakan', v('APN_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : ${f_titik(v('APN_TITIK_BELUM'))}
+${formatSingleDamage('Jenis kerusakan yang belum diperbaiki', v('APN_JENIS_BELUM'))}Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
 •  Marka :
        Standar : ${v('APN_MARKA_STD')}
        Realisasi : ${v('APN_MARKA_REALISASI')}
@@ -3953,8 +3951,7 @@ Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
 •  Standing Water :
        Pengukuran : ${v('APN_STANDING_WATER')}
        Performance : ${f_percent(v('APN_WATER_PERF'))}
-
-d. Pemotongan Rumput
+•  Pemeliharaan Potong Rumput :
        Standar : ${v('RUMPUT_STD')}
        Realisasi : ${v('RUMPUT_REALISASI')}
        Performance : ${f_percent(v('RUMPUT_PERF'))}

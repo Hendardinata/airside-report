@@ -92,27 +92,25 @@ def generate_wa_message(data, airport_code):
     else:
         cabang_str = f"1. {cabang_raw}"
 
-    # Helper for damage types
-    def format_damage_line(jenis_bel, jenis_dip):
-        parts = []
-        if jenis_bel != '-' and jenis_bel:
-            parts.append(jenis_bel)
-        if jenis_dip != '-' and jenis_dip:
-            parts.append(jenis_dip)
-        if parts:
-            return f"Jenis kerusakan : \n- {', '.join(parts)}\n"
-        return ""
-
-    rw_damage_str = format_damage_line(v('RUNWAY_JENIS_BELUM'), v('RUNWAY_JENIS_DIPERBAIKI'))
-    twy_damage_str = format_damage_line(v('TWY_JENIS_BELUM'), v('TWY_JENIS_DIPERBAIKI'))
-    apn_damage_str = format_damage_line(v('APN_JENIS_BELUM'), v('APN_JENIS_DIPERBAIKI'))
+    # Helper for single damage type
+    def format_single_damage(label, val):
+        if not val or val == '-' or str(val).strip().lower() == 'nihil':
+            return ""
+        v_clean = str(val).strip()
+        if v_clean.startswith('-'):
+            return f"{label} : \n{v_clean}\n"
+        return f"{label} : \n- {v_clean}\n"
 
     sapaan_val = v('SAPAAN')
     if sapaan_val == '-':
         sapaan_val = 'Selamat Pagi'
 
-    msg = f"""*Assalamu’alaikum Wr. Wb*
-*{sapaan_val}*
+    if 'assalamu' in sapaan_val.lower():
+        greeting_block = f"*{sapaan_val}*"
+    else:
+        greeting_block = f"*Assalamu’alaikum Wr. Wb*\n*{sapaan_val}*"
+
+    msg = f"""{greeting_block}
 
 Kepada Yth. :
 {penerima}
@@ -126,9 +124,9 @@ Region II
 •  Kondisi keseluruhan runway : {v('RUNWAY_KONDISI')}
 •  Performance pavement : {f_percent(v('RUNWAY_PCI'))}
 Jml Titik Rusak : {f_titik(v('RUNWAY_TITIK_RUSAK'))}
-{rw_damage_str}Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
-Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
-Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
+Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
+{format_single_damage('Jenis kerusakan', v('RUNWAY_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
+{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('RUNWAY_JENIS_BELUM'))}Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
 •  Marka :
        Standar : {v('RUNWAY_MARKA_STD')}
        Realisasi : {v('RUNWAY_MARKA_REALISASI')}
@@ -145,9 +143,9 @@ Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
 •  Kondisi keseluruhan Taxiway : {v('TAXIWAY_STATUS')}
 •  Performance pavement : {f_percent(v('TAXIWAY_PCI'))}
 Jml Titik Rusak : {f_titik(v('TWY_TITIK_RUSAK'))}
-{twy_damage_str}Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
-Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
-Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
+Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
+{format_single_damage('Jenis kerusakan', v('TWY_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
+{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('TWY_JENIS_BELUM'))}Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
 •  Marka :
       Standar : {v('TWY_MARKA_STD')}
       Realisasi : {v('TWY_MARKA_REALISASI')}
@@ -157,12 +155,12 @@ Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
       Performance : 100%
 
 *C. APRON*
-•  Kondisi keseluruhan. Apron : {v('APRON_KONDISI')}
+•  Kondisi keseluruhan Apron : {v('APRON_KONDISI')}
 •  Performance pavement : {f_percent(v('APRON_PCI'))}
-Jumlah Lokasi Perbaikan : {f_titik(v('APN_TITIK_RUSAK'))}
-{apn_damage_str}Realisasi Perbaikan : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
-Rencana Perbaikan : {f_titik(v('APN_TITIK_BELUM'))}
-Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
+Jml Titik Rusak : {f_titik(v('APN_TITIK_RUSAK'))}
+Jml titik yang sudah diperbaiki : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
+{format_single_damage('Jenis kerusakan', v('APN_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : {f_titik(v('APN_TITIK_BELUM'))}
+{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('APN_JENIS_BELUM'))}Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
 •  Marka :
       Standar : {v('APN_MARKA_STD')}
       Realisasi : {v('APN_MARKA_REALISASI')}
@@ -171,7 +169,7 @@ Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
       Pengukuran : {v('APN_STANDING_WATER')}
       Performance : 100%
 
-d. Pemotongan Rumput
+•  Pemeliharaan Potong Rumput :
       Standar : {v('RUMPUT_STD')}
       Realisasi : {v('RUMPUT_REALISASI')}
       Performance : {f_percent(v('RUMPUT_PERF'))}
