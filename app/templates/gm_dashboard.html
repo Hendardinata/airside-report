@@ -4043,6 +4043,25 @@
         return String(dateStr);
     }
 
+    // Performance pavement percentage cleaner/formatter
+    function formatCleanPercent(val, defaultVal = '100%') {
+        if (!val || val === '-') return defaultVal;
+        let s = String(val).trim();
+        if (!s) return defaultVal;
+        if (s.includes('%')) {
+            return s;
+        }
+        const num = parseFloat(s.replace(',', '.'));
+        if (!isNaN(num) && isFinite(num) && String(num) === s.replace(',', '.').trim()) {
+            return `${s}%`;
+        }
+        const matchNumText = s.match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
+        if (matchNumText) {
+            return `${matchNumText[1]}% ${matchNumText[2]}`;
+        }
+        return s;
+    }
+
     function formatTableDates() {
         document.querySelectorAll('.report-row .tgl-primary').forEach(el => {
             const raw = el.getAttribute('data-raw-date') || el.textContent.trim();
@@ -4572,24 +4591,6 @@
                             return `<span class="doc-badge-status serviceable"><i class="fa-solid fa-circle-check me-1"></i>${s}</span>`;
                         }
                         return `<span class="doc-badge-status neutral">${s}</span>`;
-                    }
-
-                    function formatCleanPercent(val, defaultVal = '100%') {
-                        if (!val || val === '-') return defaultVal;
-                        let s = String(val).trim();
-                        if (!s) return defaultVal;
-                        if (s.includes('%')) {
-                            return s;
-                        }
-                        const num = parseFloat(s.replace(',', '.'));
-                        if (!isNaN(num) && isFinite(num) && String(num) === s.replace(',', '.').trim()) {
-                            return `${s}%`;
-                        }
-                        const matchNumText = s.match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
-                        if (matchNumText) {
-                            return `${matchNumText[1]}% ${matchNumText[2]}`;
-                        }
-                        return s;
                     }
 
                     // PCI Badge Helper
