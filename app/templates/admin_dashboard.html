@@ -4452,10 +4452,13 @@
 
         /* Interactive Date Control Bar */
         .filter-bar {
-            padding: 0.75rem 0.85rem;
-            border-radius: 12px;
+            padding: 0.85rem;
+            border-radius: 14px;
             min-height: auto;
             margin-bottom: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: visible;
         }
 
         .filter-deck-inner {
@@ -4468,49 +4471,132 @@
 
         .filter-meta-left {
             width: 100%;
-            justify-content: space-between;
-            gap: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.4rem;
         }
 
         .filter-label {
-            font-size: 0.78rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
         .date-stepper-box {
-            flex: 1;
-            max-width: 215px;
-            height: 36px;
-            justify-content: space-between;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 42px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 0 0.45rem !important;
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 10px !important;
+            box-sizing: border-box !important;
+        }
+
+        .date-nav-btn {
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            border-radius: 8px !important;
+            background: #f8fafc !important;
+            color: #002b49 !important;
+            border: 1px solid #e2e8f0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.85rem !important;
+            cursor: pointer !important;
+            flex-shrink: 0 !important;
+            transition: all 0.15s ease !important;
+        }
+
+        .date-nav-btn:active {
+            background: #e2e8f0 !important;
+        }
+
+        .date-picker-trigger {
+            flex: 1 !important;
+            min-width: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.5rem !important;
+            padding: 0 0.35rem !important;
+            overflow: hidden !important;
+            cursor: pointer !important;
+        }
+
+        .date-icon {
+            font-size: 0.95rem !important;
+            color: #00B7CD !important;
+            flex-shrink: 0 !important;
         }
 
         .date-formatted-text {
-            font-size: 0.8rem;
+            font-size: 0.84rem !important;
+            font-weight: 700 !important;
+            color: #002b49 !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
 
         .filter-status-summary {
-            width: 100%;
-            justify-content: flex-start;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 3px;
-            gap: 0.45rem;
-            scrollbar-width: none;
-        }
-
-        .filter-status-summary::-webkit-scrollbar {
-            display: none;
+            width: 100% !important;
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 0.45rem !important;
+            padding-top: 0.65rem !important;
+            border-top: 1px dashed #e2e8f0 !important;
+            overflow-x: visible !important;
         }
 
         .summary-report-pill {
-            height: 34px;
-            padding: 0 0.75rem;
-            font-size: 0.76rem;
-            border-radius: 8px;
+            width: 100% !important;
+            height: 36px !important;
+            padding: 0 0.85rem !important;
+            font-size: 0.8rem !important;
+            font-weight: 700 !important;
+            border-radius: 9px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: #f0fdf4 !important;
+            border: 1px solid #bbf7d0 !important;
+            color: #166534 !important;
+            box-sizing: border-box !important;
         }
 
-        .summary-info-item,
+        .summary-v-divider {
+            display: none !important;
+        }
+
+        .summary-info-item {
+            font-size: 0.78rem !important;
+            color: #64748b !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.35rem !important;
+            font-weight: 600 !important;
+        }
+
         .summary-clock-item {
-            font-size: 0.75rem;
+            font-size: 0.76rem !important;
+            color: #94a3b8 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.35rem !important;
+            font-weight: 500 !important;
+            margin-left: auto !important;
         }
 
         /* 4 Airport Status Cards */
@@ -5300,6 +5386,76 @@
         opacity: 0.35;
         cursor: not-allowed;
         pointer-events: none;
+    }
+
+    /* Executive Branch Action Sheet Modal Styles */
+    .swal-branch-action-sheet .swal2-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 0.65rem !important;
+        margin: 1.25rem 0 0 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .swal-branch-action-sheet .swal2-actions button {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        border-radius: 12px !important;
+        font-size: 0.92rem !important;
+        font-weight: 700 !important;
+        padding: 0 1.25rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        white-space: nowrap !important;
+        box-sizing: border-box !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        cursor: pointer !important;
+    }
+
+    .swal-branch-action-sheet button.swal2-confirm {
+        background: #00B7CD !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35) !important;
+        order: 1 !important;
+    }
+    .swal-branch-action-sheet button.swal2-confirm:hover {
+        background: #009eb2 !important;
+        transform: translateY(-1px) !important;
+    }
+
+    .swal-branch-action-sheet button.swal2-deny {
+        background: #16a34a !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25) !important;
+        order: 2 !important;
+    }
+    .swal-branch-action-sheet button.swal2-deny:hover {
+        background: #15803d !important;
+        transform: translateY(-1px) !important;
+    }
+
+    .swal-branch-action-sheet button.swal2-cancel {
+        background: #ffffff !important;
+        color: #002b49 !important;
+        border: 1.5px solid #cbd5e1 !important;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+        order: 3 !important;
+    }
+    .swal-branch-action-sheet button.swal2-cancel:hover {
+        background: #f8fafc !important;
+        border-color: #94a3b8 !important;
+        color: #002b49 !important;
+        transform: translateY(-1px) !important;
     }
 </style>
 {% endblock %}
@@ -6575,17 +6731,23 @@
 
         Swal.fire({
             title: `Tindakan Cepat - ${code}`,
-            text: `Bandara ${branchCity} belum mengirimkan laporan tanggal ${dStr}. Pilih tindakan:`,
+            html: `
+                <div style="font-size: 0.9rem; color: #475569; line-height: 1.5; margin-bottom: 0.25rem;">
+                    Bandara <strong>${branchCity}</strong> belum mengirimkan laporan tanggal <strong>${formatDateIndonesian(dStr)}</strong>.
+                </div>
+                <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;">Pilih tindakan operasional:</div>
+            `,
             icon: 'warning',
             showCancelButton: true,
             showDenyButton: true,
-            confirmButtonText: '<i class="fa-solid fa-user-tie me-1"></i> WhatsApp DH',
-            confirmButtonColor: '#ea580c',
-            denyButtonText: '<i class="fa-brands fa-whatsapp me-1"></i> WhatsApp PIC',
-            denyButtonColor: '#16a34a',
-            cancelButtonText: '<i class="fa-solid fa-cloud-arrow-down me-1"></i> Tarik Data',
-            cancelButtonColor: '#00B7CD',
-            showCloseButton: true
+            confirmButtonText: '<i class="fa-solid fa-user-tie me-2"></i> WhatsApp DH',
+            denyButtonText: '<i class="fa-brands fa-whatsapp me-2"></i> WhatsApp PIC',
+            cancelButtonText: '<i class="fa-solid fa-cloud-arrow-down me-2"></i> Tarik Data',
+            showCloseButton: true,
+            customClass: {
+                popup: 'swal-branch-action-sheet',
+                actions: 'swal-branch-actions'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 contactGMWhatsApp(code);

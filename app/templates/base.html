@@ -802,6 +802,129 @@
             height: 3px !important;
         }
 
+        /* Multi-action & Mobile Responsive SweetAlert Layout */
+        div:where(.swal2-container) .swal2-actions:has(button.swal2-deny:not([style*="display: none"])):has(button.swal2-cancel:not([style*="display: none"])) {
+            flex-direction: column !important;
+            gap: 0.65rem !important;
+            width: 100% !important;
+        }
+
+        div:where(.swal2-container) .swal2-actions:has(button.swal2-deny:not([style*="display: none"])):has(button.swal2-cancel:not([style*="display: none"])) button {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: none !important;
+            height: 48px !important;
+            white-space: nowrap !important;
+        }
+
+        @media (max-width: 640px) {
+            div:where(.swal2-container) .swal2-popup,
+            .swal2-popup,
+            .swal2-popup.swal-corp-popup {
+                padding: 1.65rem 1.25rem 1.35rem 1.25rem !important;
+                border-radius: 20px !important;
+                width: 94% !important;
+            }
+
+            div:where(.swal2-container) .swal2-actions,
+            .swal2-actions,
+            .swal-corp-actions-bar {
+                flex-direction: column !important;
+                width: 100% !important;
+                gap: 0.55rem !important;
+                margin: 1.15rem 0 0 0 !important;
+                align-items: stretch !important;
+            }
+
+            div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+            div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+            div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+            .swal-corp-btn-primary,
+            .swal-corp-btn-secondary {
+                width: 100% !important;
+                max-width: 100% !important;
+                flex: none !important;
+                height: 48px !important;
+                min-height: 48px !important;
+                max-height: 48px !important;
+                font-size: 0.9rem !important;
+                padding: 0 1rem !important;
+                border-radius: 12px !important;
+                white-space: nowrap !important;
+                box-sizing: border-box !important;
+            }
+        }
+
+        /* Dedicated Executive Action Sheet Styling */
+        .swal-branch-action-sheet .swal2-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 0.65rem !important;
+            margin: 1.25rem 0 0 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        .swal-branch-action-sheet .swal2-actions button {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: none !important;
+            height: 48px !important;
+            min-height: 48px !important;
+            max-height: 48px !important;
+            border-radius: 12px !important;
+            font-size: 0.92rem !important;
+            font-weight: 700 !important;
+            padding: 0 1.25rem !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.5rem !important;
+            white-space: nowrap !important;
+            box-sizing: border-box !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            cursor: pointer !important;
+        }
+
+        .swal-branch-action-sheet button.swal2-confirm {
+            background: #00B7CD !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 4px 14px rgba(0, 183, 205, 0.35) !important;
+            order: 1 !important;
+        }
+        .swal-branch-action-sheet button.swal2-confirm:hover {
+            background: #009eb2 !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .swal-branch-action-sheet button.swal2-deny {
+            background: #16a34a !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25) !important;
+            order: 2 !important;
+        }
+        .swal-branch-action-sheet button.swal2-deny:hover {
+            background: #15803d !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .swal-branch-action-sheet button.swal2-cancel {
+            background: #ffffff !important;
+            color: #002b49 !important;
+            border: 1.5px solid #cbd5e1 !important;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+            order: 3 !important;
+        }
+        .swal-branch-action-sheet button.swal2-cancel:hover {
+            background: #f8fafc !important;
+            border-color: #94a3b8 !important;
+            color: #002b49 !important;
+            transform: translateY(-1px) !important;
+        }
+
         /* Inline Kawung Spinners for Badges/Buttons/Card Viewers */
         .kawung-inline-spin {
             display: inline-block;
