@@ -96,10 +96,11 @@ def generate_wa_message(data, airport_code):
     def format_single_damage(label, val):
         if not val or val == '-' or str(val).strip().lower() == 'nihil':
             return ""
-        v_clean = str(val).strip()
-        if v_clean.startswith('-'):
-            return f"{label} : \n{v_clean}\n"
-        return f"{label} : \n- {v_clean}\n"
+        lines = [l.strip() for l in str(val).strip().split('\n') if l.strip()]
+        if not lines:
+            return ""
+        formatted_items = "\n".join(f"   {l}" if l.startswith('-') else f"   - {l}" for l in lines)
+        return f"   {label} : \n{formatted_items}\n"
 
     sapaan_val = v('SAPAAN')
     if sapaan_val == '-':
@@ -123,10 +124,10 @@ Region II
 *A. RUNWAY*
 •  Kondisi keseluruhan runway : {v('RUNWAY_KONDISI')}
 •  Performance pavement : {f_percent(v('RUNWAY_PCI'))}
-Jml Titik Rusak : {f_titik(v('RUNWAY_TITIK_RUSAK'))}
-Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
-{format_single_damage('Jenis kerusakan', v('RUNWAY_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
-{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('RUNWAY_JENIS_BELUM'))}Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
+•  Jml Titik Rusak : {f_titik(v('RUNWAY_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
+{format_single_damage('Jenis kerusakan', v('RUNWAY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
+{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('RUNWAY_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
 •  Marka :
        Standar : {v('RUNWAY_MARKA_STD')}
        Realisasi : {v('RUNWAY_MARKA_REALISASI')}
@@ -142,10 +143,10 @@ Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
 *B. TAXIWAY*
 •  Kondisi keseluruhan Taxiway : {v('TAXIWAY_STATUS')}
 •  Performance pavement : {f_percent(v('TAXIWAY_PCI'))}
-Jml Titik Rusak : {f_titik(v('TWY_TITIK_RUSAK'))}
-Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
-{format_single_damage('Jenis kerusakan', v('TWY_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
-{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('TWY_JENIS_BELUM'))}Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
+•  Jml Titik Rusak : {f_titik(v('TWY_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
+{format_single_damage('Jenis kerusakan', v('TWY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
+{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('TWY_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
 •  Marka :
       Standar : {v('TWY_MARKA_STD')}
       Realisasi : {v('TWY_MARKA_REALISASI')}
@@ -157,10 +158,10 @@ Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
 *C. APRON*
 •  Kondisi keseluruhan Apron : {v('APRON_KONDISI')}
 •  Performance pavement : {f_percent(v('APRON_PCI'))}
-Jml Titik Rusak : {f_titik(v('APN_TITIK_RUSAK'))}
-Jml titik yang sudah diperbaiki : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
-{format_single_damage('Jenis kerusakan', v('APN_JENIS_DIPERBAIKI'))}Jml titik yang belum diperbaiki : {f_titik(v('APN_TITIK_BELUM'))}
-{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('APN_JENIS_BELUM'))}Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
+•  Jml Titik Rusak : {f_titik(v('APN_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
+{format_single_damage('Jenis kerusakan', v('APN_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('APN_TITIK_BELUM'))}
+{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('APN_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
 •  Marka :
       Standar : {v('APN_MARKA_STD')}
       Realisasi : {v('APN_MARKA_REALISASI')}
