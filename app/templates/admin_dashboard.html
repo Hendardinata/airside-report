@@ -7602,7 +7602,6 @@
                                 branchText += `${index + 1}. ${code}\n`;
                                 branchText += `*A. RUNWAY*\n`;
                                 branchText += `•  Kondisi keseluruhan runway : ${vClean(rd[8])}\n`;
-                                branchText += `•  Performance pavement : ${fPercent(rd[9])}\n`;
                                 branchText += `Jml Titik Rusak : ${fTitik(rd[10])}\n`;
                                 if (vClean(rd[12]) !== "-") {
                                     branchText += `Jenis kerusakan : \n- ${vClean(rd[12])}\n`;
@@ -7629,7 +7628,6 @@
                                 const twyKet = (twyNama !== "-") ? ` ${twyNama}` : "";
                                 branchText += `*B. TAXIWAY*\n`;
                                 branchText += `•  Kondisi keseluruhan Taxiway${twyKet} : ${vClean(rd[25])}\n`;
-                                branchText += `•  Performance pavement : ${fPercent(rd[26])}\n`;
                                 branchText += `Jml Titik Rusak : ${fTitik(rd[27])}\n`;
                                 if (vClean(rd[29]) !== "-") {
                                     branchText += `Jenis kerusakan : \n- ${vClean(rd[29])}\n`;
@@ -7649,7 +7647,6 @@
 
                                 branchText += `*C. APRON*\n`;
                                 branchText += `•  Kondisi keseluruhan. Apron : ${vClean(rd[37])}\n`;
-                                branchText += `•  Performance pavement : ${fPercent(rd[38])}\n`;
                                 branchText += `Jml Titik Rusak : ${fTitik(rd[39])}\n`;
                                 if (vClean(rd[41]) !== "-") {
                                     branchText += `Jenis kerusakan : \n- ${vClean(rd[41])}\n`;

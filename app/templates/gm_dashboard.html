@@ -4615,11 +4615,6 @@
                                 <div class="doc-pair-val">${fmt(d.RUNWAY_KONDISI, 'SERVICEABLE')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Performance pavement</div>
-                                <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${d.RUNWAY_PCI ? (d.RUNWAY_PCI.includes('%') ? d.RUNWAY_PCI : d.RUNWAY_PCI + '% PCI') : '100% PCI'}</div>
-                            </div>
-                            <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.RUNWAY_TITIK_RUSAK, '0')} titik</div>
@@ -4708,11 +4703,6 @@
                                 <div class="doc-pair-val">${fmt(d.TAXIWAY_STATUS, 'SERVICEABLE')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Performance pavement</div>
-                                <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${d.TAXIWAY_PCI ? (d.TAXIWAY_PCI.includes('%') ? d.TAXIWAY_PCI : d.TAXIWAY_PCI + '% PCI') : '100% PCI'}</div>
-                            </div>
-                            <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.TWY_TITIK_RUSAK, '0')} titik</div>
@@ -4779,11 +4769,6 @@
                                 <div class="doc-pair-key">Kondisi keseluruhan Apron</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.APRON_KONDISI, 'SERVICEABLE')}</div>
-                            </div>
-                            <div class="doc-pair-row">
-                                <div class="doc-pair-key">Performance pavement</div>
-                                <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${d.APRON_PCI ? (d.APRON_PCI.includes('%') ? d.APRON_PCI : d.APRON_PCI + '% PCI') : '100% PCI'}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
@@ -5115,16 +5100,6 @@
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Performance pavement</div>
-                                    <div class="doc-pair-sep">:</div>
-                                    <div class="doc-pair-val">
-                                        <div class="doc-inline-group">
-                                            <input type="text" name="RUNWAY_PCI" class="doc-inline-input num-input" value="${safe(d.RUNWAY_PCI || '100')}">
-                                            <span class="doc-inline-suffix">% PCI</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="doc-pair-row">
                                     <div class="doc-pair-key">Jml Titik Rusak</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
@@ -5262,16 +5237,6 @@
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Performance pavement</div>
-                                    <div class="doc-pair-sep">:</div>
-                                    <div class="doc-pair-val">
-                                        <div class="doc-inline-group">
-                                            <input type="text" name="TAXIWAY_PCI" class="doc-inline-input num-input" value="${safe(d.TAXIWAY_PCI || '100')}">
-                                            <span class="doc-inline-suffix">% PCI</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="doc-pair-row">
                                     <div class="doc-pair-key">Jml Titik Rusak</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
@@ -5378,16 +5343,6 @@
                                             <option value="BAIK" ${sel(d.APRON_KONDISI, 'BAIK')}>BAIK</option>
                                             <option value="RUSAK" ${sel(d.APRON_KONDISI, 'RUSAK')}>RUSAK</option>
                                         </select>
-                                    </div>
-                                </div>
-                                <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Performance pavement</div>
-                                    <div class="doc-pair-sep">:</div>
-                                    <div class="doc-pair-val">
-                                        <div class="doc-inline-group">
-                                            <input type="text" name="APRON_PCI" class="doc-inline-input num-input" value="${safe(d.APRON_PCI || '100')}">
-                                            <span class="doc-inline-suffix">% PCI</span>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
