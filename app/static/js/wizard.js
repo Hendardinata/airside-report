@@ -1,95 +1,214 @@
 // wizard.js
-function nextStep(step) {
-    // Validasi tanggal sebelum berpindah dari langkah 1 ke langkah berikutnya
-    if (step > 1 && typeof validateStepDateBeforeNext === 'function') {
+
+function getCurrentStepNum() {
+    for (let i = 1; i <= 5; i++) {
+        const stepEl = document.getElementById(`step-${i}`);
+        if (stepEl && (stepEl.style.display !== 'none' || stepEl.classList.contains('active'))) {
+            return i;
+        }
+    }
+    const activeNav = document.querySelector('.stepper-cell.step.active');
+    if (activeNav && activeNav.id) {
+        const num = parseInt(activeNav.id.replace('step-nav-', ''), 10);
+        if (!isNaN(num)) return num;
+    }
+    return 1;
+}
+
+function validateStepFields(stepNum) {
+    const stepEl = document.getElementById(`step-${stepNum}`);
+    if (!stepEl) return true;
+
+    // Validasi tanggal sebelum berpindah dari langkah 1 (cek tanggal kosong/duplikat/pending)
+    if (stepNum === 1 && typeof validateStepDateBeforeNext === 'function') {
         if (!validateStepDateBeforeNext()) {
             return false;
         }
     }
 
-    // Hide all steps
-    document.querySelectorAll('.wizard-step').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-    
-    // Show current step
-    const targetStep = document.getElementById(`step-${step}`);
-    const targetNav = document.getElementById(`step-nav-${step}`);
-    if (targetStep) targetStep.style.display = 'block';
-    if (targetNav) targetNav.classList.add('active');
+    // Ambil seluruh input wajib (bertanda bintang merah / atribut required) pada langkah ini
+    const requiredInputs = stepEl.querySelectorAll('input[required]:not([type="hidden"]), select[required], textarea[required]');
+    let invalidList = [];
 
-    // Smooth scroll to top of wizard card
-    const formCard = document.querySelector('.form-workspace-card') || document.querySelector('.form-main-card') || document.getElementById('reportWizard');
-    if (formCard) {
-        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    requiredInputs.forEach(input => {
+        let isFieldEmpty = false;
+        if (input.tagName.toLowerCase() === 'select') {
+            const val = input.value;
+            if (!val || val === '' || input.selectedIndex <= 0 || val.startsWith('--')) {
+                isFieldEmpty = true;
+            }
+        } else if (input.type === 'radio' || input.type === 'checkbox') {
+            const name = input.name;
+            const checked = stepEl.querySelectorAll(`input[name="${name}"]:checked`);
+            if (checked.length === 0) {
+                isFieldEmpty = true;
+            }
+        } else {
+            const val = (input.value || '').trim();
+            if (val === '') {
+                isFieldEmpty = true;
+            }
+        }
 
-    if (typeof updateLiveWaPreview === 'function') {
-        updateLiveWaPreview();
-    }
-}
-
-function prevStep(step) {
-    // Hide all steps
-    document.querySelectorAll('.wizard-step').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-    
-    // Show current step
-    const targetStep = document.getElementById(`step-${step}`);
-    const targetNav = document.getElementById(`step-nav-${step}`);
-    if (targetStep) targetStep.style.display = 'block';
-    if (targetNav) targetNav.classList.add('active');
-
-    const formCard = document.querySelector('.form-workspace-card') || document.querySelector('.form-main-card') || document.getElementById('reportWizard');
-    if (formCard) {
-        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    if (typeof updateLiveWaPreview === 'function') {
-        updateLiveWaPreview();
-    }
-}
-
-document.getElementById('reportWizard').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // Validasi tanggal sebelum submit
-    if (typeof validateStepDateBeforeNext === 'function' && !validateStepDateBeforeNext()) {
-        return;
-    }
-    
-    // Validasi input kosong
-    let isEmpty = false;
-    let firstEmpty = null;
-    const inputs = this.querySelectorAll('input:not([type="hidden"]), select, textarea');
-    inputs.forEach(input => {
-        if (!input.value || input.value.trim() === '') {
-            if (input.hasAttribute('required')) {
-                isEmpty = true;
-                if (!firstEmpty) firstEmpty = input;
+        if (isFieldEmpty) {
+            input.classList.add('field-has-error');
+            if (input._flatpickr && input._flatpickr.altInput) {
+                input._flatpickr.altInput.classList.add('field-has-error');
+            }
+            invalidList.push(input);
+        } else {
+            input.classList.remove('field-has-error');
+            if (input._flatpickr && input._flatpickr.altInput) {
+                input._flatpickr.altInput.classList.remove('field-has-error');
             }
         }
     });
 
-    if (isEmpty || !this.checkValidity()) {
-        const invalidElement = firstEmpty || this.querySelector(':invalid');
-        
-        Swal.fire({
-            icon: 'warning',
-            title: 'Form Belum Lengkap!',
-            text: 'Masih ada form inputan yang kosong. Mohon lengkapi terlebih dahulu baru kirim.',
-            confirmButtonText: 'Mengerti',
-            confirmButtonColor: '#00B7CD'
-        }).then(() => {
-            if (invalidElement) {
-                const step = invalidElement.closest('.wizard-step');
-                if (step) {
-                    const stepNum = step.id.split('-')[1];
-                    nextStep(stepNum);
-                    setTimeout(() => invalidElement.focus(), 300);
+    if (invalidList.length > 0) {
+        const firstInvalid = invalidList[0];
+        const targetFocus = (firstInvalid._flatpickr && firstInvalid._flatpickr.altInput) ? firstInvalid._flatpickr.altInput : firstInvalid;
+
+        // Ambil nama label untuk pesan error yang informatif
+        const row = firstInvalid.closest('.report-table-row');
+        const labelEl = row ? row.querySelector('label') : null;
+        let labelText = '';
+        if (labelEl) {
+            labelText = labelEl.innerText.replace(/\*/g, '').replace(/\(opsional\)/gi, '').trim();
+        }
+        if (!labelText) {
+            labelText = firstInvalid.placeholder || firstInvalid.name || 'Kolom Wajib';
+        }
+
+        // Fokuskan kursor dan scroll ke field yang kosong
+        targetFocus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+            targetFocus.focus();
+        }, 300);
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                customClass: {
+                    popup: 'swal-corp-popup',
+                    confirmButton: 'swal-corp-btn-primary',
+                    actions: 'swal-corp-actions-bar'
+                },
+                buttonsStyling: false,
+                html: `
+                    <div class="swal-corp-icon-tile icon-warning-corp">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <h3 class="swal-corp-title">Kolom Wajib Belum Diisi</h3>
+                    <div class="swal-corp-sub">
+                        <i class="fa-solid fa-circle-exclamation text-danger me-1"></i> Langkah ${stepNum} Memerlukan Kelengkapan Data
+                    </div>
+                    <p style="font-size:0.88rem; color:#475569; margin:0 0 1rem 0; line-height: 1.5;">
+                        Harap lengkapi semua formulir yang bertanda bintang merah (<span style="color:#ef4444; font-weight:bold;">*</span>) sebelum melanjutkan ke langkah berikutnya.
+                    </p>
+                    <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:0.65rem 0.9rem; color:#991b1b; font-size:0.86rem; text-align:left; display:flex; align-items:center; gap:0.5rem;">
+                        <i class="fa-solid fa-arrow-right text-danger"></i>
+                        <span>Kolom kosong: <b>${labelText}</b></span>
+                    </div>
+                `,
+                confirmButtonText: '<i class="fa-solid fa-pen-to-square me-1"></i> Lengkapi Sekarang'
+            });
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
+function goToStepDirect(step) {
+    // Sembunyikan semua langkah
+    document.querySelectorAll('.wizard-step').forEach(el => {
+        el.style.display = 'none';
+        el.classList.remove('active');
+    });
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    
+    // Tampilkan langkah target
+    const targetStep = document.getElementById(`step-${step}`);
+    const targetNav = document.getElementById(`step-nav-${step}`);
+    if (targetStep) {
+        targetStep.style.display = 'block';
+        targetStep.classList.add('active');
+    }
+    if (targetNav) targetNav.classList.add('active');
+
+    // Scroll halus ke atas kartu wizard
+    const formCard = document.querySelector('.form-workspace-card') || document.querySelector('.form-main-card') || document.getElementById('reportWizard');
+    if (formCard) {
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    if (typeof updateLiveWaPreview === 'function') {
+        updateLiveWaPreview();
+    }
+}
+
+function nextStep(step) {
+    const currentStep = getCurrentStepNum();
+
+    // Jika mencoba maju ke langkah berikutnya (misal 1 -> 2 atau klik stepper langkah depan)
+    if (step > currentStep) {
+        // Validasi berurutan dari currentStep sampai step - 1
+        for (let s = currentStep; s < step; s++) {
+            if (!validateStepFields(s)) {
+                if (s !== currentStep) {
+                    goToStepDirect(s);
+                }
+                return false;
+            }
+        }
+    }
+
+    // Jika valid atau kembali ke langkah sebelumnya (prev), izinkan berpindah
+    goToStepDirect(step);
+    return true;
+}
+
+function prevStep(step) {
+    goToStepDirect(step);
+}
+
+// Real-time listener: hilangkan highlight error saat user mulai mengetik / memilih opsi
+document.addEventListener('DOMContentLoaded', function() {
+    const wizardForm = document.getElementById('reportWizard');
+    if (wizardForm) {
+        const clearErr = function(target) {
+            if (target && target.classList.contains('field-has-error')) {
+                const val = (target.value || '').trim();
+                const isSelect = target.tagName.toLowerCase() === 'select';
+                const isEmptySelect = isSelect && (!val || val.startsWith('--'));
+                if (val !== '' && !isEmptySelect) {
+                    target.classList.remove('field-has-error');
+                    if (target._flatpickr && target._flatpickr.altInput) {
+                        target._flatpickr.altInput.classList.remove('field-has-error');
+                    }
                 }
             }
+        };
+
+        wizardForm.addEventListener('input', (e) => clearErr(e.target));
+        wizardForm.addEventListener('change', (e) => {
+            clearErr(e.target);
+            if (e.target && e.target._flatpickr && e.target._flatpickr.altInput) {
+                clearErr(e.target._flatpickr.altInput);
+            }
         });
-        return;
+    }
+});
+
+document.getElementById('reportWizard').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Validasi menyeluruh seluruh langkah 1 sampai 5
+    for (let s = 1; s <= 5; s++) {
+        if (!validateStepFields(s)) {
+            goToStepDirect(s);
+            return;
+        }
     }
 
     if (typeof showKawungLoading === 'function') {
