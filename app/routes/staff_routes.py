@@ -442,12 +442,15 @@ def api_notifications():
     user = USERS.get(session['user_id'])
     airport_code = user.get('airport', 'LOP')
     from app.services.notification_service import get_notifications
-    notifs = get_notifications(airport_code, role='staff', username=user.get('username'))
+    from app.models.config_store import get_active_month
+    active_m = get_active_month(airport_code)
+    notifs = get_notifications(airport_code, role='staff', username=user.get('username'), active_month=active_m)
     unread_count = sum(1 for n in notifs if not n.get('is_read'))
     return jsonify({
         "success": True,
         "notifications": notifs,
-        "unread_count": unread_count
+        "unread_count": unread_count,
+        "active_month": active_m
     })
 
 @bp.route('/api/notifications/mark-read', methods=['POST'])
@@ -462,6 +465,23 @@ def api_notifications_mark_read():
     elif data.get('notif_id'):
         mark_notification_as_read(data.get('notif_id'))
     return jsonify({"success": True})
+
+@bp.route('/api/notifications/clear', methods=['POST'])
+def api_notifications_clear():
+    data = request.json or {}
+    user = USERS.get(session['user_id'])
+    airport_code = user.get('airport', 'LOP')
+    from app.services.notification_service import clear_notifications, delete_single_notification
+    from app.models.config_store import get_active_month
+    active_m = get_active_month(airport_code)
+
+    notif_id = data.get('notif_id')
+    if notif_id:
+        delete_single_notification(notif_id)
+    else:
+        clear_notifications(airport_code, role='staff', username=user.get('username'), active_month=active_m)
+
+    return jsonify({"success": True, "message": "Notifikasi berhasil dibersihkan."})
 
 
 @bp.route('/api/active-month')

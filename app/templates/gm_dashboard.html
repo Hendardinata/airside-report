@@ -708,6 +708,59 @@
         background: #e0f2fe;
     }
 
+    .notif-hdr-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .notif-btn-clear {
+        border: 1px solid #fee2e2;
+        background: #ffffff;
+        color: #ef4444;
+        font-size: 0.72rem;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0.28rem 0.65rem;
+        border-radius: 6px;
+        transition: all 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .notif-btn-clear:hover {
+        background: #fee2e2;
+        color: #dc2626;
+        border-color: #fca5a5;
+    }
+
+    .notif-item-del-btn {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        width: 22px;
+        height: 22px;
+        border: none;
+        background: transparent;
+        color: #94a3b8;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        cursor: pointer;
+        opacity: 0.4;
+        transition: all 0.15s ease;
+        z-index: 2;
+    }
+
+    .notif-item:hover .notif-item-del-btn {
+        opacity: 1;
+        background: #fee2e2;
+        color: #ef4444;
+    }
+
     .notif-list-body {
         max-height: 380px;
         overflow-y: auto;
@@ -3637,6 +3690,12 @@
                                 <span class="notif-hdr-sub" id="notifUnreadText">Memuat notifikasi...</span>
                             </div>
                         </div>
+                        <div class="notif-hdr-actions">
+                            <button type="button" class="notif-btn-clear" id="notifClearBtn" onclick="clearAllNotifications(event)" title="Bersihkan notifikasi periode aktif" style="display: none;">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>Bersihkan</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="notif-list-body" id="notifListBody">
                         <div style="text-align: center; padding: 2.5rem 1rem; color: #94a3b8;">
@@ -4086,6 +4145,11 @@
             if (unreadText) unreadText.textContent = 'Tidak ada notifikasi';
         }
 
+        const clearBtn = document.getElementById('notifClearBtn');
+        if (clearBtn) {
+            clearBtn.style.display = notifs && notifs.length > 0 ? 'inline-flex' : 'none';
+        }
+
         if (!body) return;
 
         if (!notifs || notifs.length === 0) {
@@ -4124,6 +4188,9 @@
 
             html += `
             <div class="notif-item ${isUnread ? 'unread' : ''}" onclick="markNotifRead('${n.id}')">
+                <button type="button" class="notif-item-del-btn" onclick="deleteNotification(event, '${n.id}')" title="Hapus notifikasi ini">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
                 ${iconHtml}
                 <div class="notif-item-content">
                     <div class="notif-item-top">
@@ -4167,6 +4234,68 @@
         }).then(() => {
             fetchNotifications();
         });
+    }
+
+    function clearAllNotifications(e) {
+        if (e) e.stopPropagation();
+        Swal.fire({
+            title: 'Bersihkan Notifikasi?',
+            text: 'Semua notifikasi pada periode aktif ini akan dihapus dari daftar.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: '<i class="fa-solid fa-trash-can"></i> Ya, Bersihkan',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/gm/api/notifications/clear', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': typeof csrfToken !== 'undefined' ? csrfToken : ''
+                    },
+                    body: JSON.stringify({ csrf_token: typeof csrfToken !== 'undefined' ? csrfToken : '' })
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        fetchNotifications();
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Notifikasi berhasil dibersihkan',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Error clearing GM notifications:', err);
+                });
+            }
+        });
+    }
+
+    function deleteNotification(e, notifId) {
+        if (e) e.stopPropagation();
+        if (!notifId) return;
+        fetch('/gm/api/notifications/clear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': typeof csrfToken !== 'undefined' ? csrfToken : ''
+            },
+            body: JSON.stringify({ notif_id: notifId, csrf_token: typeof csrfToken !== 'undefined' ? csrfToken : '' })
+        })
+        .then(r => r.json())
+        .then(res => {
+            if (res.success) {
+                fetchNotifications();
+            }
+        })
+        .catch(err => console.error('Error deleting notification:', err));
     }
 
     // Table Filter on Search

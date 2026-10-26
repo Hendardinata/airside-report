@@ -164,14 +164,61 @@ def delete_notifications_by_report_id(airport_code, report_id):
         if len(data) != initial_len:
             _save_raw_notifications(data)
 
-def get_notifications(airport_code, role='staff', username=None):
+def _matches_active_month(n, active_month):
     """
-    Mengambil daftar notifikasi untuk airport dan role tertentu.
+    Memeriksa apakah notifikasi terkait dengan periode bulan aktif ('YYYY-MM').
+    """
+    if not active_month:
+        return True
+    
+    clean_month = str(active_month).strip()
+    month_compact = clean_month.replace('-', '') # misal '202610'
+    
+    # 1. Cek field tanggal langsung (e.g. '2026-10-01' atau '2026-11-18')
+    tgl = str(n.get('tanggal') or '').strip()
+    if tgl and len(tgl) >= 7:
+        return tgl.startswith(clean_month)
+        
+    # 2. Cek report_id (e.g. 'REP-LOP-20261001' vs 'REP-LOP-20261118')
+    rid = str(n.get('report_id') or '').strip()
+    if rid:
+        if month_compact in rid or clean_month in rid:
+            return True
+        import re
+        if re.search(r'20\d{4,6}', rid):
+            return False
+
+    # 3. Cek apakah ada tanggal bulan lain yang tertulis dalam message/title
+    msg = f"{n.get('title', '')} {n.get('message', '')}"
+    if clean_month in msg:
+        return True
+    import re
+    m_date = re.search(r'20\d{2}-\d{2}', msg)
+    if m_date:
+        return m_date.group(0) == clean_month
+
+    # 4. Fallback created_at jika notifikasi murni sistem tanpa tanggal laporan
+    created = str(n.get('created_at') or '').strip()
+    if created and len(created) >= 7:
+        return created.startswith(clean_month)
+
+    return True
+
+def get_notifications(airport_code, role='staff', username=None, active_month=None):
+    """
+    Mengambil daftar notifikasi untuk airport dan role tertentu yang sesuai dengan bulan aktif.
     Jika role == 'staff' dan username diberikan, hanya mengambil notifikasi yang:
     - Ditujukan spesifik ke username tersebut, ATAU
     - Merupakan notifikasi broadcast untuk seluruh staf bandara (recipient_username kosong).
     """
     airport = (airport_code or 'LOP').upper()
+    if not active_month:
+        try:
+            from app.models.config_store import get_active_month
+            active_month = get_active_month(airport)
+        except Exception:
+            active_month = None
+
     with _lock:
         raw_list = _load_raw_notifications()
 
@@ -200,6 +247,11 @@ def get_notifications(airport_code, role='staff', username=None):
                     # Jika notifikasi ditargetkan ke username tertentu:
                     if recip_user and u_filter and recip_user != u_filter:
                         continue # Notifikasi untuk staf lain, lewati!
+
+                # Filter sesuai bulan aktif
+                if active_month and not _matches_active_month(n, active_month):
+                    continue
+
                 filtered.append(n)
 
     # Sinkronisasi dengan staging reports aktif
@@ -215,6 +267,10 @@ def get_notifications(airport_code, role='staff', username=None):
             if srep.get('status') == 'REVISI':
                 rid = srep.get('report_id')
                 rep_user = (srep.get('submitted_by_username') or '').strip().lower()
+                rep_tgl = str(srep.get('tanggal') or '').strip()
+                # Hanya sinkronkan revisi jika berada di bulan aktif
+                if active_month and rep_tgl and not rep_tgl.startswith(active_month):
+                    continue
                 if rid and rid not in existing_revisi_rids and role in ('staff', 'all'):
                     # Jika filter username aktif, hanya generate jika cocok
                     if u_filter and rep_user and rep_user != u_filter:
@@ -274,6 +330,56 @@ def get_notifications(airport_code, role='staff', username=None):
     # Urutkan berdasarkan created_at descending
     filtered.sort(key=lambda x: x.get('created_at', ''), reverse=True)
     return filtered
+
+def clear_notifications(airport_code, role='staff', username=None, active_month=None):
+    """
+    Menghapus seluruh notifikasi untuk bandara, role, username, dan bulan aktif tertentu.
+    """
+    airport = (airport_code or 'LOP').upper()
+    target_roles = {'all', role}
+    if role in ('dh', 'gm'):
+        target_roles.update({'dh', 'gm'})
+    u_filter = (username or '').strip().lower()
+
+    if not active_month:
+        try:
+            from app.models.config_store import get_active_month
+            active_month = get_active_month(airport)
+        except Exception:
+            active_month = None
+
+    with _lock:
+        data = _load_raw_notifications()
+        new_data = []
+        for n in data:
+            apt_match = (n.get('airport', '').upper() == airport)
+            role_match = (n.get('recipient_role', 'all') in target_roles)
+            user_match = True
+            if role == 'staff' and u_filter:
+                recip_u = (n.get('recipient_username') or '').strip().lower()
+                if recip_u and recip_u != u_filter:
+                    user_match = False
+
+            month_match = _matches_active_month(n, active_month) if active_month else True
+
+            # Jika memenuhi kriteria, hapus (jangan masukkan ke new_data)
+            if apt_match and role_match and user_match and month_match:
+                continue
+            new_data.append(n)
+
+        _save_raw_notifications(new_data)
+
+def delete_single_notification(notif_id):
+    """
+    Menghapus satu notifikasi spesifik berdasarkan ID notifikasi.
+    """
+    if not notif_id:
+        return
+    with _lock:
+        data = _load_raw_notifications()
+        new_data = [n for n in data if n.get('id') != notif_id]
+        if len(new_data) != len(data):
+            _save_raw_notifications(new_data)
 
 def mark_notification_as_read(notif_id):
     with _lock:
