@@ -2792,8 +2792,8 @@
 
     .branch-iata-LOP { background-color: #00B7CD; }
     .branch-iata-DPS { background-color: #00B7CD; }
-    .branch-iata-BWX { background-color: #059669; }
-    .branch-iata-KOE { background-color: #4f46e5; }
+    .branch-iata-BWX { background-color: #00B7CD; }
+    .branch-iata-KOE { background-color: #00B7CD; }
 
     .branch-check-pill {
         width: 28px;
@@ -4281,54 +4281,571 @@
     }
 
     @media (max-width: 768px) {
+        /* App Layout & Canvas */
         .admin-content-canvas {
-            padding: 1.2rem 1rem 3rem 1rem;
+            padding: 0.95rem 0.75rem 3.5rem 0.75rem;
+        }
+
+        /* Topbar Header */
+        .staff-topbar {
+            height: 62px;
+            padding: 0 0.25rem;
         }
 
         .topbar-inner {
-            padding: 0 1rem;
+            padding: 0 0.85rem;
+            gap: 0.5rem;
         }
 
+        .topbar-left-cluster {
+            gap: 0.5rem;
+            max-width: none;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .btn-sidebar-toggle {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            font-size: 1.05rem;
+        }
+
+        .topbar-search-wrap {
+            max-width: 100%;
+            flex: 1;
+        }
+
+        .topbar-search-input {
+            height: 38px;
+            padding: 0 0.75rem 0 2.15rem;
+            font-size: 0.82rem;
+            border-radius: 9px;
+        }
+
+        .topbar-search-icon {
+            left: 0.75rem;
+            font-size: 0.82rem;
+        }
+
+        .topbar-actions {
+            gap: 0.45rem;
+            flex-shrink: 0;
+        }
+
+        .btn-topbar-sync {
+            padding: 0.45rem 0.65rem;
+            font-size: 0.76rem;
+            border-radius: 9px;
+        }
+
+        .btn-topbar-sync span {
+            display: none; /* Hide label on mobile to save critical topbar width */
+        }
+
+        .topbar-notif-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            font-size: 1.1rem;
+        }
+
+        .topbar-user-wrap {
+            padding: 0.2rem;
+            gap: 0;
+            background: transparent;
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        .user-avatar-circle {
+            width: 36px;
+            height: 36px;
+            font-size: 0.8rem;
+        }
+
+        .user-text-col,
+        .user-caret-icon {
+            display: none !important; /* Hide user name string on phone, keep avatar icon */
+        }
+
+        /* Notifications & User Dropdown Cards (Never clip off-screen) */
+        .notif-dropdown-card {
+            position: fixed !important;
+            top: 64px !important;
+            left: 0.75rem !important;
+            right: 0.75rem !important;
+            width: auto !important;
+            max-width: none !important;
+            margin-top: 0 !important;
+            border-radius: 14px !important;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22) !important;
+        }
+
+        .user-dropdown-card {
+            position: fixed !important;
+            top: 64px !important;
+            right: 0.75rem !important;
+            width: 250px !important;
+            max-width: calc(100vw - 1.5rem) !important;
+            border-radius: 14px !important;
+        }
+
+        /* Hero Banner */
         .admin-hero-banner {
-            padding: 1.5rem 1.25rem;
+            padding: 1.25rem 1rem;
             min-height: auto;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            gap: 1rem;
+            border-radius: 14px;
+            margin-bottom: 1rem;
+            background-position: center right;
+        }
+
+        .hero-info-col {
+            max-width: 100%;
         }
 
         .hero-heading {
-            font-size: 1.6rem;
+            font-size: 1.45rem;
+            line-height: 1.25;
+            margin-bottom: 0.35rem;
+        }
+
+        .hero-subtext {
+            font-size: 0.825rem;
+            line-height: 1.45;
         }
 
         .hero-actions-cluster {
-            justify-content: flex-start;
+            width: 100%;
+            justify-content: stretch;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .btn-hero-action {
+            width: 100%;
+            justify-content: center;
+            padding: 0.55rem 0.75rem;
+            font-size: 0.78rem;
+            min-height: 40px;
+        }
+
+        /* KPI Metric Summary Cards */
+        .kpi-grid {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .kpi-card {
+            padding: 1rem 1.15rem;
+            border-radius: 12px;
+        }
+
+        .kpi-value {
+            font-size: 1.5rem;
+        }
+
+        /* Interactive Date Control Bar */
+        .filter-bar {
+            padding: 0.75rem 0.85rem;
+            border-radius: 12px;
+            min-height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .filter-deck-inner {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+            min-width: 0 !important;
             width: 100%;
         }
 
-        .kpi-grid,
-        .airports-grid,
-        .config-columns,
-        .branch-cards-grid,
-        .central-controls-grid {
-            grid-template-columns: 1fr;
+        .filter-meta-left {
+            width: 100%;
+            justify-content: space-between;
+            gap: 0.5rem;
         }
 
+        .filter-label {
+            font-size: 0.78rem;
+        }
+
+        .date-stepper-box {
+            flex: 1;
+            max-width: 215px;
+            height: 36px;
+            justify-content: space-between;
+        }
+
+        .date-formatted-text {
+            font-size: 0.8rem;
+        }
+
+        .filter-status-summary {
+            width: 100%;
+            justify-content: flex-start;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 3px;
+            gap: 0.45rem;
+            scrollbar-width: none;
+        }
+
+        .filter-status-summary::-webkit-scrollbar {
+            display: none;
+        }
+
+        .summary-report-pill {
+            height: 34px;
+            padding: 0 0.75rem;
+            font-size: 0.76rem;
+            border-radius: 8px;
+        }
+
+        .summary-info-item,
+        .summary-clock-item {
+            font-size: 0.75rem;
+        }
+
+        /* 4 Airport Status Cards */
+        .airports-grid {
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .airport-card {
+            padding: 1rem;
+            border-radius: 14px;
+        }
+
+        .airport-card-media {
+            height: 120px;
+        }
+
+        .airport-title {
+            font-size: 1.15rem;
+        }
+
+        .btn-status-pill {
+            min-height: 42px;
+            font-size: 0.825rem;
+            border-radius: 9px;
+        }
+
+        /* Quick Console WhatsApp Strip */
+        .quick-console-strip {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 1rem;
+            gap: 0.85rem;
+            border-radius: 14px;
+            margin-top: 0.35rem;
+        }
+
+        .strip-left {
+            width: 100%;
+        }
+
+        .strip-divider {
+            display: none;
+        }
+
+        .strip-icon-box {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            font-size: 1.35rem;
+            border-radius: 11px;
+        }
+
+        .strip-text-col {
+            margin-left: 0.65rem;
+        }
+
+        .strip-title {
+            font-size: 0.92rem;
+            white-space: normal;
+        }
+
+        .strip-desc {
+            font-size: 0.76rem;
+            white-space: normal;
+        }
+
+        .strip-actions {
+            width: 100%;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-strip-copy,
+        .btn-strip-open {
+            width: 100%;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0.55rem 1rem;
+            font-size: 0.82rem;
+            border-radius: 9px;
+        }
+
+        /* Dedicated Console View */
         .console-card {
-            padding: 1.15rem 1.25rem;
+            padding: 1rem 0.85rem;
+            border-radius: 14px;
+        }
+
+        .console-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .console-title {
+            font-size: 1.15rem;
+        }
+
+        .console-textarea {
+            min-height: 250px;
+            padding: 0.85rem;
+            font-size: 0.82rem;
+            border-radius: 11px;
         }
 
         .console-footer {
             flex-direction: column;
             align-items: stretch;
+            gap: 0.75rem;
+        }
+
+        .console-stats {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.35rem;
         }
 
         .console-actions {
             width: 100%;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
-        .console-actions button {
-            flex: 1;
+        .console-actions button,
+        .btn-send-serentak {
+            width: 100%;
             justify-content: center;
+            min-height: 44px;
+        }
+
+        /* Batch Hub Multi-Cabang */
+        .hub-card {
+            padding: 1.15rem 0.85rem;
+            border-radius: 14px;
+            margin-bottom: 1rem;
+        }
+
+        .hub-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .rollout-controls-row {
+            grid-template-columns: 1fr;
+            padding: 1rem 0.85rem;
+            gap: 0.75rem;
+            border-radius: 11px;
+        }
+
+        .branch-cards-grid {
+            grid-template-columns: 1fr;
+            gap: 0.65rem;
+        }
+
+        .matrix-sync-bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+            padding: 0.75rem 0.85rem;
+        }
+
+        .matrix-sync-control {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .central-controls-grid {
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+        }
+
+        .batch-tools-stack .batch-tool-item {
+            padding: 0.75rem 0.85rem;
+            border-radius: 10px;
+        }
+
+        /* Guaranteed Responsive Table Horizontal Scrolling */
+        .hub-table-wrapper {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .hub-table {
+            min-width: 680px !important;
+            table-layout: auto !important;
+        }
+
+        .hub-table th,
+        .hub-table td {
+            padding: 0.6rem 0.5rem !important;
+            white-space: nowrap !important;
+        }
+
+        /* Visual Form Builder & Config Cards */
+        .config-view-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .config-columns {
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .config-section-card {
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .config-action-footer {
+            flex-direction: column;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .config-action-footer button {
+            width: 100%;
+            justify-content: center;
+            min-height: 44px;
+        }
+
+        /* Manajemen Pengguna */
+        .users-kpi-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.65rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-kpi-card {
+            padding: 0.85rem 0.95rem;
+            border-radius: 12px;
+            gap: 0.65rem;
+        }
+
+        .user-kpi-icon {
+            width: 38px;
+            height: 38px;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        .user-kpi-val {
+            font-size: 1.25rem;
+        }
+
+        .user-filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0.85rem;
+            gap: 0.65rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .user-filter-left {
+            flex-direction: column;
+            width: 100%;
+            min-width: 0;
+            gap: 0.5rem;
+        }
+
+        .user-search-box {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .user-filter-select {
+            width: 100%;
+        }
+
+        .btn-add-user {
+            width: 100%;
+            justify-content: center;
+            min-height: 42px;
+        }
+
+        /* Modals & Dialogs (Clean Mobile Bottom Sheet / Centered Card) */
+        .clean-modal-overlay {
+            padding: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .clean-modal-card {
+            max-height: 92vh;
+            border-radius: 20px 20px 10px 10px;
+            width: 100%;
+        }
+
+        .modal-head {
+            padding: 1rem 1.15rem;
+        }
+
+        .modal-title {
+            font-size: 1.05rem;
+        }
+
+        .modal-body {
+            padding: 1rem 1.15rem !important;
+        }
+
+        .modal-footer {
+            padding: 0.85rem 1.15rem !important;
+            flex-direction: column-reverse;
+            gap: 0.5rem;
+        }
+
+        .modal-footer button,
+        .modal-btn-save {
+            width: 100% !important;
+            justify-content: center;
+            min-height: 44px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-actions-cluster {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-heading {
+            font-size: 1.3rem;
+        }
+
+        .users-kpi-grid {
+            grid-template-columns: 1fr;
         }
     }
 
@@ -4817,36 +5334,29 @@
 
         <!-- Sidebar Navigation Menu Body -->
         <div class="sidebar-nav-body">
-            <!-- GROUP 1: MONITORING & LAPORAN -->
-            <div class="nav-group-label">Monitoring & Laporan</div>
             <ul class="sidebar-menu-list">
                 <li>
                     <button type="button" class="sidebar-menu-btn active" id="nav-btn-rekap" onclick="switchAdminView('rekap')">
                         <i class="fa-solid fa-chart-pie sidebar-item-icon"></i>
-                        <span class="sidebar-item-title">Rekapitulasi Bandara</span>
+                        <span class="sidebar-item-title">Rekap Laporan</span>
                     </button>
                 </li>
-            </ul>
-
-            <!-- GROUP 2: PENGATURAN & MASTER DATA -->
-            <div class="nav-group-label">Pengaturan & Master Data</div>
-            <ul class="sidebar-menu-list">
                 <li>
                     <button type="button" class="sidebar-menu-btn" id="nav-btn-users" onclick="switchAdminView('users')">
                         <i class="fa-solid fa-users-gear sidebar-item-icon"></i>
-                        <span class="sidebar-item-title">Manajemen Pengguna</span>
+                        <span class="sidebar-item-title">Pengguna</span>
                     </button>
                 </li>
                 <li>
                     <button type="button" class="sidebar-menu-btn" id="nav-btn-batch" onclick="switchAdminView('batch')">
-                        <i class="fa-solid fa-layer-group sidebar-item-icon"></i>
-                        <span class="sidebar-item-title">Batch Hub Multi-Cabang</span>
+                        <i class="fa-solid fa-sliders sidebar-item-icon"></i>
+                        <span class="sidebar-item-title">Pengaturan</span>
                     </button>
                 </li>
                 <li>
                     <button type="button" class="sidebar-menu-btn" id="nav-btn-schema" onclick="switchAdminView('schema')">
                         <i class="fa-solid fa-file-code sidebar-item-icon"></i>
-                        <span class="sidebar-item-title">Visual Form Builder</span>
+                        <span class="sidebar-item-title">Form Builder</span>
                     </button>
                 </li>
             </ul>
@@ -4883,14 +5393,6 @@
                     <button type="button" class="btn-sidebar-toggle" id="sidebarToggleBtn" onclick="toggleSidebar(true)" title="Buka Menu Navigasi">
                         <i class="fa-solid fa-bars"></i>
                     </button>
-
-                    <!-- Search Input with Glass Icon -->
-                    <div class="topbar-search-wrap">
-                        <i class="fa-solid fa-magnifying-glass topbar-search-icon"></i>
-                        <input type="text" id="topbarSearchInput" class="topbar-search-input" 
-                               placeholder="Cari cabang, tanggal, data rekapitulasi fasilitas..." 
-                               onkeyup="handleAdminSearch(event)">
-                    </div>
                 </div>
 
                 <!-- Right Side Actions: Notification Bell + User Profile Dropdown -->
@@ -4964,10 +5466,6 @@
                 <!-- HERO BANNER CARD (Aircraft on Runway Tarmac) -->
                 <div class="admin-hero-banner">
                     <div class="hero-info-col">
-                        <div class="hero-pill-badge">
-                            <span class="hero-dot-marker"></span>
-                            <span>UNIT FASILITAS SISI UDARA • REGIONAL II</span>
-                        </div>
                         <h1 class="hero-heading">Rekapitulasi Laporan Harian Airside</h1>
                         <p class="hero-subtext">
                             Pencatatan data inspeksi runway, taxiway, apron, dan pemeliharaan fasilitas harian cabang.
@@ -5268,15 +5766,13 @@
 
             <!-- ==================================================================
                  VIEW 4: BATCH OPERATIONS HUB MULTI-CABANG (V2)
-                 ================================================================== -->
-            <section class="content-view-panel" id="view-batch">
+                 ================================================================== -->            <section class="content-view-panel" id="view-batch">
                 <div class="config-view-header">
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
-                            <h2 class="console-title mb-0">Batch Operations Hub</h2>
-                            <span class="hub-version-badge">Fleet V2</span>
+                            <h2 class="console-title mb-0">Pengaturan Sistem</h2>
                         </div>
-                        <p class="console-subtitle">Pusat kendali operasional serentak, penerbitan spreadsheet bulanan, dan fleet matriks 4 cabang bandara.</p>
+                        <p class="console-subtitle">Kelola spreadsheet bulanan, folder Google Drive, dan kontak pimpinan cabang.</p>
                     </div>
                 </div>
 
@@ -5288,13 +5784,13 @@
                                 <i class="fa-solid fa-rocket"></i>
                             </div>
                             <div>
-                                <h4 class="hub-card-title">Penerbitan Spreadsheet Bulanan Serentak</h4>
-                                <p class="hub-card-desc">Duplikasi master template dan aktifkan spreadsheet periode baru serentak untuk seluruh cabang bandara (LOP, DPS, BWX, KOE).</p>
+                                <h4 class="hub-card-title">Penerbitan Spreadsheet Bulanan</h4>
+                                <p class="hub-card-desc">Buat dan aktifkan spreadsheet periode baru untuk seluruh cabang secara otomatis.</p>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.825rem;">
-                                <i class="fa-solid fa-layer-group me-1"></i> Otomatis Seluruh Cabang (LOP, DPS, BWX, KOE)
+                                <i class="fa-solid fa-layer-group me-1"></i> Semua Cabang (LOP, DPS, BWX, KOE)
                             </span>
                         </div>
                     </div>
@@ -5304,21 +5800,21 @@
                         <div class="rollout-inputs-grid">
                             <div class="form-group-modern">
                                 <label class="form-label-modern" for="batchTargetMonth">
-                                    <i class="fa-regular fa-calendar-days text-primary me-1"></i> Target Periode Bulan <span class="text-danger ms-1">*</span>
+                                    <i class="fa-regular fa-calendar-days text-primary me-1"></i> Periode Bulan <span class="text-danger ms-1">*</span>
                                 </label>
                                 <div class="input-with-icon">
                                     <i class="fa-solid fa-calendar-check input-icon text-primary"></i>
-                                    <input type="text" class="table-input with-icon" id="batchTargetMonth" placeholder="Pilih Bulan Rollout (Contoh: 2026-11)">
+                                    <input type="text" class="table-input with-icon" id="batchTargetMonth" placeholder="Pilih Bulan (Contoh: 2026-11)">
                                 </div>
                             </div>
 
                             <div class="form-group-modern">
                                 <label class="form-label-modern" for="batchTemplateId">
-                                    <i class="fa-solid fa-table-cells text-success me-1"></i> Template Master ID (Opsional)
+                                    <i class="fa-solid fa-table-cells text-success me-1"></i> ID Master Template (Opsional)
                                 </label>
                                 <div class="input-with-icon">
                                     <i class="fa-brands fa-google-drive input-icon text-muted"></i>
-                                    <input type="text" class="table-input with-icon monospace" id="batchTemplateId" placeholder="Kosongkan untuk Template Master Default" value="{{ default_template_id }}">
+                                    <input type="text" class="table-input with-icon monospace" id="batchTemplateId" placeholder="Default template master sistem" value="{{ default_template_id }}">
                                 </div>
                             </div>
 
@@ -5326,14 +5822,14 @@
                                 <label class="form-label-modern d-none d-lg-block">&nbsp;</label>
                                 <button type="button" class="btn-execute-rollout" onclick="executeBatchRollout()">
                                     <i class="fa-solid fa-rocket me-1"></i>
-                                    <span>Terbitkan & Aktifkan Semua Cabang</span>
+                                    <span>Terbitkan untuk Semua Cabang</span>
                                 </button>
                             </div>
                         </div>
 
                         <div class="rollout-micro-hint">
                             <i class="fa-solid fa-circle-info text-primary me-1"></i>
-                            <span>Sistem akan menduplikasi master template ke folder Google Drive seluruh cabang (LOP, DPS, BWX, KOE), menyelaraskan form schema, dan langsung mengaktifkannya sebagai spreadsheet aktif.</span>
+                            <span>Spreadsheet baru akan dibuat di Google Drive masing-masing cabang dan langsung aktif.</span>
                         </div>
                     </div>
                 </div>
@@ -5346,8 +5842,8 @@
                                 <i class="fa-solid fa-network-wired"></i>
                             </div>
                             <div>
-                                <h4 class="hub-card-title">Matriks Pengaturan 4 Cabang (Fleet Matrix)</h4>
-                                <p class="hub-card-desc">Tinjau dan kelola Folder Drive, Spreadsheet Aktif, dan Kontak WhatsApp pimpinan seluruh cabang dalam satu tabel.</p>
+                                <h4 class="hub-card-title">Pengaturan Cabang Bandara</h4>
+                                <p class="hub-card-desc">Kelola Folder Google Drive, Spreadsheet Aktif, dan Kontak DH tiap cabang.</p>
                             </div>
                         </div>
                     </div>
@@ -5359,26 +5855,26 @@
                                 <i class="fa-solid fa-sliders"></i>
                             </div>
                             <div>
-                                <span class="matrix-sync-title">Penyelarasan Acuan Serentak (Tahun & Bulan)</span>
-                                <span class="matrix-sync-subtitle d-none d-md-inline ms-1">— Filter spreadsheet per tahun dari Drive, lalu selaraskan bulan serentak</span>
+                                <span class="matrix-sync-title">Penyelarasan Periode</span>
+                                <span class="matrix-sync-subtitle d-none d-md-inline ms-1">— Filter spreadsheet per tahun dan selaraskan bulan aktif</span>
                             </div>
                         </div>
                         <div class="matrix-sync-control d-flex align-items-center gap-2 flex-wrap">
                             {% set cur_year = config.active_year if config and config.active_year else (config.active_month.split('-')[0] if config and config.active_month else '2026') %}
                             {% set cur_month_label = config.active_month_label if config and config.active_month_label else 'Bulan NOV 2026' %}
-                            <div class="input-with-icon" style="width: 175px;" title="Tahun Acuan Spreadsheet yang ditemukan di Google Drive">
+                            <div class="input-with-icon" style="width: 175px;" title="Tahun Acuan Spreadsheet">
                                 <i class="fa-solid fa-calendar-days input-icon text-primary"></i>
                                 <select id="matrixYearSelect" class="table-input with-icon" style="font-weight: 700; color: #002b49;" onchange="onMatrixYearChanged(this.value)">
                                     <option value="{{ cur_year }}" selected>Tahun {{ cur_year }}</option>
                                 </select>
                             </div>
-                            <div class="input-with-icon" style="width: 220px;" title="Selaraskan spreadsheet seluruh cabang ke bulan ini">
+                            <div class="input-with-icon" style="width: 220px;" title="Selaraskan seluruh cabang ke bulan ini">
                                 <i class="fa-regular fa-calendar-check input-icon text-success"></i>
                                 <select id="matrixBulkMonthSelect" class="table-input with-icon" style="font-weight: 700; color: #002b49;" onchange="applyBulkMonthSelection(this.value)">
                                     <option value="{{ cur_month_label.replace('Bulan ', '') }}" selected>{{ cur_month_label }}</option>
                                 </select>
                             </div>
-                            <button type="button" class="btn-table-action" onclick="loadAllBranchSheets(true)" title="Segarkan Daftar Spreadsheet Seluruh Cabang dari Google Drive">
+                            <button type="button" class="btn-table-action" onclick="loadAllBranchSheets(true)" title="Segarkan Spreadsheet dari Google Drive">
                                 <i class="fa-solid fa-arrows-rotate" id="matrixRefreshTopIcon"></i>
                             </button>
                         </div>
@@ -5389,19 +5885,17 @@
                         <table class="hub-table">
                             <colgroup>
                                 <col style="width: 10%;">
-                                <col style="width: 21%;">
-                                <col style="width: 32%;">
-                                <col style="width: 15%;">
-                                <col style="width: 15%;">
+                                <col style="width: 25%;">
+                                <col style="width: 40%;">
+                                <col style="width: 18%;">
                                 <col style="width: 7%;">
                             </colgroup>
                             <thead>
                                 <tr>
                                     <th style="width: 10%; text-align: center;">Cabang</th>
-                                    <th style="width: 21%;">Folder Google Drive</th>
-                                    <th style="width: 32%;">Spreadsheet Aktif Saat Ini</th>
-                                    <th style="width: 15%;">WhatsApp PIC</th>
-                                    <th style="width: 15%;">WhatsApp DH</th>
+                                    <th style="width: 25%;">Folder Google Drive</th>
+                                    <th style="width: 40%;">Spreadsheet Aktif</th>
+                                    <th style="width: 18%;">WhatsApp DH</th>
                                     <th style="width: 7%; text-align: center;">Aksi</th>
                                 </tr>
                             </thead>
@@ -5411,6 +5905,7 @@
                                 <tr>
                                     <td style="text-align: center;">
                                         <span class="branch-iata-pill branch-iata-{{ code }}" title="{% if code == 'LOP' %}Bandara Lombok (ZAM){% elif code == 'DPS' %}Bandara Bali (DPS){% elif code == 'BWX' %}Bandara Banyuwangi (BWX){% elif code == 'KOE' %}Bandara Kupang (KOE){% endif %}">{{ code }}</span>
+                                        <input type="hidden" id="matrixPic-{{ code }}" value="{{ c.pic_phone | default('') }}">
                                     </td>
                                     <td>
                                         <div class="input-action-wrap">
@@ -5450,17 +5945,11 @@
                                     <td>
                                         <div class="input-with-icon">
                                             <i class="fa-brands fa-whatsapp input-icon text-success"></i>
-                                            <input type="text" class="table-input with-icon monospace" id="matrixPic-{{ code }}" value="{{ c.pic_phone | default('') }}" placeholder="62812...">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-with-icon">
-                                            <i class="fa-brands fa-whatsapp input-icon text-success"></i>
                                             <input type="text" class="table-input with-icon monospace" id="matrixGM-{{ code }}" value="{{ c.dh_phone | default(c.gm_phone | default('')) }}" placeholder="62812..." title="Nomor WhatsApp Department Head (DH)">
                                         </div>
                                     </td>
                                     <td style="text-align: center;">
-                                        <button class="btn-table-action" type="button" onclick="loadSheetsForBranch('{{ code }}', true)" title="Segarkan Daftar Spreadsheet Cabang {{ code }}" style="margin: 0 auto;">
+                                        <button class="btn-table-action" type="button" onclick="loadSheetsForBranch('{{ code }}', true)" title="Segarkan Spreadsheet Cabang {{ code }}" style="margin: 0 auto;">
                                             <i class="fa-solid fa-arrows-rotate" id="matrixRefreshIcon-{{ code }}"></i>
                                         </button>
                                     </td>
@@ -5473,10 +5962,10 @@
                     <div class="matrix-card-footer">
                         <div class="matrix-footer-note">
                             <i class="fa-solid fa-shield-halved text-primary me-1"></i>
-                            Perubahan Folder ID dan Sheet Aktif akan otomatis mempengaruhi form input petugas bandara bersangkutan.
+                            Perubahan folder dan spreadsheet aktif langsung diterapkan pada form laporan petugas.
                         </div>
                         <button type="button" class="modal-btn-save" onclick="saveFleetMatrix()">
-                            <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Matriks
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Pengaturan
                         </button>
                     </div>
                 </div>
@@ -5491,8 +5980,8 @@
                                     <i class="fa-solid fa-bullhorn"></i>
                                 </div>
                                 <div>
-                                    <h4 class="hub-card-title">Kontak Pimpinan Regional (Pusat)</h4>
-                                    <p class="hub-card-desc">Nomor WhatsApp tujuan pengiriman rekapitulasi harian regional otomatis.</p>
+                                    <h4 class="hub-card-title">Kontak Pimpinan Regional</h4>
+                                    <p class="hub-card-desc">Nomor WhatsApp penerima laporan rekapitulasi harian otomatis.</p>
                                 </div>
                             </div>
                         </div>
@@ -5500,13 +5989,13 @@
                         <div class="d-flex flex-column gap-3">
                             <div class="form-group-modern">
                                 <label class="form-label-modern" for="matrixAdminPhone">
-                                    <i class="fa-solid fa-user-shield text-primary me-1"></i> WhatsApp Administrator Regional
+                                    <i class="fa-solid fa-user-shield text-primary me-1"></i> WhatsApp Administrator
                                 </label>
                                 <div class="input-with-icon">
                                     <i class="fa-brands fa-whatsapp input-icon text-success"></i>
                                     <input type="text" class="table-input with-icon monospace" id="matrixAdminPhone" value="{{ config.admin.admin_phone | default('') if config and config.admin else '' }}" placeholder="Contoh: 6281326488542">
                                 </div>
-                                <span class="form-helper-modern">Menerima rekap seluruh cabang & notifikasi status operasional</span>
+                                <span class="form-helper-modern">Menerima rekapitulasi seluruh cabang dan notifikasi sistem</span>
                             </div>
 
                             <div class="form-group-modern">
@@ -5517,63 +6006,7 @@
                                     <i class="fa-brands fa-whatsapp input-icon text-success"></i>
                                     <input type="text" class="table-input with-icon monospace" id="matrixDeputyPhone" value="{{ config.admin.deputy_phone | default('') if config and config.admin else '' }}" placeholder="Contoh: 6281234567890">
                                 </div>
-                                <span class="form-helper-modern">Menerima ringkasan eksekutif operasional 4 bandara</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Panel Utilitas Serentak -->
-                    <div class="hub-card" style="margin-bottom: 0;">
-                        <div class="hub-card-header">
-                            <div class="hub-card-title-group">
-                                <div class="hub-card-icon navy">
-                                    <i class="fa-solid fa-toolbox"></i>
-                                </div>
-                                <div>
-                                    <h4 class="hub-card-title">Alat Batch Serentak (Global Tools)</h4>
-                                    <p class="hub-card-desc">Jalankan aksi pemeliharaan ke 4 spreadsheet cabang dalam 1 klik.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="batch-tools-stack">
-                            <div class="batch-tool-item" onclick="syncSchemaToAll()">
-                                <div class="batch-tool-icon-box bg-blue-tint text-primary">
-                                    <i class="fa-solid fa-arrows-split-up-and-left"></i>
-                                </div>
-                                <div class="batch-tool-content">
-                                    <div class="batch-tool-title">Sinkronkan Schema Form ke Semua Sheet</div>
-                                    <div class="batch-tool-desc">Suntikkan konfigurasi dan urutan kolom form aktif ke 4 spreadsheet cabang</div>
-                                </div>
-                                <div class="batch-tool-arrow">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </div>
-
-                            <div class="batch-tool-item" onclick="syncAllDailyTabs()">
-                                <div class="batch-tool-icon-box bg-green-tint text-success">
-                                    <i class="fa-solid fa-table-cells"></i>
-                                </div>
-                                <div class="batch-tool-content">
-                                    <div class="batch-tool-title">Tarik Seluruh Tab Harian ke Rekap</div>
-                                    <div class="batch-tool-desc">Kompilasi dan selaraskan tab tanggal harian dari seluruh cabang ke rekap</div>
-                                </div>
-                                <div class="batch-tool-arrow">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div>
-                            </div>
-
-                            <div class="batch-tool-item danger" onclick="emptyDriveTrashBatch()">
-                                <div class="batch-tool-icon-box bg-red-tint text-danger">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </div>
-                                <div class="batch-tool-content">
-                                    <div class="batch-tool-title text-danger">Kosongkan Trash Google Drive (Semua)</div>
-                                    <div class="batch-tool-desc">Hapus permanen file sampah pada Drive ke-4 bandara untuk menghemat kuota</div>
-                                </div>
-                                <div class="batch-tool-arrow">
-                                    <i class="fa-solid fa-chevron-right text-danger"></i>
-                                </div>
+                                <span class="form-helper-modern">Menerima ringkasan eksekutif harian 4 cabang bandara</span>
                             </div>
                         </div>
                     </div>
@@ -5749,17 +6182,17 @@
             <div class="modal-title-group">
                 <div class="modal-icon-badge"><i class="fa-solid fa-layer-group"></i></div>
                 <div>
-                    <h3 class="modal-title">Batch Operations Hub</h3>
-                    <p class="modal-subtitle">Penerbitan spreadsheet massal dan pengaturan fleet matrix.</p>
+                    <h3 class="modal-title">Pengaturan Sistem</h3>
+                    <p class="modal-subtitle">Penerbitan spreadsheet dan pengaturan cabang.</p>
                 </div>
             </div>
             <button type="button" class="modal-close-btn" onclick="closeBatchModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body" style="padding: 1rem 1.5rem;">
-            <p class="text-muted">Gunakan menu <strong>Batch Hub Multi-Cabang</strong> di sidebar untuk pengalaman kontrol massal yang optimal.</p>
+            <p class="text-muted">Gunakan menu <strong>Pengaturan</strong> di sidebar untuk mengelola spreadsheet dan cabang.</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="modal-btn-save" onclick="closeBatchModal(); switchAdminView('batch');">Buka Batch Hub Lengkap</button>
+            <button type="button" class="modal-btn-save" onclick="closeBatchModal(); switchAdminView('batch');">Buka Pengaturan</button>
             <button type="button" class="btn-outline-action" onclick="closeBatchModal()">Tutup</button>
         </div>
     </div>

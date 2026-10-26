@@ -212,7 +212,7 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
     }
 
     if (typeof showKawungLoading === 'function') {
-        showKawungLoading();
+        showKawungLoading('Mengirim Laporan...', 'Menyimpan data ke Spreadsheet Staging...');
     } else {
         Swal.fire({
             title: 'Mengirim Laporan...',
@@ -235,7 +235,7 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
         if (data.status === 'success') {
             Swal.fire({
                 title: 'Laporan Diajukan ke GM!', 
-                text: 'Data telah berhasil disimpan di Spreadsheet Staging sementara.\n\nApakah Anda ingin mengirimkan notifikasi telaah ke WhatsApp General Manager?', 
+                text: 'Data telah berhasil disimpan di Spreadsheet Staging sementara.\n\nApakah Anda ingin mengirimkan notifikasi review ke WhatsApp General Manager?', 
                 icon: 'success',
                 showCancelButton: true,
                 confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Beritahu GM',
@@ -245,7 +245,7 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (data.gm_phone) {
-                        let text = data.gm_message || `Halo General Manager, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon ditelaah di portal.`;
+                        let text = data.gm_message || `Halo General Manager, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon direview di portal.`;
                         let cleanGM = data.gm_phone.replace(/\D/g, '');
                         if (cleanGM.startsWith('0')) cleanGM = '62' + cleanGM.substring(1);
                         window.open(`https://wa.me/${cleanGM}?text=${encodeURIComponent(text)}`, '_blank');
@@ -253,9 +253,19 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
                         Swal.fire('Info', 'Nomor WA General Manager belum dikonfigurasi.', 'info');
                     }
                 }
+
+                // Tampilkan loading spinner InJourney Kawung sebelum dan sesudah reload dashboard
+                try {
+                    sessionStorage.setItem('staff_dashboard_reload_loading', 'true');
+                } catch(e) {}
+
+                if (typeof showKawungLoading === 'function') {
+                    showKawungLoading('Memuat Dashboard...', 'Memperbarui data dan status laporan...');
+                }
+
                 setTimeout(() => {
                     window.location.href = '/staff/dashboard';
-                }, 500);
+                }, 400);
             });
         } else {
             Swal.fire('Gagal Menyimpan', data.message || 'Terjadi kesalahan sistem', 'error');

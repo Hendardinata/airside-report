@@ -848,6 +848,43 @@
             background-size: contain;
             animation: injourney-spin 2s linear infinite;
         }
+
+        @media (max-width: 480px) {
+            div:where(.swal2-container) .swal2-popup,
+            .swal2-popup,
+            .swal2-popup.swal-corp-popup {
+                padding: 1.5rem 1.25rem 1.25rem 1.25rem !important;
+                border-radius: 20px !important;
+                width: 95% !important;
+            }
+            div:where(.swal2-container) .swal2-title,
+            .swal2-title,
+            .swal-corp-title {
+                font-size: 1.15rem !important;
+            }
+            div:where(.swal2-container) .swal2-html-container,
+            .swal2-html-container {
+                font-size: 0.85rem !important;
+                margin: 0.35rem 0 1rem 0 !important;
+            }
+            div:where(.swal2-container) .swal2-actions,
+            .swal2-actions,
+            .swal-corp-actions-bar {
+                flex-direction: column-reverse !important;
+                gap: 0.5rem !important;
+            }
+            div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+            div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+            div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+            .swal-corp-btn-primary,
+            .swal-corp-btn-secondary {
+                width: 100% !important;
+                flex: 1 1 100% !important;
+                height: 44px !important;
+                min-height: 44px !important;
+                max-height: 44px !important;
+            }
+        }
     </style>
     
     {% block head %}{% endblock %}

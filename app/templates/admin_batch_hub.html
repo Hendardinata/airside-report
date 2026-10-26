@@ -643,8 +643,58 @@
     }
 
     @media (max-width: 640px) {
+        .hub-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .hub-title {
+            font-size: 1.45rem;
+        }
+        .hub-subtitle {
+            font-size: 0.825rem;
+        }
+        .hub-card {
+            padding: 1.15rem 0.85rem;
+            border-radius: 14px;
+        }
         .branch-cards-grid {
             grid-template-columns: 1fr;
+            gap: 0.65rem;
+        }
+        .rollout-controls-row {
+            grid-template-columns: 1fr;
+            padding: 1rem 0.85rem;
+            gap: 0.75rem;
+            border-radius: 12px;
+        }
+        .btn-execute-rollout {
+            min-height: 44px;
+        }
+        .hub-table-wrapper {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            border-radius: 10px;
+        }
+        .hub-table {
+            min-width: 680px !important;
+            table-layout: auto !important;
+        }
+        .matrix-sync-bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+        }
+        .matrix-sync-control {
+            width: 100%;
+            min-width: 0;
+        }
+        .central-controls-grid {
+            grid-template-columns: 1fr;
+        }
+        .batch-tools-stack .batch-tool-item {
+            padding: 0.75rem 0.85rem;
         }
     }
 </style>

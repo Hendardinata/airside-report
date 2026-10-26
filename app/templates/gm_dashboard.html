@@ -43,6 +43,7 @@
         font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: var(--theme-slate-900) !important;
         -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
     }
 
     /* ==========================================================================
@@ -1772,7 +1773,7 @@
     }
 
     /* ==========================================================================
-       6. MODAL DETAIL TELAAH & REVISI DIALOGS (EXECUTIVE REDESIGN)
+       6. MODAL DETAIL REVIEW & REVISI DIALOGS (EXECUTIVE REDESIGN)
        ========================================================================== */
     .custom-modal-backdrop {
         position: fixed;
@@ -2037,7 +2038,7 @@
     }
 
     /* ==========================================================================
-       MODAL REVISION (CATATAN TELAAH DH) EXECUTIVE REDESIGN
+       MODAL REVISION (CATATAN REVIEW DH) EXECUTIVE REDESIGN
        ========================================================================== */
     .custom-modal-content.modal-revision-dialog {
         max-width: 720px;
@@ -2072,10 +2073,10 @@
         width: 52px;
         height: 52px;
         border-radius: 18px;
-        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-        color: #d97706;
-        border: 1.5px solid #fde68a;
-        box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15);
+        background: rgba(0, 183, 205, 0.12);
+        color: #00B7CD;
+        border: 1.5px solid rgba(0, 183, 205, 0.25);
+        box-shadow: 0 4px 16px rgba(0, 183, 205, 0.15);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2137,33 +2138,27 @@
         border-radius: 8px;
         font-size: 0.76rem;
         font-weight: 600;
-        background: #f8fafc;
+        background: transparent !important;
         border: 1px solid #e2e8f0;
-        color: #475569;
+        color: #0f172a !important;
         white-space: nowrap;
         flex-shrink: 0;
     }
 
-    .rev-meta-badge.badge-date {
-        background: #fffbf5;
-        border-color: #fef3c7;
-        color: #92400e;
-        font-weight: 700;
+    .rev-meta-badge i {
+        color: #0f172a !important;
+    }
+
+    .rev-meta-badge.badge-date,
+    .rev-meta-badge.badge-id,
+    .rev-meta-badge.badge-submitter {
+        background: transparent !important;
+        border-color: #e2e8f0 !important;
+        color: #0f172a !important;
     }
 
     .rev-meta-badge.badge-id {
-        background: #f0f9ff;
-        border-color: #bae6fd;
-        color: #009cb0;
         font-family: 'JetBrains Mono', Consolas, monospace;
-        font-size: 0.75rem;
-        font-weight: 700;
-    }
-
-    .rev-meta-badge.badge-submitter {
-        background: #f0fdf4;
-        border-color: #bbf7d0;
-        color: #166534;
     }
 
     .modal-revision-dialog .modal-close-btn {
@@ -2202,9 +2197,8 @@
     }
 
     .rev-instruction-callout {
-        background: #fffbf5;
-        border: 1px solid #fed7aa;
-        border-left: 4px solid #ea580c;
+        background: rgba(0, 183, 205, 0.08);
+        border: none;
         border-radius: 12px;
         padding: 0.85rem 1.15rem;
         display: flex;
@@ -2213,7 +2207,7 @@
     }
 
     .rev-instruction-callout i {
-        color: #ea580c;
+        color: #00B7CD;
         font-size: 1.15rem;
         margin-top: 2px;
         flex-shrink: 0;
@@ -2222,7 +2216,7 @@
     .rev-instruction-callout p {
         margin: 0;
         font-size: 0.86rem;
-        color: #7c2d12;
+        color: #0f172a;
         line-height: 1.5;
         font-weight: 500;
     }
@@ -2273,8 +2267,8 @@
     }
 
     .rev-textarea:focus {
-        border-color: #ea580c;
-        box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.14);
+        border-color: #00B7CD;
+        box-shadow: 0 0 0 4px rgba(0, 183, 205, 0.16);
         background-color: #ffffff;
     }
 
@@ -2341,9 +2335,9 @@
 
     .rev-wa-hint {
         font-size: 0.8rem;
-        color: #15803d;
-        background: #f0fdf4;
-        border: 1px solid #bbf7d0;
+        color: #0f172a;
+        background: rgba(0, 183, 205, 0.08);
+        border: 1px solid rgba(0, 183, 205, 0.25);
         border-radius: 12px;
         padding: 0.7rem 1rem;
         display: flex;
@@ -2535,14 +2529,14 @@
     }
 
     .btn-sign-edit {
-        background: linear-gradient(135deg, #00B7CD 0%, #009cb0 100%);
-        box-shadow: 0 4px 12px rgba(0, 183, 205, 0.22);
+        background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.28);
     }
 
     .btn-sign-edit:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 183, 205, 0.32);
-        background: linear-gradient(135deg, #009cb0 0%, #075985 100%);
+        box-shadow: 0 6px 16px rgba(14, 165, 233, 0.38);
+        background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
     }
 
     .btn-sign-edit:active {
@@ -2726,7 +2720,7 @@
     }
 
     .btn-dh-edit-save {
-        background: linear-gradient(135deg, #00B7CD 0%, #009cb0 100%);
+        background: #10b981;
         border: none;
         border-radius: 10px;
         height: 44px;
@@ -2738,17 +2732,18 @@
         transition: all 0.2s ease;
         display: inline-flex;
         align-items: center;
-        box-shadow: 0 4px 12px rgba(0, 183, 205, 0.28);
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.32);
         font-family: inherit;
     }
 
     .btn-dh-edit-save:hover {
+        background: #059669;
         transform: translateY(-2px);
-        box-shadow: 0 8px 18px rgba(0, 183, 205, 0.38);
+        box-shadow: 0 8px 22px rgba(16, 185, 129, 0.45);
     }
 
     .btn-dh-edit-approve {
-        background: #10b981;
+        background: linear-gradient(135deg, #00B7CD 0%, #009cb0 100%);
         border: none;
         border-radius: 10px;
         height: 44px;
@@ -2760,14 +2755,14 @@
         transition: all 0.2s ease;
         display: inline-flex;
         align-items: center;
-        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.32);
+        box-shadow: 0 4px 12px rgba(0, 183, 205, 0.28);
         font-family: inherit;
     }
 
     .btn-dh-edit-approve:hover {
-        background: #059669;
         transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(16, 185, 129, 0.45);
+        box-shadow: 0 8px 18px rgba(0, 183, 205, 0.38);
+        background: linear-gradient(135deg, #009cb0 0%, #007a8a 100%);
     }
 
     .doc-gm-status-badge-box {
@@ -3599,6 +3594,18 @@
     }
 
     @media (max-width: 640px) {
+        .gm-layout-canvas {
+            padding: 0.95rem 0.75rem 3.5rem 0.75rem;
+        }
+
+        .staff-topbar {
+            height: 62px;
+        }
+
+        .topbar-inner {
+            padding: 0 0.85rem;
+        }
+
         .topbar-brand-logo {
             width: 32px;
             height: 32px;
@@ -3613,30 +3620,125 @@
             gap: 0.6rem;
         }
 
-        .gm-layout-canvas {
-            padding: 1rem 0.75rem 2.5rem 0.75rem;
+        .topbar-actions {
+            gap: 0.5rem;
+        }
+
+        .user-pill .user-name {
+            display: none !important;
+        }
+
+        .notif-dropdown-card {
+            position: fixed !important;
+            top: 64px !important;
+            left: 0.75rem !important;
+            right: 0.75rem !important;
+            width: auto !important;
+            max-width: none !important;
+            border-radius: 14px !important;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22) !important;
+        }
+
+        .gm-hero-banner {
+            padding: 1.25rem 1rem;
+            border-radius: 14px;
+            margin-bottom: 1rem;
         }
 
         .hero-heading {
-            font-size: 1.65rem;
+            font-size: 1.45rem;
+            line-height: 1.25;
+        }
+
+        .hero-subtext {
+            font-size: 0.825rem;
+        }
+
+        .gm-stats-grid {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .gm-table-card {
-            padding: 1.25rem 1rem;
-            border-radius: 16px;
+            padding: 1.15rem 0.85rem;
+            border-radius: 14px;
+        }
+
+        /* Horizontally scrollable status filter pills */
+        .status-filter-group {
+            width: 100%;
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            gap: 0.45rem;
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .status-filter-group::-webkit-scrollbar {
+            display: none;
+        }
+
+        .status-filter-btn {
+            flex: 0 0 auto !important;
+            white-space: nowrap !important;
+            padding: 0.5rem 0.85rem !important;
+            font-size: 0.82rem !important;
+        }
+
+        /* Review & Approval Modal Mobile Bottom Sheet */
+        .custom-modal-backdrop {
+            padding: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .custom-modal-content {
+            max-height: 94vh;
+            border-radius: 20px 20px 10px 10px;
+            width: 100%;
         }
 
         .custom-modal-header {
-            padding: 1.15rem 1.25rem;
+            padding: 1rem 1.15rem;
+        }
+
+        .modal-header-heading {
+            font-size: 1.1rem;
+        }
+
+        .modal-header-badges-row {
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+
+        .modal-tab-bar {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0 0.5rem;
+        }
+
+        .modal-tab-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-tab-btn {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            padding: 0.65rem 0.95rem;
+            font-size: 0.82rem;
         }
 
         .custom-modal-body {
-            padding: 1.15rem 1.25rem;
+            padding: 1rem 1.15rem;
         }
 
         .custom-modal-footer {
-            padding: 1rem 1.25rem;
-            flex-direction: column;
+            padding: 0.85rem 1.15rem;
+            flex-direction: column-reverse;
+            gap: 0.5rem;
         }
 
         .btn-modal-close,
@@ -3644,6 +3746,7 @@
         .btn-modal-approve {
             width: 100%;
             justify-content: center;
+            min-height: 44px;
         }
     }
 </style>
@@ -3708,7 +3811,7 @@
                             <span class="status-indicator-dot"></span>
                             <span>Portal DH • Cabang {{ airport_code }}</span>
                         </div>
-                        <span style="font-size: 0.7rem; color: #94a3b8;">Otoritas Telaah & Persetujuan</span>
+                        <span style="font-size: 0.7rem; color: #94a3b8;">Otoritas Review & Persetujuan</span>
                     </div>
                 </div>
             </div>
@@ -3748,21 +3851,8 @@
     <!-- HERO BANNER CARD (Aircraft on Runway Tarmac) -->
     <div class="gm-hero-banner">
         <div class="hero-info-col">
-            <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-                <div class="hero-pill-badge mb-0">
-                    <i class="fa-solid fa-location-dot hero-badge-icon"></i>
-                    <span>PORTAL DEPARTMENT HEAD &rsaquo; {{ airport_code }}</span>
-                </div>
-                {% if active_month_label %}
-                <div class="hero-pill-badge mb-0"
-                    style="background: rgba(0, 183, 205, 0.12); border-color: #38bdf8; color: #00B7CD;"
-                    title="Spreadsheet Produksi Aktif: {{ active_sheet_title }}">
-                    <i class="fa-regular fa-calendar-check hero-badge-icon" style="color: #00B7CD;"></i>
-                    <span>BULAN OPERASIONAL: <strong>{{ active_month_label|upper }}</strong></span>
-                </div>
-                {% endif %}
-            </div>
-            <h1 class="hero-heading">Telaah & Persetujuan Laporan Airside</h1>
+
+            <h1 class="hero-heading">Review & Persetujuan Laporan Airside</h1>
             <p class="hero-subtext">
                 Cabang {{ airport_info.name }} ({{ airport_code }}) &bull; Kantor Regional II PT Angkasa Pura Indonesia
             </p>
@@ -3784,16 +3874,16 @@
                         <h2 class="table-header-title" id="tableHeaderTitle">Daftar Pengajuan Laporan Harian</h2>
                     </div>
                     <div class="table-header-subtitle">
-                        <span id="reportCountText">Menampilkan {{ pending_count }} laporan menunggu telaah</span>
+                        <span id="reportCountText">Menampilkan {{ pending_count }} laporan menunggu review</span>
                     </div>
                 </div>
             </div>
             <div class="table-header-right">
                 <div class="status-filter-group" id="statusFilterGroup">
                     <button type="button" class="status-filter-btn btn-filter-pend active" id="filterBtnPending"
-                        onclick="applyStatusFilter('PENDING_DH', this)" title="Laporan Menunggu Telaah DH">
+                        onclick="applyStatusFilter('PENDING_DH', this)" title="Laporan Menunggu Review DH">
                         <i class="fa-solid fa-hourglass-half"></i>
-                        <span>Menunggu Telaah</span>
+                        <span>Menunggu Review</span>
                         <span class="filter-count-badge" id="filterCountPending">{{ pending_count }}</span>
                     </button>
                     <button type="button" class="status-filter-btn btn-filter-rev" id="filterBtnRevisi"
@@ -3845,7 +3935,7 @@
                             {% else %}
                             <span class="badge-review-pill pill-pend">
                                 <i class="fa-solid fa-hourglass-half"></i>
-                                <span>MENUNGGU TELAAH</span>
+                                <span>MENUNGGU REVIEW</span>
                             </span>
                             {% endif %}
                         </td>
@@ -3932,7 +4022,7 @@
 </div>
 
 <!-- ==========================================================================
-     MODAL DETAIL TELAAH LAPORAN LENGKAP (EXECUTIVE CLEAN VIEWER)
+     MODAL DETAIL REVIEW LAPORAN LENGKAP (EXECUTIVE CLEAN VIEWER)
      ========================================================================== -->
 <div class="custom-modal-backdrop" id="detailModal" onclick="handleDetailModalBackdropClick(event)">
     <div class="custom-modal-content modal-doc-viewer">
@@ -3960,7 +4050,6 @@
                 <div>
                     <h3 class="modal-header-heading">
                         <span>Catatan Koreksi / Revisi DH</span>
-                        <span class="badge-revisi-role"><i class="fa-solid fa-pen-ruler me-1"></i>Tahap Telaah</span>
                     </h3>
                     <div id="revModalMeta"></div>
                 </div>
@@ -3979,7 +4068,7 @@
             <div class="rev-field-group">
                 <div class="rev-field-header">
                     <label for="revNotesInput" class="rev-field-label">
-                        <i class="fa-solid fa-list-check text-warning"></i>
+                        <i class="fa-solid fa-list-check" style="color: #00B7CD;"></i>
                         <span>Rincian Poin Koreksi:</span>
                     </label>
                     <span class="rev-field-counter" id="revCharCount">Minimal 5 karakter</span>
@@ -3990,7 +4079,7 @@
             </div>
 
             <div class="rev-wa-hint">
-                <i class="fa-brands fa-whatsapp text-success fa-lg"></i>
+                <i class="fa-brands fa-whatsapp fa-lg" style="color: #00B7CD;"></i>
                 <span>Setelah disimpan, sistem akan menawarkan pengiriman ringkasan revisi ini langsung ke nomor WhatsApp petugas.</span>
             </div>
         </div>
@@ -4202,7 +4291,7 @@
             } else {
                 iconHtml = '<div class="notif-item-icon-box icon-box-pending"><i class="fa-solid fa-hourglass-half"></i></div>';
                 pillClass = 'pill-notif-pending';
-                pillText = '<i class="fa-solid fa-clock"></i> Perlu Telaah';
+                pillText = '<i class="fa-solid fa-clock"></i> Perlu Review';
             }
 
             html += `
@@ -4465,7 +4554,7 @@
                             <div style="width: 56px; height: 56px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem;">
                                 <i class="fa-solid fa-clipboard-check"></i>
                             </div>
-                            <div style="font-weight: 700; color: #334155; font-size: 1rem;">Tidak Ada Antrean Laporan Menunggu Telaah</div>
+                            <div style="font-weight: 700; color: #334155; font-size: 1rem;">Tidak Ada Antrean Laporan Menunggu Review</div>
                             <div style="font-size: 0.85rem; color: #94a3b8; max-width: 400px; line-height: 1.5;">
                                 Semua laporan telah diverifikasi dan disetujui, atau belum ada pengajuan baru dari petugas sisi udara.
                             </div>
@@ -4482,7 +4571,7 @@
             if (status === 'APPROVED') {
                 countText.textContent = `Menampilkan ${visibleCount} laporan disetujui (Sheet Resmi)`;
             } else if (status === 'PENDING_DH') {
-                countText.textContent = `Menampilkan ${visibleCount} laporan menunggu telaah`;
+                countText.textContent = `Menampilkan ${visibleCount} laporan menunggu review`;
             } else if (status === 'REVISI') {
                 countText.textContent = `Menampilkan ${visibleCount} laporan sedang direvisi`;
             } else {
@@ -4602,7 +4691,7 @@
                     }
 
                     // Document Status Text for Section 01
-                    let docStatusText = 'Menunggu Telaah Department Head';
+                    let docStatusText = 'Menunggu Review Department Head';
                     if (isRevisi) {
                         docStatusText = 'Sedang Direvisi';
                     } else if (isApproved) {
@@ -5065,12 +5154,12 @@
                                 </div>
                             </div>
 
-                            <!-- KEPUTUSAN & AKSI TELAAH DH (SCREEN ONLY) -->
+                            <!-- KEPUTUSAN & AKSI REVIEW DH (SCREEN ONLY) -->
                             ${(!isApproved) ? `
                             <div class="doc-gm-action-container no-print">
                                 <div class="doc-gm-action-label">
                                     <i class="fa-solid fa-stamp text-primary"></i>
-                                    <span>Keputusan Telaah Department Head:</span>
+                                    <span>Keputusan Review Department Head:</span>
                                 </div>
                                 <div class="doc-gm-action-buttons">
                                     ${!isRevisi ? `
@@ -5099,10 +5188,10 @@
                         <!-- FOOTER RESMI DOKUMEN -->
                         <div class="doc-footer-bar">
                             <div class="doc-footer-left">
-                                <strong>PT Angkasa Pura Indonesia</strong> • Regional II — Sistem Laporan Operasional Sisi Udara
+                                <strong>PT Angkasa Pura Indonesia</strong>
                             </div>
                             <div class="doc-footer-right">
-                                Dokumen Resmi Laporan Airside • ${rep.report_id || '-'}
+                                ${rep.report_id || '-'}
                             </div>
                         </div>
                     </div>
@@ -5698,10 +5787,10 @@
                             <!-- FOOTER RESMI DOKUMEN -->
                             <div class="doc-footer-bar">
                                 <div class="doc-footer-left">
-                                    <strong>PT Angkasa Pura Indonesia</strong> • Regional II — Sistem Laporan Operasional Sisi Udara
+                                    <strong>PT Angkasa Pura Indonesia</strong>
                                 </div>
                                 <div class="doc-footer-right">
-                                    Dokumen Resmi Laporan Airside • ${rep.report_id || '-'}
+                                    ${rep.report_id || '-'}
                                 </div>
                             </div>
                         </div>
@@ -5737,7 +5826,7 @@
         const confirmTitle = autoApprove ? 'Simpan & Langsung Setujui Laporan?' : 'Simpan Koreksi Mandiri?';
         const confirmText = autoApprove ?
             'Perubahan data akan disimpan dan laporan langsung disetujui serta dipindahkan ke Spreadsheet Produksi Utama.' :
-            'Perubahan data akan disimpan ke lembar kerja Staging antrean telaah.';
+            'Perubahan data akan disimpan ke lembar kerja Staging antrean review.';
 
         Swal.fire({
             title: confirmTitle,
@@ -5841,16 +5930,16 @@
             metaEl.innerHTML = `
                 <div class="rev-meta-badges">
                     <span class="rev-meta-badge badge-date">
-                        <i class="fa-regular fa-calendar-check text-warning"></i>
+                        <i class="fa-regular fa-calendar-check"></i>
                         <span>${dateFormatted}</span>
                     </span>
                     <span class="rev-meta-badge badge-id">
-                        <i class="fa-solid fa-hashtag text-primary"></i>
+                        <i class="fa-solid fa-hashtag"></i>
                         <span>${reportId}</span>
                     </span>
                     ${submitterName ? `
                     <span class="rev-meta-badge badge-submitter">
-                        <i class="fa-solid fa-user-check text-success"></i>
+                        <i class="fa-solid fa-user-check"></i>
                         <span>${submitterName}</span>
                     </span>` : ''}
                 </div>
@@ -5908,7 +5997,7 @@
             counter.style.color = '#ea580c';
         } else {
             counter.textContent = `${len} karakter tersusun`;
-            counter.style.color = '#15803d';
+            counter.style.color = '#00B7CD';
         }
     }
 
@@ -5920,7 +6009,7 @@
                 title: 'Catatan Terlalu Singkat',
                 text: 'Harap masukkan rincian koreksi/revisi yang jelas untuk petugas (minimal 5 karakter).',
                 icon: 'warning',
-                confirmButtonColor: '#ea580c'
+                confirmButtonColor: '#00B7CD'
             });
             return;
         }
@@ -6094,7 +6183,7 @@
                                     html: `<div style="text-align: left; font-size: 0.95rem; line-height: 1.5;">
                                      <p>${errorMsg}</p>
                                      <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 10px; border-radius: 6px; margin-top: 12px; color: #991b1b; font-size: 0.88rem;">
-                                       <strong>Solusi Bersih:</strong> Laporan tanggal ini sudah ada di Spreadsheet Produksi Utama (FIX). Anda dapat menghapus draf pengajuan duplikat ini dari Staging agar daftar antrean telaah bersih kembali.
+                                       <strong>Solusi Bersih:</strong> Laporan tanggal ini sudah ada di Spreadsheet Produksi Utama (FIX). Anda dapat menghapus draf pengajuan duplikat ini dari Staging agar daftar antrean review bersih kembali.
                                      </div>
                                    </div>`,
                                     showCancelButton: true,

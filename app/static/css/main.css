@@ -462,6 +462,25 @@ select.form-control {
   .btn-sm {
     min-height: 36px;
   }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .table-responsive::-webkit-scrollbar {
+    height: 5px;
+  }
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
 }
 
 @media (max-width: 380px) {
@@ -470,6 +489,19 @@ select.form-control {
   }
   .brand-name {
     font-size: 0.98rem;
+  }
+}
+
+/* Global Responsive Table & Mobile Helpers */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  input, select, textarea, button {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 

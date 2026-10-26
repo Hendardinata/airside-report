@@ -325,7 +325,7 @@ def submit():
                 if tgl_str in staging_pending:
                     return jsonify({
                         "status": "error",
-                        "message": f"DITOLAK: Laporan untuk tanggal {tgl_str} saat ini SUDAH ADA di Staging dan sedang MENUNGGU TELAAH DH! Harap menunggu Department Head menyelesaikan verifikasi atau memberikan catatan koreksi."
+                        "message": f"DITOLAK: Laporan untuk tanggal {tgl_str} saat ini SUDAH ADA di Staging dan sedang MENUNGGU REVIEW DH! Harap menunggu Department Head menyelesaikan verifikasi atau memberikan catatan koreksi."
                     })
             else:
                 # Jika sedang mengedit draf, pastikan tanggal tidak bertabrakan dengan tanggal lain yang sudah FIX
@@ -368,7 +368,7 @@ def submit():
             f"Cabang: *{airport_code}*\n"
             f"Tanggal: *{tgl_str}*\n"
             f"Petugas Pengirim: *{sender_name}* (@{sender_username})\n\n"
-            f"Mohon izin menyampaikan kepada Yth. Department Head {airport_code}, bahwa laporan harian airside telah {action_text} di sistem dan siap untuk ditelaah/dikoreksi.\n\n"
+            f"Mohon izin menyampaikan kepada Yth. Department Head {airport_code}, bahwa laporan harian airside telah {action_text} di sistem dan siap untuk direview/dikoreksi.\n\n"
             f"Mohon kesediaan Bapak/Ibu untuk memeriksa di Portal Airside. Terima kasih."
         )
         
@@ -406,7 +406,7 @@ def submit():
                 sender_name=sender_name,
                 notif_type='pending',
                 title='Pengajuan Laporan Baru',
-                message=f'Petugas {sender_name} (@{sender_username}) mengajukan laporan harian tanggal {tgl_str} untuk ditelaah.',
+                message=f'Petugas {sender_name} (@{sender_username}) mengajukan laporan harian tanggal {tgl_str} untuk direview.',
                 report_id=staging_res.get('report_id'),
                 tanggal=tgl_str
             )
@@ -418,14 +418,14 @@ def submit():
                 sender_name=sender_name,
                 notif_type='pending',
                 title='Laporan Diajukan ke DH',
-                message=f'Laporan tanggal {tgl_str} tersimpan di Staging dan menunggu telaah Department Head.',
+                message=f'Laporan tanggal {tgl_str} tersimpan di Staging dan menunggu review Department Head.',
                 report_id=staging_res.get('report_id'),
                 tanggal=tgl_str
             )
 
         return jsonify({
             "status": "success", 
-            "message": f"Data berhasil disimpan ke Spreadsheet Staging {airport_code} dan dikirim ke Department Head untuk ditelaah!",
+            "message": f"Data berhasil disimpan ke Spreadsheet Staging {airport_code} dan dikirim ke Department Head untuk direview!",
             "report_id": staging_res.get('report_id'),
             "dh_phone": dh_phone,
             "gm_phone": dh_phone,

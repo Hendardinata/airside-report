@@ -690,6 +690,7 @@
         font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: var(--theme-slate-900) !important;
         -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
     }
 
     /* Override base container to allow full-width topbar while centering content */
@@ -1590,7 +1591,7 @@
     }
 
     /* ==========================================================================
-       4. STAGING STATUS BAR (Menunggu Telaah GM)
+       4. STAGING STATUS BAR (Menunggu Review GM)
        ========================================================================== */
     .staging-alert-strip {
         background-color: #ffffff;
@@ -2568,25 +2569,197 @@
     }
 
     @media (max-width: 768px) {
+        .staff-layout-canvas {
+            padding: 0.95rem 0.75rem 3.5rem 0.75rem;
+        }
+
+        .staff-topbar {
+            height: 62px;
+        }
+
+        .topbar-inner {
+            padding: 0 0.85rem;
+            gap: 0.5rem;
+        }
+
+        .topbar-brand-logo {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+        }
+
+        .topbar-brand-title {
+            font-size: 1.15rem;
+        }
+
+        .topbar-actions {
+            gap: 0.5rem;
+        }
+
+        .user-pill .user-name {
+            display: none !important;
+        }
+
+        .notif-dropdown-card {
+            position: fixed !important;
+            top: 64px !important;
+            left: 0.75rem !important;
+            right: 0.75rem !important;
+            width: auto !important;
+            max-width: none !important;
+            border-radius: 14px !important;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22) !important;
+        }
+
+        .staff-hero-banner {
+            padding: 1.25rem 1rem;
+            border-radius: 14px;
+            margin-bottom: 1rem;
+        }
+
+        .hero-heading {
+            font-size: 1.45rem;
+            line-height: 1.25;
+        }
+
+        .hero-subtext {
+            font-size: 0.825rem;
+        }
+
+        /* Smooth touch stepper */
+        .stepper-nav-container {
+            display: flex !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none;
+            gap: 0.5rem;
+            padding: 0.4rem 0.2rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+        }
+
+        .stepper-nav-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .stepper-cell {
+            flex: 0 0 auto !important;
+            min-width: 140px;
+            padding: 0.65rem 0.85rem;
+            border-radius: 10px;
+        }
+
+        .stepper-cell:not(:last-child)::after {
+            display: none !important;
+        }
+
+        .step-num-bubble {
+            width: 26px;
+            height: 26px;
+            font-size: 0.76rem;
+        }
+
+        .step-kicker-name {
+            font-size: 0.65rem;
+        }
+
+        .step-caption-title {
+            font-size: 0.78rem;
+        }
+
+        /* Workspace Card */
+        .form-workspace-card {
+            padding: 1.15rem 0.85rem;
+            border-radius: 14px;
+        }
+
+        .card-step-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.65rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .step-main-title {
+            font-size: 1.15rem;
+        }
+
+        .step-counter-pill {
+            align-self: flex-start;
+        }
+
+        .form-subcard-section {
+            padding: 1rem 0.85rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        /* Inputs & Touch Sizing */
+        .theme-control-input,
+        .report-clean-input,
+        .report-clean-select {
+            font-size: 16px !important; /* Prevents iOS auto-zoom */
+            min-height: 44px;
+        }
+
+        /* Table Report Rows */
         .report-table-row {
             flex-direction: column;
             align-items: flex-start;
-            padding: 0.85rem 0.25rem;
+            padding: 0.75rem 0.25rem;
             gap: 0.45rem;
         }
+
         .report-label-cell {
             width: 100%;
             min-width: 0;
             padding-right: 0;
         }
+
         .report-colon-cell {
             display: none;
         }
+
         .report-input-cell {
             width: 100%;
         }
-        .report-clean-input, .report-clean-select, .report-date-wrap, .report-locked-wrap {
+
+        .report-clean-input,
+        .report-clean-select,
+        .report-date-wrap,
+        .report-locked-wrap {
             max-width: 100%;
+            width: 100%;
+        }
+
+        /* Sticky Mobile Action Bar */
+        .wizard-actions-bar {
+            position: sticky;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin: 1.25rem -0.85rem -1.15rem -0.85rem;
+            padding: 0.85rem 1rem max(0.85rem, env(safe-area-inset-bottom, 12px)) 1rem;
+            border-top: 1px solid #e2e8f0;
+            border-radius: 0 0 14px 14px;
+            z-index: 50;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-action-batal {
+            flex: 0 0 48px;
+            height: 46px;
+        }
+
+        .btn-action-next,
+        .btn-action-submit {
+            flex: 1;
+            max-width: 200px;
+            height: 46px;
         }
     }
 </style>
@@ -2733,10 +2906,6 @@
     <!-- HERO BANNER CARD (Runway Tarmac Airliner Photo) -->
     <div class="staff-hero-banner">
         <div class="hero-info-col">
-            <div class="hero-pill-badge">
-                <span class="hero-dot-marker"></span>
-                <span>UNIT FASILITAS SISI UDARA • REGIONAL II</span>
-            </div>
             <h1 class="hero-heading">Input Laporan Harian Airside</h1>
             <p class="hero-subtext">
                 Pencatatan data inspeksi runway, taxiway, apron, dan pemeliharaan fasilitas harian cabang.
@@ -2959,23 +3128,7 @@
                     {% endif %}
                 </div>
 
-                <!-- Step 5 Special: WhatsApp Real-Time Live Preview -->
-                {% if loop.index == 5 %}
-                <div class="report-wa-preview-card mt-4">
-                    <div class="wa-preview-header">
-                        <div class="wa-preview-title">
-                            <i class="fab fa-whatsapp text-success me-2"></i>
-                            <strong>Pratinjau Format Laporan WhatsApp</strong>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-success" onclick="copyWaPreviewText()" title="Salin Pratinjau Teks">
-                            <i class="fa-regular fa-copy me-1"></i> Salin Teks
-                        </button>
-                    </div>
-                    <div class="wa-preview-body" id="liveWaPreviewBox">
-                        Memuat pratinjau format WhatsApp...
-                    </div>
-                </div>
-                {% endif %}
+
 
                 <!-- Wizard Actions Footer (Modern Clean Corporate Icon-Only Grouped Right) -->
                 <div class="wizard-actions-bar">
@@ -3009,8 +3162,19 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
-<script src="{{ url_for('static', filename='js/wizard.js') }}?v=2"></script>
+<script src="{{ url_for('static', filename='js/wizard.js') }}?v=3"></script>
 <script>
+    // Cek apakah halaman sedang dimuat ulang setelah pengiriman laporan
+    (function() {
+        try {
+            if (sessionStorage.getItem('staff_dashboard_reload_loading') === 'true') {
+                if (typeof showKawungLoading === 'function') {
+                    showKawungLoading('Memuat Dashboard...', 'Menyinkronkan data status laporan...');
+                }
+            }
+        } catch(e) {}
+    })();
+
     // Toggle User Profile Dropdown Menu
     function toggleUserDropdown(e) {
         if (e) e.stopPropagation();
@@ -3682,15 +3846,15 @@
                 <div class="swal-corp-icon-tile icon-warning-corp" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #d97706; border: 1.5px solid #fde68a;">
                     <i class="fa-solid fa-hourglass-half"></i>
                 </div>
-                <h3 class="swal-corp-title">Laporan Sedang Ditelaah DH</h3>
+                <h3 class="swal-corp-title">Laporan Sedang Direview DH</h3>
                 <div class="swal-corp-sub">
-                    <i class="fa-solid fa-clock-rotate-left"></i> Database Staging (Menunggu Telaah Department Head)
+                    <i class="fa-solid fa-clock-rotate-left"></i> Database Staging (Menunggu Review Department Head)
                 </div>
 
                 <div class="swal-corp-card">
                     <div class="swal-corp-card-header">
                         <span class="swal-corp-card-label">Tanggal Dipilih</span>
-                        <span class="swal-corp-status-tag" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-hourglass-half"></i> Sedang Ditelaah</span>
+                        <span class="swal-corp-status-tag" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-hourglass-half"></i> Sedang Direview</span>
                     </div>
                     <div class="swal-corp-card-date">${formattedSelected}</div>
                 </div>
@@ -3853,7 +4017,7 @@
                 alertBox.innerHTML = `
                     <i class="fa-solid fa-hourglass-half text-amber-600 fa-lg"></i>
                     <div>
-                        <strong>Menunggu Telaah DH:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> saat ini sudah tersimpan di Staging dan menunggu persetujuan Department Head.
+                        <strong>Menunggu Review DH:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> saat ini sudah tersimpan di Staging dan menunggu persetujuan Department Head.
                     </div>
                 `;
             }
@@ -4166,6 +4330,18 @@ ${catatanStr.trim()}`;
         // Initialize Notifications
         fetchNotifications();
         setInterval(fetchNotifications, 30000);
+
+        // Sembunyikan loading spinner reload setelah sinkronisasi data selesai
+        try {
+            if (sessionStorage.getItem('staff_dashboard_reload_loading') === 'true') {
+                setTimeout(() => {
+                    sessionStorage.removeItem('staff_dashboard_reload_loading');
+                    if (typeof hideKawungLoading === 'function') {
+                        hideKawungLoading();
+                    }
+                }, 1200);
+            }
+        } catch(e) {}
     });
 </script>
 {% endblock %}
