@@ -90,7 +90,7 @@
               "name": "RUNWAY_PCI",
               "label": "Performance pavement",
               "type": "text",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 100% atau 100% PCI",
               "required": true
             },
             {
@@ -223,7 +223,7 @@
               "name": "TAXIWAY_PCI",
               "label": "Performance pavement",
               "type": "text",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 100% atau 100% PCI",
               "required": true
             },
             {
@@ -330,7 +330,7 @@
               "name": "APRON_PCI",
               "label": "Performance pavement",
               "type": "text",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 100% atau 100% PCI",
               "required": true
             },
             {

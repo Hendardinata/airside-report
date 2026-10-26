@@ -3251,12 +3251,8 @@
                             if (key === 'TANGGAL' && window.staffDatePicker) {
                                 window.staffDatePicker.setDate(val, false);
                             } else {
-                            let setVal = val;
-                            if (['RUNWAY_PCI', 'TAXIWAY_PCI', 'APRON_PCI'].includes(key) && setVal) {
-                                setVal = String(setVal).replace(/\(?\bPCI\b\)?/gi, '').trim();
-                            }
-                            el.value = setVal;
-                            el.dispatchEvent(new Event('change', { bubbles: true }));
+                                el.value = val;
+                                el.dispatchEvent(new Event('change', { bubbles: true }));
                             }
                         }
                     }
@@ -3843,12 +3839,17 @@
         const f_percent = (val) => {
             if (!val || val === '-') return '-';
             let s = String(val).trim();
-            s = s.replace(/\(?\bPCI\b\)?/gi, '').trim();
-            const sClean = s.replace(/%+$/g, '').trim();
-            if (!sClean) return '-';
-            const num = parseFloat(sClean.replace(',', '.'));
-            if (!isNaN(num) && isFinite(num)) {
-                return `${sClean}%`;
+            if (!s) return '-';
+            if (s.includes('%')) {
+                return s;
+            }
+            const num = parseFloat(s.replace(',', '.'));
+            if (!isNaN(num) && isFinite(num) && String(num) === s.replace(',', '.').trim()) {
+                return `${s}%`;
+            }
+            const matchNumText = s.match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
+            if (matchNumText) {
+                return `${matchNumText[1]}% ${matchNumText[2]}`;
             }
             return s;
         };

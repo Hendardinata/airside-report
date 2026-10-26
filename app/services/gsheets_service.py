@@ -1425,10 +1425,22 @@ def get_production_approved_reports(airport_code, force_refresh=False):
 
             pci_rw = row_dict.get('RUNWAY_PCI', '-')
             if pci_rw and pci_rw != '-':
-                import re
-                pci_clean = re.sub(r'\(?\bPCI\b\)?', '', str(pci_rw), flags=re.IGNORECASE).strip()
-                pci_clean = re.sub(r'%+$', '', pci_clean).strip()
-                pci_rw = f"{pci_clean}%" if pci_clean else '-'
+                pci_str = str(pci_rw).strip()
+                if not pci_str:
+                    pci_rw = '-'
+                elif '%' in pci_str:
+                    pci_rw = pci_str
+                else:
+                    try:
+                        float(pci_str.replace(',', '.'))
+                        pci_rw = f"{pci_str}%"
+                    except:
+                        import re
+                        m = re.match(r'^(\d+(?:[.,]\d+)?)\s+(.+)$', pci_str)
+                        if m:
+                            pci_rw = f"{m.group(1)}% {m.group(2)}"
+                        else:
+                            pci_rw = pci_str
 
             kondisi_rw = row_dict.get('RUNWAY_KONDISI', 'SERVICEABLE')
 
