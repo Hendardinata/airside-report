@@ -5091,12 +5091,7 @@
                                     <div class="doc-pair-key">Kondisi keseluruhan runway</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <select name="RUNWAY_KONDISI" class="doc-inline-select status-select">
-                                            <option value="SERVICEABLE" ${sel(d.RUNWAY_KONDISI, 'SERVICEABLE')}>SERVICEABLE</option>
-                                            <option value="UNSERVICEABLE" ${sel(d.RUNWAY_KONDISI, 'UNSERVICEABLE')}>UNSERVICEABLE</option>
-                                            <option value="BAIK" ${sel(d.RUNWAY_KONDISI, 'BAIK')}>BAIK</option>
-                                            <option value="RUSAK" ${sel(d.RUNWAY_KONDISI, 'RUSAK')}>RUSAK</option>
-                                        </select>
+                                        <input type="text" name="RUNWAY_KONDISI" class="doc-inline-input" value="${safe(d.RUNWAY_KONDISI || 'SERVICEABLE')}" placeholder="Contoh: SERVICEABLE">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -5228,12 +5223,7 @@
                                     <div class="doc-pair-key">Status Taxiway</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <select name="TAXIWAY_STATUS" class="doc-inline-select status-select">
-                                            <option value="SERVICEABLE" ${sel(d.TAXIWAY_STATUS, 'SERVICEABLE')}>SERVICEABLE</option>
-                                            <option value="UNSERVICEABLE" ${sel(d.TAXIWAY_STATUS, 'UNSERVICEABLE')}>UNSERVICEABLE</option>
-                                            <option value="BAIK" ${sel(d.TAXIWAY_STATUS, 'BAIK')}>BAIK</option>
-                                            <option value="RUSAK" ${sel(d.TAXIWAY_STATUS, 'RUSAK')}>RUSAK</option>
-                                        </select>
+                                        <input type="text" name="TAXIWAY_STATUS" class="doc-inline-input" value="${safe(d.TAXIWAY_STATUS || 'SERVICEABLE')}" placeholder="Contoh: SERVICEABLE">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -5337,12 +5327,7 @@
                                     <div class="doc-pair-key">Kondisi keseluruhan Apron</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <select name="APRON_KONDISI" class="doc-inline-select status-select">
-                                            <option value="SERVICEABLE" ${sel(d.APRON_KONDISI, 'SERVICEABLE')}>SERVICEABLE</option>
-                                            <option value="UNSERVICEABLE" ${sel(d.APRON_KONDISI, 'UNSERVICEABLE')}>UNSERVICEABLE</option>
-                                            <option value="BAIK" ${sel(d.APRON_KONDISI, 'BAIK')}>BAIK</option>
-                                            <option value="RUSAK" ${sel(d.APRON_KONDISI, 'RUSAK')}>RUSAK</option>
-                                        </select>
+                                        <input type="text" name="APRON_KONDISI" class="doc-inline-input" value="${safe(d.APRON_KONDISI || 'SERVICEABLE')}" placeholder="Contoh: SERVICEABLE">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">

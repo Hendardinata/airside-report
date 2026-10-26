@@ -82,11 +82,8 @@
             {
               "name": "RUNWAY_KONDISI",
               "label": "Kondisi keseluruhan runway",
-              "type": "select",
-              "options": [
-                "SERVICEABLE",
-                "UNSERVICEABLE"
-              ],
+              "type": "text",
+              "placeholder": "Contoh: SERVICEABLE",
               "required": true
             },
             {
@@ -211,11 +208,8 @@
             {
               "name": "TAXIWAY_STATUS",
               "label": "Status Taxiway",
-              "type": "select",
-              "options": [
-                "SERVICEABLE",
-                "UNSERVICEABLE"
-              ],
+              "type": "text",
+              "placeholder": "Contoh: SERVICEABLE",
               "required": true
             },
             {
@@ -314,11 +308,8 @@
             {
               "name": "APRON_KONDISI",
               "label": "Kondisi keseluruhan Apron",
-              "type": "select",
-              "options": [
-                "SERVICEABLE",
-                "UNSERVICEABLE"
-              ],
+              "type": "text",
+              "placeholder": "Contoh: SERVICEABLE",
               "required": true
             },
             {
