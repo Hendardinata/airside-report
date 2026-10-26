@@ -72,7 +72,7 @@
       "icon": "fa-road",
       "id": "step_2",
       "title": "A. RUNWAY",
-      "subtitle": "Kondisi perkerasan runway, PCI, titik kerusakan, marka, dan rubber deposit.",
+      "subtitle": "Kondisi perkerasan runway, titik kerusakan, marka, dan rubber deposit.",
       "sections": [
         {
           "icon": "fa-road",
@@ -198,7 +198,7 @@
       "icon": "fa-plane",
       "id": "step_3",
       "title": "B. TAXIWAY",
-      "subtitle": "Kondisi perkerasan taxiway, PCI, titik kerusakan, marka, dan standing water.",
+      "subtitle": "Kondisi perkerasan taxiway, titik kerusakan, marka, dan standing water.",
       "sections": [
         {
           "icon": "fa-plane",
@@ -312,7 +312,7 @@
       "icon": "fa-square-parking",
       "id": "step_4",
       "title": "C. APRON",
-      "subtitle": "Kondisi perkerasan apron, PCI, perbaikan, marka, dan pemeliharaan potong rumput.",
+      "subtitle": "Kondisi perkerasan apron, perbaikan, marka, dan pemeliharaan potong rumput.",
       "sections": [
         {
           "icon": "fa-square-parking",

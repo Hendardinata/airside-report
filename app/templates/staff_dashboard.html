@@ -3251,8 +3251,12 @@
                             if (key === 'TANGGAL' && window.staffDatePicker) {
                                 window.staffDatePicker.setDate(val, false);
                             } else {
-                                el.value = val;
-                                el.dispatchEvent(new Event('change', { bubbles: true }));
+                            let setVal = val;
+                            if (['RUNWAY_PCI', 'TAXIWAY_PCI', 'APRON_PCI'].includes(key) && setVal) {
+                                setVal = String(setVal).replace(/\(?\bPCI\b\)?/gi, '').trim();
+                            }
+                            el.value = setVal;
+                            el.dispatchEvent(new Event('change', { bubbles: true }));
                             }
                         }
                     }
@@ -3839,11 +3843,12 @@
         const f_percent = (val) => {
             if (!val || val === '-') return '-';
             let s = String(val).trim();
-            if (!s.endsWith('%')) {
-                try {
-                    parseFloat(s.replace(',', '.'));
-                    return `${s}%`;
-                } catch(e) {}
+            s = s.replace(/\(?\bPCI\b\)?/gi, '').trim();
+            const sClean = s.replace(/%+$/g, '').trim();
+            if (!sClean) return '-';
+            const num = parseFloat(sClean.replace(',', '.'));
+            if (!isNaN(num) && isFinite(num)) {
+                return `${sClean}%`;
             }
             return s;
         };

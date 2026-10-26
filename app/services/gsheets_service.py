@@ -1424,8 +1424,11 @@ def get_production_approved_reports(airport_code, force_refresh=False):
             raw_user = row_dict.get('_submitted_by_username') or row_dict.get('SUBMITTED_BY_USERNAME', '')
 
             pci_rw = row_dict.get('RUNWAY_PCI', '-')
-            if pci_rw and pci_rw != '-' and not str(pci_rw).endswith('%') and 'PCI' not in str(pci_rw).upper():
-                pci_rw = f"{pci_rw}% PCI"
+            if pci_rw and pci_rw != '-':
+                import re
+                pci_clean = re.sub(r'\(?\bPCI\b\)?', '', str(pci_rw), flags=re.IGNORECASE).strip()
+                pci_clean = re.sub(r'%+$', '', pci_clean).strip()
+                pci_rw = f"{pci_clean}%" if pci_clean else '-'
 
             kondisi_rw = row_dict.get('RUNWAY_KONDISI', 'SERVICEABLE')
 

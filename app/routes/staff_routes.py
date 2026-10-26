@@ -31,13 +31,16 @@ def generate_wa_message(data, airport_code):
         if val == '-' or not val:
             return '-'
         s = str(val).strip()
-        if not s.endswith('%'):
-            try:
-                float(s.replace(',', '.'))
-                return f"{s}%"
-            except:
-                pass
-        return s
+        import re
+        s = re.sub(r'\(?\bPCI\b\)?', '', s, flags=re.IGNORECASE).strip()
+        s_clean = re.sub(r'%+$', '', s).strip()
+        if not s_clean:
+            return '-'
+        try:
+            float(s_clean.replace(',', '.'))
+            return f"{s_clean}%"
+        except:
+            return s
     
     import re
     tgl = v('TANGGAL')

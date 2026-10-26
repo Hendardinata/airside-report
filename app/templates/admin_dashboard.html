@@ -7502,9 +7502,14 @@
                     function fPercent(val) {
                         let c = vClean(val);
                         if (c === "-") return "-";
-                        c = c.replace(/%/g, '').trim();
-                        if (!c) return "-";
-                        return `${c}%`;
+                        c = String(c).replace(/\(?\bPCI\b\)?/gi, '').trim();
+                        const cClean = c.replace(/%+$/g, '').trim();
+                        if (!cClean) return "-";
+                        const num = parseFloat(cClean.replace(',', '.'));
+                        if (!isNaN(num) && isFinite(num)) {
+                            return `${cClean}%`;
+                        }
+                        return c;
                     }
 
                     function fTitik(val) {

@@ -4434,11 +4434,23 @@
                         return `<span class="doc-badge-status neutral">${s}</span>`;
                     }
 
+                    function formatCleanPercent(val, defaultVal = '100%') {
+                        if (!val || val === '-') return defaultVal;
+                        let s = String(val).replace(/\(?\bPCI\b\)?/gi, '').trim();
+                        const sClean = s.replace(/%+$/g, '').trim();
+                        if (!sClean) return defaultVal;
+                        const num = parseFloat(sClean.replace(',', '.'));
+                        if (!isNaN(num) && isFinite(num)) {
+                            return `${sClean}%`;
+                        }
+                        return s;
+                    }
+
                     // PCI Badge Helper
                     function formatPciBadge(pciVal) {
                         const s = fmt(pciVal, '-');
                         if (s === '-') return '<span style="color: #94a3b8;">-</span>';
-                        const formatted = s.includes('%') ? s : `${s}% PCI`;
+                        const formatted = formatCleanPercent(s, '-');
                         return `<span class="doc-badge-pci"><i class="fa-solid fa-gauge-high me-1"></i>${formatted}</span>`;
                     }
 
@@ -4617,7 +4629,7 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Performance pavement</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${d.RUNWAY_PCI ? (d.RUNWAY_PCI.includes('%') ? d.RUNWAY_PCI : d.RUNWAY_PCI + '%') : '100%'}</div>
+                                <div class="doc-pair-val">${formatCleanPercent(d.RUNWAY_PCI, '100%')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
@@ -4710,7 +4722,7 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Performance pavement</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${d.TAXIWAY_PCI ? (d.TAXIWAY_PCI.includes('%') ? d.TAXIWAY_PCI : d.TAXIWAY_PCI + '%') : '100%'}</div>
+                                <div class="doc-pair-val">${formatCleanPercent(d.TAXIWAY_PCI, '100%')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
@@ -4783,7 +4795,7 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Performance pavement</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${d.APRON_PCI ? (d.APRON_PCI.includes('%') ? d.APRON_PCI : d.APRON_PCI + '%') : '100%'}</div>
+                                <div class="doc-pair-val">${formatCleanPercent(d.APRON_PCI, '100%')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
@@ -5113,7 +5125,7 @@
                                     <div class="doc-pair-key">Performance pavement</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="RUNWAY_PCI" class="doc-inline-input" value="${safe(d.RUNWAY_PCI || '100%')}" placeholder="Contoh: 100%">
+                                        <input type="text" name="RUNWAY_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.RUNWAY_PCI, '100%'))}" placeholder="Contoh: 100%">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -5252,7 +5264,7 @@
                                     <div class="doc-pair-key">Performance pavement</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="TAXIWAY_PCI" class="doc-inline-input" value="${safe(d.TAXIWAY_PCI || '100%')}" placeholder="Contoh: 100%">
+                                        <input type="text" name="TAXIWAY_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.TAXIWAY_PCI, '100%'))}" placeholder="Contoh: 100%">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -5363,7 +5375,7 @@
                                     <div class="doc-pair-key">Performance pavement</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="APRON_PCI" class="doc-inline-input" value="${safe(d.APRON_PCI || '100%')}" placeholder="Contoh: 100%">
+                                        <input type="text" name="APRON_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.APRON_PCI, '100%'))}" placeholder="Contoh: 100%">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
