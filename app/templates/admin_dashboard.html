@@ -3303,262 +3303,790 @@
     }
 
     /* ==========================================================================
-       12. VIEW: VISUAL FORM BUILDER (CANVAS VIEW)
+       12. VIEW: VISUAL FORM BUILDER (2-COLUMN MODERN UX WORKSPACE)
        ========================================================================== */
-    .builder-step {
+    .vfb-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .vfb-layout {
+        display: grid;
+        grid-template-columns: 310px 1fr;
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    @media (max-width: 992px) {
+        .vfb-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Left Panel: Steps Navigation */
+    .vfb-steps-panel {
         background: #ffffff;
-        border: 1.5px solid var(--theme-border);
-        border-radius: 14px;
+        border: 1.5px solid var(--theme-border, #e2e8f0);
+        border-radius: 16px;
         padding: 1.25rem;
-        margin-bottom: 1.25rem;
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
     }
 
-    .builder-step-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        gap: 0.75rem;
-    }
-
-    .step-title-group {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        flex: 1;
-    }
-
-    .step-num-badge {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        background: var(--theme-btn-gradient);
-        color: #ffffff;
+    .vfb-panel-title {
+        font-size: 1.15rem;
         font-weight: 800;
-        font-size: 0.95rem;
+        color: var(--theme-navy, #002b49);
+        margin: 0 0 0.2rem 0;
+        letter-spacing: -0.01em;
+    }
+
+    .vfb-panel-subtitle {
+        font-size: 0.8rem;
+        color: var(--theme-slate-500, #64748b);
+        margin: 0 0 1.15rem 0;
+    }
+
+    .vfb-steps-list {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .step-title-input {
-        flex: 1;
-        height: 40px;
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: var(--theme-navy);
-        border: 1.5px solid var(--theme-border-strong);
-        border-radius: 8px;
-        padding: 0 0.85rem;
-        outline: none;
-    }
-
-    .step-title-input:focus {
-        border-color: #0284c7;
-    }
-
-    .btn-builder-delete {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        border: 1.5px solid #fecaca;
-        background: #fef2f2;
-        color: #ef4444;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        flex-shrink: 0;
-    }
-
-    .btn-builder-delete:hover {
-        background-color: #ef4444;
-        color: #ffffff;
-    }
-
-    .builder-section {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 0.85rem;
-    }
-
-    .builder-sec-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0.85rem;
+        flex-direction: column;
         gap: 0.65rem;
     }
 
-    .sec-title-group {
+    .vfb-step-item {
         display: flex;
         align-items: center;
-        gap: 0.55rem;
-        flex: 1;
-    }
-
-    .sec-folder-icon {
-        color: #0284c7;
-        font-size: 1rem;
-    }
-
-    .sec-title-input {
-        flex: 1;
-        height: 36px;
-        font-size: 0.88rem;
-        font-weight: 700;
-        color: #1e293b;
-        border: 1.5px solid var(--theme-border);
-        border-radius: 8px;
-        padding: 0 0.75rem;
+        gap: 0.85rem;
+        padding: 0.85rem 1rem;
+        border-radius: 12px;
+        border: 1.5px solid var(--theme-border, #e2e8f0);
         background: #ffffff;
-        outline: none;
-    }
-
-    .sec-title-input:focus {
-        border-color: #0284c7;
-    }
-
-    .builder-field-card {
-        background: #ffffff;
-        border: 1px solid var(--theme-border);
-        border-radius: 10px;
-        padding: 0.75rem 0.85rem;
-        margin-bottom: 0.65rem;
-    }
-
-    .builder-field-row {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .field-col-label {
-        flex: 2;
-    }
-
-    .field-col-code {
-        flex: 1.5;
-    }
-
-    .field-col-type {
-        flex: 1.2;
-    }
-
-    .field-micro-label {
-        font-size: 0.68rem;
-        font-weight: 700;
-        color: var(--theme-slate-500);
-        text-transform: uppercase;
-        display: block;
-        margin-bottom: 0.25rem;
-    }
-
-    .builder-input {
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        text-align: left;
         width: 100%;
-        height: 36px;
-        border: 1.5px solid var(--theme-border-strong);
-        border-radius: 7px;
-        padding: 0 0.65rem;
-        font-size: 0.84rem;
-        outline: none;
         box-sizing: border-box;
     }
 
-    .builder-input-code {
-        font-family: monospace;
-        font-weight: 700;
-        color: #003366;
+    .vfb-step-item:hover:not(.active) {
+        border-color: var(--theme-border-strong, #cbd5e1);
+        background: #f8fafc;
+        transform: translateY(-1px);
     }
 
-    .field-dropdown-options {
+    .vfb-step-item.active {
+        background: #f0f9ff;
+        border-color: var(--theme-blue, #0284c7);
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+    }
+
+    .vfb-step-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
         display: flex;
         align-items: center;
-        gap: 0.45rem;
-        background: #fffbeb;
-        border: 1px solid #fde68a;
-        border-radius: 7px;
-        padding: 0.4rem 0.65rem;
-        margin-top: 0.45rem;
-        font-size: 0.82rem;
-    }
-
-    .field-dropdown-options input {
-        background: transparent;
-        border: none;
-        width: 100%;
-        font-size: 0.82rem;
-        outline: none;
-    }
-
-    .btn-builder-add-field {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.4rem 0.85rem;
-        font-size: 0.8rem;
+        justify-content: center;
         font-weight: 700;
-        color: #0284c7;
-        background: #f0f9ff;
-        border: 1.5px dashed #7dd3fc;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        margin-top: 0.35rem;
-    }
-
-    .btn-builder-add-field:hover {
-        background: #e0f2fe;
-    }
-
-    .btn-builder-add-sec {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.45rem 0.95rem;
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: #003366;
-        background: #ffffff;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        margin-top: 0.55rem;
-    }
-
-    .btn-builder-add-sec:hover {
-        background: #f8fafc;
-        border-color: #94a3b8;
-    }
-
-    .btn-builder-add-step {
-        width: 100%;
-        padding: 0.85rem;
-        background: #ffffff;
-        border: 2px dashed #93c5fd;
-        border-radius: 12px;
-        color: #003366;
         font-size: 0.9rem;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+        background: #e2e8f0;
+        color: #475569;
+    }
+
+    .vfb-step-item.active .vfb-step-badge {
+        background: var(--theme-blue, #0284c7);
+        color: #ffffff;
+    }
+
+    .vfb-step-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .vfb-step-name {
+        font-size: 0.92rem;
         font-weight: 700;
-        cursor: pointer;
+        color: var(--theme-navy, #002b49);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.25;
+    }
+
+    .vfb-step-desc {
+        font-size: 0.76rem;
+        color: var(--theme-slate-500, #64748b);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 2px;
+    }
+
+    .vfb-step-chevron {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+    }
+
+    .vfb-step-item.active .vfb-step-chevron {
+        color: var(--theme-blue, #0284c7);
+        transform: translateX(2px);
+    }
+
+    .vfb-btn-add-step {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: #ffffff;
+        border: 1.5px solid var(--theme-blue, #0284c7);
+        color: var(--theme-blue, #0284c7);
+        font-size: 0.875rem;
+        font-weight: 700;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
+        cursor: pointer;
         transition: all 0.2s ease;
         margin-top: 1rem;
     }
 
-    .btn-builder-add-step:hover {
+    .vfb-btn-add-step:hover {
         background: #f0f9ff;
-        border-color: #0284c7;
-        color: #0284c7;
+        border-color: var(--theme-blue-hover, #0369a1);
+        color: var(--theme-blue-hover, #0369a1);
+    }
+
+    /* Right Panel: Content / Fields Workspace */
+    .vfb-content-panel {
+        background: #ffffff;
+        border: 1.5px solid var(--theme-border, #e2e8f0);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+    }
+
+    .vfb-step-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        border-bottom: 1.5px solid #f1f5f9;
+        padding-bottom: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .vfb-step-header-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--theme-navy, #002b49);
+        margin: 0;
+        letter-spacing: -0.01em;
+    }
+
+    .vfb-step-header-subtitle {
+        font-size: 0.85rem;
+        color: var(--theme-slate-500, #64748b);
+        margin: 3px 0 0 0;
+    }
+
+    .vfb-btn-rename-step {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--theme-blue, #0284c7);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0.4rem 0.75rem;
+        border-radius: 8px;
+        transition: all 0.15s ease;
+    }
+
+    .vfb-btn-rename-step:hover {
+        background: #f0f9ff;
+        color: var(--theme-blue-hover, #0369a1);
+    }
+
+    .vfb-btn-del-step {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #ef4444;
+        background: #fef2f2;
+        border: 1px solid #fee2e2;
+        border-radius: 8px;
+        padding: 0.4rem 0.65rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .vfb-btn-del-step:hover {
+        background: #fee2e2;
+    }
+
+    .vfb-section-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--theme-navy, #002b49);
+        margin: 1.25rem 0 0.75rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* Question Cards */
+    .vfb-q-card {
+        background: #ffffff;
+        border: 1.5px solid var(--theme-border, #e2e8f0);
+        border-radius: 12px;
+        padding: 0.85rem 1.15rem;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+    }
+
+    .vfb-q-card:hover:not(.is-editing) {
+        border-color: var(--theme-border-strong, #cbd5e1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .vfb-q-num {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #f1f5f9;
+        color: #334155;
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .vfb-q-num-active {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--theme-blue, #0284c7);
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .vfb-q-label {
+        font-size: 0.925rem;
+        font-weight: 700;
+        color: var(--theme-navy, #002b49);
+        line-height: 1.2;
+    }
+
+    .vfb-q-type {
+        font-size: 0.76rem;
+        color: var(--theme-slate-500, #64748b);
+        margin-top: 2px;
+    }
+
+    .vfb-btn-ubah {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
+        background: #ffffff;
+        border: 1.5px solid var(--theme-border-strong, #cbd5e1);
+        border-radius: 8px;
+        color: var(--theme-navy, #002b49);
+        font-weight: 600;
+        font-size: 0.825rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .vfb-btn-ubah:hover {
+        background: #f8fafc;
+        border-color: var(--theme-blue, #0284c7);
+        color: var(--theme-blue, #0284c7);
+    }
+
+    /* Expanded / Editing State */
+    .vfb-q-card.is-editing {
+        background: #ffffff;
+        border: 2px solid var(--theme-blue, #0284c7);
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 0.85rem;
+        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.08);
+        display: block;
+    }
+
+    .vfb-q-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .vfb-q-label-editing {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--theme-navy, #002b49);
+    }
+
+    .vfb-badge-editing {
+        background: #e0f2fe;
+        color: var(--theme-blue, #0284c7);
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+    }
+
+    .vfb-btn-icon {
+        background: transparent;
+        border: none;
+        color: var(--theme-navy, #002b49);
+        font-size: 0.85rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+    }
+
+    .vfb-btn-icon:hover {
+        background: #f1f5f9;
+    }
+
+    /* Grid for question inputs */
+    .vfb-q-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 1rem;
+        align-items: end;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .vfb-q-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .vfb-form-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--theme-navy, #002b49);
+        margin-bottom: 0.35rem;
+    }
+
+    .vfb-form-input,
+    .vfb-form-select {
+        height: 40px;
+        border: 1.5px solid var(--theme-border-strong, #cbd5e1);
+        border-radius: 8px;
+        padding: 0 0.85rem;
+        font-size: 0.875rem;
+        width: 100%;
+        outline: none;
+        background: #ffffff;
+        box-sizing: border-box;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .vfb-form-input:focus,
+    .vfb-form-select:focus {
+        border-color: var(--theme-blue, #0284c7);
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    /* Toggle Switch iOS style */
+    .vfb-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
+
+    .vfb-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .vfb-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #cbd5e1;
+        transition: .25s ease;
+        border-radius: 24px;
+    }
+
+    .vfb-slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .25s ease;
+        border-radius: 50%;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    input:checked + .vfb-slider {
+        background-color: var(--theme-blue, #0284c7);
+    }
+
+    input:checked + .vfb-slider:before {
+        transform: translateX(20px);
+    }
+
+    /* Choices list for select field */
+    .vfb-choices-box {
+        margin-top: 1rem;
+        padding-top: 0.85rem;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .vfb-choices-title {
+        font-size: 0.825rem;
+        font-weight: 700;
+        color: var(--theme-navy, #002b49);
+    }
+
+    .vfb-choices-desc {
+        font-size: 0.75rem;
+        color: var(--theme-slate-500, #64748b);
+        margin-bottom: 0.65rem;
+    }
+
+    .vfb-choices-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+    }
+
+    .vfb-choice-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .vfb-choice-input {
+        height: 36px;
+        border: 1.5px solid var(--theme-border, #e2e8f0);
+        border-radius: 8px;
+        padding: 0 0.75rem;
+        font-size: 0.85rem;
+        flex: 1;
+        outline: none;
+        transition: border-color 0.15s ease;
+    }
+
+    .vfb-choice-input:focus {
+        border-color: var(--theme-blue, #0284c7);
+    }
+
+    .vfb-btn-del-choice {
+        padding: 0.35rem 0.65rem;
+        border: 1.5px solid #fee2e2;
+        background: #fff5f5;
+        color: #ef4444;
+        border-radius: 8px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: all 0.15s ease;
+    }
+
+    .vfb-btn-del-choice:hover {
+        background: #fee2e2;
+    }
+
+    .vfb-btn-add-choice {
+        padding: 0.45rem 0.85rem;
+        background: #f0f9ff;
+        border: 1.5px solid #bae6fd;
+        color: var(--theme-blue, #0284c7);
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-top: 0.5rem;
+        transition: all 0.15s ease;
+    }
+
+    .vfb-btn-add-choice:hover {
+        background: #e0f2fe;
+    }
+
+    /* Accordion Pengaturan Lanjutan */
+    .vfb-adv-wrapper {
+        margin-top: 1rem;
+        padding-top: 0.85rem;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .vfb-adv-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        padding: 0.4rem 0;
+        gap: 0.75rem;
+    }
+
+    .vfb-adv-title {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--theme-navy, #002b49);
+    }
+
+    .vfb-adv-desc {
+        font-size: 0.75rem;
+        color: var(--theme-slate-500, #64748b);
+    }
+
+    .vfb-btn-card-cancel {
+        padding: 0.45rem 1rem;
+        border: 1.5px solid var(--theme-border-strong, #cbd5e1);
+        background: #ffffff;
+        border-radius: 8px;
+        color: #334155;
+        font-weight: 600;
+        font-size: 0.825rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .vfb-btn-card-cancel:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+    }
+
+    .vfb-btn-card-done {
+        padding: 0.45rem 1.15rem;
+        background: var(--theme-blue, #0284c7);
+        border: none;
+        border-radius: 8px;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.825rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.2);
+    }
+
+    .vfb-btn-card-done:hover {
+        background: var(--theme-blue-hover, #0369a1);
+    }
+
+    .vfb-adv-drawer {
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 10px;
+        border: 1px solid var(--theme-border, #e2e8f0);
+        margin-top: 0.75rem;
+    }
+
+    .vfb-adv-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+        .vfb-adv-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .vfb-micro-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--theme-navy, #002b49);
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .vfb-input-help {
+        font-size: 0.72rem;
+        color: var(--theme-slate-500, #64748b);
+        display: block;
+        margin-top: 3px;
+        line-height: 1.3;
+    }
+
+    /* Add Question & Sub-section Buttons */
+    .vfb-btn-add-q {
+        width: 100%;
+        padding: 0.75rem;
+        background: #ffffff;
+        border: 1.5px dashed var(--theme-blue, #0284c7);
+        border-radius: 12px;
+        color: var(--theme-blue, #0284c7);
+        font-size: 0.875rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin: 0.65rem 0 1rem 0;
+    }
+
+    .vfb-btn-add-q:hover {
+        background: #f0f9ff;
+        border-color: var(--theme-blue-hover, #0369a1);
+        color: var(--theme-blue-hover, #0369a1);
+    }
+
+    .vfb-subsec-card {
+        background: #ffffff;
+        border: 1.5px solid var(--theme-border, #e2e8f0);
+        border-radius: 12px;
+        padding: 0.85rem 1.15rem;
+        margin-top: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .vfb-subsec-card:hover {
+        border-color: var(--theme-border-strong, #cbd5e1);
+        background: #fafbfc;
+    }
+
+    .vfb-subsec-title {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--theme-navy, #002b49);
+    }
+
+    .vfb-subsec-desc {
+        font-size: 0.76rem;
+        color: var(--theme-slate-500, #64748b);
+        margin-top: 2px;
+    }
+
+    .vfb-btn-toggle-sec {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.825rem;
+        font-weight: 600;
+        color: var(--theme-blue, #0284c7);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Sticky Bottom Footer */
+    .vfb-sticky-footer {
+        position: sticky;
+        bottom: 0;
+        background: #ffffff;
+        border-top: 1.5px solid var(--theme-border, #e2e8f0);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 50;
+        box-shadow: 0 -4px 14px rgba(15, 23, 42, 0.04);
+        border-radius: 0 0 16px 16px;
+        margin-top: 1.5rem;
+    }
+
+    .vfb-footer-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--theme-slate-700, #334155);
+    }
+
+    .vfb-dot-amber {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #f59e0b;
+        display: inline-block;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+
+    .vfb-footer-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+    }
+
+    .vfb-btn-discard {
+        padding: 0.55rem 1.25rem;
+        background: #ffffff;
+        border: 1.5px solid var(--theme-border-strong, #cbd5e1);
+        border-radius: 10px;
+        color: var(--theme-navy, #002b49);
+        font-weight: 700;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .vfb-btn-discard:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+    }
+
+    .vfb-btn-save {
+        padding: 0.55rem 1.5rem;
+        background: var(--theme-blue, #0284c7);
+        border: none;
+        border-radius: 10px;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.875rem;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+        transition: all 0.2s ease;
+    }
+
+    .vfb-btn-save:hover {
+        background: var(--theme-blue-hover, #0369a1);
+        transform: translateY(-1px);
+    }
+
+    .vfb-footer-help {
+        font-size: 0.75rem;
+        color: var(--theme-slate-500, #64748b);
+        text-align: right;
     }
 
     /* Modal Overlay (Clean & High-Contrast) */
@@ -5059,31 +5587,17 @@
                 <div class="config-view-header">
                     <div>
                         <h2 class="console-title mb-1">Visual Form Builder</h2>
-                        <p class="console-subtitle">Desain form laporan dengan mudah. Perubahan akan langsung disinkronkan ke aplikasi petugas dan Google Sheets.</p>
+                        <p class="console-subtitle">Desain struktur form laporan dengan mudah. Perubahan akan langsung disinkronkan ke aplikasi petugas dan Google Sheets.</p>
                     </div>
                     <div class="d-flex gap-2">
                         <button type="button" class="btn-outline-action" onclick="syncFromSheet()" title="Tarik perubahan kolom/baris dari Google Sheets">
                             <i class="fa-solid fa-arrows-rotate me-1 text-primary"></i> Tarik dari Spreadsheet
                         </button>
-                        <button type="button" class="modal-btn-save" onclick="saveSchema()">
-                            <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Form & Sinkronisasi
-                        </button>
                     </div>
                 </div>
 
-                <div class="hub-card">
-                    <div id="visualBuilderContainer">
-                        <!-- Loaded dynamically via JS -->
-                    </div>
-
-                    <button type="button" class="btn-builder-add-step" onclick="addStep()">
-                        <i class="fa-solid fa-circle-plus"></i> Tambah Bab / Langkah Baru
-                    </button>
-
-                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 0.85rem 1.15rem; display: flex; align-items: flex-start; gap: 0.75rem; color: #1e3a8a; font-size: 0.825rem; margin-top: 1.15rem; line-height: 1.4;">
-                        <i class="fa-solid fa-lightbulb text-primary" style="margin-top: 2px;"></i>
-                        <div>Kolom <code>KODE_KOLOM</code> akan menjadi penentu nama Header di Google Sheets. Sistem memastikannya menjadi huruf besar tanpa spasi.</div>
-                    </div>
+                <div id="visualBuilderContainer">
+                    <!-- Loaded dynamically via JS: 2-Column workspace with Step list and Question cards -->
                 </div>
             </section>
 
@@ -8015,8 +8529,14 @@ REGION II`;
         });
     }
 
-    // --- VISUAL FORM BUILDER LOGIC ---
+    // --- VISUAL FORM BUILDER LOGIC (MODERN 2-COLUMN UX) ---
     let currentSchema = { steps: [] };
+    let initialSchema = null;
+    let activeStepIdx = 0;
+    let editingFieldKey = null; // format: `${secIdx}_${fIdx}`
+    let advancedOpenKeys = {};
+    let expandedSections = {};
+    let isSchemaDirty = false;
 
     function openSchemaModal() {
         switchAdminView('schema');
@@ -8027,16 +8547,53 @@ REGION II`;
         if (modal) modal.style.display = 'none';
     }
 
+    function getTypeLabel(type) {
+        switch (type) {
+            case 'select': return 'Pilihan jawaban';
+            case 'date': return 'Jawaban tanggal';
+            case 'number': return 'Angka / Jumlah';
+            case 'textarea': return 'Teks panjang';
+            default: return 'Jawaban singkat';
+        }
+    }
+
+    function setSchemaDirty(dirty) {
+        isSchemaDirty = dirty;
+        updateStickyFooterStatus();
+    }
+
+    function updateStickyFooterStatus() {
+        const statusEl = document.getElementById('vfbStatusIndicator');
+        if (!statusEl) return;
+        if (isSchemaDirty) {
+            statusEl.innerHTML = `
+                <span class="vfb-dot-amber"></span>
+                <span>Perubahan belum disimpan</span>
+            `;
+        } else {
+            statusEl.innerHTML = `
+                <i class="fa-solid fa-circle-check text-success"></i>
+                <span>Semua perubahan tersimpan</span>
+            `;
+        }
+    }
+
     function loadFormBuilderSchema() {
         const container = document.getElementById('visualBuilderContainer');
         if (!container) return;
-        container.innerHTML = '<div class="p-4 text-center text-muted"><i class="fa-solid fa-spinner fa-spin me-2"></i> Memuat skema form aktif...</div>';
+        container.innerHTML = '<div class="p-5 text-center text-muted"><i class="fa-solid fa-spinner fa-spin me-2"></i> Memuat struktur Visual Form Builder...</div>';
 
         fetch('/admin/api/schema')
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
-                    currentSchema = data.data;
+                    currentSchema = data.data || { steps: [] };
+                    initialSchema = JSON.parse(JSON.stringify(currentSchema));
+                    activeStepIdx = 0;
+                    editingFieldKey = null;
+                    advancedOpenKeys = {};
+                    expandedSections = {};
+                    isSchemaDirty = false;
                     renderVisualBuilder();
                 } else {
                     Swal.fire('Error', 'Gagal memuat schema: ' + data.error, 'error');
@@ -8050,177 +8607,706 @@ REGION II`;
     function renderVisualBuilder() {
         const container = document.getElementById('visualBuilderContainer');
         if (!container) return;
-        container.innerHTML = '';
 
         if (!currentSchema.steps || currentSchema.steps.length === 0) {
-            container.innerHTML = '<p class="text-center text-muted my-4"><i class="fa-solid fa-folder-open me-2"></i>Belum ada struktur form. Klik tombol di bawah untuk membuat Bab baru.</p>';
+            container.innerHTML = `
+                <div class="hub-card text-center p-5">
+                    <i class="fa-solid fa-folder-open text-muted mb-3" style="font-size: 2.5rem;"></i>
+                    <h4 class="text-navy font-weight-bold mb-2">Belum Ada Struktur Formulir</h4>
+                    <p class="text-muted mb-4">Mulai bangun formulir laporan dengan menambahkan bagian pertama.</p>
+                    <button type="button" class="btn-primary-action px-4 py-2" onclick="addStep()">
+                        <i class="fa-solid fa-plus me-1"></i> Buat Bagian Baru
+                    </button>
+                </div>
+            `;
             return;
         }
 
+        if (activeStepIdx < 0 || activeStepIdx >= currentSchema.steps.length) {
+            activeStepIdx = 0;
+        }
+
+        const activeStep = currentSchema.steps[activeStepIdx];
+        if (!activeStep.sections || activeStep.sections.length === 0) {
+            activeStep.sections = [{ title: 'Data Laporan', fields: [] }];
+        }
+
+        // --- 1. LEFT PANEL: BAGIAN FORMULIR ---
+        let stepsHtml = '';
         currentSchema.steps.forEach((step, sIdx) => {
-            const stepDiv = document.createElement('div');
-            stepDiv.className = 'builder-step';
+            const isActive = sIdx === activeStepIdx;
+            const stepNum = sIdx + 1;
+            const title = step.title || `Langkah ${stepNum}`;
+            const subtitle = step.subtitle || 'Bagian formulir laporan';
 
-            let html = `
-                <div class="builder-step-header">
-                    <div class="step-title-group">
-                        <div class="step-num-badge">${sIdx + 1}</div>
-                        <input type="text" class="step-title-input" value="${escapeHtml(step.title || '')}" onchange="updateSchema(${sIdx}, null, null, 'title', this.value)" placeholder="Judul Bab / Langkah (Contoh: A. Runway)">
+            stepsHtml += `
+                <div class="vfb-step-item ${isActive ? 'active' : ''}" onclick="selectStep(${sIdx})">
+                    <div class="vfb-step-badge">${stepNum}</div>
+                    <div class="vfb-step-info">
+                        <div class="vfb-step-name">${escapeHtml(title)}</div>
+                        <div class="vfb-step-desc">${escapeHtml(subtitle)}</div>
                     </div>
-                    <button type="button" class="btn-builder-delete" onclick="removeStep(${sIdx})" title="Hapus Bab"><i class="fa-solid fa-trash-can"></i></button>
+                    <div class="vfb-step-chevron">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
                 </div>
-                <div class="sections-container" id="sections-${sIdx}"></div>
-                <button type="button" class="btn-builder-add-sec" onclick="addSection(${sIdx})"><i class="fa-solid fa-folder-plus me-1"></i> Tambah Sub-bab (Section)</button>
             `;
-            stepDiv.innerHTML = html;
+        });
 
-            const secContainer = stepDiv.querySelector(`#sections-${sIdx}`);
-            if (step.sections) {
-                step.sections.forEach((sec, secIdx) => {
-                    const secDiv = document.createElement('div');
-                    secDiv.className = 'builder-section';
+        // --- 2. RIGHT PANEL: QUESTIONS CONTENT ---
+        let contentSectionsHtml = '';
 
-                    let secHtml = `
-                        <div class="builder-sec-header">
-                            <div class="sec-title-group">
-                                <span class="sec-folder-icon"><i class="fa-solid fa-folder-open"></i></span>
-                                <input type="text" class="sec-title-input" value="${escapeHtml(sec.title || '')}" onchange="updateSchema(${sIdx}, ${secIdx}, null, 'secTitle', this.value)" placeholder="Judul Sub-bab (Contoh: Kondisi Fisik)">
+        activeStep.sections.forEach((sec, secIdx) => {
+            const secKey = `${activeStepIdx}_${secIdx}`;
+            const isSubSection = secIdx > 0;
+            const isExpanded = !isSubSection || !!expandedSections[secKey];
+            const fieldCount = sec.fields ? sec.fields.length : 0;
+
+            if (isSubSection && !isExpanded) {
+                // Collapsed Sub-section Card (Matches mockup: 👥 Penerima Laporan, 4 pertanyaan, Tampilkan v)
+                contentSectionsHtml += `
+                    <div class="vfb-subsec-card" onclick="toggleSectionCard(${activeStepIdx}, ${secIdx})">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-primary" style="font-size: 1.15rem;">
+                                <i class="fa-solid ${sec.icon || 'fa-users'}"></i>
                             </div>
-                            <button type="button" class="btn-builder-delete btn-sm" onclick="removeSection(${sIdx}, ${secIdx})" title="Hapus Sub-bab"><i class="fa-solid fa-xmark"></i></button>
+                            <div>
+                                <div class="vfb-subsec-title">${escapeHtml(sec.title || 'Sub-bagian')}</div>
+                                <div class="vfb-subsec-desc">${fieldCount} pertanyaan</div>
+                            </div>
                         </div>
-                        <div class="fields-container" id="fields-${sIdx}-${secIdx}"></div>
-                        <button type="button" class="btn-builder-add-field" onclick="addField(${sIdx}, ${secIdx})"><i class="fa-solid fa-plus me-1"></i> Tambah Pertanyaan Form</button>
+                        <button type="button" class="vfb-btn-toggle-sec">
+                            <span>Tampilkan</span>
+                            <i class="fa-solid fa-chevron-down ms-1"></i>
+                        </button>
+                    </div>
+                `;
+            } else {
+                // Expanded Section: Header + Questions
+                let headerHtml = '';
+                if (isSubSection) {
+                    headerHtml = `
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-2 pt-3 border-top">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fa-solid ${sec.icon || 'fa-users'} text-primary"></i>
+                                <span class="vfb-section-title my-0">${escapeHtml(sec.title || 'Sub-bagian')}</span>
+                                <span class="badge bg-light text-muted border ms-1" style="font-size: 0.72rem;">${fieldCount} pertanyaan</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn text-danger btn-sm p-0 me-2" onclick="deleteSection(${secIdx})" title="Hapus Sub-bab ini">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                                <button type="button" class="vfb-btn-toggle-sec" onclick="toggleSectionCard(${activeStepIdx}, ${secIdx})">
+                                    <span>Sembunyikan</span>
+                                    <i class="fa-solid fa-chevron-up ms-1"></i>
+                                </button>
+                            </div>
+                        </div>
                     `;
-                    secDiv.innerHTML = secHtml;
+                } else {
+                    headerHtml = `
+                        <div class="vfb-section-title">
+                            <span>${escapeHtml(sec.title || 'Data Laporan')}</span>
+                        </div>
+                    `;
+                }
 
-                    const fieldContainer = secDiv.querySelector(`#fields-${sIdx}-${secIdx}`);
-                    if (sec.fields) {
-                        sec.fields.forEach((field, fIdx) => {
-                            let typeOptions = `
-                                <option value="text" ${field.type === 'text' ? 'selected' : ''}>Teks Singkat</option>
-                                <option value="select" ${field.type === 'select' ? 'selected' : ''}>Dropdown (Pilihan)</option>
-                                <option value="date" ${field.type === 'date' ? 'selected' : ''}>Tanggal</option>
-                                <option value="number" ${field.type === 'number' ? 'selected' : ''}>Angka</option>
-                            `;
+                // Render Fields
+                let fieldsHtml = '';
+                if (!sec.fields || sec.fields.length === 0) {
+                    fieldsHtml = `
+                        <div class="p-3 text-center text-muted bg-light rounded-12 mb-2" style="font-size: 0.85rem; border: 1px dashed #cbd5e1;">
+                            Belum ada pertanyaan pada ${escapeHtml(sec.title || 'bagian ini')}. Klik tombol di bawah untuk menambahkan.
+                        </div>
+                    `;
+                } else {
+                    sec.fields.forEach((field, fIdx) => {
+                        const fieldKey = `${secIdx}_${fIdx}`;
+                        const isEditing = editingFieldKey === fieldKey;
+                        const qNumber = fIdx + 1;
+                        const typeLabel = getTypeLabel(field.type);
 
-                            let optionsHtml = '';
+                        if (isEditing) {
+                            // --- EXPANDED CARD (SEDANG DIUBAH) ---
+                            let choicesHtml = '';
                             if (field.type === 'select') {
-                                let optStr = (field.options || []).join(', ');
-                                optionsHtml = `
-                                    <div class="field-dropdown-options">
-                                        <i class="fa-solid fa-list-ul text-warning"></i>
-                                        <input type="text" value="${escapeHtml(optStr)}" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'options', this.value)" placeholder="Pilihan dropdown (pisahkan koma: Baik, Sedang, Rusak)">
+                                const optionsList = field.options || [];
+                                const optionRows = optionsList.map((opt, oIdx) => `
+                                    <div class="vfb-choice-row">
+                                        <i class="fa-solid fa-grip-vertical text-muted"></i>
+                                        <input type="text" class="vfb-choice-input" 
+                                               value="${escapeHtml(opt)}" 
+                                               oninput="updateFieldOption(${secIdx}, ${fIdx}, ${oIdx}, this.value)"
+                                               placeholder="Ketik teks pilihan...">
+                                        <button type="button" class="vfb-btn-del-choice" onclick="removeFieldOption(${secIdx}, ${fIdx}, ${oIdx})">
+                                            <i class="fa-solid fa-trash-can"></i> Hapus
+                                        </button>
+                                    </div>
+                                `).join('');
+
+                                choicesHtml = `
+                                    <div class="vfb-choices-box">
+                                        <div class="vfb-choices-title">Pilihan Jawaban</div>
+                                        <div class="vfb-choices-desc">Tambahkan pilihan yang dapat dipilih petugas.</div>
+                                        <div class="vfb-choices-list">
+                                            ${optionRows}
+                                        </div>
+                                        <button type="button" class="vfb-btn-add-choice" onclick="addFieldOption(${secIdx}, ${fIdx})">
+                                            <i class="fa-solid fa-plus"></i> Tambah Pilihan
+                                        </button>
                                     </div>
                                 `;
                             }
 
-                            let fieldHtml = `
-                                <div class="builder-field-card">
-                                    <div class="builder-field-row">
-                                        <div class="field-col-label">
-                                            <span class="field-micro-label">Pertanyaan Form</span>
-                                            <input type="text" class="builder-input" value="${escapeHtml(field.label || '')}" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'label', this.value)" placeholder="Contoh: Kondisi Aspal">
+                            const isAdvOpen = !!advancedOpenKeys[fieldKey];
+
+                            fieldsHtml += `
+                                <div class="vfb-q-card is-editing" id="card-${secIdx}-${fIdx}">
+                                    <div class="vfb-q-header">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="vfb-q-num-active">${qNumber}</div>
+                                            <div>
+                                                <div class="vfb-q-label-editing">${escapeHtml(field.label || 'Pertanyaan Baru')}</div>
+                                                <div class="vfb-q-type">${typeLabel}</div>
+                                            </div>
                                         </div>
-                                        <div class="field-col-code">
-                                            <span class="field-micro-label">Kode Header Sheets</span>
-                                            <input type="text" class="builder-input builder-input-code" value="${escapeHtml(field.name || '')}" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'name', this.value)" placeholder="KODE_KOLOM">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="vfb-badge-editing">Sedang Diubah</span>
+                                            <button type="button" class="vfb-btn-icon" onclick="cancelEditField(${secIdx}, ${fIdx})" title="Tutup">
+                                                <i class="fa-solid fa-chevron-up"></i>
+                                            </button>
                                         </div>
-                                        <div class="field-col-type">
-                                            <span class="field-micro-label">Tipe Data</span>
-                                            <select class="builder-input" onchange="updateSchema(${sIdx}, ${secIdx}, ${fIdx}, 'type', this.value)">
-                                                ${typeOptions}
+                                    </div>
+
+                                    <div class="vfb-q-grid">
+                                        <div>
+                                            <label class="vfb-form-label">Nama Pertanyaan</label>
+                                            <input type="text" class="vfb-form-input" 
+                                                   value="${escapeHtml(field.label || '')}" 
+                                                   oninput="updateFieldProp(${secIdx}, ${fIdx}, 'label', this.value)"
+                                                   placeholder="Contoh: Sapaan Pembuka">
+                                        </div>
+                                        <div>
+                                            <label class="vfb-form-label">Bentuk Jawaban</label>
+                                            <select class="vfb-form-select" onchange="updateFieldProp(${secIdx}, ${fIdx}, 'type', this.value)">
+                                                <option value="text" ${field.type === 'text' ? 'selected' : ''}>Jawaban singkat</option>
+                                                <option value="select" ${field.type === 'select' ? 'selected' : ''}>Pilih Salah Satu</option>
+                                                <option value="number" ${field.type === 'number' ? 'selected' : ''}>Angka / Jumlah</option>
+                                                <option value="date" ${field.type === 'date' ? 'selected' : ''}>Jawaban tanggal</option>
+                                                <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Teks panjang</option>
                                             </select>
                                         </div>
-                                        <button type="button" class="btn-builder-delete" onclick="removeField(${sIdx}, ${secIdx}, ${fIdx})" title="Hapus Pertanyaan"><i class="fa-solid fa-trash-can"></i></button>
+                                        <div style="min-width: 90px; text-align: center;">
+                                            <label class="vfb-form-label">Wajib Diisi</label>
+                                            <div style="height: 40px; display: flex; align-items: center; justify-content: center;">
+                                                <label class="vfb-switch">
+                                                    <input type="checkbox" ${field.required ? 'checked' : ''} 
+                                                           onchange="updateFieldProp(${secIdx}, ${fIdx}, 'required', this.checked)">
+                                                    <span class="vfb-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    ${optionsHtml}
+
+                                    ${choicesHtml}
+
+                                    <div class="vfb-adv-wrapper">
+                                        <div class="vfb-adv-header" onclick="toggleAdvancedSettings(${secIdx}, ${fIdx})">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i id="advIcon-${fieldKey}" class="fa-solid ${isAdvOpen ? 'fa-chevron-down' : 'fa-chevron-right'} text-primary" style="font-size: 0.8rem;"></i>
+                                                <div>
+                                                    <div class="vfb-adv-title">Pengaturan Lanjutan</div>
+                                                    <div class="vfb-adv-desc">Hubungan dengan kolom spreadsheet</div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2" onclick="event.stopPropagation()">
+                                                <button type="button" class="vfb-btn-card-cancel" onclick="cancelEditField(${secIdx}, ${fIdx})">Batal</button>
+                                                <button type="button" class="vfb-btn-card-done" onclick="finishEditField(${secIdx}, ${fIdx})">Selesai Mengubah</button>
+                                            </div>
+                                        </div>
+                                        <div id="advSettings-${fieldKey}" class="vfb-adv-drawer" style="display: ${isAdvOpen ? 'block' : 'none'};">
+                                            <div class="vfb-adv-grid">
+                                                <div>
+                                                    <label class="vfb-micro-label">Kode Kolom Spreadsheet (Header)</label>
+                                                    <input type="text" class="vfb-form-input font-monospace text-uppercase" 
+                                                           value="${escapeHtml(field.name || '')}" 
+                                                           onchange="updateFieldProp(${secIdx}, ${fIdx}, 'name', this.value)"
+                                                           placeholder="KODE_KOLOM">
+                                                    <span class="vfb-input-help">Otomatis huruf besar tanpa spasi. Digunakan sebagai Header Google Sheets.</span>
+                                                </div>
+                                                <div>
+                                                    <label class="vfb-micro-label">Petunjuk Petugas (Placeholder)</label>
+                                                    <input type="text" class="vfb-form-input" 
+                                                           value="${escapeHtml(field.placeholder || '')}" 
+                                                           oninput="updateFieldProp(${secIdx}, ${fIdx}, 'placeholder', this.value)"
+                                                           placeholder="Contoh: SERVICEABLE">
+                                                </div>
+                                                <div>
+                                                    <label class="vfb-micro-label">Satuan Ukuran / Unit (Opsional)</label>
+                                                    <input type="text" class="vfb-form-input" 
+                                                           value="${escapeHtml(field.unit || '')}" 
+                                                           oninput="updateFieldProp(${secIdx}, ${fIdx}, 'unit', this.value)"
+                                                           placeholder="Contoh: titik, %, Mu">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                                                <button type="button" class="btn text-danger btn-sm p-0" onclick="deleteField(${secIdx}, ${fIdx})">
+                                                    <i class="fa-solid fa-trash-can me-1"></i> Hapus Pertanyaan Ini
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             `;
+                        } else {
+                            // --- COLLAPSED CARD ---
+                            fieldsHtml += `
+                                <div class="vfb-q-card">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="vfb-q-num">${qNumber}</div>
+                                        <div>
+                                            <div class="vfb-q-label">${escapeHtml(field.label || 'Pertanyaan Tanpa Judul')}</div>
+                                            <div class="vfb-q-type">${typeLabel}</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button type="button" class="vfb-btn-ubah" onclick="toggleEditField(${secIdx}, ${fIdx})">
+                                            <span>Ubah</span>
+                                            <i class="fa-solid fa-chevron-down" style="font-size: 0.72rem;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
 
-                            const fDiv = document.createElement('div');
-                            fDiv.innerHTML = fieldHtml;
-                            fieldContainer.appendChild(fDiv);
-                        });
-                    }
-                    secContainer.appendChild(secDiv);
-                });
+                contentSectionsHtml += `
+                    <div class="vfb-section-block mb-3">
+                        ${headerHtml}
+                        <div class="vfb-fields-list">
+                            ${fieldsHtml}
+                        </div>
+                        <button type="button" class="vfb-btn-add-q" onclick="addFieldToSection(${secIdx})">
+                            <i class="fa-solid fa-plus"></i> Tambah Pertanyaan
+                        </button>
+                    </div>
+                `;
             }
-            container.appendChild(stepDiv);
+        });
+
+        // Add section button at the bottom of right pane if they want to group questions
+        contentSectionsHtml += `
+            <div class="mt-4 pt-2 text-center">
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addSectionToCurrentStep()" style="border-radius: 8px; font-weight: 600; font-size: 0.8rem;">
+                    <i class="fa-solid fa-folder-plus me-1"></i> Tambah Sub-bab (Section) Baru
+                </button>
+            </div>
+        `;
+
+        // --- ASSEMBLE 2-COLUMN WORKSPACE AND STICKY FOOTER ---
+        container.innerHTML = `
+            <div class="vfb-container">
+                <div class="vfb-layout">
+                    <!-- Left: Bagian Formulir -->
+                    <div class="vfb-steps-panel">
+                        <div class="vfb-panel-title">Bagian Formulir</div>
+                        <div class="vfb-panel-subtitle">Pilih bagian yang ingin diubah.</div>
+                        <div class="vfb-steps-list">
+                            ${stepsHtml}
+                        </div>
+                        <button type="button" class="vfb-btn-add-step" onclick="addStep()">
+                            <i class="fa-solid fa-plus"></i> Tambah Bagian
+                        </button>
+                    </div>
+
+                    <!-- Right: Pertanyaan pada bagian ini -->
+                    <div class="vfb-content-panel">
+                        <div class="vfb-step-header">
+                            <div>
+                                <h3 class="vfb-step-header-title">${escapeHtml(activeStep.title || 'Informasi Umum')}</h3>
+                                <div class="vfb-step-header-subtitle">Pertanyaan pada bagian ini.</div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="vfb-btn-rename-step" onclick="editCurrentStepName()">
+                                    <i class="fa-solid fa-pencil"></i> Ubah Nama Bagian
+                                </button>
+                                ${currentSchema.steps.length > 1 ? `
+                                    <button type="button" class="vfb-btn-del-step" onclick="deleteCurrentStep()" title="Hapus bagian ini">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        ${contentSectionsHtml}
+                    </div>
+                </div>
+
+                <!-- Sticky Action Footer -->
+                <div class="vfb-sticky-footer">
+                    <div id="vfbStatusIndicator" class="vfb-footer-status">
+                        ${isSchemaDirty ? `
+                            <span class="vfb-dot-amber"></span>
+                            <span>Perubahan belum disimpan</span>
+                        ` : `
+                            <i class="fa-solid fa-circle-check text-success"></i>
+                            <span>Semua perubahan tersimpan</span>
+                        `}
+                    </div>
+                    <div class="vfb-footer-right">
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="vfb-btn-discard" onclick="discardSchemaChanges()">Batalkan Perubahan</button>
+                            <button type="button" class="vfb-btn-save" onclick="saveSchema()">Simpan Perubahan</button>
+                        </div>
+                        <div class="vfb-footer-help">Setelah disimpan, formulir petugas akan diperbarui.</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function selectStep(sIdx) {
+        activeStepIdx = sIdx;
+        editingFieldKey = null;
+        renderVisualBuilder();
+    }
+
+    function addStep() {
+        Swal.fire({
+            title: 'Tambah Bagian Baru',
+            html: `
+                <div style="text-align: left;">
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #002b49; display: block; margin-bottom: 0.35rem;">Nama Bagian / Bab</label>
+                    <input id="swalNewStepTitle" class="swal2-input" style="width: 100%; margin: 0 0 1rem 0; font-size: 0.9rem;" placeholder="Contoh: Fasilitas Tambahan">
+                    
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #002b49; display: block; margin-bottom: 0.35rem;">Keterangan / Subtitle</label>
+                    <input id="swalNewStepSubtitle" class="swal2-input" style="width: 100%; margin: 0; font-size: 0.9rem;" placeholder="Contoh: Kondisi dan fasilitas pendukung">
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Tambah',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#0284c7',
+            preConfirm: () => {
+                const title = document.getElementById('swalNewStepTitle').value.trim();
+                const subtitle = document.getElementById('swalNewStepSubtitle').value.trim();
+                if (!title) {
+                    Swal.showValidationMessage('Nama bagian tidak boleh kosong');
+                    return false;
+                }
+                return { title, subtitle };
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                const newStep = {
+                    id: "step_" + (currentSchema.steps.length + 1),
+                    title: result.value.title,
+                    subtitle: result.value.subtitle,
+                    icon: "fa-file",
+                    sections: [
+                        {
+                            title: result.value.title,
+                            fields: []
+                        }
+                    ]
+                };
+                currentSchema.steps.push(newStep);
+                activeStepIdx = currentSchema.steps.length - 1;
+                editingFieldKey = null;
+                setSchemaDirty(true);
+                renderVisualBuilder();
+            }
         });
     }
 
-    function updateSchema(sIdx, secIdx, fIdx, key, value) {
-        if (fIdx !== null) {
-            let f = currentSchema.steps[sIdx].sections[secIdx].fields[fIdx];
-            if (key === 'options') {
-                f.options = value.split(',').map(s => s.trim()).filter(s => s);
-            } else if (key === 'name') {
-                f.name = value.toUpperCase().replace(/\s+/g, '_');
+    function editCurrentStepName() {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step) return;
+
+        Swal.fire({
+            title: 'Ubah Nama Bagian',
+            html: `
+                <div style="text-align: left;">
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #002b49; display: block; margin-bottom: 0.35rem;">Nama Bagian / Bab</label>
+                    <input id="swalStepTitle" class="swal2-input" style="width: 100%; margin: 0 0 1rem 0; font-size: 0.9rem;" value="${escapeHtml(step.title || '')}" placeholder="Contoh: Informasi Umum">
+                    
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #002b49; display: block; margin-bottom: 0.35rem;">Keterangan / Subtitle</label>
+                    <input id="swalStepSubtitle" class="swal2-input" style="width: 100%; margin: 0; font-size: 0.9rem;" value="${escapeHtml(step.subtitle || '')}" placeholder="Contoh: Tanggal dan penerima laporan">
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#0284c7',
+            preConfirm: () => {
+                const title = document.getElementById('swalStepTitle').value.trim();
+                const subtitle = document.getElementById('swalStepSubtitle').value.trim();
+                if (!title) {
+                    Swal.showValidationMessage('Nama bagian tidak boleh kosong');
+                    return false;
+                }
+                return { title, subtitle };
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                step.title = result.value.title;
+                step.subtitle = result.value.subtitle;
+                setSchemaDirty(true);
                 renderVisualBuilder();
-                return;
-            } else {
-                f[key] = value;
             }
-            if (key === 'type' && value === 'select' && !f.options) {
-                f.options = ["Opsi 1", "Opsi 2"];
+        });
+    }
+
+    function deleteCurrentStep() {
+        if (currentSchema.steps.length <= 1) {
+            return Swal.fire('Perhatian', 'Formulir harus memiliki minimal 1 bagian.', 'warning');
+        }
+        const step = currentSchema.steps[activeStepIdx];
+        Swal.fire({
+            title: 'Hapus Bagian Ini?',
+            text: `Bagian "${step.title || 'Langkah ' + (activeStepIdx + 1)}" dan seluruh pertanyaan di dalamnya akan dihapus.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus Bagian',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#ef4444'
+        }).then(result => {
+            if (result.isConfirmed) {
+                currentSchema.steps.splice(activeStepIdx, 1);
+                if (activeStepIdx >= currentSchema.steps.length) {
+                    activeStepIdx = Math.max(0, currentSchema.steps.length - 1);
+                }
+                editingFieldKey = null;
+                setSchemaDirty(true);
+                renderVisualBuilder();
             }
-        } else if (secIdx !== null) {
-            currentSchema.steps[sIdx].sections[secIdx].title = value;
-        } else {
-            currentSchema.steps[sIdx].title = value;
+        });
+    }
+
+    function addSectionToCurrentStep() {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step) return;
+
+        Swal.fire({
+            title: 'Tambah Sub-bab (Section)',
+            input: 'text',
+            inputLabel: 'Nama Sub-bab / Kelompok Pertanyaan',
+            inputPlaceholder: 'Contoh: Penerima Laporan',
+            showCancelButton: true,
+            confirmButtonText: 'Tambah',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#0284c7',
+            inputValidator: (val) => {
+                if (!val || !val.trim()) return 'Nama sub-bab tidak boleh kosong';
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                if (!step.sections) step.sections = [];
+                step.sections.push({
+                    title: result.value.trim(),
+                    fields: []
+                });
+                const newSecIdx = step.sections.length - 1;
+                expandedSections[`${activeStepIdx}_${newSecIdx}`] = true;
+                setSchemaDirty(true);
+                renderVisualBuilder();
+            }
+        });
+    }
+
+    function deleteSection(secIdx) {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step || !step.sections) return;
+        if (step.sections.length <= 1) {
+            return Swal.fire('Perhatian', 'Bagian ini harus memiliki minimal 1 kelompok pertanyaan.', 'warning');
         }
 
-        if (key === 'type') {
+        Swal.fire({
+            title: 'Hapus Sub-bab Ini?',
+            text: `Sub-bab "${step.sections[secIdx].title || 'Sub-bab'}" dan seluruh pertanyaannya akan dihapus.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#ef4444'
+        }).then(result => {
+            if (result.isConfirmed) {
+                step.sections.splice(secIdx, 1);
+                editingFieldKey = null;
+                setSchemaDirty(true);
+                renderVisualBuilder();
+            }
+        });
+    }
+
+    function toggleSectionCard(sIdx, secIdx) {
+        const key = `${sIdx}_${secIdx}`;
+        expandedSections[key] = !expandedSections[key];
+        renderVisualBuilder();
+    }
+
+    function toggleEditField(secIdx, fIdx) {
+        const key = `${secIdx}_${fIdx}`;
+        if (editingFieldKey === key) {
+            editingFieldKey = null;
+        } else {
+            editingFieldKey = key;
+        }
+        renderVisualBuilder();
+    }
+
+    function updateFieldProp(secIdx, fIdx, key, val) {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
+        const f = step.sections[secIdx].fields[fIdx];
+
+        if (key === 'name') {
+            f.name = val.toUpperCase().replace(/\s+/g, '_');
+        } else if (key === 'required') {
+            f.required = !!val;
+        } else if (key === 'type') {
+            f.type = val;
+            if (val === 'select' && (!f.options || f.options.length === 0)) {
+                f.options = ["Selamat pagi", "Selamat siang", "Selamat sore"];
+            }
+            renderVisualBuilder();
+            setSchemaDirty(true);
+            return;
+        } else {
+            f[key] = val;
+        }
+        setSchemaDirty(true);
+    }
+
+    function updateFieldOption(secIdx, fIdx, optIdx, val) {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
+        const f = step.sections[secIdx].fields[fIdx];
+        if (f && f.options && f.options[optIdx] !== undefined) {
+            f.options[optIdx] = val;
+            setSchemaDirty(true);
+        }
+    }
+
+    function addFieldOption(secIdx, fIdx) {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
+        const f = step.sections[secIdx].fields[fIdx];
+        if (!f.options) f.options = [];
+        f.options.push(`Pilihan ${f.options.length + 1}`);
+        setSchemaDirty(true);
+        renderVisualBuilder();
+    }
+
+    function removeFieldOption(secIdx, fIdx, optIdx) {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
+        const f = step.sections[secIdx].fields[fIdx];
+        if (f && f.options) {
+            f.options.splice(optIdx, 1);
+            setSchemaDirty(true);
             renderVisualBuilder();
         }
     }
 
-    function addStep() {
-        currentSchema.steps.push({
-            title: "Bab Baru",
-            icon: "fa-file",
-            sections: []
-        });
+    function toggleAdvancedSettings(secIdx, fIdx) {
+        const key = `${secIdx}_${fIdx}`;
+        advancedOpenKeys[key] = !advancedOpenKeys[key];
+        const el = document.getElementById(`advSettings-${key}`);
+        const icon = document.getElementById(`advIcon-${key}`);
+        if (el) {
+            if (advancedOpenKeys[key]) {
+                el.style.display = 'block';
+                if (icon) icon.className = 'fa-solid fa-chevron-down text-primary';
+            } else {
+                el.style.display = 'none';
+                if (icon) icon.className = 'fa-solid fa-chevron-right text-primary';
+            }
+        }
+    }
+
+    function finishEditField(secIdx, fIdx) {
+        editingFieldKey = null;
         renderVisualBuilder();
     }
 
-    function removeStep(sIdx) {
-        currentSchema.steps.splice(sIdx, 1);
+    function cancelEditField(secIdx, fIdx) {
+        editingFieldKey = null;
         renderVisualBuilder();
     }
 
-    function addSection(sIdx) {
-        currentSchema.steps[sIdx].sections.push({
-            title: "Sub-bab Baru",
-            fields: []
-        });
-        renderVisualBuilder();
-    }
+    function addFieldToSection(secIdx) {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step) return;
+        if (!step.sections || step.sections.length === 0) {
+            step.sections = [{ title: 'Data Laporan', fields: [] }];
+        }
+        if (!step.sections[secIdx]) secIdx = 0;
 
-    function removeSection(sIdx, secIdx) {
-        currentSchema.steps[sIdx].sections.splice(secIdx, 1);
-        renderVisualBuilder();
-    }
-
-    function addField(sIdx, secIdx) {
-        currentSchema.steps[sIdx].sections[secIdx].fields.push({
-            name: "FIELD_BARU_" + Date.now().toString().slice(-4),
+        const newField = {
+            name: "FIELD_" + Date.now().toString().slice(-4),
             label: "Pertanyaan Baru",
             type: "text",
             required: false
-        });
+        };
+        step.sections[secIdx].fields.push(newField);
+        const newIdx = step.sections[secIdx].fields.length - 1;
+        editingFieldKey = `${secIdx}_${newIdx}`;
+        setSchemaDirty(true);
         renderVisualBuilder();
     }
 
-    function removeField(sIdx, secIdx, fIdx) {
-        currentSchema.steps[sIdx].sections[secIdx].fields.splice(fIdx, 1);
-        renderVisualBuilder();
+    function deleteField(secIdx, fIdx) {
+        const step = currentSchema.steps[activeStepIdx];
+        if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
+        const fieldName = step.sections[secIdx].fields[fIdx].label || 'pertanyaan ini';
+
+        Swal.fire({
+            title: 'Hapus Pertanyaan?',
+            text: `Pertanyaan "${fieldName}" akan dihapus dari formulir.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#ef4444'
+        }).then(result => {
+            if (result.isConfirmed) {
+                step.sections[secIdx].fields.splice(fIdx, 1);
+                editingFieldKey = null;
+                setSchemaDirty(true);
+                renderVisualBuilder();
+            }
+        });
+    }
+
+    function discardSchemaChanges() {
+        if (!isSchemaDirty) {
+            return Swal.fire('Informasi', 'Tidak ada perubahan yang belum disimpan.', 'info');
+        }
+        Swal.fire({
+            title: 'Batalkan Perubahan?',
+            text: 'Semua perubahan yang belum disimpan akan dikembalikan ke kondisi awal saat terakhir dibuka atau disimpan.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Batalkan Perubahan',
+            cancelButtonText: 'Kembali Mengedit',
+            confirmButtonColor: '#ef4444'
+        }).then(result => {
+            if (result.isConfirmed) {
+                currentSchema = JSON.parse(JSON.stringify(initialSchema));
+                isSchemaDirty = false;
+                editingFieldKey = null;
+                renderVisualBuilder();
+                Swal.fire('Dibatalkan', 'Perubahan telah dibatalkan.', 'success');
+            }
+        });
     }
 
     function saveSchema() {
         Swal.fire({
             title: 'Menyimpan & Sinkronisasi...',
-            text: 'Menyimpan form schema baru dan memperbarui kolom di Google Sheets...',
+            text: 'Menyimpan struktur form baru dan menyelaraskan seluruh spreadsheet...',
             allowOutsideClick: false,
             didOpen: () => { Swal.showLoading(); }
         });
@@ -8233,7 +9319,14 @@ REGION II`;
         .then(r => r.json())
         .then(data => {
             if (data.success) {
-                Swal.fire('Berhasil!', data.message, 'success');
+                initialSchema = JSON.parse(JSON.stringify(currentSchema));
+                setSchemaDirty(false);
+                Swal.fire({
+                    title: 'Berhasil Disimpan!',
+                    text: data.message || 'Formulir berhasil diperbarui dan disinkronkan ke spreadsheet.',
+                    icon: 'success',
+                    confirmButtonColor: '#0284c7'
+                });
             } else {
                 Swal.fire('Gagal Menyimpan', data.error, 'error');
             }
@@ -8251,7 +9344,7 @@ REGION II`;
             showCancelButton: true,
             confirmButtonText: 'Ya, Tarik Sekarang',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#00B7CD'
+            confirmButtonColor: '#0284c7'
         }).then(result => {
             if (result.isConfirmed) {
                 Swal.fire({

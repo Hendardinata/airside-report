@@ -1,5 +1,21 @@
 [
   {
+    "id": "notif_1792998398_9218d2",
+    "airport": "LOP",
+    "recipient_role": "staff",
+    "recipient_username": "lop_hendar",
+    "sender_username": "lop_hendar",
+    "sender_name": "Hendardinata, S.Kom",
+    "notif_type": "pending",
+    "title": "Laporan Diajukan ke DH",
+    "message": "Laporan tanggal 2026-10-01 tersimpan di Staging dan menunggu telaah Department Head.",
+    "report_id": "REP-LOP-20261001",
+    "tanggal": "2026-10-01",
+    "notes": "",
+    "created_at": "2026-10-26 15:06:38",
+    "is_read": false
+  },
+  {
     "id": "notif_1792975461_1a5b4d",
     "airport": "LOP",
     "recipient_role": "dh",
@@ -29,38 +45,6 @@
     "tanggal": "2026-11-18",
     "notes": "",
     "created_at": "2026-10-26 08:44:21",
-    "is_read": false
-  },
-  {
-    "id": "notif_1792974837_248988",
-    "airport": "LOP",
-    "recipient_role": "staff",
-    "recipient_username": "lop_hendar",
-    "sender_username": "lop_hendar",
-    "sender_name": "Hendardinata, S.Kom",
-    "notif_type": "pending",
-    "title": "Laporan Diajukan ke DH",
-    "message": "Laporan tanggal 2026-11-17 tersimpan di Staging dan menunggu telaah Department Head.",
-    "report_id": "REP-LOP-20261117",
-    "tanggal": "2026-11-17",
-    "notes": "",
-    "created_at": "2026-10-26 08:33:57",
-    "is_read": true
-  },
-  {
-    "id": "notif_1792974837_58e0f1",
-    "airport": "LOP",
-    "recipient_role": "dh",
-    "recipient_username": "",
-    "sender_username": "lop_hendar",
-    "sender_name": "Hendardinata, S.Kom",
-    "notif_type": "pending",
-    "title": "Pengajuan Laporan Baru",
-    "message": "Petugas Hendardinata, S.Kom (@lop_hendar) mengajukan laporan harian tanggal 2026-11-17 untuk ditelaah.",
-    "report_id": "REP-LOP-20261117",
-    "tanggal": "2026-11-17",
-    "notes": "",
-    "created_at": "2026-10-26 08:33:57",
     "is_read": false
   },
   {

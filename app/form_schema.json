@@ -3,13 +3,19 @@
     {
       "icon": "fa-file-lines",
       "id": "step_1",
-      "title": "UMUM",
-      "subtitle": "Tentukan tanggal laporan, sapaan pembuka, susunan pejabat penerima laporan, dan kantor cabang.",
+      "title": "Informasi Umum",
+      "subtitle": "Tanggal dan penerima laporan",
       "sections": [
         {
           "icon": "fa-file-lines",
-          "title": "UMUM",
+          "title": "Data Laporan",
           "fields": [
+            {
+              "name": "TANGGAL",
+              "label": "Tanggal Laporan",
+              "type": "date",
+              "required": true
+            },
             {
               "name": "SAPAAN",
               "label": "Sapaan Pembuka",
@@ -19,16 +25,23 @@
                 "Selamat siang",
                 "Selamat sore",
                 "Selamat malam",
-                "Assalamualaikum Wr Wb"
+                "Assalamualaikum Wr. Wb"
               ],
               "required": true
             },
             {
-              "name": "TANGGAL",
-              "label": "Tanggal Laporan",
-              "type": "date",
+              "name": "KANTOR_CABANG",
+              "label": "Nomor & Nama Kantor Cabang",
+              "type": "text",
+              "placeholder": "Contoh: 1. Kantor Cabang LOP",
               "required": true
-            },
+            }
+          ]
+        },
+        {
+          "icon": "fa-users",
+          "title": "Penerima Laporan",
+          "fields": [
             {
               "name": "PENERIMA_1",
               "label": "Penerima 1",
@@ -56,13 +69,6 @@
               "type": "text",
               "placeholder": "Contoh: Pak DH Regional II",
               "required": false
-            },
-            {
-              "name": "KANTOR_CABANG",
-              "label": "Nomor & Nama Kantor Cabang",
-              "type": "text",
-              "placeholder": "Contoh: 1. Kantor Cabang LOP",
-              "required": true
             }
           ]
         }
@@ -71,8 +77,8 @@
     {
       "icon": "fa-road",
       "id": "step_2",
-      "title": "A. RUNWAY",
-      "subtitle": "Kondisi perkerasan runway, titik kerusakan, marka, dan rubber deposit.",
+      "title": "Fasilitas Runway",
+      "subtitle": "Kondisi dan perkerasan",
       "sections": [
         {
           "icon": "fa-road",
@@ -197,8 +203,8 @@
     {
       "icon": "fa-plane",
       "id": "step_3",
-      "title": "B. TAXIWAY",
-      "subtitle": "Kondisi perkerasan taxiway, titik kerusakan, marka, dan standing water.",
+      "title": "Fasilitas Taxiway",
+      "subtitle": "Kondisi dan perkerasan",
       "sections": [
         {
           "icon": "fa-plane",
@@ -311,8 +317,8 @@
     {
       "icon": "fa-square-parking",
       "id": "step_4",
-      "title": "C. APRON",
-      "subtitle": "Kondisi perkerasan apron, perbaikan, marka, dan pemeliharaan potong rumput.",
+      "title": "Fasilitas Apron",
+      "subtitle": "Kondisi dan perkerasan",
       "sections": [
         {
           "icon": "fa-square-parking",
@@ -438,8 +444,8 @@
     {
       "icon": "fa-clipboard-check",
       "id": "step_5",
-      "title": "CATATAN & KIRIM",
-      "subtitle": "Catatan khusus operasional, pratinjau pesan WhatsApp, dan submit ke spreadsheet.",
+      "title": "Catatan & Pengesahan",
+      "subtitle": "Catatan tambahan dan pengesahan",
       "sections": [
         {
           "icon": "fa-pen-to-square",
