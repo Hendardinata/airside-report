@@ -295,11 +295,13 @@
     }
 
     .heading-dark {
-        color: #1e293b; /* Deep slate / dark navy */
+        color: #1e293b;
+        /* Deep slate / dark navy */
     }
 
     .heading-blue {
-        color: #00B7CD; /* InJourney Cyan */
+        color: #00B7CD;
+        /* InJourney Cyan */
     }
 
     .portal-subheading {
@@ -1309,6 +1311,7 @@
         border-color: #fde68a !important;
         box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15) !important;
     }
+
     div:where(.swal2-container) .swal2-icon.swal2-warning::after {
         content: "" !important;
         display: block !important;
@@ -1328,6 +1331,7 @@
         border-color: #bbf7d0 !important;
         box-shadow: 0 4px 16px rgba(22, 163, 74, 0.15) !important;
     }
+
     div:where(.swal2-container) .swal2-icon.swal2-success::after {
         content: "" !important;
         display: block !important;
@@ -1347,6 +1351,7 @@
         border-color: #fecdd3 !important;
         box-shadow: 0 4px 16px rgba(225, 29, 72, 0.15) !important;
     }
+
     div:where(.swal2-container) .swal2-icon.swal2-error::after {
         content: "" !important;
         display: block !important;
@@ -1366,6 +1371,7 @@
         border-color: #bae6fd !important;
         box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15) !important;
     }
+
     div:where(.swal2-container) .swal2-icon.swal2-info::after {
         content: "" !important;
         display: block !important;
@@ -1385,6 +1391,7 @@
         border-color: #ddd6fe !important;
         box-shadow: 0 4px 16px rgba(124, 58, 237, 0.15) !important;
     }
+
     div:where(.swal2-container) .swal2-icon.swal2-question::after {
         content: "" !important;
         display: block !important;
@@ -1497,7 +1504,7 @@
 
     /* Single-button alert: confirm button spans 100% width symmetrically */
     div:where(.swal2-container) .swal2-actions:not(:has(button.swal2-cancel:not([style*="display: none"]))):not(:has(button.swal2-deny:not([style*="display: none"]))) button.swal2-confirm:not([style*="display: none"]),
-    div:where(.swal2-container) .swal2-actions > button.swal2-styled:only-of-type,
+    div:where(.swal2-container) .swal2-actions>button.swal2-styled:only-of-type,
     .swal-corp-actions-bar:not(:has(.swal-corp-btn-secondary)) .swal-corp-btn-primary {
         flex: 1 1 100% !important;
         width: 100% !important;
@@ -1574,6 +1581,7 @@
         border: 2px solid #991b1b !important;
         box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
     }
+
     div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"]:hover,
     div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"]:hover,
     div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"]:hover,
@@ -1607,7 +1615,8 @@
         <!-- Center: Futuristic Airport Island Travel Diorama -->
         <div class="diorama-anchor-wrap">
             <img src="{{ url_for('static', filename='img/airport-diorama.webp') }}?v=2"
-                alt="Futuristic Airport Island Travel Diorama" class="diorama-artwork" loading="eager" width="600" height="600">
+                alt="Futuristic Airport Island Travel Diorama" class="diorama-artwork" loading="eager" width="600"
+                height="600">
         </div>
 
         <!-- Bottom Left Corporate Footer -->
@@ -1654,19 +1663,19 @@
                 <!-- CSRF Token -->
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <!-- Username Input -->
+                <!-- nama_pengguna Input -->
                 <div class="input-field-group">
-                    <label class="field-caption" for="username">Username</label>
+                    <label class="field-caption" for="username">Nama Pengguna</label>
                     <div class="input-inner-wrap">
                         <input type="text" id="username" name="username" class="control-dark-input"
-                            placeholder="Masukkan username Anda" required autocomplete="username">
+                            placeholder="Masukkan Nama Pengguna Anda" required autocomplete="username">
                         <i class="fa-regular fa-user input-icon-lead"></i>
                     </div>
                 </div>
 
                 <!-- Password Input -->
                 <div class="input-field-group">
-                    <label class="field-caption" for="password">Password</label>
+                    <label class="field-caption" for="password">Kata Sandi</label>
                     <div class="input-inner-wrap">
                         <input type="password" id="password" name="password" class="control-dark-input"
                             style="padding-right: 2.85rem;" placeholder="Masukkan kata sandi Anda" required
@@ -1749,7 +1758,7 @@
                 <div class="info-item-content">
                     <h4>Identifikasi Peran Otomatis</h4>
                     <p>Sistem secara otomatis mengenali peran Anda (Petugas Lapangan, Department Head, atau
-                        Administrator) saat Anda memasukkan username kedinasan.</p>
+                        Administrator) saat Anda memasukkan nama_pengguna kedinasan.</p>
                 </div>
             </div>
 
@@ -1759,7 +1768,8 @@
                 </div>
                 <div class="info-item-content">
                     <h4>Bantuan & Kendala Login</h4>
-                    <p>Jika mengalami kendala akun atau membutuhkan pemulihan kata sandi, hubungi Helpdesk Regional II via DH masing - masing Cabang.</p>
+                    <p>Jika mengalami kendala akun atau membutuhkan pemulihan kata sandi, hubungi Helpdesk Regional II
+                        via DH masing - masing Cabang.</p>
                 </div>
             </div>
         </div>

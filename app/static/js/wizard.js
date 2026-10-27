@@ -134,7 +134,12 @@ function goToStepDirect(step) {
         targetStep.style.display = 'block';
         targetStep.classList.add('active');
     }
-    if (targetNav) targetNav.classList.add('active');
+    if (targetNav) {
+        targetNav.classList.add('active');
+        try {
+            targetNav.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        } catch(e) {}
+    }
 
     // Scroll halus ke atas kartu wizard
     const formCard = document.querySelector('.form-workspace-card') || document.querySelector('.form-main-card') || document.getElementById('reportWizard');
