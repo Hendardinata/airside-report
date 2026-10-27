@@ -72,7 +72,7 @@ def dashboard():
     gm_notifs = get_notifications(airport_code, role='dh')
     unread_notifs = sum(1 for n in gm_notifs if not n.get('is_read'))
     total_notifs = len(gm_notifs)
-    notif_badge_num = unread_notifs if unread_notifs > 0 else total_notifs
+    notif_badge_num = unread_notifs
 
     from app.services.gsheets_service import get_airport_sheet_calendar_data
     cal_data = get_airport_sheet_calendar_data(airport_code)
@@ -291,11 +291,7 @@ def api_edit_report():
             admin_phone = admin_conf.get('admin_phone', '')
             wa_report = generate_wa_message(final_form_data, airport_code)
 
-            approval_header = (
-                f"*[VERIFIKASI & KOREKSI MANDIRI DEPARTMENT HEAD - LAPORAN DISETUJUI]*\n"
-                f"Laporan Harian Fasilitas Sisi Udara Cabang *{airport_code}* telah diverifikasi, disesuaikan secara mandiri oleh DH, dan disetujui.\n\n"
-            )
-            full_admin_message = approval_header + wa_report
+            full_admin_message = wa_report
 
             return jsonify({
                 "success": True,
@@ -370,11 +366,7 @@ def api_approve():
         admin_phone = admin_conf.get('admin_phone', '')
         wa_report = generate_wa_message(form_data, airport_code)
 
-        approval_header = (
-            f"*[VERIFIKASI DEPARTMENT HEAD SELESAI - LAPORAN DISETUJUI]*\n"
-            f"Laporan Harian Fasilitas Sisi Udara Cabang *{airport_code}* telah diverifikasi dan disetujui oleh Department Head.\n\n"
-        )
-        full_admin_message = approval_header + wa_report
+        full_admin_message = wa_report
 
         # Invalidate cache kalender
         try:
@@ -435,12 +427,13 @@ def api_notifications_mark_read():
     data = request.json or {}
     user = USERS.get(session['user_id'])
     airport_code = user.get('airport', 'LOP')
-    from app.services.notification_service import mark_notification_as_read, mark_all_as_read
+    from app.services.notification_service import mark_notification_as_read, mark_all_as_read, set_notification_read_status
     
     if data.get('mark_all'):
         mark_all_as_read(airport_code, role='dh')
     elif data.get('notif_id'):
-        mark_notification_as_read(data.get('notif_id'))
+        is_read = data.get('is_read', True)
+        set_notification_read_status(data.get('notif_id'), is_read=is_read)
     return jsonify({"success": True})
 
 @bp.route('/api/notifications/clear', methods=['POST'])
@@ -459,4 +452,3 @@ def api_notifications_clear():
         clear_notifications(airport_code, role='dh', active_month=active_m)
 
     return jsonify({"success": True, "message": "Notifikasi berhasil dibersihkan."})
-

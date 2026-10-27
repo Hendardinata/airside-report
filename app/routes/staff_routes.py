@@ -208,7 +208,7 @@ def dashboard():
     user_notifs = get_notifications(airport_code, role='staff', username=user.get('username'))
     unread_notifs = sum(1 for n in user_notifs if not n.get('is_read'))
     total_notifs = len(user_notifs)
-    notif_badge_num = unread_notifs if unread_notifs > 0 else total_notifs
+    notif_badge_num = unread_notifs
 
     from app.services.gsheets_service import get_airport_sheet_calendar_data
     cal_data = get_airport_sheet_calendar_data(airport_code)
@@ -425,7 +425,7 @@ def submit():
 
         return jsonify({
             "status": "success", 
-            "message": f"Data berhasil disimpan ke Spreadsheet Staging {airport_code} dan dikirim ke Department Head untuk direview!",
+            "message": f"Data berhasil disimpan ke Database Staging {airport_code} dan dikirim ke Department Head untuk direview!",
             "report_id": staging_res.get('report_id'),
             "dh_phone": dh_phone,
             "gm_phone": dh_phone,
@@ -458,12 +458,13 @@ def api_notifications_mark_read():
     data = request.json or {}
     user = USERS.get(session['user_id'])
     airport_code = user.get('airport', 'LOP')
-    from app.services.notification_service import mark_notification_as_read, mark_all_as_read
+    from app.services.notification_service import mark_notification_as_read, mark_all_as_read, set_notification_read_status
     
     if data.get('mark_all'):
         mark_all_as_read(airport_code, role='staff', username=user.get('username'))
     elif data.get('notif_id'):
-        mark_notification_as_read(data.get('notif_id'))
+        is_read = data.get('is_read', True)
+        set_notification_read_status(data.get('notif_id'), is_read=is_read)
     return jsonify({"success": True})
 
 @bp.route('/api/notifications/clear', methods=['POST'])

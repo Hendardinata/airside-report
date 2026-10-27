@@ -1,5 +1,37 @@
 [
   {
+    "id": "notif_1793070199_4e0c3a",
+    "airport": "DPS",
+    "recipient_role": "dh",
+    "recipient_username": "",
+    "sender_username": "dh_dps",
+    "sender_name": "Department Head DPS",
+    "notif_type": "approved",
+    "title": "Laporan Berhasil Disetujui",
+    "message": "Laporan tanggal 2026-10-01 (ID: REP-DPS-20261001) dari Petugas DPS telah berhasil disetujui & disinkronkan ke Spreadsheet Produksi.",
+    "report_id": "REP-DPS-20261001",
+    "tanggal": "2026-10-01",
+    "notes": "",
+    "created_at": "2026-10-27 11:03:19",
+    "is_read": true
+  },
+  {
+    "id": "notif_1793070199_518908",
+    "airport": "DPS",
+    "recipient_role": "staff",
+    "recipient_username": "dps",
+    "sender_username": "dh_dps",
+    "sender_name": "Department Head DPS",
+    "notif_type": "approved",
+    "title": "Laporan Disetujui DH",
+    "message": "Laporan Harian Airside tanggal 2026-10-01 telah diverifikasi dan disetujui oleh Department Head serta dipindahkan ke Spreadsheet Produksi.",
+    "report_id": "REP-DPS-20261001",
+    "tanggal": "2026-10-01",
+    "notes": "",
+    "created_at": "2026-10-27 11:03:19",
+    "is_read": true
+  },
+  {
     "id": "notif_1792998398_9218d2",
     "airport": "LOP",
     "recipient_role": "staff",
@@ -136,18 +168,5 @@
     "notes": "",
     "created_at": "2026-10-21 16:31:00",
     "is_read": true
-  },
-  {
-    "id": "notif_1792559348_827680",
-    "airport": "DPS",
-    "recipient_role": "staff",
-    "notif_type": "pending",
-    "title": "Laporan Diajukan ke GM",
-    "message": "Laporan tanggal 2026-10-03 tersimpan di Staging dan menunggu review General Manager.",
-    "report_id": "REP-DPS-20261003",
-    "tanggal": "2026-10-03",
-    "notes": "",
-    "created_at": "2026-10-21 13:09:08",
-    "is_read": false
   }
 ]

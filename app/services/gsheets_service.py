@@ -35,6 +35,27 @@ def get_client():
     creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=SCOPES)
     return gspread.authorize(creds)
 
+STANDARD_CORE_FIELDS = [
+    'SAPAAN', 'TANGGAL', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4',
+    'KANTOR_CABANG', 
+    'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK',
+    'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI', 'RUNWAY_TITIK_BELUM',
+    'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', 'RUNWAY_MARKA_STD',
+    'RUNWAY_MARKA_REALISASI', 'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER',
+    'RUNWAY_WATER_PERF', 'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL',
+    'RUNWAY_RUBBER_SKID', 
+    'TAXIWAY_NAMA', 'TAXIWAY_STATUS', 'TAXIWAY_PCI',
+    'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI',
+    'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', 'TWY_MARKA_STD',
+    'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER', 'TWY_WATER_PERF',
+    'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI',
+    'APN_JENIS_DIPERBAIKI', 'APN_TITIK_BELUM', 'APN_JENIS_BELUM', 'APN_TITIK_BERULANG',
+    'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER',
+    'APN_WATER_PERF',
+    'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF', 
+    'CATATAN_1', 'CATATAN_2', 'CATATAN_3', 'CATATAN_4', 'CATATAN_5', 'CATATAN_6', 'CATATAN_7'
+]
+
 def write_daily_report(sheet_url, form_data):
     if not sheet_url:
         raise ValueError("URL Spreadsheet belum dikonfigurasi untuk bandara ini.")
@@ -212,83 +233,89 @@ def write_daily_report(sheet_url, form_data):
                 )
             
             # PEMBERSIHAN MUTLAK:
-            # Kosongkan sisa input di B4:B66 dan seluruh baris 67 ke bawah (A67:Z150)
-            # agar duplikasi tab '1' tidak pernah membawa nilai lama atau pertanyaan yang sudah dihapus
+            # Kosongkan sisa input di B4:B150 dan bersihkan baris dinamis 66 ke bawah
             try:
-                target_sheet.batch_clear(["B4:B66", "A67:Z150"])
+                # Jika sebelumnya ada baris ekstra yang terformat di baris 67+, hapus agar tab kembali rapi
+                extra_check = target_sheet.get("A67:A85")
+                if extra_check and any(any(c for c in r) for r in extra_check):
+                    target_sheet.delete_rows(67, 67 + len(extra_check) + 2)
+            except Exception:
+                pass
+
+            try:
+                target_sheet.batch_clear(["B4:B150", "A66:Z150"])
             except Exception as clear_err:
                 print(f"Warning saat clear target sheet: {clear_err}")
             
-            # Array kolom B dari B4 sampai B66
+            # Array kolom B dari B4 sampai B65 (persis 62 baris sesuai template Google Sheets)
             col_B_data = [
                 [form_data.get('SAPAAN', '')], # B4
                 [form_data.get('TANGGAL', '')], # B5
-                [form_data.get('PENERIMA_1', '')],
-                [form_data.get('PENERIMA_2', '')],
-                [form_data.get('PENERIMA_3', '')],
-                [form_data.get('PENERIMA_4', '')],
+                [form_data.get('PENERIMA_1', '')], # B6
+                [form_data.get('PENERIMA_2', '')], # B7
+                [form_data.get('PENERIMA_3', '')], # B8
+                [form_data.get('PENERIMA_4', '')], # B9
                 [form_data.get('KANTOR_CABANG', '')], # B10
-                [''], # B11 Header
+                [''], # B11 Header A. RUNWAY
                 [form_data.get('RUNWAY_KONDISI', '')], # B12
-                [form_data.get('RUNWAY_PCI', '')],
-                [form_data.get('RUNWAY_TITIK_RUSAK', '')],
-                [form_data.get('RUNWAY_TITIK_DIPERBAIKI', '')],
-                [form_data.get('RUNWAY_JENIS_DIPERBAIKI', '')],
-                [form_data.get('RUNWAY_TITIK_BELUM', '')],
-                [form_data.get('RUNWAY_JENIS_BELUM', '')],
+                [form_data.get('RUNWAY_PCI', '')], # B13
+                [form_data.get('RUNWAY_TITIK_RUSAK', '')], # B14
+                [form_data.get('RUNWAY_TITIK_DIPERBAIKI', '')], # B15
+                [form_data.get('RUNWAY_JENIS_DIPERBAIKI', '')], # B16
+                [form_data.get('RUNWAY_TITIK_BELUM', '')], # B17
+                [form_data.get('RUNWAY_JENIS_BELUM', '')], # B18
                 [form_data.get('RUNWAY_TITIK_BERULANG', '')], # B19
-                [form_data.get('RUNWAY_MARKA_STD', '')],
-                [form_data.get('RUNWAY_MARKA_REALISASI', '')],
-                [form_data.get('RUNWAY_MARKA_PERF', '')],
-                [form_data.get('RUNWAY_STANDING_WATER', '')],
+                [form_data.get('RUNWAY_MARKA_STD', '')], # B20
+                [form_data.get('RUNWAY_MARKA_REALISASI', '')], # B21
+                [form_data.get('RUNWAY_MARKA_PERF', '')], # B22
+                [form_data.get('RUNWAY_STANDING_WATER', '')], # B23
                 [form_data.get('RUNWAY_WATER_PERF', '')], # B24
-                [form_data.get('RUNWAY_RUBBER_STD', '')],
-                [form_data.get('RUNWAY_RUBBER_REAL', '')],
+                [form_data.get('RUNWAY_RUBBER_STD', '')], # B25
+                [form_data.get('RUNWAY_RUBBER_REAL', '')], # B26
                 [form_data.get('RUNWAY_RUBBER_SKID', '')], # B27
-                [''], # B28 Header
+                [''], # B28 Header B. TAXIWAY
                 [form_data.get('TAXIWAY_NAMA', '')], # B29
-                [form_data.get('TAXIWAY_STATUS', '')],
-                [form_data.get('TAXIWAY_PCI', '')],
-                [form_data.get('TWY_TITIK_RUSAK', '')],
-                [form_data.get('TWY_TITIK_DIPERBAIKI', '')],
-                [form_data.get('TWY_JENIS_DIPERBAIKI', '')],
-                [form_data.get('TWY_TITIK_BELUM', '')],
-                [form_data.get('TWY_JENIS_BELUM', '')],
+                [form_data.get('TAXIWAY_STATUS', '')], # B30
+                [form_data.get('TAXIWAY_PCI', '')], # B31
+                [form_data.get('TWY_TITIK_RUSAK', '')], # B32
+                [form_data.get('TWY_TITIK_DIPERBAIKI', '')], # B33
+                [form_data.get('TWY_JENIS_DIPERBAIKI', '')], # B34
+                [form_data.get('TWY_TITIK_BELUM', '')], # B35
+                [form_data.get('TWY_JENIS_BELUM', '')], # B36
                 [form_data.get('TWY_TITIK_BERULANG', '')], # B37
-                [''], # B38 TWY Jenis kerusakan berulang
-                [form_data.get('TWY_MARKA_STD', '')], # B39
-                [form_data.get('TWY_MARKA_REALISASI', '')],
-                [form_data.get('TWY_MARKA_PERF', '')],
-                [form_data.get('TWY_STANDING_WATER', '')], # B42
-                [''], # B43 TWY_WATER_PERF
-                [''], # B44 Header
-                [form_data.get('APRON_KONDISI', '')], # B45
-                [form_data.get('APRON_PCI', '')],
-                [form_data.get('APN_TITIK_RUSAK', '')],
-                [form_data.get('APN_TITIK_DIPERBAIKI', '')],
-                [form_data.get('APN_JENIS_DIPERBAIKI', '')],
-                [form_data.get('APN_TITIK_BELUM', '')],
-                [form_data.get('APN_JENIS_BELUM', '')],
-                [form_data.get('APN_TITIK_BERULANG', '')], # B52
-                [form_data.get('APN_MARKA_STD', '')], # B53
-                [form_data.get('APN_MARKA_REALISASI', '')],
-                [form_data.get('APN_MARKA_PERF', '')],
-                [form_data.get('APN_STANDING_WATER', '')], # B56
-                [''], # B57 APN_WATER_PERF
-                [form_data.get('RUMPUT_STD', '')], # B58
-                [form_data.get('RUMPUT_REALISASI', '')],
-                [form_data.get('RUMPUT_PERF', '')], # B60
-                [''], # B61 Header
-                [form_data.get('CATATAN_1', '')], # B62
-                [form_data.get('CATATAN_2', '')],
-                [form_data.get('CATATAN_3', '')],
-                [form_data.get('CATATAN_4', '')],
-                [form_data.get('CATATAN_5', '')] # B66
+                [form_data.get('TWY_MARKA_STD', '')], # B38
+                [form_data.get('TWY_MARKA_REALISASI', '')], # B39
+                [form_data.get('TWY_MARKA_PERF', '')], # B40
+                [form_data.get('TWY_STANDING_WATER', '')], # B41
+                [form_data.get('TWY_WATER_PERF', '')], # B42
+                [''], # B43 Header C. APRON
+                [form_data.get('APRON_KONDISI', '')], # B44
+                [form_data.get('APRON_PCI', '')], # B45
+                [form_data.get('APN_TITIK_RUSAK', '')], # B46
+                [form_data.get('APN_TITIK_DIPERBAIKI', '')], # B47
+                [form_data.get('APN_JENIS_DIPERBAIKI', '')], # B48
+                [form_data.get('APN_TITIK_BELUM', '')], # B49
+                [form_data.get('APN_JENIS_BELUM', '')], # B50
+                [form_data.get('APN_TITIK_BERULANG', '')], # B51
+                [form_data.get('APN_MARKA_STD', '')], # B52
+                [form_data.get('APN_MARKA_REALISASI', '')], # B53
+                [form_data.get('APN_MARKA_PERF', '')], # B54
+                [form_data.get('APN_STANDING_WATER', '')], # B55
+                [form_data.get('APN_WATER_PERF', '')], # B56
+                [form_data.get('RUMPUT_STD', '')], # B57
+                [form_data.get('RUMPUT_REALISASI', '')], # B58
+                [form_data.get('RUMPUT_PERF', '')], # B59
+                [''], # B60 Header CATATAN KHUSUS
+                [form_data.get('CATATAN_1', '')], # B61
+                [form_data.get('CATATAN_2', '')], # B62
+                [form_data.get('CATATAN_3', '')], # B63
+                [form_data.get('CATATAN_4', '')], # B64
+                [form_data.get('CATATAN_5', '')]  # B65
             ]
             
             # Sanitasi col_B_data
             sanitized_col_B = [[sanitize_sheet_value(cell[0])] for cell in col_B_data]
-            target_sheet.update(values=sanitized_col_B, range_name='B4:B66')
+            target_sheet.update(values=sanitized_col_B, range_name='B4:B65')
             
             # --- FASE 4: DYNAMIC DAILY SHEET MAPPING ---
             # Cari field baru yang dibuat melalui Form Builder yang tidak ada di template standar
@@ -296,27 +323,25 @@ def write_daily_report(sheet_url, form_data):
             with open(schema_path, 'r') as f:
                 schema = json.load(f)
                 
-            standard_fields = [
-                'SAPAAN', 'TANGGAL', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4',
-                'KANTOR_CABANG', 'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK',
-                'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI', 'RUNWAY_TITIK_BELUM',
-                'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', 'RUNWAY_MARKA_STD',
-                'RUNWAY_MARKA_REALISASI', 'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER',
-                'RUNWAY_WATER_PERF', 'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL',
-                'RUNWAY_RUBBER_SKID', 'TAXIWAY_NAMA', 'TAXIWAY_STATUS', 'TAXIWAY_PCI',
-                'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI',
-                'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', 'TWY_MARKA_STD',
-                'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER',
-                'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI',
-                'APN_JENIS_DIPERBAIKI', 'APN_TITIK_BELUM', 'APN_JENIS_BELUM', 'APN_TITIK_BERULANG',
-                'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER',
-                'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF', 'CATATAN_1', 'CATATAN_2',
-                'CATATAN_3', 'CATATAN_4', 'CATATAN_5'
-            ]
+            standard_fields = STANDARD_CORE_FIELDS
             
             extra_data = []
             format_requests = []
             current_row = 67 # Start at row 67 (0-indexed 66)
+            
+            # Cek jika ada Catatan 6 atau Catatan 7 yang diisi secara manual
+            for extra_catatan_key, extra_catatan_label in [('CATATAN_6', 'Catatan 6'), ('CATATAN_7', 'Catatan 7')]:
+                val = form_data.get(extra_catatan_key, '')
+                if val and str(val).strip():
+                    extra_data.append([extra_catatan_label, sanitize_sheet_value(val)])
+                    format_requests.append({
+                        "copyPaste": {
+                            "source": { "sheetId": target_sheet.id, "startRowIndex": 63, "endRowIndex": 64, "startColumnIndex": 0, "endColumnIndex": 2 },
+                            "destination": { "sheetId": target_sheet.id, "startRowIndex": current_row-1, "endRowIndex": current_row, "startColumnIndex": 0, "endColumnIndex": 2 },
+                            "pasteType": "PASTE_FORMAT"
+                        }
+                    })
+                    current_row += 1
             
             for step in schema.get('steps', []):
                 for sec in step.get('sections', []):
@@ -604,32 +629,29 @@ def sync_sheets_to_rekap(sheet_url):
             continue
             
         form_data = {}
-        # Daftar field standar persis seperti struktur B4:B66 (termasuk None untuk baris kosong/header)
-        B4_TO_B66_KEYS = [
+        # Daftar field standar persis seperti struktur B4:B65 (termasuk None untuk baris kosong/header)
+        B4_TO_B65_KEYS = [
             'SAPAAN', 'TANGGAL', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4', 'KANTOR_CABANG', # B4 - B10
-            None, # B11 Header
+            None, # B11 Header RUNWAY
             'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK', 'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI', # B12 - B16
             'RUNWAY_TITIK_BELUM', 'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', # B17 - B19
             'RUNWAY_MARKA_STD', 'RUNWAY_MARKA_REALISASI', 'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER', 'RUNWAY_WATER_PERF', # B20 - B24
             'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL', 'RUNWAY_RUBBER_SKID', # B25 - B27
-            None, # B28 Header
+            None, # B28 Header TAXIWAY
             'TAXIWAY_NAMA', 'TAXIWAY_STATUS', 'TAXIWAY_PCI', 'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI', # B29 - B34
             'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', # B35 - B37
-            None, # B38 TWY Jenis kerusakan berulang
-            'TWY_MARKA_STD', 'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER', # B39 - B42
-            None, # B43 TWY_WATER_PERF
-            None, # B44 Header
-            'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI', 'APN_JENIS_DIPERBAIKI', # B45 - B49
-            'APN_TITIK_BELUM', 'APN_JENIS_BELUM', 'APN_TITIK_BERULANG', # B50 - B52
-            'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER', # B53 - B56
-            None, # B57 APN_WATER_PERF
-            'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF', # B58 - B60
-            None, # B61 Header
-            'CATATAN_1', 'CATATAN_2', 'CATATAN_3', 'CATATAN_4', 'CATATAN_5' # B62 - B66
+            'TWY_MARKA_STD', 'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER', 'TWY_WATER_PERF', # B38 - B42
+            None, # B43 Header APRON
+            'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI', 'APN_JENIS_DIPERBAIKI', # B44 - B48
+            'APN_TITIK_BELUM', 'APN_JENIS_BELUM', 'APN_TITIK_BERULANG', # B49 - B51
+            'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER', 'APN_WATER_PERF', # B52 - B56
+            'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF', # B57 - B59
+            None, # B60 Header CATATAN KHUSUS
+            'CATATAN_1', 'CATATAN_2', 'CATATAN_3', 'CATATAN_4', 'CATATAN_5' # B61 - B65
         ]
         
-        # 1. Map standard fields berdasar index baris yang kaku (Baris 4 sampai 66)
-        for i, field_name in enumerate(B4_TO_B66_KEYS):
+        # 1. Map standard fields berdasar index baris yang kaku (Baris 4 sampai 65)
+        for i, field_name in enumerate(B4_TO_B65_KEYS):
             if not field_name:
                 continue
                 
@@ -676,23 +698,7 @@ def sync_sheets_to_rekap(sheet_url):
 # SINKRONISASI DUA ARAH (TWO-WAY SYNC): FORM SCHEMA <---> GOOGLE SPREADSHEET
 # ==============================================================================
 
-STANDARD_CORE_FIELDS = [
-    'SAPAAN', 'TANGGAL', 'PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4',
-    'KANTOR_CABANG', 'RUNWAY_KONDISI', 'RUNWAY_PCI', 'RUNWAY_TITIK_RUSAK',
-    'RUNWAY_TITIK_DIPERBAIKI', 'RUNWAY_JENIS_DIPERBAIKI', 'RUNWAY_TITIK_BELUM',
-    'RUNWAY_JENIS_BELUM', 'RUNWAY_TITIK_BERULANG', 'RUNWAY_MARKA_STD',
-    'RUNWAY_MARKA_REALISASI', 'RUNWAY_MARKA_PERF', 'RUNWAY_STANDING_WATER',
-    'RUNWAY_WATER_PERF', 'RUNWAY_RUBBER_STD', 'RUNWAY_RUBBER_REAL',
-    'RUNWAY_RUBBER_SKID', 'TAXIWAY_NAMA', 'TAXIWAY_STATUS', 'TAXIWAY_PCI',
-    'TWY_TITIK_RUSAK', 'TWY_TITIK_DIPERBAIKI', 'TWY_JENIS_DIPERBAIKI',
-    'TWY_TITIK_BELUM', 'TWY_JENIS_BELUM', 'TWY_TITIK_BERULANG', 'TWY_MARKA_STD',
-    'TWY_MARKA_REALISASI', 'TWY_MARKA_PERF', 'TWY_STANDING_WATER',
-    'APRON_KONDISI', 'APRON_PCI', 'APN_TITIK_RUSAK', 'APN_TITIK_DIPERBAIKI',
-    'APN_JENIS_DIPERBAIKI', 'APN_TITIK_BELUM', 'APN_JENIS_BELUM', 'APN_TITIK_BERULANG',
-    'APN_MARKA_STD', 'APN_MARKA_REALISASI', 'APN_MARKA_PERF', 'APN_STANDING_WATER',
-    'RUMPUT_STD', 'RUMPUT_REALISASI', 'RUMPUT_PERF', 'CATATAN_1', 'CATATAN_2',
-    'CATATAN_3', 'CATATAN_4', 'CATATAN_5'
-]
+# (STANDARD_CORE_FIELDS didefinisikan secara global di bagian atas file)
 
 def get_schema_field_names(schema=None):
     """Mengambil seluruh nama field (KODE_KOLOM) dari form_schema.json secara berurutan."""
@@ -766,7 +772,13 @@ def sync_schema_to_sheets(sheet_url, schema=None):
     try:
         ws_1 = spreadsheet.worksheet('1')
         # Selalu bersihkan baris 67 ke bawah pada master tab '1'
-        ws_1.batch_clear(["A67:Z150"])
+        try:
+            extra_check = ws_1.get("A67:A85")
+            if extra_check and any(any(c for c in r) for r in extra_check):
+                ws_1.delete_rows(67, 67 + len(extra_check) + 2)
+        except Exception:
+            pass
+        ws_1.batch_clear(["A66:Z150"])
         
         extra_template = []
         format_requests = []

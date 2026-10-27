@@ -621,8 +621,8 @@
         top: 100%;
         right: 0;
         margin-top: 0.65rem;
-        width: 380px;
-        max-width: 92vw;
+        width: 410px;
+        max-width: 94vw;
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 16px;
@@ -661,6 +661,7 @@
         display: flex;
         align-items: center;
         gap: 0.65rem;
+        min-width: 0;
     }
 
     .notif-hdr-icon {
@@ -673,6 +674,7 @@
         align-items: center;
         justify-content: center;
         font-size: 0.88rem;
+        flex-shrink: 0;
     }
 
     .notif-hdr-title {
@@ -681,6 +683,9 @@
         font-weight: 700;
         color: #0f172a;
         line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .notif-hdr-sub {
@@ -688,31 +693,37 @@
         font-size: 0.72rem;
         color: #64748b;
         font-weight: 500;
-    }
-
-    .notif-btn-mark-all {
-        border: none;
-        background: transparent;
-        color: #00B7CD;
-        font-size: 0.74rem;
-        font-weight: 600;
-        cursor: pointer;
-        padding: 0.3rem 0.5rem;
-        border-radius: 6px;
-        transition: background 0.15s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-    }
-
-    .notif-btn-mark-all:hover {
-        background: #e0f2fe;
+        white-space: nowrap;
     }
 
     .notif-hdr-actions {
         display: flex;
         align-items: center;
         gap: 0.4rem;
+        flex-shrink: 0;
+    }
+
+    .notif-btn-mark-all {
+        border: 1px solid #cffafe;
+        background: #f0fdfa;
+        color: #0891b2;
+        font-size: 0.72rem;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0.28rem 0.65rem;
+        border-radius: 6px;
+        transition: all 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+
+    .notif-btn-mark-all:hover {
+        background: #e0f2fe;
+        color: #0284c7;
+        border-color: #7dd3fc;
     }
 
     .notif-btn-clear {
@@ -728,6 +739,8 @@
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
+        white-space: nowrap;
+        line-height: 1.2;
     }
 
     .notif-btn-clear:hover {
@@ -782,8 +795,11 @@
         border-bottom: 1px solid #f1f5f9;
         display: flex;
         gap: 0.75rem;
-        transition: background-color 0.15s ease;
+        transition: all 0.18s ease;
         position: relative;
+        background: #ffffff;
+        border-left: 3.5px solid transparent;
+        cursor: pointer;
     }
 
     .notif-item:last-child {
@@ -791,11 +807,72 @@
     }
 
     .notif-item.unread {
-        background-color: #f8fafc;
+        background-color: #f0fdfa;
+        border-left: 3.5px solid #00B7CD;
+    }
+
+    .notif-item.is-read {
+        background-color: #ffffff;
+        border-left: 3.5px solid transparent;
+        opacity: 0.92;
     }
 
     .notif-item:hover {
-        background-color: #f1f5f9;
+        background-color: #f8fafc;
+    }
+
+    .notif-item.unread:hover {
+        background-color: #e6fffa;
+    }
+
+    .notif-item-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-top: 0.45rem;
+        padding-top: 0.35rem;
+        border-top: 1px dashed #f1f5f9;
+    }
+
+    .notif-status-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.22rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        border: none;
+        font-family: inherit;
+        text-decoration: none;
+    }
+
+    .notif-status-btn.is-unread {
+        background: #e0f2fe;
+        color: #0284c7;
+        border: 1px solid #bae6fd;
+    }
+
+    .notif-status-btn.is-unread:hover {
+        background: #00B7CD;
+        color: #ffffff;
+        border-color: #00B7CD;
+        box-shadow: 0 2px 4px rgba(0, 183, 205, 0.25);
+    }
+
+    .notif-status-btn.is-read {
+        background: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+    }
+
+    .notif-status-btn.is-read:hover {
+        background: #fee2e2;
+        color: #ef4444;
+        border-color: #fecaca;
     }
 
     .notif-item-icon-box {
@@ -832,6 +909,7 @@
     .notif-item-content {
         flex: 1;
         min-width: 0;
+        padding-right: 1.25rem;
     }
 
     .notif-item-top {
@@ -1543,10 +1621,17 @@
         box-sizing: border-box;
     }
 
-    .gm-table tbody tr td:first-child {
+    .mobile-card-td {
+        display: none !important;
+    }
+
+    .gm-table tbody tr td:first-child,
+    .gm-table tbody tr td.desktop-cell:first-child {
         padding-left: 1.25rem;
     }
 
+    .gm-table tbody tr td:nth-child(5),
+    .gm-table tbody tr td.desktop-cell:nth-child(5),
     .gm-table tbody tr td:last-child {
         padding-right: 1.25rem;
         text-align: right;
@@ -3807,98 +3892,209 @@
             width: 100%;
         }
 
+        .desktop-cell {
+            display: none !important;
+        }
+
         .gm-table tbody tr.report-row {
-            display: flex;
-            flex-direction: column;
+            display: block !important;
+            width: 100% !important;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .gm-table tbody tr.report-row td.mobile-card-td {
+            display: block !important;
+            width: 100% !important;
+            padding: 0 !important;
+            border: none !important;
+            background: transparent !important;
+        }
+
+        /* Modern Corporate Executive Mobile Card */
+        .gm-mobile-card {
             background: #ffffff;
             border: 1.5px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 1rem;
-            gap: 0.65rem;
+            border-radius: 16px;
+            padding: 1.15rem 1.15rem;
             box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
             transition: all 0.2s ease;
         }
 
-        .gm-table tbody tr.report-row:hover {
+        .gm-mobile-card:hover {
             border-color: #cbd5e1;
             box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
         }
 
-        .gm-table tbody tr.report-row td {
+        /* 1. Baris Atas: Tanggal (Kiri) & Status Badge (Kanan) */
+        .gm-mcard-header {
             display: flex;
-            align-items: center;
-            padding: 0;
-            border: none;
-            width: 100%;
             justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.65rem;
         }
 
-        /* Urutan Tampilan dalam Kartu Mobile */
-        .gm-table tbody tr.report-row td:nth-child(1) {
-            order: 1; /* Tanggal Laporan */
+        .gm-mcard-date-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            min-width: 0;
+            flex: 1 1 auto;
         }
 
-        .gm-table tbody tr.report-row td:nth-child(3) {
-            order: 2; /* Status Review Badge */
+        .gm-mcard-date-icon {
+            color: #00B7CD;
+            font-size: 0.95rem;
+            flex-shrink: 0;
         }
 
-        .gm-table tbody tr.report-row td:nth-child(2) {
-            order: 3; /* ID Laporan */
+        .gm-mcard-date-wrap .tgl-primary {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #002b49;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .gm-table tbody tr.report-row td:nth-child(4) {
-            order: 4; /* Nama Petugas Pelapor */
-        }
-
-        .gm-table tbody tr.report-row td:nth-child(5) {
-            order: 5; /* Tombol Aksi */
-            padding-top: 0.65rem;
-            border-top: 1px dashed #e2e8f0;
-            margin-top: 0.2rem;
-        }
-
-        .gm-table tbody tr.report-row .table-actions-stack {
+        .gm-mcard-status-wrap {
+            flex: 0 0 auto;
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            justify-content: flex-end;
+        }
+
+        .gm-mcard-status-wrap .badge-review-pill {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.28rem 0.65rem;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        /* 2. Baris Tengah: ID Laporan (Kiri) & Petugas Pelapor (Kanan) */
+        .gm-mcard-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 0.85rem;
+            border-bottom: 1px dashed #e2e8f0;
+            margin-bottom: 0.85rem;
+        }
+
+        .gm-mcard-id-wrap {
+            flex: 0 0 auto;
+        }
+
+        .gm-mcard-id-wrap .badge-report-id {
+            font-size: 0.76rem;
+            font-weight: 700;
+            padding: 0.24rem 0.6rem;
+            border-radius: 6px;
+            letter-spacing: 0.2px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .gm-mcard-petugas-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.4rem;
+            min-width: 0;
+            flex: 1 1 auto;
+            text-align: right;
+        }
+
+        .gm-mcard-user-icon {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            flex-shrink: 0;
+        }
+
+        .gm-mcard-petugas-wrap .petugas-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #475569;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 3. Baris Bawah: Tombol Aksi */
+        .gm-mcard-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
             width: 100%;
         }
 
-        .gm-table tbody tr.report-row .btn-tbl-action.act-detail {
+        .btn-mcard-action {
             flex: 1;
-            height: 42px;
-            border-radius: 10px;
+            min-width: 0;
+            height: 44px;
+            border-radius: 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 0.55rem;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-mcard-action.act-review {
             background: #00B7CD;
             color: #ffffff;
-            border: none;
-            font-size: 0.88rem;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(0, 183, 205, 0.35);
+            box-shadow: 0 3px 12px rgba(0, 183, 205, 0.35);
         }
 
-        .gm-table tbody tr.report-row .btn-tbl-action.act-detail::after {
-            content: 'Review & Setujui';
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.84rem;
-            font-weight: 700;
+        .btn-mcard-action.act-review:active {
+            background: #009eb2;
+            transform: scale(0.98);
         }
 
-        .gm-table tbody tr.report-row .btn-tbl-action.act-detail-approved::after {
-            content: 'Lihat Dokumen A4';
+        .btn-mcard-action.act-detail-approved {
+            background: #f0fdf4;
+            border: 1.5px solid #bbf7d0;
+            color: #16a34a;
+            box-shadow: 0 2px 8px rgba(22, 163, 74, 0.1);
         }
 
-        .gm-table tbody tr.report-row .btn-tbl-action.act-hapus {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
+        .btn-mcard-action.act-detail-approved:active {
+            background: #dcfce7;
+            transform: scale(0.98);
+        }
+
+        .btn-mcard-delete {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            background: #fff1f2;
+            border: 1.5px solid #fecdd3;
+            color: #e11d48;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-mcard-delete:active {
+            background: #fee2e2;
+            transform: scale(0.96);
         }
 
         /* Status Empty Row styling */
@@ -4021,7 +4217,7 @@
     <div class="topbar-inner">
         <!-- Corporate Brand Header (InJourney Airports) -->
         <a href="{{ url_for('gm.dashboard') }}" class="topbar-brand-link"
-            title="Dashboard General Manager - InJourney Regional II">
+            title="Dashboard Department Head (DH) - InJourney Regional II">
             <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports"
                 class="topbar-brand-logo">
             <span class="topbar-brand-title">InJourney Airports</span>
@@ -4055,6 +4251,10 @@
                             </div>
                         </div>
                         <div class="notif-hdr-actions">
+                            <button type="button" class="notif-btn-mark-all" id="notifMarkAllBtn" onclick="markAllNotifsRead(event)" title="Tandai semua sudah dibaca" style="display: none;">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>Baca Semua</span>
+                            </button>
                             <button type="button" class="notif-btn-clear" id="notifClearBtn" onclick="clearAllNotifications(event)" title="Bersihkan notifikasi periode aktif" style="display: none;">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <span>Bersihkan</span>
@@ -4131,9 +4331,14 @@
                     <i class="fa-solid fa-list-check"></i>
                 </div>
                 <div>
-                    <div class="table-header-title-row">
+                    <div class="table-header-title-row" style="display: flex; align-items: center; gap: 0.6rem;">
                         <h2 class="table-header-title" id="tableHeaderTitle">Daftar Pengajuan Laporan Harian</h2>
+                        <button type="button" class="btn-refresh-staging" onclick="window.location.reload()" title="Segarkan Data Antrean Staging" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; cursor: pointer; padding: 4px 9px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem; transition: all 0.15s ease;">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <span>Segarkan</span>
+                        </button>
                     </div>
+
                     <div class="table-header-subtitle">
                         <span id="reportCountText">Menampilkan {{ pending_count }} laporan menunggu review</span>
                     </div>
@@ -4181,13 +4386,13 @@
                     <tr class="report-row report-row-staging" id="row-{{ rep.report_id }}" data-report-id="{{ rep.report_id }}"
                         data-status="{{ rep.status }}"
                         data-search="{{ rep.tanggal_indo or '' }} {{ rep.tanggal }} {{ rep.report_id }} {{ rep.submitted_by }} {{ rep.submitted_by_username or '' }}">
-                        <td>
+                        <td class="desktop-cell">
                             <strong class="tgl-primary" data-raw-date="{{ rep.tanggal }}">{{ rep.tanggal_indo or rep.tanggal }}</strong>
                         </td>
-                        <td>
+                        <td class="desktop-cell">
                             <span class="badge-report-id">{{ rep.report_id }}</span>
                         </td>
-                        <td>
+                        <td class="desktop-cell">
                             {% if rep.status == 'REVISI' %}
                             <span class="badge-review-pill pill-rev">
                                 <i class="fa-solid fa-rotate-left"></i>
@@ -4200,12 +4405,12 @@
                             </span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="desktop-cell">
                             <div class="petugas-profile-cell">
                                 <span class="petugas-name">{{ rep.submitted_by or ('Petugas ' ~ airport_code) }}</span>
                             </div>
                         </td>
-                        <td>
+                        <td class="desktop-cell">
                             <div class="table-actions-stack">
                                 <button type="button" class="btn-tbl-action act-detail"
                                     onclick="openDetailModal('{{ rep.report_id }}')"
@@ -4217,6 +4422,55 @@
                                     title="Hapus dari Staging">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
+                            </div>
+                        </td>
+
+                        <!-- Mobile Executive Card View -->
+                        <td class="mobile-card-td" colspan="5">
+                            <div class="gm-mobile-card">
+                                <div class="gm-mcard-header">
+                                    <div class="gm-mcard-date-wrap">
+                                        <i class="fa-regular fa-calendar-days gm-mcard-date-icon"></i>
+                                        <strong class="tgl-primary" data-raw-date="{{ rep.tanggal }}">{{ rep.tanggal_indo or rep.tanggal }}</strong>
+                                    </div>
+                                    <div class="gm-mcard-status-wrap">
+                                        {% if rep.status == 'REVISI' %}
+                                        <span class="badge-review-pill pill-rev">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                            <span>SEDANG DIREVISI</span>
+                                        </span>
+                                        {% else %}
+                                        <span class="badge-review-pill pill-pend">
+                                            <i class="fa-solid fa-hourglass-half"></i>
+                                            <span>MENUNGGU REVIEW</span>
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="gm-mcard-meta">
+                                    <div class="gm-mcard-id-wrap">
+                                        <span class="badge-report-id">{{ rep.report_id }}</span>
+                                    </div>
+                                    <div class="gm-mcard-petugas-wrap">
+                                        <i class="fa-regular fa-circle-user gm-mcard-user-icon"></i>
+                                        <span class="petugas-name">{{ rep.submitted_by or ('Petugas ' ~ airport_code) }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="gm-mcard-footer">
+                                    <button type="button" class="btn-mcard-action act-review"
+                                        onclick="openDetailModal('{{ rep.report_id }}')"
+                                        title="Review & Setujui Laporan">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <span>Review & Setujui</span>
+                                    </button>
+                                    <button type="button" class="btn-mcard-delete"
+                                        onclick="confirmDeleteReport('{{ rep.report_id }}', '{{ rep.tanggal }}')"
+                                        title="Hapus dari Staging">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -4247,30 +4501,67 @@
                         data-status="APPROVED"
                         data-search="{{ rep.tanggal_indo or '' }} {{ rep.tanggal }} {{ rep.report_id }} {{ rep.submitted_by }} {{ rep.submitted_by_username or '' }}"
                         style="display: none;">
-                        <td>
+                        <td class="desktop-cell">
                             <strong class="tgl-primary" data-raw-date="{{ rep.tanggal }}">{{ rep.tanggal_indo or rep.tanggal }}</strong>
                         </td>
-                        <td>
+                        <td class="desktop-cell">
                             <span class="badge-report-id badge-report-id-approved">{{ rep.report_id }}</span>
                         </td>
-                        <td>
+                        <td class="desktop-cell">
                             <span class="badge-review-pill pill-app">
                                 <i class="fa-solid fa-circle-check"></i>
                                 <span>DISETUJUI</span>
                             </span>
                         </td>
-                        <td>
+                        <td class="desktop-cell">
                             <div class="petugas-profile-cell">
                                 <span class="petugas-name">{{ rep.submitted_by or ('Petugas ' ~ airport_code) }}</span>
                             </div>
                         </td>
-                        <td>
+                        <td class="desktop-cell">
                             <div class="table-actions-stack">
                                 <button type="button" class="btn-tbl-action act-detail act-detail-approved"
                                     onclick="openDetailModal('{{ rep.report_id }}')"
                                     title="Lihat Dokumen Resmi A4 (Cetak PDF)">
                                     <i class="fa-regular fa-file-lines"></i>
                                 </button>
+                            </div>
+                        </td>
+
+                        <!-- Mobile Executive Card View -->
+                        <td class="mobile-card-td" colspan="5">
+                            <div class="gm-mobile-card">
+                                <div class="gm-mcard-header">
+                                    <div class="gm-mcard-date-wrap">
+                                        <i class="fa-regular fa-calendar-days gm-mcard-date-icon"></i>
+                                        <strong class="tgl-primary" data-raw-date="{{ rep.tanggal }}">{{ rep.tanggal_indo or rep.tanggal }}</strong>
+                                    </div>
+                                    <div class="gm-mcard-status-wrap">
+                                        <span class="badge-review-pill pill-app">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            <span>DISETUJUI</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="gm-mcard-meta">
+                                    <div class="gm-mcard-id-wrap">
+                                        <span class="badge-report-id badge-report-id-approved">{{ rep.report_id }}</span>
+                                    </div>
+                                    <div class="gm-mcard-petugas-wrap">
+                                        <i class="fa-regular fa-circle-user gm-mcard-user-icon"></i>
+                                        <span class="petugas-name">{{ rep.submitted_by or ('Petugas ' ~ airport_code) }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="gm-mcard-footer">
+                                    <button type="button" class="btn-mcard-action act-detail-approved"
+                                        onclick="openDetailModal('{{ rep.report_id }}')"
+                                        title="Lihat Dokumen Resmi A4 (Cetak PDF)">
+                                        <i class="fa-regular fa-file-lines"></i>
+                                        <span>Lihat Dokumen A4</span>
+                                    </button>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -4491,32 +4782,39 @@
         const badgeDot = document.getElementById('notifBadgeDot');
         const unreadText = document.getElementById('notifUnreadText');
         const body = document.getElementById('notifListBody');
+        const markAllBtn = document.getElementById('notifMarkAllBtn');
+        const clearBtn = document.getElementById('notifClearBtn');
 
         const totalNotifs = (notifs || []).length;
-        const displayCount = unreadCount > 0 ? unreadCount : totalNotifs;
+        // Angka notifikasi hanya menampilkan jumlah belum dibaca
+        const displayCount = unreadCount || 0;
 
         if (displayCount > 0) {
             if (badgeCount) {
                 badgeCount.textContent = displayCount > 9 ? '9+' : displayCount;
                 badgeCount.style.display = 'flex';
             }
-            if (badgeDot) badgeDot.style.display = unreadCount > 0 ? 'block' : 'none';
+            if (badgeDot) badgeDot.style.display = 'block';
             if (unreadText) {
-                if (unreadCount > 0) {
-                    unreadText.textContent = `${unreadCount} notifikasi belum dibaca`;
-                } else {
-                    unreadText.textContent = `${totalNotifs} notifikasi aktif`;
-                }
+                unreadText.textContent = `${displayCount} notifikasi belum dibaca`;
             }
         } else {
-            if (badgeCount) badgeCount.style.display = 'none';
+            if (badgeCount) {
+                badgeCount.textContent = '0';
+                badgeCount.style.display = 'none';
+            }
             if (badgeDot) badgeDot.style.display = 'none';
-            if (unreadText) unreadText.textContent = 'Tidak ada notifikasi';
+            if (unreadText) {
+                unreadText.textContent = totalNotifs > 0 ? `Semua dibaca (${totalNotifs} notifikasi)` : 'Tidak ada notifikasi';
+            }
         }
 
-        const clearBtn = document.getElementById('notifClearBtn');
+        if (markAllBtn) {
+            markAllBtn.style.display = displayCount > 0 ? 'inline-flex' : 'none';
+        }
+
         if (clearBtn) {
-            clearBtn.style.display = notifs && notifs.length > 0 ? 'inline-flex' : 'none';
+            clearBtn.style.display = totalNotifs > 0 ? 'inline-flex' : 'none';
         }
 
         if (!body) return;
@@ -4555,8 +4853,18 @@
                 pillText = '<i class="fa-solid fa-clock"></i> Perlu Review';
             }
 
+            const readStatusBtn = isUnread 
+                ? `<button type="button" class="notif-status-btn is-unread" onclick="toggleNotifRead(event, '${n.id}', true)" title="Klik untuk tandai sudah dibaca">
+                     <i class="fa-regular fa-circle-check"></i>
+                     <span>Tandai Dibaca</span>
+                   </button>`
+                : `<button type="button" class="notif-status-btn is-read" onclick="toggleNotifRead(event, '${n.id}', false)" title="Telah dibaca. Klik untuk tandai belum dibaca">
+                     <i class="fa-solid fa-check"></i>
+                     <span>Sudah Dibaca</span>
+                   </button>`;
+
             html += `
-            <div class="notif-item ${isUnread ? 'unread' : ''}" onclick="markNotifRead('${n.id}')">
+            <div class="notif-item ${isUnread ? 'unread' : 'is-read'}" onclick="handleNotifCardClick(event, '${n.id}', ${isUnread})">
                 <button type="button" class="notif-item-del-btn" onclick="deleteNotification(event, '${n.id}')" title="Hapus notifikasi ini">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -4568,7 +4876,10 @@
                     </div>
                     <div class="notif-item-title">${n.title || 'Notifikasi GM'}</div>
                     <div class="notif-item-msg">${n.message || ''}</div>
-                    ${n.report_id ? `<div class="notif-item-meta">ID Laporan: ${n.report_id}</div>` : ''}
+                    <div class="notif-item-bottom">
+                        ${n.report_id ? `<span class="notif-item-meta" style="margin-bottom:0;">ID: ${n.report_id}</span>` : '<span></span>'}
+                        ${readStatusBtn}
+                    </div>
                 </div>
             </div>
         `;
@@ -4577,7 +4888,15 @@
         body.innerHTML = html;
     }
 
-    function markNotifRead(notifId) {
+    function handleNotifCardClick(event, notifId, isUnread) {
+        if (!notifId) return;
+        if (isUnread) {
+            toggleNotifRead(event, notifId, true);
+        }
+    }
+
+    function toggleNotifRead(e, notifId, markAsRead) {
+        if (e) e.stopPropagation();
         if (!notifId) return;
         fetch('/gm/api/notifications/mark-read', {
             method: 'POST',
@@ -4585,10 +4904,14 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             },
-            body: JSON.stringify({ notif_id: notifId, csrf_token: csrfToken })
+            body: JSON.stringify({ notif_id: notifId, is_read: markAsRead, csrf_token: csrfToken })
         }).then(() => {
             fetchNotifications();
         });
+    }
+
+    function markNotifRead(notifId) {
+        toggleNotifRead(null, notifId, true);
     }
 
     function markAllNotifsRead(e) {

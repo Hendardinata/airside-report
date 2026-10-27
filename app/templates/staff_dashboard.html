@@ -30,13 +30,13 @@
     div:where(.swal2-container) .swal2-popup,
     .swal2-popup,
     .swal2-popup.swal-corp-popup {
-        border-radius: 24px !important;
-        padding: 2.25rem 2.25rem 2rem 2.25rem !important;
-        box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+        border-radius: 20px !important;
+        padding: 1.65rem 1.65rem 1.4rem 1.65rem !important;
+        box-shadow: 0 20px 50px -10px rgba(0, 43, 73, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
         background: #ffffff !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-        max-width: 460px !important;
-        width: 92% !important;
+        max-width: 400px !important;
+        width: 90% !important;
         box-sizing: border-box !important;
     }
 
@@ -851,8 +851,8 @@
         top: 100%;
         right: 0;
         margin-top: 0.65rem;
-        width: 380px;
-        max-width: 92vw;
+        width: 410px;
+        max-width: 94vw;
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 16px;
@@ -884,6 +884,7 @@
         display: flex;
         align-items: center;
         gap: 0.65rem;
+        min-width: 0;
     }
 
     .notif-hdr-icon {
@@ -896,6 +897,7 @@
         align-items: center;
         justify-content: center;
         font-size: 0.88rem;
+        flex-shrink: 0;
     }
 
     .notif-hdr-title {
@@ -904,6 +906,9 @@
         font-weight: 700;
         color: #0f172a;
         line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .notif-hdr-sub {
@@ -911,31 +916,37 @@
         font-size: 0.72rem;
         color: #64748b;
         font-weight: 500;
-    }
-
-    .notif-btn-mark-all {
-        border: none;
-        background: transparent;
-        color: #00B7CD;
-        font-size: 0.74rem;
-        font-weight: 600;
-        cursor: pointer;
-        padding: 0.3rem 0.5rem;
-        border-radius: 6px;
-        transition: background 0.15s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-    }
-
-    .notif-btn-mark-all:hover {
-        background: #e0f2fe;
+        white-space: nowrap;
     }
 
     .notif-hdr-actions {
         display: flex;
         align-items: center;
         gap: 0.4rem;
+        flex-shrink: 0;
+    }
+
+    .notif-btn-mark-all {
+        border: 1px solid #cffafe;
+        background: #f0fdfa;
+        color: #0891b2;
+        font-size: 0.72rem;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0.28rem 0.65rem;
+        border-radius: 6px;
+        transition: all 0.15s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+
+    .notif-btn-mark-all:hover {
+        background: #e0f2fe;
+        color: #0284c7;
+        border-color: #7dd3fc;
     }
 
     .notif-btn-clear {
@@ -951,6 +962,8 @@
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
+        white-space: nowrap;
+        line-height: 1.2;
     }
 
     .notif-btn-clear:hover {
@@ -1004,8 +1017,11 @@
         border-bottom: 1px solid #f1f5f9;
         display: flex;
         gap: 0.75rem;
-        transition: background-color 0.15s ease;
+        transition: all 0.18s ease;
         position: relative;
+        background: #ffffff;
+        border-left: 3.5px solid transparent;
+        cursor: pointer;
     }
 
     .notif-item:last-child {
@@ -1013,11 +1029,72 @@
     }
 
     .notif-item.unread {
-        background-color: #f8fafc;
+        background-color: #f0fdfa;
+        border-left: 3.5px solid #00B7CD;
+    }
+
+    .notif-item.is-read {
+        background-color: #ffffff;
+        border-left: 3.5px solid transparent;
+        opacity: 0.92;
     }
 
     .notif-item:hover {
-        background-color: #f1f5f9;
+        background-color: #f8fafc;
+    }
+
+    .notif-item.unread:hover {
+        background-color: #e6fffa;
+    }
+
+    .notif-item-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-top: 0.45rem;
+        padding-top: 0.35rem;
+        border-top: 1px dashed #f1f5f9;
+    }
+
+    .notif-status-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.22rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        border: none;
+        font-family: inherit;
+        text-decoration: none;
+    }
+
+    .notif-status-btn.is-unread {
+        background: #e0f2fe;
+        color: #0284c7;
+        border: 1px solid #bae6fd;
+    }
+
+    .notif-status-btn.is-unread:hover {
+        background: #00B7CD;
+        color: #ffffff;
+        border-color: #00B7CD;
+        box-shadow: 0 2px 4px rgba(0, 183, 205, 0.25);
+    }
+
+    .notif-status-btn.is-read {
+        background: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+    }
+
+    .notif-status-btn.is-read:hover {
+        background: #fee2e2;
+        color: #ef4444;
+        border-color: #fecaca;
     }
 
     .notif-item-icon-box {
@@ -1054,6 +1131,7 @@
     .notif-item-content {
         flex: 1;
         min-width: 0;
+        padding-right: 1.25rem;
     }
 
     .notif-item-top {
@@ -1591,7 +1669,7 @@
     }
 
     /* ==========================================================================
-       4. STAGING STATUS BAR (Menunggu Review GM)
+       4. STAGING STATUS BAR (Menunggu Review DH)
        ========================================================================== */
     .staging-alert-strip {
         background-color: #ffffff;
@@ -1682,7 +1760,7 @@
         color: #00B7CD;
     }
 
-    /* Staging Revision Alert (When GM returned report) */
+    /* Staging Revision Alert (When DH returned report) */
     .staging-revision-strip {
         background-color: #fff7ed;
         border: 1.5px solid #fed7aa;
@@ -2884,6 +2962,10 @@
                             </div>
                         </div>
                         <div class="notif-hdr-actions">
+                            <button type="button" class="notif-btn-mark-all" id="notifMarkAllBtn" onclick="markAllNotifsRead(event)" title="Tandai semua sudah dibaca" style="display: none;">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>Baca Semua</span>
+                            </button>
                             <button type="button" class="notif-btn-clear" id="notifClearBtn" onclick="clearAllNotifications(event)" title="Bersihkan notifikasi periode aktif" style="display: none;">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <span>Bersihkan</span>
@@ -3058,154 +3140,121 @@
                 </div>
                 {% endif %}
 
-                <!-- Content Rows in Checklist Table Layout (100% Match Gambar 2 to 5) -->
+                <!-- Content Rows in Checklist Table Layout (Dynamically Driven by Form Schema) -->
                 <div class="report-table-list">
-                    {% if loop.index == 1 %}
-                        <!-- Sapaan Pembuka -->
-                        <div class="report-table-row">
-                            <div class="report-label-cell">
-                                <label for="input-SAPAAN">Sapaan Pembuka <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="report-colon-cell">:</div>
-                            <div class="report-input-cell">
-                                <select class="report-clean-select" name="SAPAAN" id="input-SAPAAN" required>
-                                    <option value="" disabled selected>-- Pilih Sapaan --</option>
-                                    <option value="Selamat pagi">Selamat pagi</option>
-                                    <option value="Selamat siang">Selamat siang</option>
-                                    <option value="Selamat sore">Selamat sore</option>
-                                    <option value="Selamat malam">Selamat malam</option>
-                                    <option value="Assalamualaikum Wr. Wb">Assalamualaikum Wr. Wb</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Tanggal Laporan -->
-                        <div class="report-table-row">
-                            <div class="report-label-cell">
-                                <label for="input-TANGGAL">Tanggal Laporan <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="report-colon-cell">:</div>
-                            <div class="report-input-cell">
-                                <div class="report-date-wrap">
-                                    <i class="fa-regular fa-calendar-days field-lead-icon"></i>
-                                    <input type="text" class="report-clean-input flatpickr-custom-input" name="TANGGAL" id="input-TANGGAL" required value="" readonly placeholder="Pilih Tanggal Laporan" autocomplete="off">
-                                    <button type="button" class="field-trail-clear" onclick="clearDateField()" title="Hapus Tanggal">
-                                        <i class="fa-regular fa-circle-xmark"></i>
-                                    </button>
+                    {% for section in step.sections %}
+                        {% for field in section.fields %}
+                            {% if field.name == 'TANGGAL' %}
+                            <!-- Tanggal Laporan (Flatpickr Custom Input) -->
+                            <div class="report-table-row">
+                                <div class="report-label-cell">
+                                    <label for="input-TANGGAL">{{ field.label }}{% if field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                 </div>
-                                <span class="badge bg-light text-primary border ms-2 d-none d-md-inline-block" id="labelActiveMonthBadge" style="font-size:0.75rem; font-weight:600;">
-                                    <i class="fa-solid fa-cloud-arrow-down me-1"></i>Bulan: {{ active_month_label or 'November 2026' }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="report-table-row" id="rowDateAlert" style="display: none; padding-top: 0; padding-bottom: 0.5rem;">
-                            <div class="report-label-cell"></div>
-                            <div class="report-colon-cell"></div>
-                            <div class="report-input-cell">
-                                <div id="dateStatusAlert" class="date-status-alert w-100" style="display: none;"></div>
-                            </div>
-                        </div>
-
-                        <!-- Penerima 1 -->
-                        <div class="report-table-row">
-                            <div class="report-label-cell">
-                                <label for="input-PENERIMA_1">Penerima 1 <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="report-colon-cell">:</div>
-                            <div class="report-input-cell">
-                                <input type="text" class="report-clean-input" name="PENERIMA_1" id="input-PENERIMA_1" 
-                                       value="" placeholder="Contoh: Pak DT API" required>
-                            </div>
-                        </div>
-
-                        <!-- Penerima 2 -->
-                        <div class="report-table-row">
-                            <div class="report-label-cell">
-                                <label for="input-PENERIMA_2">Penerima 2 <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="report-colon-cell">:</div>
-                            <div class="report-input-cell">
-                                <input type="text" class="report-clean-input" name="PENERIMA_2" id="input-PENERIMA_2" 
-                                       value="" placeholder="Contoh: Pak GH API" required>
-                            </div>
-                        </div>
-
-                        <!-- Penerima 3 -->
-                        <div class="report-table-row">
-                            <div class="report-label-cell">
-                                <label for="input-PENERIMA_3">Penerima 3 <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="report-colon-cell">:</div>
-                            <div class="report-input-cell">
-                                <input type="text" class="report-clean-input" name="PENERIMA_3" id="input-PENERIMA_3" 
-                                       value="" placeholder="Contoh: Pak Deputy" required>
-                            </div>
-                        </div>
-
-                        <!-- Penerima 4 -->
-                        <div class="report-table-row">
-                            <div class="report-label-cell">
-                                <label for="input-PENERIMA_4">Penerima 4 (opsional)</label>
-                            </div>
-                            <div class="report-colon-cell">:</div>
-                            <div class="report-input-cell">
-                                <input type="text" class="report-clean-input" name="PENERIMA_4" id="input-PENERIMA_4" 
-                                       value="" placeholder="Contoh: Pak DH Regional II (opsional)">
-                            </div>
-                        </div>
-
-                        <!-- Nomor & Nama Kantor Cabang -->
-                        <div class="report-table-row">
-                            <div class="report-label-cell">
-                                <label for="input-KANTOR_CABANG">Nomor & Nama Kantor Cabang <span class="text-danger">*</span></label>
-                            </div>
-                            <div class="report-colon-cell">:</div>
-                            <div class="report-input-cell">
-                                <div class="report-locked-wrap">
-                                    <input type="text" class="report-clean-input field-locked" name="KANTOR_CABANG" id="input-KANTOR_CABANG"
-                                           value="{{ airport_info.code if airport_info and airport_info.code else ('1. Kantor Cabang ' ~ (current_user.airport or 'LOP')) }}"
-                                           readonly>
-                                    <span class="field-locked-badge" title="Terkunci otomatis sesuai bandara penugasan ({{ current_user.airport or 'LOP' }})">
-                                        <i class="fa-solid fa-lock"></i>
+                                <div class="report-colon-cell">:</div>
+                                <div class="report-input-cell">
+                                    <div class="report-date-wrap">
+                                        <i class="fa-regular fa-calendar-days field-lead-icon"></i>
+                                        <input type="text" class="report-clean-input flatpickr-custom-input" name="TANGGAL" id="input-TANGGAL" {% if field.required %}required{% endif %} value="" readonly placeholder="{{ field.placeholder | default('Pilih Tanggal Laporan') }}" autocomplete="off">
+                                        <button type="button" class="field-trail-clear" onclick="clearDateField()" title="Hapus Tanggal">
+                                            <i class="fa-regular fa-circle-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <span class="badge bg-light text-primary border ms-2 d-none d-md-inline-block" id="labelActiveMonthBadge" style="font-size:0.75rem; font-weight:600;">
+                                        <i class="fa-solid fa-cloud-arrow-down me-1"></i>Bulan: {{ active_month_label or 'November 2026' }}
                                     </span>
                                 </div>
                             </div>
-                        </div>
+                            <div class="report-table-row" id="rowDateAlert" style="display: none; padding-top: 0; padding-bottom: 0.5rem;">
+                                <div class="report-label-cell"></div>
+                                <div class="report-colon-cell"></div>
+                                <div class="report-input-cell">
+                                    <div id="dateStatusAlert" class="date-status-alert w-100" style="display: none;"></div>
+                                </div>
+                            </div>
 
-                    {% else %}
-                        <!-- Loop over fields for Steps 2, 3, 4, 5 -->
-                        {% for section in step.sections %}
-                            {% for field in section.fields %}
+                            {% elif field.name == 'KANTOR_CABANG' %}
+                            <!-- Nomor & Nama Kantor Cabang (Terkunci Sesuai Bandara) -->
+                            <div class="report-table-row">
+                                <div class="report-label-cell">
+                                    <label for="input-KANTOR_CABANG">{{ field.label }}{% if field.required %} <span class="text-danger">*</span>{% endif %}</label>
+                                </div>
+                                <div class="report-colon-cell">:</div>
+                                <div class="report-input-cell">
+                                    <div class="report-locked-wrap">
+                                        <input type="text" class="report-clean-input field-locked" name="KANTOR_CABANG" id="input-KANTOR_CABANG"
+                                               value="{{ airport_info.code if airport_info and airport_info.code else ('1. Kantor Cabang ' ~ (current_user.airport or 'LOP')) }}"
+                                               readonly>
+                                        <span class="field-locked-badge" title="Terkunci otomatis sesuai bandara penugasan ({{ current_user.airport or 'LOP' }})">
+                                            <i class="fa-solid fa-lock"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% elif field.type == 'select' %}
+                            <!-- Select Dropdown (misal Sapaan Pembuka atau Pilihan) -->
                             <div class="report-table-row">
                                 <div class="report-label-cell">
                                     <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                 </div>
                                 <div class="report-colon-cell">:</div>
                                 <div class="report-input-cell">
-                                    {% if field.type == 'select' %}
-                                        <select class="report-clean-select" name="{{ field.name }}" id="input-{{ field.name }}" {% if field.required %}required{% endif %}>
-                                            <option value="" disabled selected>-- Pilih --</option>
-                                            {% for opt in field.options %}
-                                            <option value="{{ opt }}">{{ opt }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    {% elif field.unit %}
-                                        <div class="d-inline-flex align-items-center gap-2">
-                                            <input type="text" class="report-clean-input input-compact" name="{{ field.name }}" id="input-{{ field.name }}"
-                                                   value="" placeholder="{{ field.placeholder | default('') }}" {% if field.required %}required{% endif %}>
-                                            <span class="report-unit-suffix">{{ field.unit }}</span>
-                                        </div>
-                                    {% else %}
-                                        <input type="{{ field.type }}" class="report-clean-input" name="{{ field.name }}" id="input-{{ field.name }}"
-                                               value="" 
-                                               placeholder="{{ field.placeholder | default('') }}" 
-                                               {% if field.required %}required{% endif %}>
-                                    {% endif %}
+                                    <select class="report-clean-select" name="{{ field.name }}" id="input-{{ field.name }}" {% if field.required %}required{% endif %}>
+                                        <option value="" disabled selected>-- Pilih {{ field.label }} --</option>
+                                        {% for opt in field.options %}
+                                        <option value="{{ opt }}">{{ opt }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
-                            {% endfor %}
+
+                            {% elif field.unit %}
+                            <!-- Input dengan Satuan/Unit -->
+                            <div class="report-table-row">
+                                <div class="report-label-cell">
+                                    <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span class="text-danger">*</span>{% endif %}</label>
+                                </div>
+                                <div class="report-colon-cell">:</div>
+                                <div class="report-input-cell">
+                                    <div class="d-inline-flex align-items-center gap-2">
+                                        <input type="text" class="report-clean-input input-compact" name="{{ field.name }}" id="input-{{ field.name }}"
+                                               value="" placeholder="{{ field.placeholder | default('') }}" {% if field.required %}required{% endif %}>
+                                        <span class="report-unit-suffix">{{ field.unit }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% elif field.type == 'textarea' %}
+                            <!-- Input Textarea -->
+                            <div class="report-table-row">
+                                <div class="report-label-cell">
+                                    <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span class="text-danger">*</span>{% endif %}</label>
+                                </div>
+                                <div class="report-colon-cell">:</div>
+                                <div class="report-input-cell">
+                                    <textarea class="report-clean-input" name="{{ field.name }}" id="input-{{ field.name }}" rows="3"
+                                              placeholder="{{ field.placeholder | default('') }}"
+                                              {% if field.required %}required{% endif %}></textarea>
+                                </div>
+                            </div>
+
+                            {% else %}
+                            <!-- Standard Input Field (Text / Number / dsb.) -->
+                            <div class="report-table-row">
+                                <div class="report-label-cell">
+                                    <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span class="text-danger">*</span>{% endif %}</label>
+                                </div>
+                                <div class="report-colon-cell">:</div>
+                                <div class="report-input-cell">
+                                    <input type="{{ field.type | default('text') }}" class="report-clean-input" name="{{ field.name }}" id="input-{{ field.name }}"
+                                           value="" 
+                                           placeholder="{{ field.placeholder | default('') }}" 
+                                           {% if field.required %}required{% endif %}>
+                                </div>
+                            </div>
+                            {% endif %}
                         {% endfor %}
-                    {% endif %}
+                    {% endfor %}
                 </div>
 
 
@@ -3353,33 +3402,39 @@
         const badgeDot = document.getElementById('notifBadgeDot');
         const unreadText = document.getElementById('notifUnreadText');
         const body = document.getElementById('notifListBody');
+        const markAllBtn = document.getElementById('notifMarkAllBtn');
+        const clearBtn = document.getElementById('notifClearBtn');
 
         const totalNotifs = (notifs || []).length;
-        // Selalu tampilkan angka notifikasi jika terdapat notifikasi (apapun bentuknya)
-        const displayCount = unreadCount > 0 ? unreadCount : totalNotifs;
+        // Angka notifikasi hanya menampilkan jumlah belum dibaca
+        const displayCount = unreadCount || 0;
 
         if (displayCount > 0) {
             if (badgeCount) {
                 badgeCount.textContent = displayCount > 9 ? '9+' : displayCount;
                 badgeCount.style.display = 'flex';
             }
-            if (badgeDot) badgeDot.style.display = unreadCount > 0 ? 'block' : 'none';
+            if (badgeDot) badgeDot.style.display = 'block';
             if (unreadText) {
-                if (unreadCount > 0) {
-                    unreadText.textContent = `${unreadCount} notifikasi belum dibaca`;
-                } else {
-                    unreadText.textContent = `${totalNotifs} notifikasi aktif`;
-                }
+                unreadText.textContent = `${displayCount} notifikasi belum dibaca`;
             }
         } else {
-            if (badgeCount) badgeCount.style.display = 'none';
+            if (badgeCount) {
+                badgeCount.textContent = '0';
+                badgeCount.style.display = 'none';
+            }
             if (badgeDot) badgeDot.style.display = 'none';
-            if (unreadText) unreadText.textContent = 'Tidak ada notifikasi';
+            if (unreadText) {
+                unreadText.textContent = totalNotifs > 0 ? `Semua dibaca (${totalNotifs} notifikasi)` : 'Tidak ada notifikasi';
+            }
         }
 
-        const clearBtn = document.getElementById('notifClearBtn');
+        if (markAllBtn) {
+            markAllBtn.style.display = displayCount > 0 ? 'inline-flex' : 'none';
+        }
+
         if (clearBtn) {
-            clearBtn.style.display = notifs && notifs.length > 0 ? 'inline-flex' : 'none';
+            clearBtn.style.display = totalNotifs > 0 ? 'inline-flex' : 'none';
         }
 
         if (!body) return;
@@ -3389,7 +3444,7 @@
                 <div class="notif-empty-box">
                     <i class="fa-regular fa-bell-slash"></i>
                     <div style="font-weight: 700; color: #475569; font-size: 0.88rem; margin-bottom: 0.25rem;">Tidak Ada Notifikasi</div>
-                    <div style="font-size: 0.76rem; color: #94a3b8;">Catatan revisi atau persetujuan laporan oleh GM akan tampil di sini.</div>
+                    <div style="font-size: 0.76rem; color: #94a3b8;">Catatan revisi atau persetujuan laporan oleh DH akan tampil di sini.</div>
                 </div>
             `;
             return;
@@ -3426,12 +3481,22 @@
             } else {
                 iconHtml = '<div class="notif-item-icon-box icon-box-pending"><i class="fa-solid fa-hourglass-half"></i></div>';
                 pillClass = 'pill-notif-pending';
-                pillText = '<i class="fa-solid fa-clock"></i> Menunggu GM';
+                pillText = '<i class="fa-solid fa-clock"></i> Menunggu DH';
                 actionBtnHtml = '';
             }
 
+            const readStatusBtn = isUnread 
+                ? `<button type="button" class="notif-status-btn is-unread" onclick="toggleNotifRead(event, '${n.id}', true)" title="Klik untuk tandai sudah dibaca">
+                     <i class="fa-regular fa-circle-check"></i>
+                     <span>Tandai Dibaca</span>
+                   </button>`
+                : `<button type="button" class="notif-status-btn is-read" onclick="toggleNotifRead(event, '${n.id}', false)" title="Telah dibaca. Klik untuk tandai belum dibaca">
+                     <i class="fa-solid fa-check"></i>
+                     <span>Sudah Dibaca</span>
+                   </button>`;
+
             html += `
-                <div class="notif-item ${isUnread ? 'unread' : ''}" onclick="markNotifRead('${n.id}')">
+                <div class="notif-item ${isUnread ? 'unread' : 'is-read'}" onclick="handleNotifCardClick(event, '${n.id}', ${isUnread})">
                     <button type="button" class="notif-item-del-btn" onclick="deleteNotification(event, '${n.id}')" title="Hapus notifikasi ini">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -3443,8 +3508,11 @@
                         </div>
                         <div class="notif-item-title">${n.title || 'Notifikasi Laporan'}</div>
                         <div class="notif-item-msg">${n.message || ''}</div>
-                        ${n.report_id ? `<div class="notif-item-meta">ID Laporan: ${n.report_id}</div>` : ''}
                         ${actionBtnHtml}
+                        <div class="notif-item-bottom">
+                            ${n.report_id ? `<span class="notif-item-meta" style="margin-bottom:0;">ID: ${n.report_id}</span>` : '<span></span>'}
+                            ${readStatusBtn}
+                        </div>
                     </div>
                 </div>
             `;
@@ -3453,17 +3521,30 @@
         body.innerHTML = html;
     }
 
-    function markNotifRead(notifId) {
+    function handleNotifCardClick(event, notifId, isUnread) {
+        if (!notifId) return;
+        // Klik pada kartu notifikasi yang belum dibaca langsung menandainya sudah dibaca
+        if (isUnread) {
+            toggleNotifRead(event, notifId, true);
+        }
+    }
+
+    function toggleNotifRead(e, notifId, markAsRead) {
+        if (e) e.stopPropagation();
         if (!notifId) return;
         fetch('/staff/api/notifications/mark-read', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ notif_id: notifId })
+            body: JSON.stringify({ notif_id: notifId, is_read: markAsRead })
         }).then(() => {
             fetchNotifications();
         });
+    }
+
+    function markNotifRead(notifId) {
+        toggleNotifRead(null, notifId, true);
     }
 
     function markAllNotifsRead(e) {
@@ -3610,9 +3691,9 @@
                         document.getElementById('editReportLabel').textContent = `Laporan Tanggal: ${rep.tanggal} (ID: ${rep.report_id})`;
                         const notesP = document.getElementById('editGmNotesText');
                         if (rep.catatan_gm) {
-                            notesP.innerHTML = `<strong>Pesan Koreksi GM:</strong> <em>"${rep.catatan_gm}"</em>`;
+                            notesP.innerHTML = `<strong>Pesan Koreksi DH:</strong> <em>"${rep.catatan_gm}"</em>`;
                         } else {
-                            notesP.textContent = "Silakan sesuaikan data laporan sebelum dikirim ulang ke General Manager.";
+                            notesP.textContent = "Silakan sesuaikan data laporan sebelum dikirim ulang ke Department Head.";
                         }
                     }
                     
@@ -3631,7 +3712,7 @@
                     const submitBtn = document.getElementById('btnSubmitReport');
                     if (submitBtn) {
                         submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
-                        submitBtn.title = 'Kirim Ulang ke GM (Hasil Revisi)';
+                        submitBtn.title = 'Kirim Ulang ke DH (Hasil Revisi)';
                     }
                     
                     if (typeof nextStep === 'function') {
@@ -3763,7 +3844,7 @@
                         dayElem.title = `Status: Revisi Draf (${dateIso})`;
                     } else if (data.staging_pending_dates && data.staging_pending_dates.includes(dateIso)) {
                         dayElem.classList.add('day-status-pending');
-                        dayElem.title = `Status: Menunggu Persetujuan GM (${dateIso})`;
+                        dayElem.title = `Status: Menunggu Persetujuan DH (${dateIso})`;
                     }
                     if (dateIso === data.next_recommended_date) {
                         dayElem.classList.add('day-status-recommended');
@@ -3902,9 +3983,9 @@
     function showPendingDateModal(dateStr, res) {
         const formattedSelected = formatIndonesianDate(dateStr);
         const recDate = res?.next_recommended_date;
-        const formattedRec = recDate ? formatIndonesianDate(recDate) : '-';
+        const formattedRec = recDate ? formatIndonesianDate(recDate) : null;
 
-        // 1. Otomatis langsung set tanggal pada formulir & kalender ke tanggal rekomendasi
+        // 1. Otomatis set tanggal pada formulir & kalender ke tanggal rekomendasi
         if (recDate && recDate !== dateStr) {
             const dateInput = document.getElementById('input-TANGGAL');
             if (window.staffDatePicker) {
@@ -3915,7 +3996,7 @@
             updateDateValidationStatus(recDate, false);
         }
 
-        // 2. Tampilkan notifikasi eksekutif tanpa tombol pertanyaan (auto-close & clean)
+        // 2. Modal ringkas, rapi & to the point
         Swal.fire({
             customClass: {
                 popup: 'swal-corp-popup'
@@ -3927,43 +4008,29 @@
             timer: 3500,
             timerProgressBar: true,
             html: `
-                <div class="swal-corp-icon-tile icon-warning-corp" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #d97706; border: 1.5px solid #fde68a;">
+                <div class="swal-corp-icon-tile icon-warning-corp" style="width: 50px !important; height: 50px !important; min-width: 50px !important; min-height: 50px !important; font-size: 1.3rem !important; margin: 0 auto 0.75rem auto !important; border-radius: 14px !important; background: #fffbeb !important; color: #d97706 !important; border: 1.5px solid #fde68a !important;">
                     <i class="fa-solid fa-hourglass-half"></i>
                 </div>
-                <h3 class="swal-corp-title">Laporan Sedang Direview DH</h3>
-                <div class="swal-corp-sub">
-                    <i class="fa-solid fa-clock-rotate-left"></i> Database Staging (Menunggu Review Department Head)
-                </div>
+                <h3 class="swal-corp-title" style="font-size: 1.12rem; margin-bottom: 0.35rem; color: #0f172a;">Laporan Sedang Direview DH</h3>
+                <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 0.9rem 0; line-height: 1.45;">
+                    Laporan tanggal <strong>${formattedSelected}</strong> sedang dalam proses review Department Head.
+                </p>
 
-                <div class="swal-corp-card">
-                    <div class="swal-corp-card-header">
-                        <span class="swal-corp-card-label">Tanggal Dipilih</span>
-                        <span class="swal-corp-status-tag" style="background:#fef3c7; color:#b45309;"><i class="fa-solid fa-hourglass-half"></i> Sedang Direview</span>
-                    </div>
-                    <div class="swal-corp-card-date">${formattedSelected}</div>
-                </div>
-
-                <div class="swal-corp-info-note">
-                    <i class="fa-solid fa-circle-info"></i>
+                ${formattedRec ? `
+                <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 0.65rem 0.95rem; display: flex; align-items: center; justify-content: space-between; text-align: left; margin-bottom: 0.85rem;">
                     <div>
-                        Laporan untuk tanggal ini <strong>sudah tersimpan di Staging</strong> dan saat ini sedang dalam peninjauan oleh <strong>Department Head (DH)</strong>. Sistem membatasi pengisian baru pada tanggal ini untuk mencegah duplikasi.
+                        <span style="display: block; font-size: 0.68rem; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.3px;">Dialihkan Otomatis Ke</span>
+                        <strong style="font-size: 0.95rem; color: #0f172a;">${formattedRec}</strong>
                     </div>
-                </div>
-
-                ${recDate ? `
-                <div class="swal-corp-rec-box" style="margin-bottom: 0.4rem; background: #f0fdf4; border: 1.5px solid #86efac;">
-                    <div class="swal-corp-rec-label" style="display: flex; justify-content: space-between; align-items: center; color: #15803d;">
-                        <span><i class="fa-solid fa-arrow-right-arrow-left me-1"></i> Otomatis Dialihkan Ke</span>
-                        <span style="font-size: 0.68rem; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">Tersedia</span>
-                    </div>
-                    <div class="swal-corp-rec-value" style="font-size: 1.12rem; color: #0f172a; font-weight: 800; margin-top: 0.35rem;">
-                        ${formattedRec}
-                    </div>
-                </div>
-                <div style="font-size: 0.76rem; color: #64748b; text-align: center; margin-top: 0.5rem;">
-                    <i class="fa-regular fa-clock me-1"></i>Tanggal formulir telah disesuaikan otomatis ke tanggal rekomendasi berikutnya.
+                    <span style="font-size: 0.7rem; font-weight: 700; background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 9999px;">
+                        <i class="fa-solid fa-check me-1"></i>Tersedia
+                    </span>
                 </div>
                 ` : ''}
+
+                <button type="button" class="swal-corp-btn-primary" onclick="Swal.close()" style="width: 100%; padding: 0.5rem 1.25rem; font-size: 0.84rem; border-radius: 10px; font-weight: 700; margin-top: 0.15rem;">
+                    Mengerti
+                </button>
             `
         });
     }
@@ -3971,9 +4038,9 @@
     function showDuplicateDateModal(dateStr, res) {
         const formattedSelected = formatIndonesianDate(dateStr);
         const recDate = res?.next_recommended_date;
-        const formattedRec = recDate ? formatIndonesianDate(recDate) : '-';
+        const formattedRec = recDate ? formatIndonesianDate(recDate) : null;
 
-        // 1. Otomatis langsung set tanggal pada formulir & kalender ke tanggal rekomendasi
+        // 1. Otomatis set tanggal pada formulir & kalender ke tanggal rekomendasi
         if (recDate && recDate !== dateStr) {
             const dateInput = document.getElementById('input-TANGGAL');
             if (window.staffDatePicker) {
@@ -3984,7 +4051,7 @@
             updateDateValidationStatus(recDate, false);
         }
 
-        // 2. Tampilkan notifikasi eksekutif tanpa tombol pertanyaan (auto-close & clean)
+        // 2. Modal ringkas, rapi & to the point
         Swal.fire({
             customClass: {
                 popup: 'swal-corp-popup'
@@ -3993,46 +4060,32 @@
             showConfirmButton: false,
             showCancelButton: false,
             showCloseButton: true,
-            timer: 3200,
+            timer: 3500,
             timerProgressBar: true,
             html: `
-                <div class="swal-corp-icon-tile icon-warning-corp">
+                <div class="swal-corp-icon-tile icon-warning-corp" style="width: 50px !important; height: 50px !important; min-width: 50px !important; min-height: 50px !important; font-size: 1.3rem !important; margin: 0 auto 0.75rem auto !important; border-radius: 14px !important; background: #eff6ff !important; color: #2563eb !important; border: 1.5px solid #bfdbfe !important;">
                     <i class="fa-solid fa-calendar-check"></i>
                 </div>
-                <h3 class="swal-corp-title">Tanggal Sudah Terisi</h3>
-                <div class="swal-corp-sub">
-                    <i class="fa-solid fa-cloud-arrow-down"></i> Database Spreadsheet Produksi (FIX)
-                </div>
+                <h3 class="swal-corp-title" style="font-size: 1.12rem; margin-bottom: 0.35rem; color: #0f172a;">Tanggal Sudah Terisi</h3>
+                <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 0.9rem 0; line-height: 1.45;">
+                    Laporan tanggal <strong>${formattedSelected}</strong> sudah tercatat di lembar utama.
+                </p>
 
-                <div class="swal-corp-card">
-                    <div class="swal-corp-card-header">
-                        <span class="swal-corp-card-label">Tanggal Dipilih</span>
-                        <span class="swal-corp-status-tag"><i class="fa-solid fa-ban"></i> Terisi</span>
-                    </div>
-                    <div class="swal-corp-card-date">${formattedSelected}</div>
-                </div>
-
-                <div class="swal-corp-info-note">
-                    <i class="fa-solid fa-circle-info"></i>
+                ${formattedRec ? `
+                <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 0.65rem 0.95rem; display: flex; align-items: center; justify-content: space-between; text-align: left; margin-bottom: 0.85rem;">
                     <div>
-                        Laporan untuk tanggal ini <strong>sudah tercatat</strong> di lembar kerja utama. Sistem membatasi pengisian hanya pada tanggal yang belum dilaporkan untuk mencegah duplikasi.
+                        <span style="display: block; font-size: 0.68rem; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.3px;">Dialihkan Otomatis Ke</span>
+                        <strong style="font-size: 0.95rem; color: #0f172a;">${formattedRec}</strong>
                     </div>
-                </div>
-
-                ${recDate ? `
-                <div class="swal-corp-rec-box" style="margin-bottom: 0.4rem; background: #f0fdf4; border: 1.5px solid #86efac;">
-                    <div class="swal-corp-rec-label" style="display: flex; justify-content: space-between; align-items: center; color: #15803d;">
-                        <span><i class="fa-solid fa-arrow-right-arrow-left me-1"></i> Otomatis Dialihkan Ke</span>
-                        <span style="font-size: 0.68rem; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 9999px; font-weight: 700;">Tersedia</span>
-                    </div>
-                    <div class="swal-corp-rec-value" style="font-size: 1.12rem; color: #0f172a; font-weight: 800; margin-top: 0.35rem;">
-                        ${formattedRec}
-                    </div>
-                </div>
-                <div style="font-size: 0.76rem; color: #64748b; text-align: center; margin-top: 0.5rem;">
-                    <i class="fa-regular fa-clock me-1"></i>Tanggal formulir telah disesuaikan otomatis ke tanggal rekomendasi berikutnya.
+                    <span style="font-size: 0.7rem; font-weight: 700; background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 9999px;">
+                        <i class="fa-solid fa-check me-1"></i>Tersedia
+                    </span>
                 </div>
                 ` : ''}
+
+                <button type="button" class="swal-corp-btn-primary" onclick="Swal.close()" style="width: 100%; padding: 0.5rem 1.25rem; font-size: 0.84rem; border-radius: 10px; font-weight: 700; margin-top: 0.15rem;">
+                    Mengerti
+                </button>
             `
         });
     }
@@ -4141,18 +4194,15 @@
                 },
                 buttonsStyling: false,
                 html: `
-                    <div class="swal-corp-icon-tile icon-warning-corp">
+                    <div class="swal-corp-icon-tile icon-warning-corp" style="width: 50px !important; height: 50px !important; min-width: 50px !important; min-height: 50px !important; font-size: 1.3rem !important; margin: 0 auto 0.75rem auto !important; border-radius: 14px !important;">
                         <i class="fa-regular fa-calendar-days"></i>
                     </div>
-                    <h3 class="swal-corp-title">Tanggal Belum Dipilih</h3>
-                    <div class="swal-corp-sub">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Formulir Laporan Harian Airside
-                    </div>
-                    <p style="font-size:0.86rem; color:#475569; margin:0 0 1.25rem 0; line-height: 1.5;">
-                        Harap pilih tanggal laporan pada formulir atau kalender terlebih dahulu sebelum melanjutkan ke langkah berikutnya.
+                    <h3 class="swal-corp-title" style="font-size: 1.12rem; margin-bottom: 0.35rem; color: #0f172a;">Tanggal Belum Dipilih</h3>
+                    <p style="font-size:0.85rem; color:#64748b; margin:0 0 1rem 0; line-height: 1.45;">
+                        Harap tentukan tanggal laporan pada formulir atau kalender sebelum melanjutkan.
                     </p>
                 `,
-                confirmButtonText: '<i class="fa-solid fa-check me-1"></i> Mengerti & Pilih Tanggal'
+                confirmButtonText: 'Pilih Tanggal'
             });
             dateInput.focus();
             return false;

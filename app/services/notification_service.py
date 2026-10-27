@@ -3,26 +3,64 @@ import json
 import uuid
 from datetime import datetime
 import threading
+from app.models.db import get_db
 
-NOTIF_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'notifications.json')
 _lock = threading.Lock()
 
+def _row_to_notif(row):
+    if not row:
+        return None
+    return {
+        "id": row['id'],
+        "airport": (row['airport'] or '').upper(),
+        "recipient_role": (row['recipient_role'] or '').lower(),
+        "recipient_username": (row['recipient_username'] or '').lower(),
+        "sender_username": row['sender_username'] or '',
+        "sender_name": row['sender_name'] or '',
+        "notif_type": row['notif_type'] or 'info',
+        "title": row['title'] or '',
+        "message": row['message'] or '',
+        "report_id": row['report_id'] or '',
+        "tanggal": row['tanggal'] or '',
+        "notes": row['notes'] or '',
+        "created_at": row['created_at'] or '',
+        "is_read": bool(row['is_read'])
+    }
+
 def _load_raw_notifications():
-    if not os.path.exists(NOTIF_FILE):
-        return []
-    try:
-        with open(NOTIF_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Error loading notifications.json: {e}")
-        return []
+    """Memuat seluruh baris notifikasi dari database SQLite."""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM notifications ORDER BY created_at DESC;")
+        return [_row_to_notif(r) for r in cursor.fetchall()]
 
 def _save_raw_notifications(data):
-    try:
-        with open(NOTIF_FILE, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
-    except Exception as e:
-        print(f"Error saving notifications.json: {e}")
+    """Menyimpan list notifikasi ke database SQLite."""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM notifications;")
+        for n in data:
+            cursor.execute("""
+            INSERT INTO notifications (
+                id, airport, recipient_role, recipient_username, sender_username, sender_name,
+                notif_type, title, message, report_id, tanggal, notes, created_at, is_read
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, (
+                n.get('id'),
+                (n.get('airport') or '').upper(),
+                (n.get('recipient_role') or '').lower(),
+                (n.get('recipient_username') or '').lower(),
+                n.get('sender_username', ''),
+                n.get('sender_name', ''),
+                n.get('notif_type', 'info'),
+                n.get('title', ''),
+                n.get('message', ''),
+                n.get('report_id', ''),
+                n.get('tanggal', ''),
+                n.get('notes', ''),
+                n.get('created_at', datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+                1 if n.get('is_read') else 0
+            ))
 
 def _clean_superseded_notifications(notif_list):
     """
@@ -54,9 +92,7 @@ def _clean_superseded_notifications(notif_list):
     ids_to_remove = set()
 
     for key, items in by_report.items():
-        # Urutkan dari yang terbaru ke terlama berdasarkan created_at
         items.sort(key=lambda x: x.get('created_at', ''), reverse=True)
-        
         has_approved = any(i.get('notif_type') == 'approved' for i in items)
         if has_approved:
             for i in items:
@@ -64,16 +100,12 @@ def _clean_superseded_notifications(notif_list):
                     ids_to_remove.add(i.get('id'))
             continue
 
-        latest_item = items[0]
-        latest_type = latest_item.get('notif_type')
-
+        latest_type = items[0].get('notif_type')
         if latest_type == 'revisi':
-            # Notifikasi terbaru adalah revisi dari GM/DH -> buang notifikasi pending untuk laporan ini bagi role tersebut
             for i in items:
                 if i.get('notif_type') == 'pending':
                     ids_to_remove.add(i.get('id'))
         elif latest_type == 'pending':
-            # Notifikasi terbaru adalah pengajuan/perbaikan petugas -> buang revisi lama yang sudah diselesaikan
             for i in items[1:]:
                 if i.get('notif_type') == 'revisi':
                     ids_to_remove.add(i.get('id'))
@@ -83,17 +115,14 @@ def _clean_superseded_notifications(notif_list):
 
 def create_notification(airport_code, recipient_role, notif_type, title, message, report_id=None, tanggal=None, notes=None, recipient_username=None, sender_username=None, sender_name=None):
     """
-    Menambahkan notifikasi baru.
-    recipient_role: 'staff', 'dh', 'gm', atau 'all'
-    recipient_username: opsional username akun staf spesifik (misal 'lop_hendar')
-    sender_username: opsional username akun pengirim
-    sender_name: opsional nama akun pengirim
-    notif_type: 'revisi', 'approved', 'pending', 'info'
+    Menambahkan notifikasi baru ke database SQLite.
     """
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     clean_recip_u = (recipient_username or '').strip().lower()
+    notif_id = f"notif_{int(datetime.now().timestamp())}_{uuid.uuid4().hex[:6]}"
+    
     notif = {
-        "id": f"notif_{int(datetime.now().timestamp())}_{uuid.uuid4().hex[:6]}",
+        "id": notif_id,
         "airport": (airport_code or 'LOP').upper(),
         "recipient_role": recipient_role,
         "recipient_username": clean_recip_u,
@@ -112,10 +141,8 @@ def create_notification(airport_code, recipient_role, notif_type, title, message
     with _lock:
         data = _load_raw_notifications()
 
-        # Otomatis buang notifikasi lama yang statusnya digantikan oleh aksi baru ini
         if report_id:
             def matches_recipient(existing_n):
-                # Cocokkan apakah notifikasi ditujukan ke role dan penerima yang sama
                 ex_role = (existing_n.get('recipient_role') or '').strip().lower()
                 cur_role = (recipient_role or '').strip().lower()
                 ex_norm = 'dh' if ex_role in ('dh', 'gm') else ex_role
@@ -126,13 +153,10 @@ def create_notification(airport_code, recipient_role, notif_type, title, message
                 return not clean_recip_u or not ex_u or ex_u == clean_recip_u
 
             if notif_type == 'revisi':
-                # Saat GM/DH memberi revisi: buang notifikasi pending untuk laporan ini bagi staf bersangkutan
                 data = [n for n in data if not (n.get('report_id') == report_id and n.get('notif_type') == 'pending' and matches_recipient(n))]
             elif notif_type == 'approved':
-                # Saat GM/DH menyetujui: buang notifikasi pending dan revisi untuk laporan ini bagi role tersebut
                 data = [n for n in data if not (n.get('report_id') == report_id and n.get('notif_type') in ('pending', 'revisi') and matches_recipient(n))]
             elif notif_type == 'pending':
-                # Saat Petugas mengirim ulang: buang revisi lama dan pending lama bagi role tersebut
                 data = [n for n in data if not (n.get('report_id') == report_id and n.get('notif_type') in ('revisi', 'pending') and matches_recipient(n))]
 
         data.insert(0, notif)
@@ -145,24 +169,17 @@ def create_notification(airport_code, recipient_role, notif_type, title, message
 
 def delete_notifications_by_report_id(airport_code, report_id):
     """
-    Menghapus seluruh notifikasi terkait report_id tertentu
-    (misal saat laporan dihapus dari Staging oleh GM atau dibatalkan).
+    Menghapus seluruh notifikasi terkait report_id tertentu dari SQLite.
     """
     if not report_id:
         return
     airport = (airport_code or '').upper()
-    with _lock:
-        data = _load_raw_notifications()
-        initial_len = len(data)
-        data = [
-            n for n in data
-            if not (
-                n.get('report_id') == report_id and
-                (not airport or n.get('airport', '').upper() == airport)
-            )
-        ]
-        if len(data) != initial_len:
-            _save_raw_notifications(data)
+    with get_db() as conn:
+        cursor = conn.cursor()
+        if airport:
+            cursor.execute("DELETE FROM notifications WHERE report_id = ? AND UPPER(airport) = ?;", (report_id, airport))
+        else:
+            cursor.execute("DELETE FROM notifications WHERE report_id = ?;", (report_id,))
 
 def _matches_active_month(n, active_month):
     """
@@ -172,14 +189,12 @@ def _matches_active_month(n, active_month):
         return True
     
     clean_month = str(active_month).strip()
-    month_compact = clean_month.replace('-', '') # misal '202610'
+    month_compact = clean_month.replace('-', '')
     
-    # 1. Cek field tanggal langsung (e.g. '2026-10-01' atau '2026-11-18')
     tgl = str(n.get('tanggal') or '').strip()
     if tgl and len(tgl) >= 7:
         return tgl.startswith(clean_month)
         
-    # 2. Cek report_id (e.g. 'REP-LOP-20261001' vs 'REP-LOP-20261118')
     rid = str(n.get('report_id') or '').strip()
     if rid:
         if month_compact in rid or clean_month in rid:
@@ -188,7 +203,6 @@ def _matches_active_month(n, active_month):
         if re.search(r'20\d{4,6}', rid):
             return False
 
-    # 3. Cek apakah ada tanggal bulan lain yang tertulis dalam message/title
     msg = f"{n.get('title', '')} {n.get('message', '')}"
     if clean_month in msg:
         return True
@@ -197,7 +211,6 @@ def _matches_active_month(n, active_month):
     if m_date:
         return m_date.group(0) == clean_month
 
-    # 4. Fallback created_at jika notifikasi murni sistem tanpa tanggal laporan
     created = str(n.get('created_at') or '').strip()
     if created and len(created) >= 7:
         return created.startswith(clean_month)
@@ -206,10 +219,7 @@ def _matches_active_month(n, active_month):
 
 def get_notifications(airport_code, role='staff', username=None, active_month=None):
     """
-    Mengambil daftar notifikasi untuk airport dan role tertentu yang sesuai dengan bulan aktif.
-    Jika role == 'staff' dan username diberikan, hanya mengambil notifikasi yang:
-    - Ditujukan spesifik ke username tersebut, ATAU
-    - Merupakan notifikasi broadcast untuk seluruh staf bandara (recipient_username kosong).
+    Mengambil daftar notifikasi untuk airport dan role tertentu yang sesuai dengan bulan aktif dari SQLite.
     """
     airport = (airport_code or 'LOP').upper()
     if not active_month:
@@ -222,14 +232,12 @@ def get_notifications(airport_code, role='staff', username=None, active_month=No
     with _lock:
         raw_list = _load_raw_notifications()
 
-    # Bersihkan notifikasi usang/superseded di level database
     cleaned_list = _clean_superseded_notifications(raw_list)
     if len(cleaned_list) != len(raw_list):
         with _lock:
             _save_raw_notifications(cleaned_list)
         raw_list = cleaned_list
 
-    # Filter untuk bandara dan role terkait
     target_roles = {'all', role}
     if role in ('dh', 'gm'):
         target_roles.update({'dh', 'gm'})
@@ -242,40 +250,33 @@ def get_notifications(airport_code, role='staff', username=None, active_month=No
             r = n.get('recipient_role', 'all')
             if r in target_roles:
                 recip_user = (n.get('recipient_username') or '').strip().lower()
-                # Jika filtering role staff:
                 if role == 'staff':
-                    # Jika notifikasi ditargetkan ke username tertentu:
                     if recip_user and u_filter and recip_user != u_filter:
-                        continue # Notifikasi untuk staf lain, lewati!
+                        continue
 
-                # Filter sesuai bulan aktif
                 if active_month and not _matches_active_month(n, active_month):
                     continue
 
                 filtered.append(n)
 
-    # Sinkronisasi dengan staging reports aktif
+    # Sinkronisasi dengan staging reports aktif di SQLite
     try:
         from app.services.staging_service import get_staging_reports
         active_staging = get_staging_reports(airport)
         active_staging_ids = {srep.get('report_id') for srep in active_staging if srep.get('report_id')}
         staging_status_map = {srep.get('report_id'): srep.get('status') for srep in active_staging if srep.get('report_id')}
         
-        # Cek jika ada laporan REVISI aktif yang belum tercatat di notifikasi
         existing_revisi_rids = {n.get('report_id') for n in filtered if n.get('notif_type') == 'revisi'}
         for srep in active_staging:
             if srep.get('status') == 'REVISI':
                 rid = srep.get('report_id')
                 rep_user = (srep.get('submitted_by_username') or '').strip().lower()
                 rep_tgl = str(srep.get('tanggal') or '').strip()
-                # Hanya sinkronkan revisi jika berada di bulan aktif
                 if active_month and rep_tgl and not rep_tgl.startswith(active_month):
                     continue
                 if rid and rid not in existing_revisi_rids and role in ('staff', 'all'):
-                    # Jika filter username aktif, hanya generate jika cocok
                     if u_filter and rep_user and rep_user != u_filter:
                         continue
-                    # Auto generate notification for active revision
                     auto_notif = create_notification(
                         airport_code=airport,
                         recipient_role='staff',
@@ -290,8 +291,6 @@ def get_notifications(airport_code, role='staff', username=None, active_month=No
                     filtered.insert(0, auto_notif)
                     existing_revisi_rids.add(rid)
 
-        # Buang notifikasi 'pending' jika report_id tersebut sudah ada tanggapan DH (revisi/approved) atau di staging statusnya REVISI
-        # DAN buang notifikasi pending/revisi yang laporannya SUDAH DIHAPUS dari Staging!
         final_filtered = []
         orphan_notif_ids = set()
 
@@ -299,35 +298,27 @@ def get_notifications(airport_code, role='staff', username=None, active_month=No
             rid = n.get('report_id')
             ntype = n.get('notif_type')
 
-            # Jika notifikasi pending atau revisi, periksa apakah laporannya masih aktif di staging
             if rid and ntype in ('pending', 'revisi'):
                 if rid not in active_staging_ids:
-                    # Laporan sudah dihapus dari staging, buang notifikasinya!
                     orphan_notif_ids.add(n.get('id'))
                     continue
                 if ntype == 'pending':
-                    # Jika status di staging sudah REVISI
                     if staging_status_map.get(rid) == 'REVISI':
                         continue
-                    # Jika ada notifikasi revisi atau approved untuk report ini
                     if rid in existing_revisi_rids:
                         continue
 
             final_filtered.append(n)
         filtered = final_filtered
 
-        # Bersihkan notifikasi orphan yang terdeteksi dari penyimpanan database
         if orphan_notif_ids:
-            with _lock:
-                current_raw = _load_raw_notifications()
-                new_raw = [n for n in current_raw if n.get('id') not in orphan_notif_ids]
-                if len(new_raw) != len(current_raw):
-                    _save_raw_notifications(new_raw)
+            with get_db() as conn:
+                cursor = conn.cursor()
+                cursor.executemany("DELETE FROM notifications WHERE id = ?;", [(oid,) for oid in orphan_notif_ids])
 
     except Exception as e:
         print(f"Warning sync staging to notifications: {e}")
 
-    # Urutkan berdasarkan created_at descending
     filtered.sort(key=lambda x: x.get('created_at', ''), reverse=True)
     return filtered
 
@@ -362,7 +353,6 @@ def clear_notifications(airport_code, role='staff', username=None, active_month=
 
             month_match = _matches_active_month(n, active_month) if active_month else True
 
-            # Jika memenuhi kriteria, hapus (jangan masukkan ke new_data)
             if apt_match and role_match and user_match and month_match:
                 continue
             new_data.append(n)
@@ -371,31 +361,37 @@ def clear_notifications(airport_code, role='staff', username=None, active_month=
 
 def delete_single_notification(notif_id):
     """
-    Menghapus satu notifikasi spesifik berdasarkan ID notifikasi.
+    Menghapus satu notifikasi spesifik berdasarkan ID notifikasi di SQLite.
     """
     if not notif_id:
         return
-    with _lock:
-        data = _load_raw_notifications()
-        new_data = [n for n in data if n.get('id') != notif_id]
-        if len(new_data) != len(data):
-            _save_raw_notifications(new_data)
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM notifications WHERE id = ?;", (notif_id,))
+
+def set_notification_read_status(notif_id, is_read=True):
+    """
+    Mengubah status baca (is_read: True/False) untuk satu notifikasi spesifik di SQLite.
+    """
+    if not notif_id:
+        return
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE notifications SET is_read = ? WHERE id = ?;", (1 if is_read else 0, notif_id))
 
 def mark_notification_as_read(notif_id):
-    with _lock:
-        data = _load_raw_notifications()
-        for n in data:
-            if n.get('id') == notif_id:
-                n['is_read'] = True
-                break
-        _save_raw_notifications(data)
+    set_notification_read_status(notif_id, is_read=True)
 
 def mark_all_as_read(airport_code, role='staff', username=None):
+    """
+    Menandai semua notifikasi untuk bandara dan role tertentu telah dibaca di SQLite.
+    """
     airport = (airport_code or 'LOP').upper()
     target_roles = {'all', role}
     if role in ('dh', 'gm'):
         target_roles.update({'dh', 'gm'})
     u_filter = (username or '').strip().lower()
+    
     with _lock:
         data = _load_raw_notifications()
         for n in data:

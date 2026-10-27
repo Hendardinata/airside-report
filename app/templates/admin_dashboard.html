@@ -9176,7 +9176,7 @@ REGION II`;
     function loadFormBuilderSchema() {
         const container = document.getElementById('visualBuilderContainer');
         if (!container) return;
-        container.innerHTML = '<div class="p-5 text-center text-muted"><i class="fa-solid fa-spinner fa-spin me-2"></i> Memuat struktur Visual Form Builder...</div>';
+        container.innerHTML = '<div class="p-5 text-center text-muted"><span class="kawung-inline-spin-md mb-2"></span><div style="font-weight: 500; font-size: 0.9rem; color: #475569; margin-top: 0.5rem;">Memuat struktur Visual Form Builder...</div></div>';
 
         fetch('/admin/api/schema')
             .then(r => r.json())
@@ -9552,7 +9552,7 @@ REGION II`;
                     <div class="vfb-footer-right">
                         <div class="d-flex align-items-center gap-2">
                             <button type="button" class="vfb-btn-discard" onclick="discardSchemaChanges()">Batalkan Perubahan</button>
-                            <button type="button" class="vfb-btn-save" onclick="saveSchema()">Simpan Perubahan</button>
+                            <button type="button" class="vfb-btn-save" id="vfbBtnSave" onclick="saveSchema()">Simpan Perubahan</button>
                         </div>
                         <div class="vfb-footer-help">Setelah disimpan, formulir petugas akan diperbarui.</div>
                     </div>
@@ -9899,12 +9899,26 @@ REGION II`;
     }
 
     function saveSchema() {
-        Swal.fire({
-            title: 'Menyimpan & Sinkronisasi...',
-            text: 'Menyimpan struktur form baru dan menyelaraskan seluruh spreadsheet...',
-            allowOutsideClick: false,
-            didOpen: () => { Swal.showLoading(); }
-        });
+        const btnSave = document.getElementById('vfbBtnSave');
+        const originalBtnHtml = btnSave ? btnSave.innerHTML : 'Simpan Perubahan';
+        if (btnSave) {
+            btnSave.disabled = true;
+            btnSave.innerHTML = '<span class="kawung-inline-spin me-2"></span> Menyimpan...';
+        }
+
+        if (typeof showKawungLoading === 'function') {
+            showKawungLoading(
+                'Menyimpan Perubahan Formulir...',
+                'Menyimpan struktur form baru dan menyelaraskan seluruh spreadsheet...'
+            );
+        } else {
+            Swal.fire({
+                title: 'Menyimpan & Sinkronisasi...',
+                text: 'Menyimpan struktur form baru dan menyelaraskan seluruh spreadsheet...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+        }
 
         fetch('/admin/api/schema/update', {
             method: 'POST',
@@ -9913,6 +9927,11 @@ REGION II`;
         })
         .then(r => r.json())
         .then(data => {
+            if (typeof hideKawungLoading === 'function') hideKawungLoading();
+            if (btnSave) {
+                btnSave.disabled = false;
+                btnSave.innerHTML = originalBtnHtml;
+            }
             if (data.success) {
                 initialSchema = JSON.parse(JSON.stringify(currentSchema));
                 setSchemaDirty(false);
@@ -9927,6 +9946,11 @@ REGION II`;
             }
         })
         .catch(err => {
+            if (typeof hideKawungLoading === 'function') hideKawungLoading();
+            if (btnSave) {
+                btnSave.disabled = false;
+                btnSave.innerHTML = originalBtnHtml;
+            }
             Swal.fire('Error', err.message, 'error');
         });
     }
@@ -9942,11 +9966,18 @@ REGION II`;
             confirmButtonColor: '#00B7CD'
         }).then(result => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Membaca Spreadsheet...',
-                    allowOutsideClick: false,
-                    didOpen: () => { Swal.showLoading(); }
-                });
+                if (typeof showKawungLoading === 'function') {
+                    showKawungLoading(
+                        'Membaca Google Spreadsheet...',
+                        'Membaca header kolom dan mengonversi struktur formulir...'
+                    );
+                } else {
+                    Swal.fire({
+                        title: 'Membaca Spreadsheet...',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+                }
 
                 fetch('/admin/api/schema/sync-from-sheet', {
                     method: 'POST',
@@ -9955,6 +9986,7 @@ REGION II`;
                 })
                 .then(r => r.json())
                 .then(data => {
+                    if (typeof hideKawungLoading === 'function') hideKawungLoading();
                     if (data.success) {
                         Swal.fire('Berhasil!', 'Schema berhasil diselaraskan dari Google Sheets!', 'success').then(() => {
                             loadFormBuilderSchema();
@@ -9964,6 +9996,7 @@ REGION II`;
                     }
                 })
                 .catch(err => {
+                    if (typeof hideKawungLoading === 'function') hideKawungLoading();
                     Swal.fire('Error', err.message, 'error');
                 });
             }

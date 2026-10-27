@@ -1,12 +1,8 @@
-import json
 import os
-import threading
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import hmac
-
-USERS_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'users.json'))
-_lock = threading.Lock()
+from app.models.db import get_db
 
 # Akun bawaan (Default Seed Users)
 DEFAULT_USERS = {
@@ -157,78 +153,86 @@ DEFAULT_USERS = {
     }
 }
 
+def _row_to_user_dict(row):
+    if not row:
+        return None
+    return {
+        'username': row['username'],
+        'name': row['name'],
+        'role': row['role'],
+        'airport': row['airport'],
+        'password_hash': row['password_hash'],
+        'is_active': bool(row['is_active']),
+        'is_system': bool(row['is_system']),
+        'is_legacy_alias': bool(row['is_legacy_alias']),
+        'created_at': row['created_at'],
+        'updated_at': row['updated_at']
+    }
+
 def load_users():
     """
-    Memuat seluruh data pengguna dari users.json.
-    Jika file belum ada, otomatis membuat dari DEFAULT_USERS.
+    Memuat seluruh data pengguna dari database SQLite.
+    Mengembalikan dict dengan key berupa username huruf kecil.
     """
-    with _lock:
-        if not os.path.exists(USERS_FILE):
-            _save_users_internal(DEFAULT_USERS)
-            return dict(DEFAULT_USERS)
-
-        try:
-            with open(USERS_FILE, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            
-            # Migrasi data jika ada akun baru di default yang belum ada di file
-            modified = False
-            for k, default_record in DEFAULT_USERS.items():
-                if k not in data:
-                    data[k] = default_record
-                    modified = True
-                else:
-                    # Pastikan field is_active ada
-                    if 'is_active' not in data[k]:
-                        data[k]['is_active'] = True
-                        modified = True
-                    # Migrasi role gm -> dh jika masih gm
-                    if data[k].get('role') == 'gm':
-                        data[k]['role'] = 'dh'
-                        modified = True
-
-            if modified:
-                _save_users_internal(data)
-
-            return data
-        except Exception as e:
-            print(f"Error reading users.json: {e}")
-            return dict(DEFAULT_USERS)
-
-def _save_users_internal(users_dict):
-    """Fungsi pembantu penyimpanan internal."""
-    tmp_file = f"{USERS_FILE}.tmp"
-    with open(tmp_file, 'w', encoding='utf-8') as f:
-        json.dump(users_dict, f, indent=4, ensure_ascii=False)
-    if os.path.exists(USERS_FILE):
-        os.replace(tmp_file, USERS_FILE)
-    else:
-        os.rename(tmp_file, USERS_FILE)
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users;")
+        rows = cursor.fetchall()
+        result = {}
+        for r in rows:
+            u = _row_to_user_dict(r)
+            result[u['username']] = u
+        return result
 
 def save_users(users_dict):
-    """Menyimpan dictionary pengguna ke users.json dengan thread-safety."""
-    with _lock:
-        _save_users_internal(users_dict)
+    """
+    Menyimpan atau memperbarui data dictionary pengguna ke database SQLite.
+    """
+    with get_db() as conn:
+        cursor = conn.cursor()
+        for uname, u in users_dict.items():
+            cursor.execute("""
+            INSERT OR REPLACE INTO users (
+                username, name, role, airport, password_hash, is_active, is_system, is_legacy_alias, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, (
+                uname.lower(),
+                u.get('name', ''),
+                u.get('role', 'staff'),
+                u.get('airport'),
+                u.get('password_hash', ''),
+                1 if u.get('is_active', True) else 0,
+                1 if u.get('is_system', False) else 0,
+                1 if u.get('is_legacy_alias', False) else 0,
+                u.get('created_at', datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+                u.get('updated_at', datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            ))
 
 def get_user(username):
     """Mengambil data pengguna berdasarkan username (case-insensitive)."""
     if not username:
         return None
-    users = load_users()
-    return users.get(username.strip().lower())
+    clean_username = str(username).strip().lower()
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE LOWER(username) = ?;", (clean_username,))
+        row = cursor.fetchone()
+        return _row_to_user_dict(row)
 
 def get_all_users(include_legacy_alias=False):
     """
     Mengambil daftar seluruh pengguna untuk ditampilkan di Admin Dashboard.
     Secara default menyembunyikan alias backward-compatibility gm_*.
     """
-    users = load_users()
-    user_list = []
-    for uname, u in users.items():
-        if not include_legacy_alias and u.get('is_legacy_alias'):
-            continue
-        user_list.append(u)
-    # Urutkan: admin pertama, lalu berdasar role (dh -> staff), lalu nama
+    with get_db() as conn:
+        cursor = conn.cursor()
+        if include_legacy_alias:
+            cursor.execute("SELECT * FROM users;")
+        else:
+            cursor.execute("SELECT * FROM users WHERE is_legacy_alias = 0;")
+        rows = cursor.fetchall()
+        user_list = [_row_to_user_dict(r) for r in rows]
+
     def sort_key(item):
         role_prio = {'admin': 0, 'dh': 1, 'staff': 2}.get(item.get('role'), 9)
         return (role_prio, item.get('airport') or '', item.get('name') or '')
@@ -237,7 +241,7 @@ def get_all_users(include_legacy_alias=False):
 
 def add_user(username, name, role, airport, password, is_active=True):
     """
-    Menambahkan pengguna baru.
+    Menambahkan pengguna baru ke SQLite.
     Cakupan: role 'staff' atau 'dh', penempatan airport tertentu.
     """
     clean_username = (username or '').strip().lower()
@@ -261,8 +265,8 @@ def add_user(username, name, role, airport, password, is_active=True):
     if not clean_password:
         clean_password = '123' # Default fallback password
 
-    users = load_users()
-    if clean_username in users:
+    existing = get_user(clean_username)
+    if existing:
         raise ValueError(f"Username '{clean_username}' sudah digunakan oleh pengguna lain. Silakan pilih username lain.")
 
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -274,88 +278,134 @@ def add_user(username, name, role, airport, password, is_active=True):
         'password_hash': generate_password_hash(clean_password),
         'is_active': bool(is_active),
         'is_system': False,
+        'is_legacy_alias': False,
         'created_at': now_str,
         'updated_at': now_str
     }
 
-    users[clean_username] = new_user
-    save_users(users)
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        INSERT INTO users (
+            username, name, role, airport, password_hash, is_active, is_system, is_legacy_alias, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        """, (
+            clean_username,
+            clean_name,
+            clean_role,
+            clean_airport,
+            new_user['password_hash'],
+            1 if is_active else 0,
+            0,
+            0,
+            now_str,
+            now_str
+        ))
     return new_user
 
 def update_user_status(username, is_active):
     """
-    Mengaktifkan atau menonaktifkan akun pengguna.
+    Mengaktifkan atau menonaktifkan akun pengguna di SQLite.
     Superadmin ('admin') tidak bisa dinonaktifkan.
     """
     clean_username = (username or '').strip().lower()
     if clean_username == 'admin':
         raise ValueError("Akun Administrator Utama tidak dapat dinonaktifkan.")
 
-    users = load_users()
-    if clean_username not in users:
+    existing = get_user(clean_username)
+    if not existing:
         raise ValueError(f"Pengguna '{clean_username}' tidak ditemukan.")
 
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    users[clean_username]['is_active'] = bool(is_active)
-    users[clean_username]['updated_at'] = now_str
-    save_users(users)
-    return users[clean_username]
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        UPDATE users SET is_active = ?, updated_at = ? WHERE username = ?;
+        """, (1 if is_active else 0, now_str, clean_username))
+
+    existing['is_active'] = bool(is_active)
+    existing['updated_at'] = now_str
+    return existing
 
 def update_user(username, name=None, role=None, airport=None, password=None, is_active=None):
     """
     Memperbarui profil pengguna (nama, role, cabang penempatan, kata sandi, status aktif).
     """
     clean_username = (username or '').strip().lower()
-    users = load_users()
-    if clean_username not in users:
+    existing = get_user(clean_username)
+    if not existing:
         raise ValueError(f"Pengguna '{clean_username}' tidak ditemukan.")
 
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    target = users[clean_username]
 
+    new_name = existing['name']
     if name is not None:
         clean_name = name.strip()
         if not clean_name:
             raise ValueError("Nama lengkap tidak boleh kosong.")
-        target['name'] = clean_name
+        new_name = clean_name
 
+    new_role = existing['role']
     if role is not None and clean_username != 'admin':
         clean_role = role.strip().lower()
         if clean_role not in ('staff', 'dh', 'admin'):
             raise ValueError("Peran hanya boleh 'staff', 'dh', atau 'admin'.")
-        target['role'] = clean_role
+        new_role = clean_role
 
+    new_airport = existing['airport']
     if airport is not None and clean_username != 'admin':
         clean_airport = airport.strip().upper()
         if not clean_airport:
             raise ValueError("Cabang bandara wajib dipilih.")
-        target['airport'] = clean_airport
+        new_airport = clean_airport
 
+    new_active = existing['is_active']
     if is_active is not None and clean_username != 'admin':
-        target['is_active'] = bool(is_active)
+        new_active = bool(is_active)
 
+    new_hash = existing['password_hash']
     if password is not None and str(password).strip():
-        target['password_hash'] = generate_password_hash(str(password).strip())
+        new_hash = generate_password_hash(str(password).strip())
 
-    target['updated_at'] = now_str
-    users[clean_username] = target
-    save_users(users)
-    return target
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        UPDATE users 
+        SET name = ?, role = ?, airport = ?, password_hash = ?, is_active = ?, updated_at = ?
+        WHERE username = ?;
+        """, (
+            new_name,
+            new_role,
+            new_airport,
+            new_hash,
+            1 if new_active else 0,
+            now_str,
+            clean_username
+        ))
+
+    existing['name'] = new_name
+    existing['role'] = new_role
+    existing['airport'] = new_airport
+    existing['password_hash'] = new_hash
+    existing['is_active'] = new_active
+    existing['updated_at'] = now_str
+    return existing
 
 def delete_user(username):
     """
-    Menghapus akun pengguna (hanya untuk akun non-system atau non-admin).
+    Menghapus akun pengguna dari SQLite (hanya untuk akun non-system atau non-admin).
     """
     clean_username = (username or '').strip().lower()
     if clean_username == 'admin':
         raise ValueError("Akun Administrator Utama tidak dapat dihapus.")
 
-    users = load_users()
-    if clean_username not in users:
+    existing = get_user(clean_username)
+    if not existing:
         raise ValueError(f"Pengguna '{clean_username}' tidak ditemukan.")
 
-    del users[clean_username]
-    save_users(users)
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM users WHERE username = ?;", (clean_username,))
     return True
 
 def verify_user_password(user_record, password):

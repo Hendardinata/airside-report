@@ -112,4 +112,11 @@ def create_app():
             mimetype='image/png'
         )
 
+    # Inisialisasi Database SQLite lokal
+    from app.models.db import init_db
+    try:
+        init_db()
+    except Exception as db_err:
+        print(f"Warning inisialisasi SQLite database: {db_err}")
+
     return app

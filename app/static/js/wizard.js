@@ -217,7 +217,7 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
     }
 
     if (typeof showKawungLoading === 'function') {
-        showKawungLoading('Mengirim Laporan...', 'Menyimpan data ke Spreadsheet Staging...');
+        showKawungLoading('Mengirim Laporan...', 'Menyimpan data ke Database Staging...');
     } else {
         Swal.fire({
             title: 'Mengirim Laporan...',
@@ -239,23 +239,24 @@ document.getElementById('reportWizard').addEventListener('submit', function(e) {
 
         if (data.status === 'success') {
             Swal.fire({
-                title: 'Laporan Diajukan ke GM!', 
-                text: 'Data telah berhasil disimpan di Spreadsheet Staging sementara.\n\nApakah Anda ingin mengirimkan notifikasi review ke WhatsApp General Manager?', 
+                title: 'Laporan Diajukan ke DH!', 
+                text: 'Data telah berhasil disimpan di Database Staging sementara.\n\nApakah Anda ingin mengirimkan notifikasi review ke WhatsApp Department Head?', 
                 icon: 'success',
                 showCancelButton: true,
-                confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Beritahu GM',
+                confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Beritahu DH',
                 cancelButtonText: 'Kembali ke Dashboard',
                 confirmButtonColor: '#16a34a',
                 cancelButtonColor: '#64748b'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    if (data.gm_phone) {
-                        let text = data.gm_message || `Halo General Manager, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon direview di portal.`;
-                        let cleanGM = data.gm_phone.replace(/\D/g, '');
-                        if (cleanGM.startsWith('0')) cleanGM = '62' + cleanGM.substring(1);
-                        window.open(`https://wa.me/${cleanGM}?text=${encodeURIComponent(text)}`, '_blank');
+                    const phone = data.dh_phone || data.gm_phone;
+                    if (phone) {
+                        let text = data.dh_message || data.gm_message || `Halo Department Head, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon direview di portal.`;
+                        let cleanDH = phone.replace(/\D/g, '');
+                        if (cleanDH.startsWith('0')) cleanDH = '62' + cleanDH.substring(1);
+                        window.open(`https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`, '_blank');
                     } else {
-                        Swal.fire('Info', 'Nomor WA General Manager belum dikonfigurasi.', 'info');
+                        Swal.fire('Info', 'Nomor WA Department Head belum dikonfigurasi.', 'info');
                     }
                 }
 

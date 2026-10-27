@@ -3,17 +3,12 @@
     {
       "icon": "fa-file-lines",
       "id": "step_1",
-      "title": "Informasi Umum",
-      "subtitle": "Tanggal dan penerima laporan",
       "sections": [
         {
-          "icon": "fa-file-lines",
-          "title": "Data Laporan",
           "fields": [
             {
-              "name": "SAPAAN",
               "label": "Sapaan Pembuka",
-              "type": "select",
+              "name": "SAPAAN",
               "options": [
                 "Selamat pagi",
                 "Selamat siang",
@@ -21,490 +16,496 @@
                 "Selamat malam",
                 "Assalamualaikum Wr. Wb"
               ],
-              "required": true
+              "required": true,
+              "type": "select"
             },
             {
-              "name": "TANGGAL",
               "label": "Tanggal Laporan",
-              "type": "date",
-              "required": true
+              "name": "TANGGAL",
+              "required": true,
+              "type": "date"
             }
-          ]
+          ],
+          "icon": "fa-file-lines",
+          "title": "Data Laporan"
         },
         {
-          "icon": "fa-users",
-          "title": "Penerima Laporan",
           "fields": [
             {
-              "name": "PENERIMA_1",
               "label": "Penerima 1",
-              "type": "text",
+              "name": "PENERIMA_1",
               "placeholder": "Contoh: Pak DT API",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "PENERIMA_2",
               "label": "Penerima 2",
-              "type": "text",
+              "name": "PENERIMA_2",
               "placeholder": "Contoh: Pak GH API",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "PENERIMA_3",
               "label": "Penerima 3",
-              "type": "text",
+              "name": "PENERIMA_3",
               "placeholder": "Contoh: Pak Deputy",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
+              "label": "Penerima 4",
               "name": "PENERIMA_4",
-              "label": "Penerima 4 (opsional)",
-              "type": "text",
-              "placeholder": "Contoh: Pak DH Regional II",
-              "required": false
+              "placeholder": "Contoh: Pak DH Regional II (opsional)",
+              "required": true,
+              "type": "text"
             }
-          ]
+          ],
+          "icon": "fa-users",
+          "title": "Penerima Laporan"
         },
         {
-          "icon": "fa-building",
-          "title": "Kantor Cabang",
           "fields": [
             {
-              "name": "KANTOR_CABANG",
               "label": "Nomor & Nama Kantor Cabang",
-              "type": "text",
+              "name": "KANTOR_CABANG",
               "placeholder": "Contoh: 1. Kantor Cabang LOP",
-              "required": true
+              "required": true,
+              "type": "text"
             }
-          ]
+          ],
+          "icon": "fa-building",
+          "title": "Kantor Cabang"
         }
-      ]
+      ],
+      "subtitle": "Tanggal dan penerima laporan",
+      "title": "Informasi Umum"
     },
     {
       "icon": "fa-road",
       "id": "step_2",
-      "title": "Fasilitas Runway",
-      "subtitle": "Kondisi dan perkerasan",
       "sections": [
         {
-          "icon": "fa-road",
-          "title": "RUNWAY",
           "badge": "A",
           "fields": [
             {
-              "name": "RUNWAY_KONDISI",
               "label": "Kondisi keseluruhan runway",
-              "type": "text",
+              "name": "RUNWAY_KONDISI",
               "placeholder": "Contoh: SERVICEABLE",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUNWAY_PCI",
               "label": "Performance pavement",
-              "type": "text",
+              "name": "RUNWAY_PCI",
               "placeholder": "Contoh: 100% atau 100% PCI",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUNWAY_TITIK_RUSAK",
               "label": "Jml Titik Rusak",
-              "type": "text",
-              "unit": "titik",
+              "name": "RUNWAY_TITIK_RUSAK",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "RUNWAY_TITIK_DIPERBAIKI",
               "label": "Jml titik yang sudah diperbaiki",
-              "type": "text",
-              "unit": "titik",
+              "name": "RUNWAY_TITIK_DIPERBAIKI",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "RUNWAY_JENIS_DIPERBAIKI",
               "label": "Jenis kerusakan",
-              "type": "text",
-              "placeholder": "Contoh: Crack / Joint sealant"
+              "name": "RUNWAY_JENIS_DIPERBAIKI",
+              "placeholder": "Contoh: Crack / Joint sealant",
+              "type": "text"
             },
             {
-              "name": "RUNWAY_TITIK_BELUM",
               "label": "Jml titik yang belum diperbaiki",
-              "type": "text",
-              "unit": "titik",
+              "name": "RUNWAY_TITIK_BELUM",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "RUNWAY_JENIS_BELUM",
               "label": "Jenis kerusakan yang belum diperbaiki",
-              "type": "text",
-              "placeholder": "Contoh: Raveling / Depresi / Nihil"
+              "name": "RUNWAY_JENIS_BELUM",
+              "placeholder": "Contoh: Raveling / Depresi / Nihil",
+              "type": "text"
             },
             {
-              "name": "RUNWAY_TITIK_BERULANG",
               "label": "Jml titik rusak berulang > 1x",
-              "type": "text",
-              "unit": "titik",
+              "name": "RUNWAY_TITIK_BERULANG",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "RUNWAY_MARKA_STD",
               "label": "Marka - Standard",
-              "type": "text",
+              "name": "RUNWAY_MARKA_STD",
               "placeholder": "Contoh: 1x / Tahun",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUNWAY_MARKA_REALISASI",
               "label": "Marka - Realisasi",
-              "type": "text",
-              "placeholder": "Contoh: -"
+              "name": "RUNWAY_MARKA_REALISASI",
+              "placeholder": "Contoh: -",
+              "type": "text"
             },
             {
-              "name": "RUNWAY_MARKA_PERF",
               "label": "Marka - Performance",
-              "type": "text",
+              "name": "RUNWAY_MARKA_PERF",
               "placeholder": "Contoh: 100%",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUNWAY_STANDING_WATER",
               "label": "Standing Water - Pengukuran",
-              "type": "text",
+              "name": "RUNWAY_STANDING_WATER",
               "placeholder": "Contoh: Nihil / Sesuai Standar",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUNWAY_WATER_PERF",
               "label": "Standing Water - Performance",
-              "type": "text",
+              "name": "RUNWAY_WATER_PERF",
               "placeholder": "Contoh: 100%",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUNWAY_RUBBER_STD",
               "label": "Rubber Removal - Standar ketentuan",
-              "type": "text",
+              "name": "RUNWAY_RUBBER_STD",
               "placeholder": "Contoh: 4x / thn",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUNWAY_RUBBER_REAL",
               "label": "Rubber Removal - Realisasi",
-              "type": "text",
-              "placeholder": "Contoh: -"
+              "name": "RUNWAY_RUBBER_REAL",
+              "placeholder": "Contoh: -",
+              "type": "text"
             },
             {
-              "name": "RUNWAY_RUBBER_SKID",
               "label": "Rubber Removal - Nilai Skid",
-              "type": "text",
-              "placeholder": "Contoh: -"
+              "name": "RUNWAY_RUBBER_SKID",
+              "placeholder": "Contoh: -",
+              "type": "text"
             }
-          ]
+          ],
+          "icon": "fa-road",
+          "title": "RUNWAY"
         }
-      ]
+      ],
+      "subtitle": "Kondisi dan perkerasan",
+      "title": "Fasilitas Runway"
     },
     {
       "icon": "fa-plane",
       "id": "step_3",
-      "title": "Fasilitas Taxiway",
-      "subtitle": "Kondisi dan perkerasan",
       "sections": [
         {
-          "icon": "fa-plane",
-          "title": "TAXIWAY",
           "badge": "B",
           "fields": [
             {
-              "name": "TAXIWAY_NAMA",
               "label": "Kondisi keseluruhan Taxiway (sebutkan nama-nama taxiway)",
-              "type": "text",
+              "name": "TAXIWAY_NAMA",
               "placeholder": "Contoh: TWY A, B, C",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "TAXIWAY_STATUS",
               "label": "Status Taxiway",
-              "type": "text",
+              "name": "TAXIWAY_STATUS",
               "placeholder": "Contoh: SERVICEABLE",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "TAXIWAY_PCI",
               "label": "Performance pavement",
-              "type": "text",
+              "name": "TAXIWAY_PCI",
               "placeholder": "Contoh: 100% atau 100% PCI",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "TWY_TITIK_RUSAK",
               "label": "Jml Titik Rusak",
-              "type": "text",
-              "unit": "titik",
+              "name": "TWY_TITIK_RUSAK",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "TWY_TITIK_DIPERBAIKI",
               "label": "Jml titik yang sudah diperbaiki",
-              "type": "text",
-              "unit": "titik",
+              "name": "TWY_TITIK_DIPERBAIKI",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "TWY_JENIS_DIPERBAIKI",
               "label": "Jenis kerusakan",
-              "type": "text",
-              "placeholder": "Contoh: Crack filling, patch"
+              "name": "TWY_JENIS_DIPERBAIKI",
+              "placeholder": "Contoh: Crack filling, patch",
+              "type": "text"
             },
             {
-              "name": "TWY_TITIK_BELUM",
               "label": "Jml titik yang belum diperbaiki",
-              "type": "text",
-              "unit": "titik",
+              "name": "TWY_TITIK_BELUM",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "TWY_JENIS_BELUM",
               "label": "Jenis kerusakan yang belum diperbaiki",
-              "type": "text",
-              "placeholder": "Contoh: Spalling / Nihil"
+              "name": "TWY_JENIS_BELUM",
+              "placeholder": "Contoh: Spalling / Nihil",
+              "type": "text"
             },
             {
-              "name": "TWY_TITIK_BERULANG",
               "label": "Jml titik rusak berulang > 1x",
-              "type": "text",
-              "unit": "titik",
+              "name": "TWY_TITIK_BERULANG",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "TWY_MARKA_STD",
               "label": "Marka - Standard",
-              "type": "text",
+              "name": "TWY_MARKA_STD",
               "placeholder": "Contoh: 1x / Tahun",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "TWY_MARKA_REALISASI",
               "label": "Marka - Realisasi",
-              "type": "text",
-              "placeholder": "Contoh: -"
+              "name": "TWY_MARKA_REALISASI",
+              "placeholder": "Contoh: -",
+              "type": "text"
             },
             {
-              "name": "TWY_MARKA_PERF",
               "label": "Marka - Performance",
-              "type": "text",
+              "name": "TWY_MARKA_PERF",
               "placeholder": "Contoh: 100%",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "TWY_STANDING_WATER",
               "label": "Standing Water - Pengukuran",
-              "type": "text",
+              "name": "TWY_STANDING_WATER",
               "placeholder": "Contoh: Nihil / Sesuai Standar",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "TWY_WATER_PERF",
               "label": "Standing Water - Performance",
-              "type": "text",
+              "name": "TWY_WATER_PERF",
               "placeholder": "Contoh: 100%",
-              "required": true
+              "required": true,
+              "type": "text"
             }
-          ]
+          ],
+          "icon": "fa-plane",
+          "title": "TAXIWAY"
         }
-      ]
+      ],
+      "subtitle": "Kondisi dan perkerasan",
+      "title": "Fasilitas Taxiway"
     },
     {
       "icon": "fa-square-parking",
       "id": "step_4",
-      "title": "Fasilitas Apron",
-      "subtitle": "Kondisi dan perkerasan",
       "sections": [
         {
-          "icon": "fa-square-parking",
-          "title": "APRON",
           "badge": "C",
           "fields": [
             {
-              "name": "APRON_KONDISI",
               "label": "Kondisi keseluruhan Apron",
-              "type": "text",
+              "name": "APRON_KONDISI",
               "placeholder": "Contoh: SERVICEABLE",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "APRON_PCI",
               "label": "Performance pavement",
-              "type": "text",
+              "name": "APRON_PCI",
               "placeholder": "Contoh: 100% atau 100% PCI",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "APN_TITIK_RUSAK",
               "label": "Jml Titik Rusak",
-              "type": "text",
-              "unit": "titik",
+              "name": "APN_TITIK_RUSAK",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "APN_TITIK_DIPERBAIKI",
               "label": "Jml titik yang sudah diperbaiki",
-              "type": "text",
-              "unit": "titik",
+              "name": "APN_TITIK_DIPERBAIKI",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "APN_JENIS_DIPERBAIKI",
               "label": "Jenis kerusakan",
-              "type": "text",
-              "placeholder": "Contoh: Joint sealant / Spalling"
+              "name": "APN_JENIS_DIPERBAIKI",
+              "placeholder": "Contoh: Joint sealant / Spalling",
+              "type": "text"
             },
             {
-              "name": "APN_TITIK_BELUM",
               "label": "Jml titik yang belum diperbaiki",
-              "type": "text",
-              "unit": "titik",
+              "name": "APN_TITIK_BELUM",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "APN_JENIS_BELUM",
               "label": "Jenis kerusakan yang belum diperbaiki",
-              "type": "text",
-              "placeholder": "Contoh: Retak sudut / Nihil"
+              "name": "APN_JENIS_BELUM",
+              "placeholder": "Contoh: Retak sudut / Nihil",
+              "type": "text"
             },
             {
-              "name": "APN_TITIK_BERULANG",
               "label": "Jml titik rusak berulang > 1x",
-              "type": "text",
-              "unit": "titik",
+              "name": "APN_TITIK_BERULANG",
               "placeholder": "Contoh: 0",
-              "required": true
+              "required": true,
+              "type": "text",
+              "unit": "titik"
             },
             {
-              "name": "APN_MARKA_STD",
               "label": "Marka - Standard",
-              "type": "text",
+              "name": "APN_MARKA_STD",
               "placeholder": "Contoh: 1x / Tahun",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "APN_MARKA_REALISASI",
               "label": "Marka - Realisasi",
-              "type": "text",
-              "placeholder": "Contoh: -"
+              "name": "APN_MARKA_REALISASI",
+              "placeholder": "Contoh: -",
+              "type": "text"
             },
             {
-              "name": "APN_MARKA_PERF",
               "label": "Marka - Performance",
-              "type": "text",
+              "name": "APN_MARKA_PERF",
               "placeholder": "Contoh: 100%",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "APN_STANDING_WATER",
               "label": "Standing Water - Pengukuran",
-              "type": "text",
+              "name": "APN_STANDING_WATER",
               "placeholder": "Contoh: Nihil / Sesuai Standar",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "APN_WATER_PERF",
               "label": "Standing Water - Performance",
-              "type": "text",
+              "name": "APN_WATER_PERF",
               "placeholder": "Contoh: 100%",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUMPUT_STD",
               "label": "Pemeliharaan Potong Rumput - Standard",
-              "type": "text",
+              "name": "RUMPUT_STD",
               "placeholder": "Contoh: 12 x / 1 Tahun",
-              "required": true
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUMPUT_REALISASI",
               "label": "Pemeliharaan Potong Rumput - Realisasi",
-              "type": "text",
-              "placeholder": "Contoh: -"
+              "name": "RUMPUT_REALISASI",
+              "placeholder": "Contoh: -",
+              "required": true,
+              "type": "text"
             },
             {
-              "name": "RUMPUT_PERF",
               "label": "Pemeliharaan Potong Rumput - Performance",
-              "type": "text",
+              "name": "RUMPUT_PERF",
               "placeholder": "Contoh: 100%",
-              "required": true
+              "required": true,
+              "type": "text"
             }
-          ]
+          ],
+          "icon": "fa-square-parking",
+          "title": "APRON"
         }
-      ]
+      ],
+      "subtitle": "Kondisi dan perkerasan",
+      "title": "Fasilitas Apron"
     },
     {
       "icon": "fa-clipboard-check",
       "id": "step_5",
-      "title": "Catatan & Pengesahan",
-      "subtitle": "Catatan tambahan dan pengesahan",
       "sections": [
         {
-          "icon": "fa-pen-to-square",
-          "title": "CATATAN KHUSUS",
           "badge": "D",
           "fields": [
             {
-              "name": "CATATAN_1",
               "label": "Catatan 1",
-              "type": "text",
-              "placeholder": "Contoh: Situasi operasional penerbangan aman terkendali."
+              "name": "CATATAN_1",
+              "placeholder": "Contoh: Situasi operasional penerbangan aman terkendali.",
+              "type": "text"
             },
             {
-              "name": "CATATAN_2",
               "label": "Catatan 2",
-              "type": "text",
-              "placeholder": "Contoh: Pelaksanaan inspeksi sisi udara pagi dan sore normal."
+              "name": "CATATAN_2",
+              "placeholder": "Contoh: Pelaksanaan inspeksi sisi udara pagi dan sore normal.",
+              "type": "text"
             },
             {
-              "name": "CATATAN_3",
               "label": "Catatan 3",
-              "type": "text",
-              "placeholder": "Catatan khusus 3 (opsional)"
+              "name": "CATATAN_3",
+              "placeholder": "Catatan khusus 3 (opsional)",
+              "type": "text"
             },
             {
-              "name": "CATATAN_4",
               "label": "Catatan 4",
-              "type": "text",
-              "placeholder": "Catatan khusus 4 (opsional)"
+              "name": "CATATAN_4",
+              "placeholder": "Catatan khusus 4 (opsional)",
+              "type": "text"
             },
             {
-              "name": "CATATAN_5",
               "label": "Catatan 5",
-              "type": "text",
-              "placeholder": "Catatan khusus 5 (opsional)"
+              "name": "CATATAN_5",
+              "placeholder": "Catatan khusus 5 (opsional)",
+              "type": "text"
             },
             {
-              "name": "CATATAN_6",
               "label": "Catatan 6",
-              "type": "text",
+              "name": "CATATAN_6",
               "placeholder": "Catatan khusus 6 (opsional)",
-              "required": false
+              "required": false,
+              "type": "text"
             },
             {
-              "name": "CATATAN_7",
               "label": "Catatan 7",
-              "type": "text",
+              "name": "CATATAN_7",
               "placeholder": "Catatan khusus 7 (opsional)",
-              "required": false
+              "required": false,
+              "type": "text"
             }
-          ]
+          ],
+          "icon": "fa-pen-to-square",
+          "title": "CATATAN KHUSUS"
         }
-      ]
+      ],
+      "subtitle": "Catatan tambahan dan pengesahan",
+      "title": "Catatan & Pengesahan"
     }
   ]
 }
