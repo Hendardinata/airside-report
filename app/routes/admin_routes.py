@@ -1,3 +1,5 @@
+import re
+from datetime import datetime
 from flask import Blueprint, render_template, session, redirect, url_for, request, jsonify
 from app.models.airport_profiles import (
     USERS,
@@ -11,8 +13,7 @@ from app.models.airport_profiles import (
 )
 from app.models.config_store import update_airport_config, get_airport_config, get_admin_config, update_admin_config
 from app.services.drive_service import create_monthly_sheet
-from app.services.gsheets_service import get_daily_summary
-from datetime import datetime
+from app.services.gsheets_service import get_daily_summary, get_client
 
 bp = Blueprint('admin', __name__)
 
@@ -56,9 +57,6 @@ def dashboard():
 @bp.route('/batch-hub')
 def batch_hub():
     return redirect(url_for('admin.dashboard', modal='batch-hub'))
-
-import re
-from datetime import datetime
 
 def extract_drive_id(text):
     if not text: return ""
@@ -110,14 +108,8 @@ def update_config():
     
     if sheet_url:
         try:
-            import gspread
-            from google.oauth2.service_account import Credentials
-            SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-            import os
-            cred_path = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.json')
-            credentials = Credentials.from_service_account_file(cred_path, scopes=SCOPES)
-            client = gspread.authorize(credentials)
-            sheet = client.open_by_url(sheet_url)
+            client = get_client()
+            client.open_by_url(sheet_url)
             return jsonify({"status": "success", "message": "Konfigurasi tersimpan. Link Valid dan Terkoneksi."})
         except Exception as e:
             error_details = getattr(e, 'response', repr(e))
@@ -221,13 +213,7 @@ def api_create_sheet():
         
         # --- Update Judul di dalam Spreadsheet (Cell A1) ---
         try:
-            import gspread
-            from google.oauth2.service_account import Credentials
-            SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-            import os
-            cred_path = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.json')
-            credentials = Credentials.from_service_account_file(cred_path, scopes=SCOPES)
-            client = gspread.authorize(credentials)
+            client = get_client()
             sheet = client.open_by_url(new_url)
             
             title_text = f"LAPORAN HARIAN {airport_code} — {month.upper()} {year}"
@@ -585,34 +571,6 @@ def api_batch_sync_all_rekap():
                 results[code] = {"status": "error", "error": str(e)}
         else:
             results[code] = {"status": "skipped", "message": "Belum ada link sheet aktif"}
-            
-    return jsonify({"success": True, "results": results})
-
-@bp.route('/api/staging/init-all', methods=['POST'])
-def api_init_staging_sheets():
-    """Inisialisasi otomatis seluruh spreadsheet staging (LOP, DPS, BWX, KOE) di folder STAGING."""
-    from app.services.staging_service import get_or_create_staging_sheet
-    from app.models.config_store import get_staging_sheet_url
-    
-    airports = ['LOP', 'DPS', 'BWX', 'KOE']
-    results = {}
-    
-    for code in airports:
-        try:
-            ws = get_or_create_staging_sheet(code)
-            url = get_staging_sheet_url(code)
-            results[code] = {
-                "status": "success",
-                "sheet_name": f"STAGING_{code}",
-                "url": url,
-                "message": f"Spreadsheet STAGING_{code} aktif dan terhubung."
-            }
-        except Exception as e:
-            results[code] = {
-                "status": "error",
-                "sheet_name": f"STAGING_{code}",
-                "error": str(e)
-            }
             
     return jsonify({"success": True, "results": results})
 

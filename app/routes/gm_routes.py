@@ -9,6 +9,7 @@ from app.services.staging_service import (
     update_staging_report_by_dh
 )
 from app.routes.staff_routes import generate_wa_message
+from app.services.gsheets_service import format_indo_date
 
 bp = Blueprint('gm', __name__)
 
@@ -20,23 +21,6 @@ def require_login():
         if request.path.startswith('/gm/api/') or request.is_json or request.method == 'POST':
             return jsonify({"status": "error", "message": "Unauthorized. Sesi login Department Head diperlukan."}), 401
         return redirect(url_for('auth.index'))
-
-MONTH_NAMES_ID = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
-
-def format_indo_date(date_str):
-    if not date_str:
-        return '-'
-    try:
-        parts = str(date_str).split('T')[0].split('-')
-        if len(parts) == 3:
-            day = int(parts[2])
-            month = int(parts[1])
-            year = parts[0]
-            if 1 <= month <= 12:
-                return f"{day} {MONTH_NAMES_ID[month]} {year}"
-    except Exception:
-        pass
-    return str(date_str)
 
 @bp.route('/')
 @bp.route('/dashboard')

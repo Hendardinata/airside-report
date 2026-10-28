@@ -2,13 +2,6 @@
     "active_month": "2026-10",
     "active_year": "2026",
     "active_month_label": "Bulan OKT 2026",
-    "staging_folder_id": "1qdPtWNaXQK8ZZYt0eq2nxHrRL3IJ8b3L",
-    "staging_sheets": {
-        "LOP": "https://docs.google.com/spreadsheets/d/1At96OADWeM42YlA2D8NGmJ5ewI9EjRuiM-HRwGOF4ww/edit?usp=drivesdk",
-        "DPS": "https://docs.google.com/spreadsheets/d/1lxET5aVPOwWyobRSckoRtG284IkKHWivoHxtB_BIn6g/edit?usp=drivesdk",
-        "BWX": "https://docs.google.com/spreadsheets/d/1kruGp6G3xyMhNL2w_h4mRCu7992a4LpYj_5zMTcU24I/edit?usp=drivesdk",
-        "KOE": "https://docs.google.com/spreadsheets/d/1-YKhP5mby9Oh1GYzs_Iuy4E-14_4O7ZQGSpEh9herpI/edit?usp=drivesdk"
-    },
     "airports": {
         "LOP": {
             "sheet_url": "https://docs.google.com/spreadsheets/d/13hNQxcY6XcQVEusBpEPIs6HFg1pGhz9H3H5RCVZd2Yo/edit?usp=drivesdk",

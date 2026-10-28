@@ -30,14 +30,6 @@ def load_config():
             config['active_month'] = ""
             modified = True
 
-        if 'staging_folder_id' not in config:
-            config['staging_folder_id'] = "1qdPtWNaXQK8ZZYt0eq2nxHrRL3IJ8b3L"
-            modified = True
-            
-        if 'staging_sheets' not in config:
-            config['staging_sheets'] = {"LOP": "", "DPS": "", "BWX": "", "KOE": ""}
-            modified = True
-
         if 'active_year' not in config:
             config['active_year'] = config.get('active_month', '').split('-')[0] if config.get('active_month') else "2026"
             modified = True
@@ -166,22 +158,3 @@ def update_admin_config(deputy_phone=None, admin_phone=None):
         config['admin']['admin_phone'] = admin_phone
     save_config(config)
 
-def get_staging_folder_id():
-    config = load_config()
-    return config.get('staging_folder_id', '1qdPtWNaXQK8ZZYt0eq2nxHrRL3IJ8b3L')
-
-def get_staging_sheet_url(airport_code):
-    config = load_config()
-    return config.get('staging_sheets', {}).get(airport_code, '')
-
-def update_staging_sheet_url(airport_code, sheet_url):
-    config = load_config()
-    if 'staging_sheets' not in config:
-        config['staging_sheets'] = {}
-    config['staging_sheets'][airport_code] = sheet_url
-    save_config(config)
-
-def update_staging_folder_id(folder_id):
-    config = load_config()
-    config['staging_folder_id'] = folder_id
-    save_config(config)

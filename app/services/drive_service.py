@@ -1,6 +1,8 @@
+import os
+import re
+import requests
 from googleapiclient.discovery import build
 from google.oauth2.service_account import Credentials
-import os
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 CREDENTIALS_FILE = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.json')
@@ -10,8 +12,6 @@ def get_drive_service():
         raise FileNotFoundError("File credentials.json tidak ditemukan.")
     creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=SCOPES)
     return build('drive', 'v3', credentials=creds)
-
-import requests
 
 def create_monthly_sheet(new_file_name, target_folder_id, template_file_id):
     """
@@ -52,7 +52,6 @@ def find_monthly_sheet(airport_code, target_folder_id, month_abbr, year):
         drive_svc = get_drive_service()
         clean_folder = target_folder_id.strip()
         # Ekstrak ID folder jika berupa URL
-        import re
         m_id = re.search(r'[-\w]{25,}', clean_folder)
         if m_id:
             clean_folder = m_id.group(0)

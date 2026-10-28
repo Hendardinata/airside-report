@@ -1,9 +1,8 @@
-import os
 import json
 import re
 from datetime import datetime
 from app.models.db import get_db
-from app.services.gsheets_service import write_daily_report, sanitize_sheet_value
+from app.services.gsheets_service import write_daily_report
 from app.models.config_store import get_airport_config
 
 def parse_submitted_by(raw_val, airport_code=None):

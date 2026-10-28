@@ -1,5 +1,5 @@
 import os
-from flask import Flask, session, request, abort, jsonify, send_from_directory, redirect
+from flask import Flask, session, request, abort, jsonify, send_from_directory, redirect, flash, url_for
 from config import Config
 import secrets
 import hmac
@@ -62,7 +62,6 @@ def create_app():
                 "success": False,
                 "error": str(getattr(e, 'description', 'Permintaan ditolak: Token CSRF tidak valid.'))
             }), 403
-        from flask import flash, redirect, url_for
         flash("Sesi Anda telah kedaluwarsa atau token tidak valid. Silakan masuk kembali.", "warning")
         return redirect(url_for('auth.index'))
 

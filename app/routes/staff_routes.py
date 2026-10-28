@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, jsonify
 from app.models.airport_profiles import USERS, AIRPORTS
-from app.models.config_store import get_airport_config, get_admin_config
-from app.services.gsheets_service import write_daily_report
+from app.models.config_store import get_airport_config
 
 bp = Blueprint('staff', __name__)
 

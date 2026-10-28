@@ -1,5 +1,4 @@
-import os
-import json
+import re
 import uuid
 from datetime import datetime
 import threading
@@ -199,14 +198,12 @@ def _matches_active_month(n, active_month):
     if rid:
         if month_compact in rid or clean_month in rid:
             return True
-        import re
         if re.search(r'20\d{4,6}', rid):
             return False
 
     msg = f"{n.get('title', '')} {n.get('message', '')}"
     if clean_month in msg:
         return True
-    import re
     m_date = re.search(r'20\d{2}-\d{2}', msg)
     if m_date:
         return m_date.group(0) == clean_month

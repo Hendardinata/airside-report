@@ -1,6 +1,3 @@
-from werkzeug.security import generate_password_hash, check_password_hash
-import hmac
-
 AIRPORTS = {
     'LOP': {'name': 'Lombok', 'id': 'LOP', 'code': '1. Kantor Cabang LOP'},
     'DPS': {'name': 'Bali', 'id': 'DPS', 'code': '2. Kantor Cabang DPS'},
@@ -10,7 +7,6 @@ AIRPORTS = {
 
 from app.models.user_store import (
     load_users,
-    save_users,
     get_user,
     get_all_users,
     add_user,
@@ -23,7 +19,7 @@ from app.models.user_store import (
 class _UserStoreProxy(dict):
     """
     Proxy dictionary agar seluruh kode yang memanggil USERS[key], USERS.get(key),
-    atau 'key' in USERS selalu mendapatkan data akun terbaru dari users.json secara dinamis.
+    atau 'key' in USERS selalu mendapatkan data akun terbaru dari database SQLite secara dinamis.
     """
     def __getitem__(self, key):
         return load_users()[str(key).lower()]

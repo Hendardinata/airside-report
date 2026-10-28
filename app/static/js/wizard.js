@@ -205,82 +205,85 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById('reportWizard').addEventListener('submit', function(e) {
-    e.preventDefault();
+const reportWizardForm = document.getElementById('reportWizard');
+if (reportWizardForm) {
+    reportWizardForm.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    // Validasi menyeluruh seluruh langkah 1 sampai 5
-    for (let s = 1; s <= 5; s++) {
-        if (!validateStepFields(s)) {
-            goToStepDirect(s);
-            return;
+        // Validasi menyeluruh seluruh langkah 1 sampai 5
+        for (let s = 1; s <= 5; s++) {
+            if (!validateStepFields(s)) {
+                goToStepDirect(s);
+                return;
+            }
         }
-    }
 
-    if (typeof showKawungLoading === 'function') {
-        showKawungLoading('Mengirim Laporan...', 'Menyimpan data ke Database Staging...');
-    } else {
-        Swal.fire({
-            title: 'Mengirim Laporan...',
-            allowOutsideClick: false,
-            didOpen: () => { Swal.showLoading(); }
-        });
-    }
-
-    const formData = new FormData(this);
-    
-    fetch('/staff/submit', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (typeof hideKawungLoading === 'function') hideKawungLoading();
-        Swal.close();
-
-        if (data.status === 'success') {
-            Swal.fire({
-                title: 'Laporan Diajukan ke DH!', 
-                text: 'Data telah berhasil disimpan di Database Staging sementara.\n\nApakah Anda ingin mengirimkan notifikasi review ke WhatsApp Department Head?', 
-                icon: 'success',
-                showCancelButton: true,
-                confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Beritahu DH',
-                cancelButtonText: 'Kembali ke Dashboard',
-                confirmButtonColor: '#16a34a',
-                cancelButtonColor: '#64748b'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const phone = data.dh_phone || data.gm_phone;
-                    if (phone) {
-                        let text = data.dh_message || data.gm_message || `Halo Department Head, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon direview di portal.`;
-                        let cleanDH = phone.replace(/\D/g, '');
-                        if (cleanDH.startsWith('0')) cleanDH = '62' + cleanDH.substring(1);
-                        window.open(`https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`, '_blank');
-                    } else {
-                        Swal.fire('Info', 'Nomor WA Department Head belum dikonfigurasi.', 'info');
-                    }
-                }
-
-                // Tampilkan loading spinner InJourney Kawung sebelum dan sesudah reload dashboard
-                try {
-                    sessionStorage.setItem('staff_dashboard_reload_loading', 'true');
-                } catch(e) {}
-
-                if (typeof showKawungLoading === 'function') {
-                    showKawungLoading('Memuat Dashboard...', 'Memperbarui data dan status laporan...');
-                }
-
-                setTimeout(() => {
-                    window.location.href = '/staff/dashboard';
-                }, 400);
-            });
+        if (typeof showKawungLoading === 'function') {
+            showKawungLoading('Mengirim Laporan...', 'Menyimpan data ke Database Staging...');
         } else {
-            Swal.fire('Gagal Menyimpan', data.message || 'Terjadi kesalahan sistem', 'error');
+            Swal.fire({
+                title: 'Mengirim Laporan...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
         }
-    })
-    .catch(error => {
-        if (typeof hideKawungLoading === 'function') hideKawungLoading();
-        Swal.close();
-        Swal.fire('Error', 'Gagal terhubung ke server', 'error');
-        console.error('Error:', error);
+
+        const formData = new FormData(this);
+        
+        fetch('/staff/submit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (typeof hideKawungLoading === 'function') hideKawungLoading();
+            Swal.close();
+
+            if (data.status === 'success') {
+                Swal.fire({
+                    title: 'Laporan Diajukan ke DH!', 
+                    text: 'Data telah berhasil disimpan di Database Staging sementara.\n\nApakah Anda ingin mengirimkan notifikasi review ke WhatsApp Department Head?', 
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Beritahu DH',
+                    cancelButtonText: 'Kembali ke Dashboard',
+                    confirmButtonColor: '#16a34a',
+                    cancelButtonColor: '#64748b'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const phone = data.dh_phone || data.gm_phone;
+                        if (phone) {
+                            let text = data.dh_message || data.gm_message || `Halo Department Head, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon direview di portal.`;
+                            let cleanDH = phone.replace(/\D/g, '');
+                            if (cleanDH.startsWith('0')) cleanDH = '62' + cleanDH.substring(1);
+                            window.open(`https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`, '_blank');
+                        } else {
+                            Swal.fire('Info', 'Nomor WA Department Head belum dikonfigurasi.', 'info');
+                        }
+                    }
+
+                    // Tampilkan loading spinner InJourney Kawung sebelum dan sesudah reload dashboard
+                    try {
+                        sessionStorage.setItem('staff_dashboard_reload_loading', 'true');
+                    } catch(e) {}
+
+                    if (typeof showKawungLoading === 'function') {
+                        showKawungLoading('Memuat Dashboard...', 'Memperbarui data dan status laporan...');
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = '/staff/dashboard';
+                    }, 400);
+                });
+            } else {
+                Swal.fire('Gagal Menyimpan', data.message || 'Terjadi kesalahan sistem', 'error');
+            }
+        })
+        .catch(error => {
+            if (typeof hideKawungLoading === 'function') hideKawungLoading();
+            Swal.close();
+            Swal.fire('Error', 'Gagal terhubung ke server', 'error');
+            console.error('Error:', error);
+        });
     });
-});
+}

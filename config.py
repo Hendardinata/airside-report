@@ -40,12 +40,3 @@ class Config:
     # DoS protection: limit request payload to 16MB
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
-    # Base directory for local excel files
-    PARENT_DIR = os.path.dirname(BASE_DIR)
-    EXCEL_PATHS = {
-        'LOP': os.path.join(PARENT_DIR, 'LOP_OKT_2026 (1).xlsx'),
-        'DPS': os.path.join(PARENT_DIR, 'DPS_OKT_2026.xlsx'),
-        'BWX': os.path.join(PARENT_DIR, 'BWX_OKT_2026.xlsx'),
-        'KOE': os.path.join(PARENT_DIR, 'KOE_OKT_2026.xlsx'),
-        'ADMIN': os.path.join(PARENT_DIR, 'ADMIN_OKT_2026.xlsx')
-    }

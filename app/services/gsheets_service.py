@@ -1,8 +1,11 @@
-import gspread
-from google.oauth2.service_account import Credentials
 import os
 import json
-from datetime import datetime
+import time
+import calendar
+import re
+from datetime import datetime, timedelta
+import gspread
+from google.oauth2.service_account import Credentials
 
 SCOPES = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -453,20 +456,10 @@ def get_daily_summary(date_str):
         # Jika tidak cocok, lakukan Auto-Discovery menggunakan Drive API
         if not is_url_match and drive_folder:
             try:
-                from googleapiclient.discovery import build
-                from google.oauth2.service_account import Credentials
-                import os
-                
-                cred_path = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.json')
-                creds = Credentials.from_service_account_file(cred_path, scopes=['https://www.googleapis.com/auth/drive'])
-                drive_svc = build('drive', 'v3', credentials=creds)
-                
-                query = f"'{drive_folder}' in parents and mimeType='application/vnd.google-apps.spreadsheet' and name contains '{month_abbr}' and name contains '{year_str}' and trashed=false"
-                res = drive_svc.files().list(q=query, spaces='drive', fields='files(id, name, webViewLink)').execute()
-                files = res.get('files', [])
-                if files:
-                    url = files[0]['webViewLink']
-                    print(f"Auto-discovered sheet for {code} {month_abbr} {year_str}: {url}")
+                from app.services.drive_service import find_monthly_sheet
+                found = find_monthly_sheet(code, drive_folder, month_abbr, year_str)
+                if found:
+                    url = found.get('webViewLink') or f"https://docs.google.com/spreadsheets/d/{found['id']}/edit"
             except Exception as e:
                 print(f"Gagal auto-discovery Drive API untuk {code}: {e}")
                 
@@ -1008,10 +1001,6 @@ def sync_sheets_to_schema(sheet_url):
 # ==============================================================================
 # FITUR KALENDER STATUS REAL-TIME DARI SPREADSHEET FIX (DATABASE_REKAP)
 # ==============================================================================
-
-import time
-import calendar
-import re
 
 _CALENDAR_CACHE = {}
 _CALENDAR_CACHE_TTL = 90  # Cache 90 detik untuk efisiensi kuota API
