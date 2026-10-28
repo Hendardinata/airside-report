@@ -9,14 +9,33 @@ DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'a
 @contextmanager
 def get_db():
     """
-    Context manager untuk koneksi SQLite yang thread-safe dengan WAL mode.
-    Memastikan koneksi ditutup secara otomatis dan transaksi di-commit / rollback.
+    Context manager untuk koneksi SQLite yang thread-safe.
+    Kompatibel dengan disk lokal maupun NFS (Network File System seperti di PythonAnywhere).
     """
     conn = sqlite3.connect(DB_PATH, timeout=30.0)
     conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL;")
-    conn.execute("PRAGMA synchronous=NORMAL;")
-    conn.execute("PRAGMA foreign_keys=ON;")
+    try:
+        # Coba aktifkan WAL mode untuk performa lokal
+        res = conn.execute("PRAGMA journal_mode=WAL;").fetchone()
+        # Jika environment NFS (seperti PythonAnywhere) tidak mendukung WAL, fallback ke TRUNCATE
+        if res and res[0].lower() not in ('wal',):
+            conn.execute("PRAGMA journal_mode=TRUNCATE;")
+    except Exception:
+        try:
+            conn.execute("PRAGMA journal_mode=TRUNCATE;")
+        except Exception:
+            pass
+
+    try:
+        conn.execute("PRAGMA synchronous=NORMAL;")
+    except Exception:
+        pass
+
+    try:
+        conn.execute("PRAGMA foreign_keys=ON;")
+    except Exception:
+        pass
+
     try:
         yield conn
         conn.commit()
