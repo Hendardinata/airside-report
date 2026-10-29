@@ -6031,7 +6031,7 @@
                                 <h4 style="margin: 0; font-size: 0.88rem; font-weight: 800; color: #0f172a;" id="deputyPhotosTitle">Dokumentasi Foto Lapangan Regional II</h4>
                             </div>
                             <a id="deputyPublicDocLink" href="/dokumentasi" target="_blank" style="text-decoration: none; font-size: 0.73rem; color: #0369a1; background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.22rem 0.7rem; border-radius: 999px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
-                                <i class="fa-solid fa-up-right-from-square"></i> Buka Halaman Galeri / PDF Deputy
+                                <i class="fa-solid fa-up-right-from-square"></i> Buka Halaman Galeri Dokumentasi
                             </a>
                         </div>
 
@@ -8927,7 +8927,9 @@
                         const c = vClean(val);
                         if (c === "-") return "-";
                         if (c.toLowerCase() === "nihil") return "Nihil";
-                        if (c.toLowerCase().endsWith("titik")) return c;
+                        if (c.toLowerCase().includes("titik")) return c;
+                        const m = c.match(/^(\d+)\s*(\(.+\))$/);
+                        if (m) return `${m[1]} titik ${m[2]}`;
                         return `${c} titik`;
                     }
 
@@ -9015,82 +9017,110 @@
 
                             if (info.raw_data) {
                                 const rd = info.raw_data;
+                                const fd = info.fields || {};
+                                const gf = (key, fallbackIdx) => (fd[key] !== undefined && fd[key] !== null) ? fd[key] : (fallbackIdx !== undefined ? rd[fallbackIdx] : "");
+                                const fmtJenis = (val) => {
+                                    const c = vClean(val);
+                                    if (c === "-" || c.toLowerCase() === "nihil") return "•  Jenis kerusakan : -\n";
+                                    if (c.includes("\n")) return `•  Jenis kerusakan :\n${c}\n`;
+                                    return `•  Jenis kerusakan : ${c}\n`;
+                                };
+
                                 branchText += `${index + 1}. ${code}\n`;
-                                branchText += `*A. RUNWAY*\n`;
-                                branchText += `•  Kondisi keseluruhan runway : ${vClean(rd[8])}\n`;
-                                branchText += `•  Performance pavement : ${fPercent(rd[9])}\n`;
-                                branchText += `•  Jml Titik Rusak : ${fTitik(rd[10])}\n`;
-                                branchText += `•  Jml titik yang sudah diperbaiki : ${fTitik(rd[11])}\n`;
-                                if (vClean(rd[12]) !== "-" && vClean(rd[12]).toLowerCase() !== "nihil") {
-                                    branchText += `   Jenis kerusakan : \n   - ${vClean(rd[12])}\n`;
-                                }
-                                branchText += `•  Jml titik yang belum diperbaiki : ${fTitik(rd[13])}\n`;
-                                if (vClean(rd[14]) !== "-" && vClean(rd[14]).toLowerCase() !== "nihil") {
-                                    branchText += `   Jenis kerusakan yang belum diperbaiki : \n   - ${vClean(rd[14])}\n`;
-                                }
-                                branchText += `•  Jml titik rusak berulang > 1x : ${fTitik(rd[15])}\n`;
+                                branchText += `A. RUNWAY\n`;
+                                branchText += `•  Kondisi keseluruhan runway : ${vClean(gf("RUNWAY_KONDISI", 8))}\n`;
+                                branchText += `•  Performance pavement : ${fPercent(gf("RUNWAY_PCI", 9))}\n`;
+                                branchText += `    Jml Titik Rusak : ${fTitik(gf("RUNWAY_TITIK_RUSAK", 10))}\n`;
+                                branchText += `    Jml titik yang sudah diperbaiki : ${fTitik(gf("RUNWAY_TITIK_DIPERBAIKI", 11))}\n`;
+                                branchText += fmtJenis(gf("RUNWAY_JENIS_DIPERBAIKI", 12));
+                                branchText += `    Jml titik yang belum diperbaiki : ${fTitik(gf("RUNWAY_TITIK_BELUM", 13))}\n`;
+                                branchText += fmtJenis(gf("RUNWAY_JENIS_BELUM", 14));
+                                branchText += `    Jml titik rusak berulang > 1x : ${fTitik(gf("RUNWAY_TITIK_BERULANG", 15))}\n`;
                                 branchText += `•  Marka :\n`;
-                                branchText += `       Standar : ${vClean(rd[16])}\n`;
-                                branchText += `       Realisasi : ${vClean(rd[17])}\n`;
-                                branchText += `       Performance : ${fPercent(rd[18])}\n`;
+                                branchText += `       Standar : ${vClean(gf("RUNWAY_MARKA_STD", 16))}\n`;
+                                branchText += `       Realisasi : ${vClean(gf("RUNWAY_MARKA_REALISASI", 17))}\n`;
+                                const rwyMarkaPct = vClean(gf("RUNWAY_MARKA_PERSENTASE"));
+                                if (rwyMarkaPct !== "-") {
+                                    branchText += `       Persentase : ${fPercent(rwyMarkaPct)}\n`;
+                                }
+                                branchText += `       Performance : ${fPercent(gf("RUNWAY_MARKA_PERF", 18))}\n`;
                                 branchText += `•  Standing Water :\n`;
-                                branchText += `       Pengukuran : ${vClean(rd[19])}\n`;
-                                branchText += `       Performance : ${fPercent(rd[20])}\n`;
+                                branchText += `       Pengukuran : ${vClean(gf("RUNWAY_STANDING_WATER", 19))}\n`;
+                                branchText += `       Performance : ${fPercent(gf("RUNWAY_WATER_PERF", 20))}\n`;
                                 branchText += `•  Rubber Removal :  \n`;
-                                branchText += `       Standar ketentuan : ${vClean(rd[21])}\n`;
-                                branchText += `       Realisasi : ${vClean(rd[22])}\n`;
-                                branchText += `       Nilai Skid : ${vClean(rd[23])}\n\n`;
+                                branchText += `       Standar ketentuan : ${vClean(gf("RUNWAY_RUBBER_STD", 21))}\n`;
+                                branchText += `       Realisasi : ${vClean(gf("RUNWAY_RUBBER_REAL", 22))}\n`;
+                                const rwyRubProg = vClean(gf("RUNWAY_RUBBER_PROGRES"));
+                                if (rwyRubProg !== "-") {
+                                    branchText += `       Progres : ${fPercent(rwyRubProg)}\n`;
+                                }
+                                branchText += `       Nilai Skid : ${vClean(gf("RUNWAY_RUBBER_SKID", 23))}\n`;
+                                const rwyRubPerf = vClean(gf("RUNWAY_RUBBER_PERF"));
+                                if (rwyRubPerf !== "-") {
+                                    branchText += `       Performance : ${fPercent(rwyRubPerf)}\n`;
+                                }
+                                branchText += `\n`;
 
-                                const twyNama = vClean(rd[24]);
-                                const twyKet = (twyNama !== "-") ? ` ${twyNama}` : "";
-                                branchText += `*B. TAXIWAY*\n`;
-                                branchText += `•  Kondisi keseluruhan Taxiway${twyKet} : ${vClean(rd[25])}\n`;
-                                branchText += `•  Performance pavement : ${fPercent(rd[26])}\n`;
-                                branchText += `•  Jml Titik Rusak : ${fTitik(rd[27])}\n`;
-                                branchText += `•  Jml titik yang sudah diperbaiki : ${fTitik(rd[28])}\n`;
-                                if (vClean(rd[29]) !== "-" && vClean(rd[29]).toLowerCase() !== "nihil") {
-                                    branchText += `   Jenis kerusakan : \n   - ${vClean(rd[29])}\n`;
-                                }
-                                branchText += `•  Jml titik yang belum diperbaiki : ${fTitik(rd[30])}\n`;
-                                if (vClean(rd[31]) !== "-" && vClean(rd[31]).toLowerCase() !== "nihil") {
-                                    branchText += `   Jenis kerusakan yang belum diperbaiki : \n   - ${vClean(rd[31])}\n`;
-                                }
-                                branchText += `•  Jml titik rusak berulang > 1x : ${fTitik(rd[32])}\n`;
+                                const twyNama = vClean(gf("TAXIWAY_NAMA", 24));
+                                const twyKet = (twyNama !== "-" && twyNama.toLowerCase() !== "nihil") ? ` ${twyNama}` : "";
+                                branchText += `B. TAXIWAY\n`;
+                                branchText += `•  Kondisi keseluruhan Taxiway${twyKet} : ${vClean(gf("TAXIWAY_STATUS", 25))}\n`;
+                                branchText += `•  Performance pavement : ${fPercent(gf("TAXIWAY_PCI", 26))}\n`;
+                                branchText += `    Jml Titik Rusak : ${fTitik(gf("TWY_TITIK_RUSAK", 27))}\n`;
+                                branchText += `    Jml titik yang sudah diperbaiki : ${fTitik(gf("TWY_TITIK_DIPERBAIKI", 28))}\n`;
+                                branchText += fmtJenis(gf("TWY_JENIS_DIPERBAIKI", 29));
+                                branchText += `    Jml titik yang belum diperbaiki : ${fTitik(gf("TWY_TITIK_BELUM", 30))}\n`;
+                                branchText += fmtJenis(gf("TWY_JENIS_BELUM", 31));
+                                branchText += `    Jml titik rusak berulang > 1x : ${fTitik(gf("TWY_TITIK_BERULANG", 32))}\n`;
                                 branchText += `•  Marka :\n`;
-                                branchText += `      Standar : ${vClean(rd[33])}\n`;
-                                branchText += `      Realisasi : ${vClean(rd[34])}\n`;
-                                branchText += `      Performance : ${fPercent(rd[35])}\n`;
+                                branchText += `      Standar : ${vClean(gf("TWY_MARKA_STD", 33))}\n`;
+                                branchText += `      Realisasi : ${vClean(gf("TWY_MARKA_REALISASI", 34))}\n`;
+                                const twyMarkaPct = vClean(gf("TWY_MARKA_PERSENTASE"));
+                                if (twyMarkaPct !== "-") {
+                                    branchText += `      Persentase : ${fPercent(twyMarkaPct)}\n`;
+                                }
+                                branchText += `      Performance : ${fPercent(gf("TWY_MARKA_PERF", 35))}\n`;
                                 branchText += `•  Standing Water : \n`;
-                                branchText += `      Pengukuran : ${vClean(rd[36])}\n\n`;
+                                branchText += `      Pengukuran : ${vClean(gf("TWY_STANDING_WATER", 36))}\n`;
+                                const twyWaterDry = vClean(gf("TWY_WATER_DRY"));
+                                if (twyWaterDry !== "-") {
+                                    branchText += `      Prosentase DRY : ${fPercent(twyWaterDry)}\n`;
+                                }
+                                branchText += `      Performance : ${fPercent(gf("TWY_WATER_PERF", 37))}\n\n`;
 
-                                branchText += `*C. APRON*\n`;
-                                branchText += `•  Kondisi keseluruhan Apron : ${vClean(rd[37])}\n`;
-                                branchText += `•  Performance pavement : ${fPercent(rd[38])}\n`;
-                                branchText += `•  Jml Titik Rusak : ${fTitik(rd[39])}\n`;
-                                branchText += `•  Jml titik yang sudah diperbaiki : ${fTitik(rd[40])}\n`;
-                                if (vClean(rd[41]) !== "-" && vClean(rd[41]).toLowerCase() !== "nihil") {
-                                    branchText += `   Jenis kerusakan : \n   - ${vClean(rd[41])}\n`;
-                                }
-                                branchText += `•  Jml titik yang belum diperbaiki : ${fTitik(rd[42])}\n`;
-                                if (vClean(rd[43]) !== "-" && vClean(rd[43]).toLowerCase() !== "nihil") {
-                                    branchText += `   Jenis kerusakan yang belum diperbaiki : \n   - ${vClean(rd[43])}\n`;
-                                }
-                                branchText += `•  Jml titik rusak berulang > 1x : ${fTitik(rd[44])}\n`;
+                                branchText += `C. APRON\n`;
+                                branchText += `•  Kondisi keseluruhan Apron : ${vClean(gf("APRON_KONDISI", 38))}\n`;
+                                branchText += `•  Performance pavement : ${fPercent(gf("APRON_PCI", 39))}\n`;
+                                branchText += `    Jml Titik Rusak : ${fTitik(gf("APN_TITIK_RUSAK", 40))}\n`;
+                                branchText += `    Jml titik yang sudah diperbaiki : ${fTitik(gf("APN_TITIK_DIPERBAIKI", 41))}\n`;
+                                branchText += fmtJenis(gf("APN_JENIS_DIPERBAIKI", 42));
+                                branchText += `    Jml titik yang belum diperbaiki : ${fTitik(gf("APN_TITIK_BELUM", 43))}\n`;
+                                branchText += fmtJenis(gf("APN_JENIS_BELUM", 44));
+                                branchText += `    Jml titik rusak berulang > 1x : ${fTitik(gf("APN_TITIK_BERULANG", 45))}\n`;
                                 branchText += `•  Marka :\n`;
-                                branchText += `      Standar : ${vClean(rd[45])}\n`;
-                                branchText += `      Realisasi : ${vClean(rd[46])}\n`;
-                                branchText += `      Performance : ${fPercent(rd[47])}\n`;
+                                branchText += `      Standar : ${vClean(gf("APN_MARKA_STD", 46))}\n`;
+                                branchText += `      Realisasi : ${vClean(gf("APN_MARKA_REALISASI", 47))}\n`;
+                                const apnMarkaPct = vClean(gf("APN_MARKA_PERSENTASE"));
+                                if (apnMarkaPct !== "-") {
+                                    branchText += `      Persentase : ${fPercent(apnMarkaPct)}\n`;
+                                }
+                                branchText += `      Performance : ${fPercent(gf("APN_MARKA_PERF", 48))}\n`;
                                 branchText += `•  Standing Water :\n`;
-                                branchText += `      Pengukuran : ${vClean(rd[48])}\n\n`;
+                                branchText += `      Pengukuran : ${vClean(gf("APN_STANDING_WATER", 49))}\n`;
+                                const apnWaterDry = vClean(gf("APN_WATER_DRY"));
+                                if (apnWaterDry !== "-") {
+                                    branchText += `      Prosentase DRY : ${fPercent(apnWaterDry)}\n`;
+                                }
+                                branchText += `      Performance : ${fPercent(gf("APN_WATER_PERF", 50))}\n\n`;
 
-                                branchText += `•  Pemeliharaan Potong Rumput :\n`;
-                                branchText += `      Standar : ${vClean(rd[49])}\n`;
-                                branchText += `      Realisasi : ${vClean(rd[50])}\n`;
-                                branchText += `      Performance : ${fPercent(rd[51])}\n\n`;
+                                branchText += `D. Pemeliharaan Potong Rumput\n`;
+                                branchText += `      Standar : ${vClean(gf("RUMPUT_STD", 51))}\n`;
+                                branchText += `      Realisasi : ${vClean(gf("RUMPUT_REALISASI", 52))}\n`;
+                                branchText += `      Performance : ${fPercent(gf("RUMPUT_PERF", 53))}\n\n`;
 
                                 let catList = [];
-                                for (let i = 52; i <= 56; i++) {
-                                    const c = vClean(rd[i]);
+                                for (let i = 1; i <= 5; i++) {
+                                    const c = vClean(gf(`CATATAN_${i}`, 53 + i));
                                     if (c !== "-" && c.toLowerCase() !== "nihil") catList.push(c);
                                 }
 
@@ -9142,8 +9172,7 @@
                                 pciTagEl.style.backgroundColor = "#f1f5f9";
                             }
 
-                            branchText += `${index + 1}. ${code}\n`;
-                            branchText += `⚠️ Laporan belum diterima (Belum mengirim data)\n\n\n`;
+                            branchText += `${index + 1}. ${code}\n\n`;
 
                             if (actionDiv) {
                                 actionDiv.innerHTML = `
@@ -9216,7 +9245,7 @@ Kepada Yth. :
 2. Pak GH API
 
 Mohon izin, menyampaikan Laporan Harian Kondisi Fasilitas Sisi Udara di PT Angkasa Pura Indonesia
-Tanggal : *${formatTanggalIndo(res.date)}*
+Tanggal : ${formatTanggalIndo(res.date)}
 
 Region II
 ${branchText.trim()}

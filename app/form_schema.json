@@ -46,17 +46,17 @@
               "type": "text"
             },
             {
-              "label": "Penerima 3",
+              "label": "Penerima 3 (Opsional)",
               "name": "PENERIMA_3",
-              "placeholder": "Contoh: Pak Deputy",
-              "required": true,
+              "placeholder": "Kosongkan jika hanya 2 penerima",
+              "required": false,
               "type": "text"
             },
             {
-              "label": "Penerima 4",
+              "label": "Penerima 4 (Opsional)",
               "name": "PENERIMA_4",
-              "placeholder": "Contoh: Pak DH Regional II (opsional)",
-              "required": true,
+              "placeholder": "Kosongkan jika hanya 2 penerima",
+              "required": false,
               "type": "text"
             }
           ],
@@ -90,21 +90,21 @@
             {
               "label": "Kondisi keseluruhan runway",
               "name": "RUNWAY_KONDISI",
-              "placeholder": "Contoh: SERVICEABLE",
+              "placeholder": "Contoh: Clear & Serviceable / Serviceable",
               "required": true,
               "type": "text"
             },
             {
               "label": "Performance pavement",
               "name": "RUNWAY_PCI",
-              "placeholder": "Contoh: 100% atau 100% PCI",
+              "placeholder": "Contoh: 93,29% atau 93%",
               "required": true,
               "type": "text"
             },
             {
               "label": "Jml Titik Rusak",
               "name": "RUNWAY_TITIK_RUSAK",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 28",
               "required": true,
               "type": "text",
               "unit": "titik"
@@ -112,7 +112,7 @@
             {
               "label": "Jml titik yang sudah diperbaiki",
               "name": "RUNWAY_TITIK_DIPERBAIKI",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 27",
               "required": true,
               "type": "text",
               "unit": "titik"
@@ -120,82 +120,108 @@
             {
               "label": "Jenis kerusakan",
               "name": "RUNWAY_JENIS_DIPERBAIKI",
-              "placeholder": "Contoh: Crack / Joint sealant",
+              "placeholder": "Contoh: 1 titik deflection, 27 titik pothole / One Wheel Lock Turn",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Jml titik yang belum diperbaiki",
               "name": "RUNWAY_TITIK_BELUM",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 1 atau 0",
               "required": true,
               "type": "text",
               "unit": "titik"
             },
             {
-              "label": "Jenis kerusakan yang belum diperbaiki",
+              "label": "Jenis kerusakan (belum diperbaiki)",
               "name": "RUNWAY_JENIS_BELUM",
-              "placeholder": "Contoh: Raveling / Depresi / Nihil",
+              "placeholder": "Contoh: Lendutan di Turning Runway 08 / -",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Jml titik rusak berulang > 1x",
               "name": "RUNWAY_TITIK_BERULANG",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 0 atau 1 titik (deflection TH 09)",
               "required": true,
               "type": "text",
               "unit": "titik"
             },
             {
-              "label": "Marka - Standard",
+              "label": "Marka - Standar",
               "name": "RUNWAY_MARKA_STD",
-              "placeholder": "Contoh: 1x / Tahun",
+              "placeholder": "Contoh: 1x / Tahun atau 1x kali / thn",
               "required": true,
               "type": "text"
             },
             {
               "label": "Marka - Realisasi",
               "name": "RUNWAY_MARKA_REALISASI",
-              "placeholder": "Contoh: -",
+              "placeholder": "Contoh: 7.243,33 m2 atau 01 Juli 2026 pengecatan marka side strip",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "label": "Marka - Persentase (Opsional)",
+              "name": "RUNWAY_MARKA_PERSENTASE",
+              "placeholder": "Contoh: 80,72% (opsional, kosongkan jika tidak ada)",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Marka - Performance",
               "name": "RUNWAY_MARKA_PERF",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 99,13% atau 95%",
               "required": true,
               "type": "text"
             },
             {
               "label": "Standing Water - Pengukuran",
               "name": "RUNWAY_STANDING_WATER",
-              "placeholder": "Contoh: Nihil / Sesuai Standar",
+              "placeholder": "Contoh: 31 Agustus 2026 DRY/DRY/DRY/100/100/100",
               "required": true,
               "type": "text"
             },
             {
               "label": "Standing Water - Performance",
               "name": "RUNWAY_WATER_PERF",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 100% atau 100%/100%/100%",
               "required": true,
               "type": "text"
             },
             {
               "label": "Rubber Removal - Standar ketentuan",
               "name": "RUNWAY_RUBBER_STD",
-              "placeholder": "Contoh: 4x / thn",
+              "placeholder": "Contoh: 4x / thn atau 1x kali / thn (sesuai kebutuhan fasilitas)",
               "required": true,
               "type": "text"
             },
             {
               "label": "Rubber Removal - Realisasi",
               "name": "RUNWAY_RUBBER_REAL",
-              "placeholder": "Contoh: -",
+              "placeholder": "Contoh: 3x (Maret, Mei, Agustus) atau 1x (pelaksanaan 13-10-2026)",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "label": "Rubber Removal - Progres (Opsional)",
+              "name": "RUNWAY_RUBBER_PROGRES",
+              "placeholder": "Contoh: 75% (opsional, kosongkan jika tidak ada)",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Rubber Removal - Nilai Skid",
               "name": "RUNWAY_RUBBER_SKID",
-              "placeholder": "Contoh: -",
+              "placeholder": "Contoh: 0,64 (24 Oktober 2026) atau 0,58 (Mu Meter 05 Maret 2026)",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "label": "Rubber Removal - Performance (Opsional)",
+              "name": "RUNWAY_RUBBER_PERF",
+              "placeholder": "Contoh: 0,64/0,72x100% : 88,88% (opsional)",
+              "required": false,
               "type": "text"
             }
           ],
@@ -214,30 +240,30 @@
           "badge": "B",
           "fields": [
             {
-              "label": "Kondisi keseluruhan Taxiway (sebutkan nama-nama taxiway)",
-              "name": "TAXIWAY_NAMA",
-              "placeholder": "Contoh: TWY A, B, C",
+              "label": "Kondisi keseluruhan Taxiway",
+              "name": "TAXIWAY_STATUS",
+              "placeholder": "Contoh: Clear & Serviceable / Serviceable",
               "required": true,
               "type": "text"
             },
             {
-              "label": "Status Taxiway",
-              "name": "TAXIWAY_STATUS",
-              "placeholder": "Contoh: SERVICEABLE",
-              "required": true,
+              "label": "Spesifikasi Nama Taxiway (Opsional)",
+              "name": "TAXIWAY_NAMA",
+              "placeholder": "Kosongkan jika kondisi keseluruhan, atau isi misal: TWY A, B, C",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Performance pavement",
               "name": "TAXIWAY_PCI",
-              "placeholder": "Contoh: 100% atau 100% PCI",
+              "placeholder": "Contoh: 97,21% atau 87%",
               "required": true,
               "type": "text"
             },
             {
               "label": "Jml Titik Rusak",
               "name": "TWY_TITIK_RUSAK",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 12 atau 1",
               "required": true,
               "type": "text",
               "unit": "titik"
@@ -245,7 +271,7 @@
             {
               "label": "Jml titik yang sudah diperbaiki",
               "name": "TWY_TITIK_DIPERBAIKI",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 12 atau -",
               "required": true,
               "type": "text",
               "unit": "titik"
@@ -253,7 +279,8 @@
             {
               "label": "Jenis kerusakan",
               "name": "TWY_JENIS_DIPERBAIKI",
-              "placeholder": "Contoh: Crack filling, patch",
+              "placeholder": "Contoh: 10 titik lendutan, 1 pothole, 1 titik retak memanjang",
+              "required": false,
               "type": "text"
             },
             {
@@ -265,50 +292,66 @@
               "unit": "titik"
             },
             {
-              "label": "Jenis kerusakan yang belum diperbaiki",
+              "label": "Jenis kerusakan (belum diperbaiki)",
               "name": "TWY_JENIS_BELUM",
-              "placeholder": "Contoh: Spalling / Nihil",
+              "placeholder": "Contoh: Lendutan & retak memanjang di Twy E / -",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Jml titik rusak berulang > 1x",
               "name": "TWY_TITIK_BERULANG",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 0, -, atau 3 titik (rutting/deflection)",
               "required": true,
               "type": "text",
               "unit": "titik"
             },
             {
-              "label": "Marka - Standard",
+              "label": "Marka - Standar",
               "name": "TWY_MARKA_STD",
-              "placeholder": "Contoh: 1x / Tahun",
+              "placeholder": "Contoh: 1x / Tahun atau 1x kali / thn",
               "required": true,
               "type": "text"
             },
             {
               "label": "Marka - Realisasi",
               "name": "TWY_MARKA_REALISASI",
-              "placeholder": "Contoh: -",
+              "placeholder": "Contoh: 52,85 m2 atau 20 Des 2025 Cat Marka Taxiway Holding",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "label": "Marka - Persentase (Opsional)",
+              "name": "TWY_MARKA_PERSENTASE",
+              "placeholder": "Contoh: 0,72% (opsional, kosongkan jika tidak ada)",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Marka - Performance",
               "name": "TWY_MARKA_PERF",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 100% atau 92%",
               "required": true,
               "type": "text"
             },
             {
               "label": "Standing Water - Pengukuran",
               "name": "TWY_STANDING_WATER",
-              "placeholder": "Contoh: Nihil / Sesuai Standar",
+              "placeholder": "Contoh: 31 Agustus 2026 atau DRY/DRY/DRY",
               "required": true,
+              "type": "text"
+            },
+            {
+              "label": "Standing Water - Prosentase DRY (Opsional)",
+              "name": "TWY_WATER_DRY",
+              "placeholder": "Contoh: 100% (opsional, kosongkan jika tidak ada)",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Standing Water - Performance",
               "name": "TWY_WATER_PERF",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 100% atau 100% (area yg tidak tergenang)",
               "required": true,
               "type": "text"
             }
@@ -330,29 +373,29 @@
             {
               "label": "Kondisi keseluruhan Apron",
               "name": "APRON_KONDISI",
-              "placeholder": "Contoh: SERVICEABLE",
+              "placeholder": "Contoh: Clear & Serviceable / Serviceable",
               "required": true,
               "type": "text"
             },
             {
               "label": "Performance pavement",
               "name": "APRON_PCI",
-              "placeholder": "Contoh: 100% atau 100% PCI",
+              "placeholder": "Contoh: 89,3% atau 95%",
               "required": true,
               "type": "text"
             },
             {
-              "label": "Jml Titik Rusak",
+              "label": "Jml Titik Rusak / Lokasi Perbaikan",
               "name": "APN_TITIK_RUSAK",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 26 atau 58",
               "required": true,
               "type": "text",
               "unit": "titik"
             },
             {
-              "label": "Jml titik yang sudah diperbaiki",
+              "label": "Jml titik yang sudah diperbaiki / Realisasi",
               "name": "APN_TITIK_DIPERBAIKI",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 26 atau 32",
               "required": true,
               "type": "text",
               "unit": "titik"
@@ -360,21 +403,23 @@
             {
               "label": "Jenis kerusakan",
               "name": "APN_JENIS_DIPERBAIKI",
-              "placeholder": "Contoh: Joint sealant / Spalling",
+              "placeholder": "Contoh: Joint Sealant Damage, Joint Spalling & Cracking Linear",
+              "required": false,
               "type": "text"
             },
             {
-              "label": "Jml titik yang belum diperbaiki",
+              "label": "Jml titik yang belum diperbaiki / Rencana",
               "name": "APN_TITIK_BELUM",
-              "placeholder": "Contoh: 0",
+              "placeholder": "Contoh: 0 atau 26",
               "required": true,
               "type": "text",
               "unit": "titik"
             },
             {
-              "label": "Jenis kerusakan yang belum diperbaiki",
+              "label": "Jenis kerusakan (belum diperbaiki)",
               "name": "APN_JENIS_BELUM",
-              "placeholder": "Contoh: Retak sudut / Nihil",
+              "placeholder": "Contoh: a. 8 Joint Sealant Damage, b. 18 Dummy Joint Sealant",
+              "required": false,
               "type": "text"
             },
             {
@@ -386,85 +431,107 @@
               "unit": "titik"
             },
             {
-              "label": "Marka - Standard",
+              "label": "Marka - Standar",
               "name": "APN_MARKA_STD",
-              "placeholder": "Contoh: 1x / Tahun",
+              "placeholder": "Contoh: 1x / Tahun atau 1x kali / thn",
               "required": true,
               "type": "text"
             },
             {
               "label": "Marka - Realisasi",
               "name": "APN_MARKA_REALISASI",
-              "placeholder": "Contoh: -",
+              "placeholder": "Contoh: 1.376,54 m2 atau 20 Juni 2026 pengecatan marka npa",
+              "required": false,
+              "type": "text"
+            },
+            {
+              "label": "Marka - Persentase (Opsional)",
+              "name": "APN_MARKA_PERSENTASE",
+              "placeholder": "Contoh: 9,18% (opsional, kosongkan jika tidak ada)",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Marka - Performance",
               "name": "APN_MARKA_PERF",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 97% atau 95%",
               "required": true,
               "type": "text"
             },
             {
               "label": "Standing Water - Pengukuran",
               "name": "APN_STANDING_WATER",
-              "placeholder": "Contoh: Nihil / Sesuai Standar",
+              "placeholder": "Contoh: 31 Agustus 2026 atau DRY/DRY/DRY",
               "required": true,
+              "type": "text"
+            },
+            {
+              "label": "Standing Water - Prosentase DRY (Opsional)",
+              "name": "APN_WATER_DRY",
+              "placeholder": "Contoh: 100% (opsional, kosongkan jika tidak ada)",
+              "required": false,
               "type": "text"
             },
             {
               "label": "Standing Water - Performance",
               "name": "APN_WATER_PERF",
-              "placeholder": "Contoh: 100%",
-              "required": true,
-              "type": "text"
-            },
-            {
-              "label": "Pemeliharaan Potong Rumput - Standard",
-              "name": "RUMPUT_STD",
-              "placeholder": "Contoh: 12 x / 1 Tahun",
-              "required": true,
-              "type": "text"
-            },
-            {
-              "label": "Pemeliharaan Potong Rumput - Realisasi",
-              "name": "RUMPUT_REALISASI",
-              "placeholder": "Contoh: -",
-              "required": true,
-              "type": "text"
-            },
-            {
-              "label": "Pemeliharaan Potong Rumput - Performance",
-              "name": "RUMPUT_PERF",
-              "placeholder": "Contoh: 100%",
+              "placeholder": "Contoh: 100% atau 100% (area yg tidak tergenang)",
               "required": true,
               "type": "text"
             }
           ],
           "icon": "fa-square-parking",
           "title": "APRON"
+        },
+        {
+          "badge": "D",
+          "fields": [
+            {
+              "label": "Pemeliharaan Potong Rumput - Standar",
+              "name": "RUMPUT_STD",
+              "placeholder": "Contoh: 12 x / 1 Tahun atau 1x kali / bln",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "label": "Pemeliharaan Potong Rumput - Realisasi",
+              "name": "RUMPUT_REALISASI",
+              "placeholder": "Contoh: 9 x (30 September 2026) atau September 2026",
+              "required": true,
+              "type": "text"
+            },
+            {
+              "label": "Pemeliharaan Potong Rumput - Performance",
+              "name": "RUMPUT_PERF",
+              "placeholder": "Contoh: 75% atau 100% (area yang memenuhi standard)",
+              "required": true,
+              "type": "text"
+            }
+          ],
+          "icon": "fa-seedling",
+          "title": "PEMELIHARAAN POTONG RUMPUT"
         }
       ],
-      "subtitle": "Kondisi dan perkerasan",
-      "title": "Fasilitas Apron"
+      "subtitle": "Kondisi Apron dan Pemeliharaan Potong Rumput",
+      "title": "Fasilitas Apron & Rumput"
     },
     {
       "icon": "fa-clipboard-check",
       "id": "step_5",
       "sections": [
         {
-          "badge": "D",
+          "badge": "E",
           "fields": [
             {
               "label": "Catatan 1",
               "name": "CATATAN_1",
-              "placeholder": "Contoh: Situasi operasional penerbangan aman terkendali.",
+              "placeholder": "Contoh: Monitoring Taxiway N1, N7 dan NP7",
               "type": "text"
             },
             {
               "label": "Catatan 2",
               "name": "CATATAN_2",
-              "placeholder": "Contoh: Pelaksanaan inspeksi sisi udara pagi dan sore normal.",
+              "placeholder": "Contoh: Terdapat lendutan di turning runway 08",
               "type": "text"
             },
             {

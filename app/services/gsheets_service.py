@@ -354,6 +354,8 @@ def write_daily_report(sheet_url, form_data):
                     for field in sec.get('fields', []):
                         if field['name'] not in standard_fields:
                             val = form_data.get(field['name'], '')
+                            if field.get('required') is False and (not val or not str(val).strip() or str(val).strip() == '-'):
+                                continue
                             if not sec_added and not is_standard_sec:
                                 # Tambahkan Judul Sub-bab HANYA jika ini bab benar-benar baru
                                 sec_title = sec.get('title', 'TAMBAHAN')
@@ -521,9 +523,28 @@ def get_daily_summary(date_str):
                 summary[code]["is_submitted"] = True
                 summary[code]["pci"] = str(row_data[pci_col_idx]) if len(row_data) > pci_col_idx else "-"
                 summary[code]["raw_data"] = row_data
-                
+
+                # --- PEMETAAN FIELD BERBASIS NAMA KOLOM (ANTI-GESER) ---
+                field_dict = {}
+                for idx_std, std_key in enumerate(STANDARD_CORE_FIELDS):
+                    pos = idx_std + 1
+                    if pos < len(row_data):
+                        field_dict[std_key] = str(row_data[pos]).strip()
+                if header_row:
+                    for idx_col, h_name in enumerate(header_row):
+                        c_key = str(h_name).strip()
+                        if c_key and idx_col < len(row_data):
+                            field_dict[c_key] = str(row_data[idx_col]).strip()
+                summary[code]["fields"] = field_dict
+
                 # --- EXTRACT DATA TAMBAHAN UNTUK WA ---
                 extra_data = []
+                known_inline_fields = set(STANDARD_CORE_FIELDS) | {
+                    'TIMESTAMP',
+                    'RUNWAY_MARKA_PERSENTASE', 'RUNWAY_RUBBER_PROGRES', 'RUNWAY_RUBBER_PERF',
+                    'TWY_MARKA_PERSENTASE', 'TWY_WATER_DRY',
+                    'APN_MARKA_PERSENTASE', 'APN_WATER_DRY'
+                }
                 if header_row and len(row_data) > 57:
                     # Load schema on demand to get nice labels & sections
                     try:
@@ -542,9 +563,11 @@ def get_daily_summary(date_str):
                         name_to_label = {}
                         name_to_section = {}
                         
-                    for i in range(57, len(row_data)):
+                    for i in range(len(row_data)):
                         if i < len(header_row):
                             col_key = str(header_row[i]).strip()
+                            if not col_key or col_key in known_inline_fields:
+                                continue
                             col_val = str(row_data[i]).strip()
                             if col_val and col_val != "-":
                                 nice_label = name_to_label.get(col_key, col_key)

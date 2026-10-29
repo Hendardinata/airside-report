@@ -3133,7 +3133,7 @@
                 {% else %}
                 <div class="report-section-hdr">
                     <div class="report-badge-title-row">
-                        <span class="report-badge-square">{% if loop.index == 2 %}A{% elif loop.index == 3 %}B{% elif loop.index == 4 %}C{% else %}D{% endif %}</span>
+                        <span class="report-badge-square">{% if loop.index == 2 %}A{% elif loop.index == 3 %}B{% elif loop.index == 4 %}C{% else %}E{% endif %}</span>
                         <h2 class="report-title-bold">{% if loop.index == 2 %}RUNWAY{% elif loop.index == 3 %}TAXIWAY{% elif loop.index == 4 %}APRON{% else %}CATATAN KHUSUS & REVIEW{% endif %}</h2>
                     </div>
                     <div class="report-navy-line"></div>
@@ -3143,6 +3143,15 @@
                 <!-- Content Rows in Checklist Table Layout (Dynamically Driven by Form Schema) -->
                 <div class="report-table-list">
                     {% for section in step.sections %}
+                        {% if not loop.first %}
+                        <div class="report-section-hdr" style="margin-top: 24px;">
+                            <div class="report-badge-title-row">
+                                <span class="report-badge-square">{{ section.badge | default('D') }}</span>
+                                <h2 class="report-title-bold">{{ section.title | default('PEMELIHARAAN POTONG RUMPUT') }}</h2>
+                            </div>
+                            <div class="report-navy-line"></div>
+                        </div>
+                        {% endif %}
                         {% for field in section.fields %}
                             {% if field.name == 'TANGGAL' %}
                             <!-- Tanggal Laporan (Flatpickr Custom Input) -->
@@ -4304,8 +4313,12 @@
 
         const f_titik = (val) => {
             if (!val || val === '-') return '-';
-            if (String(val).toLowerCase().includes('titik')) return val;
-            return `${val} titik`;
+            const s = String(val).trim();
+            if (s.toLowerCase() === 'nihil') return 'Nihil';
+            if (s.toLowerCase().includes('titik')) return s;
+            const m = s.match(/^(\d+)\s*(\(.+\))$/);
+            if (m) return `${m[1]} titik ${m[2]}`;
+            return `${s} titik`;
         };
 
         const f_percent = (val) => {
@@ -4326,10 +4339,10 @@
             return s;
         };
 
-        const sapaanRaw = v('SAPAAN') !== '-' ? v('SAPAAN') : 'Selamat Pagi';
-        let greetingBlock = `*Assalamu’alaikum Wr. Wb*\n*${sapaanRaw}*`;
+        const sapaanRaw = v('SAPAAN') !== '-' ? v('SAPAAN') : 'Selamat Malam';
+        let greetingBlock = `Assalamu’alaikum Wr. Wb\n${sapaanRaw}`;
         if (sapaanRaw.toLowerCase().includes('assalamu')) {
-            greetingBlock = `*${sapaanRaw}*`;
+            greetingBlock = `${sapaanRaw}`;
         }
 
         let tgl = v('TANGGAL') !== '-' ? v('TANGGAL') : '-';
@@ -4345,26 +4358,33 @@
         if (penerimaArr.length === 0) penerimaArr = ['-'];
         const penerimaStr = penerimaArr.map((p, i) => `${i + 1}. ${p}`).join('\n');
 
-        const cabang = v('KANTOR_CABANG') !== '-' ? v('KANTOR_CABANG') : '1. Kantor Cabang LOP';
+        const cabang = v('KANTOR_CABANG') !== '-' ? v('KANTOR_CABANG') : '1. DPS';
 
         let catatanStr = '';
         let cIdx = 1;
         for (let i = 1; i <= 7; i++) {
             const c = v('CATATAN_' + i);
-            if (c && c !== '-') {
+            if (c && c !== '-' && c.toLowerCase() !== 'nihil') {
                 catatanStr += `${cIdx}. ${c}\n`;
                 cIdx++;
             }
         }
-        if (!catatanStr) catatanStr = '-\n';
+        if (!catatanStr) catatanStr = '- (Nihil)\n';
 
-        const formatSingleDamage = (label, val) => {
-            if (!val || val === '-' || val.trim().toLowerCase() === 'nihil') return '';
-            const lines = val.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            if (lines.length === 0) return '';
-            const formattedItems = lines.map(l => l.startsWith('-') ? `   ${l}` : `   - ${l}`).join('\n');
-            return `   ${label} : \n${formattedItems}\n`;
+        const formatJenis = (val) => {
+            if (!val || val === '-' || val.trim().toLowerCase() === 'nihil') return '•  Jenis kerusakan : -\n';
+            const cleaned = val.trim();
+            if (cleaned.includes('\n')) return `•  Jenis kerusakan :\n${cleaned}\n`;
+            return `•  Jenis kerusakan : ${cleaned}\n`;
         };
+
+        const optLine = (indent, label, val, isPct = false) => {
+            if (!val || val === '-' || val.toLowerCase() === 'nihil') return '';
+            return `${indent}${label} : ${isPct ? f_percent(val) : val}\n`;
+        };
+
+        const twyNama = v('TAXIWAY_NAMA');
+        const twyKet = (twyNama && twyNama !== '-' && twyNama.toLowerCase() !== 'nihil') ? ` ${twyNama}` : '';
 
         const text = `${greetingBlock}
 
@@ -4372,65 +4392,71 @@ Kepada Yth. :
 ${penerimaStr}
 
 Mohon izin,  menyampaikan Laporan Harian Kondisi Fasilitas Sisi Udara di PT Angkasa Pura Indonesia 
-Tanggal : *${tgl}*
+Tanggal : ${tgl}
 
 Region II
 ${cabang}
-*A. RUNWAY*
+A. RUNWAY
 •  Kondisi keseluruhan runway : ${v('RUNWAY_KONDISI')}
 •  Performance pavement : ${f_percent(v('RUNWAY_PCI'))}
-•  Jml Titik Rusak : ${f_titik(v('RUNWAY_TITIK_RUSAK'))}
-•  Jml titik yang sudah diperbaiki : ${f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
-${formatSingleDamage('Jenis kerusakan', v('RUNWAY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : ${f_titik(v('RUNWAY_TITIK_BELUM'))}
-${formatSingleDamage('Jenis kerusakan yang belum diperbaiki', v('RUNWAY_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
+    Jml Titik Rusak : ${f_titik(v('RUNWAY_TITIK_RUSAK'))}
+    Jml titik yang sudah diperbaiki : ${f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
+${formatJenis(v('RUNWAY_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : ${f_titik(v('RUNWAY_TITIK_BELUM'))}
+${formatJenis(v('RUNWAY_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
 •  Marka :
        Standar : ${v('RUNWAY_MARKA_STD')}
        Realisasi : ${v('RUNWAY_MARKA_REALISASI')}
-       Performance : ${f_percent(v('RUNWAY_MARKA_PERF'))}
+${optLine('       ', 'Persentase', v('RUNWAY_MARKA_PERSENTASE'), true)}       Performance : ${f_percent(v('RUNWAY_MARKA_PERF'))}
 •  Standing Water :
        Pengukuran : ${v('RUNWAY_STANDING_WATER')}
        Performance : ${f_percent(v('RUNWAY_WATER_PERF'))}
 •  Rubber Removal :  
        Standar ketentuan : ${v('RUNWAY_RUBBER_STD')}
        Realisasi : ${v('RUNWAY_RUBBER_REAL')}
-       Nilai Skid : ${v('RUNWAY_RUBBER_SKID')}
-
-*B. TAXIWAY*
-•  Kondisi keseluruhan Taxiway : ${v('TAXIWAY_STATUS')}
+${optLine('       ', 'Progres', v('RUNWAY_RUBBER_PROGRES'), true)}       Nilai Skid : ${v('RUNWAY_RUBBER_SKID')}
+${optLine('       ', 'Performance', v('RUNWAY_RUBBER_PERF'), true)}
+B. TAXIWAY
+•  Kondisi keseluruhan Taxiway${twyKet} : ${v('TAXIWAY_STATUS')}
 •  Performance pavement : ${f_percent(v('TAXIWAY_PCI'))}
-•  Jml Titik Rusak : ${f_titik(v('TWY_TITIK_RUSAK'))}
-•  Jml titik yang sudah diperbaiki : ${f_titik(v('TWY_TITIK_DIPERBAIKI'))}
-${formatSingleDamage('Jenis kerusakan', v('TWY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : ${f_titik(v('TWY_TITIK_BELUM'))}
-${formatSingleDamage('Jenis kerusakan yang belum diperbaiki', v('TWY_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
+    Jml Titik Rusak : ${f_titik(v('TWY_TITIK_RUSAK'))}
+    Jml titik yang sudah diperbaiki : ${f_titik(v('TWY_TITIK_DIPERBAIKI'))}
+${formatJenis(v('TWY_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : ${f_titik(v('TWY_TITIK_BELUM'))}
+${formatJenis(v('TWY_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
 •  Marka :
-       Standar : ${v('TWY_MARKA_STD')}
-       Realisasi : ${v('TWY_MARKA_REALISASI')}
-       Performance : ${f_percent(v('TWY_MARKA_PERF'))}
+      Standar : ${v('TWY_MARKA_STD')}
+      Realisasi : ${v('TWY_MARKA_REALISASI')}
+${optLine('      ', 'Persentase', v('TWY_MARKA_PERSENTASE'), true)}      Performance : ${f_percent(v('TWY_MARKA_PERF'))}
 •  Standing Water : 
-       Pengukuran : ${v('TWY_STANDING_WATER')}
-       Performance : ${f_percent(v('TWY_WATER_PERF'))}
+      Pengukuran : ${v('TWY_STANDING_WATER')}
+${optLine('      ', 'Prosentase DRY', v('TWY_WATER_DRY'), true)}      Performance : ${f_percent(v('TWY_WATER_PERF'))}
 
-*C. APRON*
+C. APRON
 •  Kondisi keseluruhan Apron : ${v('APRON_KONDISI')}
 •  Performance pavement : ${f_percent(v('APRON_PCI'))}
-•  Jml Titik Rusak : ${f_titik(v('APN_TITIK_RUSAK'))}
-•  Jml titik yang sudah diperbaiki : ${f_titik(v('APN_TITIK_DIPERBAIKI'))}
-${formatSingleDamage('Jenis kerusakan', v('APN_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : ${f_titik(v('APN_TITIK_BELUM'))}
-${formatSingleDamage('Jenis kerusakan yang belum diperbaiki', v('APN_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
+    Jml Titik Rusak : ${f_titik(v('APN_TITIK_RUSAK'))}
+    Jml titik yang sudah diperbaiki : ${f_titik(v('APN_TITIK_DIPERBAIKI'))}
+${formatJenis(v('APN_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : ${f_titik(v('APN_TITIK_BELUM'))}
+${formatJenis(v('APN_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
 •  Marka :
-       Standar : ${v('APN_MARKA_STD')}
-       Realisasi : ${v('APN_MARKA_REALISASI')}
-       Performance : ${f_percent(v('APN_MARKA_PERF'))}
+      Standar : ${v('APN_MARKA_STD')}
+      Realisasi : ${v('APN_MARKA_REALISASI')}
+${optLine('      ', 'Persentase', v('APN_MARKA_PERSENTASE'), true)}      Performance : ${f_percent(v('APN_MARKA_PERF'))}
 •  Standing Water :
-       Pengukuran : ${v('APN_STANDING_WATER')}
-       Performance : ${f_percent(v('APN_WATER_PERF'))}
-•  Pemeliharaan Potong Rumput :
-       Standar : ${v('RUMPUT_STD')}
-       Realisasi : ${v('RUMPUT_REALISASI')}
-       Performance : ${f_percent(v('RUMPUT_PERF'))}
+      Pengukuran : ${v('APN_STANDING_WATER')}
+${optLine('      ', 'Prosentase DRY', v('APN_WATER_DRY'), true)}      Performance : ${f_percent(v('APN_WATER_PERF'))}
+
+D. Pemeliharaan Potong Rumput
+      Standar : ${v('RUMPUT_STD')}
+      Realisasi : ${v('RUMPUT_REALISASI')}
+      Performance : ${f_percent(v('RUMPUT_PERF'))}
 
 Catatan Khusus : 
-${catatanStr.trim()}`;
+${catatanStr.trim()}
+
+Demikian disampaikan, atas perhatiannya diucapkan terima kasih
+
+Ttd
+REGION II`;
 
         const previewBox = document.getElementById('liveWaPreviewBox');
         if (previewBox) {

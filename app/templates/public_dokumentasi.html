@@ -103,50 +103,6 @@
             white-space: nowrap;
         }
 
-        .topbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .badge-portal-role {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            color: #0369a1;
-            font-size: 0.78rem;
-            font-weight: 700;
-            padding: 0.45rem 0.85rem;
-            border-radius: 10px;
-            white-space: nowrap;
-        }
-
-        .btn-pdf-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #00B7CD;
-            color: #ffffff;
-            border: none;
-            padding: 0.58rem 1.15rem;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 0.84rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0, 183, 205, 0.32);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-        }
-
-        .btn-pdf-action:hover {
-            background: #009eb2;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(0, 183, 205, 0.42);
-        }
-
         /* ==========================================================================
            2. MAIN CONTENT CANVAS & HERO BANNER CARD
            ========================================================================== */
@@ -575,14 +531,6 @@
             .topbar-brand-title {
                 font-size: 1.08rem;
             }
-            .badge-portal-role {
-                display: none;
-            }
-            .btn-pdf-action {
-                padding: 0.45rem 0.85rem;
-                font-size: 0.76rem;
-                border-radius: 10px;
-            }
             .gm-layout-canvas {
                 padding: 0.85rem 0.75rem 2.5rem 0.75rem;
             }
@@ -627,30 +575,6 @@
                 grid-template-columns: 1fr;
             }
         }
-
-        @media print {
-            body { background: #ffffff; }
-            .no-print { display: none !important; }
-            .gm-layout-canvas { padding: 0; max-width: 100%; }
-            .gm-hero-banner {
-                border: 1.5px solid #cbd5e1;
-                box-shadow: none;
-                min-height: auto;
-                padding: 1.25rem 1.5rem;
-            }
-            .gm-table-card {
-                border: none;
-                box-shadow: none;
-                padding: 0.5rem 0;
-            }
-            .photo-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.85rem;
-            }
-            .zoom-pill-overlay {
-                display: none !important;
-            }
-        }
     </style>
 </head>
 <body>
@@ -662,17 +586,6 @@
                 <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports" class="topbar-brand-logo">
                 <span class="topbar-brand-title">InJourney Airports</span>
             </a>
-
-            <div class="topbar-actions no-print">
-                <span class="badge-portal-role">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span>Dokumentasi Resmi Regional II</span>
-                </span>
-                <button type="button" class="btn-pdf-action" onclick="window.print()">
-                    <i class="fa-solid fa-print"></i>
-                    <span>Simpan / Cetak PDF</span>
-                </button>
-            </div>
         </div>
     </header>
 

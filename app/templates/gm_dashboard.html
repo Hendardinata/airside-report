@@ -5508,6 +5508,24 @@
 
                     const branchCode = (rep.airport || 'LOP').toUpperCase();
                     const senderName = fmt(rep.submitted_by, 'Petugas Lapangan');
+                    const fmtTitik = (val, def = '0') => {
+                        const v = fmt(val, def);
+                        if (!v || v === '-') return '-';
+                        if (String(v).toLowerCase() === 'nihil') return 'Nihil';
+                        if (String(v).toLowerCase().includes('titik')) return v;
+                        const m = String(v).trim().match(/^(\d+)\s*(\(.+\))$/);
+                        if (m) return `${m[1]} titik ${m[2]}`;
+                        return `${v} titik`;
+                    };
+                    const optRow = (keyLabel, val) => {
+                        if (!val || String(val).trim() === '' || String(val).trim() === '-') return '';
+                        return `
+                            <div class="doc-pair-row">
+                                <div class="doc-pair-key">${keyLabel}</div>
+                                <div class="doc-pair-sep">:</div>
+                                <div class="doc-pair-val">${val}</div>
+                            </div>`;
+                    };
 
                     // Construct Official Executive A4 Portrait Document (Paired Key-Value Format)
                     contentBox.innerHTML = `
@@ -5601,7 +5619,7 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Kondisi keseluruhan runway</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.RUNWAY_KONDISI, 'SERVICEABLE')}</div>
+                                <div class="doc-pair-val">${fmt(d.RUNWAY_STATUS || d.RUNWAY_KONDISI, 'Clear & Serviceable')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Performance pavement</div>
@@ -5611,12 +5629,12 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.RUNWAY_TITIK_RUSAK, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.RUNWAY_TITIK_RUSAK, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik yang sudah diperbaiki</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.RUNWAY_TITIK_DIPERBAIKI, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.RUNWAY_TITIK_DIPERBAIKI, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jenis kerusakan</div>
@@ -5626,20 +5644,20 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik yang belum diperbaiki</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.RUNWAY_TITIK_BELUM, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.RUNWAY_TITIK_BELUM, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Jenis kerusakan yang belum diperbaiki</div>
+                                <div class="doc-pair-key">Jenis kerusakan (belum diperbaiki)</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.RUNWAY_JENIS_BELUM, '-')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik rusak berulang > 1x</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.RUNWAY_TITIK_BERULANG, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.RUNWAY_RUSAK_BERULANG || d.RUNWAY_TITIK_BERULANG, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Marka - Standard</div>
+                                <div class="doc-pair-key">Marka - Standar</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.RUNWAY_MARKA_STD, '1x / Tahun')}</div>
                             </div>
@@ -5648,6 +5666,7 @@
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.RUNWAY_MARKA_REALISASI, '-')}</div>
                             </div>
+                            ${optRow('Marka - Persentase', d.RUNWAY_MARKA_PERSENTASE ? formatCleanPercent(d.RUNWAY_MARKA_PERSENTASE) : '')}
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Marka - Performance</div>
                                 <div class="doc-pair-sep">:</div>
@@ -5656,7 +5675,7 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Standing Water - Pengukuran</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.RUNWAY_STANDING_WATER, 'Nihil / Sesuai Standar')}</div>
+                                <div class="doc-pair-val">${fmt(d.RUNWAY_STANDING_WATER, 'DRY/DRY/DRY')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Standing Water - Performance</div>
@@ -5671,13 +5690,15 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Rubber Removal - Realisasi</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.RUNWAY_RUBBER_REAL, '-')}</div>
+                                <div class="doc-pair-val">${fmt(d.RUNWAY_RUBBER_REALISASI || d.RUNWAY_RUBBER_REAL, '-')}</div>
                             </div>
+                            ${optRow('Rubber Removal - Progres', d.RUNWAY_RUBBER_PROGRES ? formatCleanPercent(d.RUNWAY_RUBBER_PROGRES) : '')}
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Rubber Removal - Nilai Skid</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.RUNWAY_RUBBER_SKID, '-')}</div>
+                                <div class="doc-pair-val">${fmt(d.RUNWAY_SKID || d.RUNWAY_RUBBER_SKID, '-')}</div>
                             </div>
+                            ${optRow('Rubber Removal - Performance', d.RUNWAY_RUBBER_PERF ? formatCleanPercent(d.RUNWAY_RUBBER_PERF) : '')}
                         </div>
 
                         <!-- B. TAXIWAY -->
@@ -5687,15 +5708,11 @@
                         </div>
                         <div class="doc-pairs-container">
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Kondisi keseluruhan Taxiway (sebutkan nama-nama taxiway)</div>
+                                <div class="doc-pair-key">Kondisi keseluruhan Taxiway</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.TAXIWAY_NAMA, '-')}</div>
+                                <div class="doc-pair-val">${fmt(d.TAXIWAY_STATUS, 'Clear & Serviceable')}</div>
                             </div>
-                            <div class="doc-pair-row">
-                                <div class="doc-pair-key">Status Taxiway</div>
-                                <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.TAXIWAY_STATUS, 'SERVICEABLE')}</div>
-                            </div>
+                            ${optRow('Spesifikasi Nama Taxiway', d.TAXIWAY_NAMA)}
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Performance pavement</div>
                                 <div class="doc-pair-sep">:</div>
@@ -5704,12 +5721,12 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.TWY_TITIK_RUSAK, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.TWY_TITIK_RUSAK, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik yang sudah diperbaiki</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.TWY_TITIK_DIPERBAIKI, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.TWY_TITIK_DIPERBAIKI, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jenis kerusakan</div>
@@ -5719,20 +5736,20 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik yang belum diperbaiki</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.TWY_TITIK_BELUM, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.TWY_TITIK_BELUM, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Jenis kerusakan yang belum diperbaiki</div>
+                                <div class="doc-pair-key">Jenis kerusakan (belum diperbaiki)</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.TWY_JENIS_BELUM, '-')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik rusak berulang > 1x</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.TWY_TITIK_BERULANG, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.TWY_RUSAK_BERULANG || d.TWY_TITIK_BERULANG, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Marka - Standard</div>
+                                <div class="doc-pair-key">Marka - Standar</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.TWY_MARKA_STD, '1x / Tahun')}</div>
                             </div>
@@ -5741,6 +5758,7 @@
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.TWY_MARKA_REALISASI, '-')}</div>
                             </div>
+                            ${optRow('Marka - Persentase', d.TWY_MARKA_PERSENTASE ? formatCleanPercent(d.TWY_MARKA_PERSENTASE) : '')}
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Marka - Performance</div>
                                 <div class="doc-pair-sep">:</div>
@@ -5749,8 +5767,9 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Standing Water - Pengukuran</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.TWY_STANDING_WATER, 'Nihil / Sesuai Standar')}</div>
+                                <div class="doc-pair-val">${fmt(d.TWY_STANDING_WATER, 'DRY/DRY/DRY')}</div>
                             </div>
+                            ${optRow('Standing Water - Prosentase DRY', d.TWY_WATER_DRY ? formatCleanPercent(d.TWY_WATER_DRY) : '')}
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Standing Water - Performance</div>
                                 <div class="doc-pair-sep">:</div>
@@ -5767,7 +5786,7 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Kondisi keseluruhan Apron</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.APRON_KONDISI, 'SERVICEABLE')}</div>
+                                <div class="doc-pair-val">${fmt(d.APRON_KONDISI, 'Clear & Serviceable')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Performance pavement</div>
@@ -5777,12 +5796,12 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml Titik Rusak</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.APN_TITIK_RUSAK, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.APN_TITIK_RUSAK, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik yang sudah diperbaiki</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.APN_TITIK_DIPERBAIKI, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.APN_TITIK_DIPERBAIKI, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jenis kerusakan</div>
@@ -5792,20 +5811,20 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik yang belum diperbaiki</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.APN_TITIK_BELUM, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.APN_TITIK_BELUM, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Jenis kerusakan yang belum diperbaiki</div>
+                                <div class="doc-pair-key">Jenis kerusakan (belum diperbaiki)</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.APN_JENIS_BELUM, '-')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Jml titik rusak berulang > 1x</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.APN_TITIK_BERULANG, '0')} titik</div>
+                                <div class="doc-pair-val">${fmtTitik(d.APN_RUSAK_BERULANG || d.APN_TITIK_BERULANG, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Marka - Standard</div>
+                                <div class="doc-pair-key">Marka - Standar</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.APN_MARKA_STD, '1x / Tahun')}</div>
                             </div>
@@ -5814,6 +5833,7 @@
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.APN_MARKA_REALISASI, '-')}</div>
                             </div>
+                            ${optRow('Marka - Persentase', d.APN_MARKA_PERSENTASE ? formatCleanPercent(d.APN_MARKA_PERSENTASE) : '')}
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Marka - Performance</div>
                                 <div class="doc-pair-sep">:</div>
@@ -5822,25 +5842,34 @@
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Standing Water - Pengukuran</div>
                                 <div class="doc-pair-sep">:</div>
-                                <div class="doc-pair-val">${fmt(d.APN_STANDING_WATER, 'Nihil / Sesuai Standar')}</div>
+                                <div class="doc-pair-val">${fmt(d.APN_STANDING_WATER, 'DRY/DRY/DRY')}</div>
                             </div>
+                            ${optRow('Standing Water - Prosentase DRY', d.APN_WATER_DRY ? formatCleanPercent(d.APN_WATER_DRY) : '')}
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Standing Water - Performance</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.APN_WATER_PERF, '100%')}</div>
                             </div>
+                        </div>
+
+                        <!-- D. PEMELIHARAAN POTONG RUMPUT -->
+                        <div class="doc-section-head">
+                            <div class="doc-section-badge">D</div>
+                            <h2 class="doc-section-heading">PEMELIHARAAN POTONG RUMPUT</h2>
+                        </div>
+                        <div class="doc-pairs-container">
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Pemeliharaan Potong Rumput - Standard</div>
+                                <div class="doc-pair-key">Standar</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.RUMPUT_STD, '12 x / 1 Tahun')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Pemeliharaan Potong Rumput - Realisasi</div>
+                                <div class="doc-pair-key">Realisasi</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.RUMPUT_REALISASI, '-')}</div>
                             </div>
                             <div class="doc-pair-row">
-                                <div class="doc-pair-key">Pemeliharaan Potong Rumput - Performance</div>
+                                <div class="doc-pair-key">Performance</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.RUMPUT_PERF, '100%')}</div>
                             </div>
@@ -6055,6 +6084,24 @@
                     const formattedDate = formatIndonesianDate(activeReportDate);
                     const branchCode = (rep.airport || 'LOP').toUpperCase();
                     const senderName = fmt(rep.submitted_by, 'Petugas Lapangan');
+                    const fmtTitik = (val, def = '0') => {
+                        const v = fmt(val, def);
+                        if (!v || v === '-') return '-';
+                        if (String(v).toLowerCase() === 'nihil') return 'Nihil';
+                        if (String(v).toLowerCase().includes('titik')) return v;
+                        const m = String(v).trim().match(/^(\d+)\s*(\(.+\))$/);
+                        if (m) return `${m[1]} titik ${m[2]}`;
+                        return `${v} titik`;
+                    };
+                    const optRow = (keyLabel, val) => {
+                        if (!val || String(val).trim() === '' || String(val).trim() === '-') return '';
+                        return `
+                            <div class="doc-pair-row">
+                                <div class="doc-pair-key">${keyLabel}</div>
+                                <div class="doc-pair-sep">:</div>
+                                <div class="doc-pair-val">${val}</div>
+                            </div>`;
+                    };
 
                     contentBox.innerHTML = `
                     <form id="dhSelfEditForm" onsubmit="event.preventDefault();">
@@ -6149,14 +6196,14 @@
                                     <div class="doc-pair-key">Kondisi keseluruhan runway</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="RUNWAY_KONDISI" class="doc-inline-input" value="${safe(d.RUNWAY_KONDISI || 'SERVICEABLE')}" placeholder="Contoh: SERVICEABLE">
+                                        <input type="text" name="RUNWAY_KONDISI" class="doc-inline-input" value="${safe(d.RUNWAY_KONDISI || d.RUNWAY_STATUS || 'Clear & Serviceable')}" placeholder="Contoh: Clear & Serviceable">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
                                     <div class="doc-pair-key">Performance pavement</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="RUNWAY_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.RUNWAY_PCI, '100%'))}" placeholder="Contoh: 100%">
+                                        <input type="text" name="RUNWAY_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.RUNWAY_PCI, '100%'))}" placeholder="Contoh: 93,29%">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6164,7 +6211,7 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="RUNWAY_TITIK_RUSAK" class="doc-inline-input num-input" value="${safe(d.RUNWAY_TITIK_RUSAK || '0')}">
+                                            <input type="text" name="RUNWAY_TITIK_RUSAK" class="doc-inline-input num-input" value="${safe(d.RUNWAY_TITIK_RUSAK || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
@@ -6174,7 +6221,7 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="RUNWAY_TITIK_DIPERBAIKI" class="doc-inline-input num-input" value="${safe(d.RUNWAY_TITIK_DIPERBAIKI || '0')}">
+                                            <input type="text" name="RUNWAY_TITIK_DIPERBAIKI" class="doc-inline-input num-input" value="${safe(d.RUNWAY_TITIK_DIPERBAIKI || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
@@ -6183,7 +6230,7 @@
                                     <div class="doc-pair-key">Jenis kerusakan</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="RUNWAY_JENIS_DIPERBAIKI" class="doc-inline-input" value="${safe(d.RUNWAY_JENIS_DIPERBAIKI)}" placeholder="Contoh: Crack / Spalling / Nihil">
+                                        <input type="text" name="RUNWAY_JENIS_DIPERBAIKI" class="doc-inline-input" value="${safe(d.RUNWAY_JENIS_DIPERBAIKI)}" placeholder="Contoh: 1 titik deflection, 27 titik pothole">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6191,30 +6238,27 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="RUNWAY_TITIK_BELUM" class="doc-inline-input num-input" value="${safe(d.RUNWAY_TITIK_BELUM || '0')}">
+                                            <input type="text" name="RUNWAY_TITIK_BELUM" class="doc-inline-input num-input" value="${safe(d.RUNWAY_TITIK_BELUM || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Jenis kerusakan yang belum diperbaiki</div>
+                                    <div class="doc-pair-key">Jenis kerusakan (belum diperbaiki)</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="RUNWAY_JENIS_BELUM" class="doc-inline-input" value="${safe(d.RUNWAY_JENIS_BELUM)}" placeholder="Contoh: Raveling / Depresi / Nihil">
+                                        <input type="text" name="RUNWAY_JENIS_BELUM" class="doc-inline-input" value="${safe(d.RUNWAY_JENIS_BELUM)}" placeholder="Contoh: Lendutan di Turning Runway 08 / -">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
                                     <div class="doc-pair-key">Jml titik rusak berulang > 1x</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <div class="doc-inline-group">
-                                            <input type="number" min="0" name="RUNWAY_TITIK_BERULANG" class="doc-inline-input num-input" value="${safe(d.RUNWAY_TITIK_BERULANG || '0')}">
-                                            <span class="doc-inline-suffix">titik</span>
-                                        </div>
+                                        <input type="text" name="RUNWAY_TITIK_BERULANG" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_TITIK_BERULANG || d.RUNWAY_RUSAK_BERULANG || '0')}" placeholder="Contoh: 0 atau 1 titik (deflection TH 09)">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Marka - Standard</div>
+                                    <div class="doc-pair-key">Marka - Standar</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <input type="text" name="RUNWAY_MARKA_STD" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_MARKA_STD || '1x / Tahun')}">
@@ -6228,6 +6272,13 @@
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Marka - Persentase (Opsional)</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="RUNWAY_MARKA_PERSENTASE" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_MARKA_PERSENTASE || '')}" placeholder="(Opsional, misal: 80,72%)">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
                                     <div class="doc-pair-key">Marka - Performance</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
@@ -6238,7 +6289,7 @@
                                     <div class="doc-pair-key">Standing Water - Pengukuran</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="RUNWAY_STANDING_WATER" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_STANDING_WATER || 'Nihil / Sesuai Standar')}">
+                                        <input type="text" name="RUNWAY_STANDING_WATER" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_STANDING_WATER || 'DRY/DRY/DRY')}">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6259,14 +6310,28 @@
                                     <div class="doc-pair-key">Rubber Removal - Realisasi</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="RUNWAY_RUBBER_REAL" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_RUBBER_REAL || '-')}">
+                                        <input type="text" name="RUNWAY_RUBBER_REAL" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_RUBBER_REAL || d.RUNWAY_RUBBER_REALISASI || '-')}">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Rubber Removal - Progres (Opsional)</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="RUNWAY_RUBBER_PROGRES" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_RUBBER_PROGRES || '')}" placeholder="(Opsional, misal: 75%)">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
                                     <div class="doc-pair-key">Rubber Removal - Nilai Skid</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="RUNWAY_RUBBER_SKID" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_RUBBER_SKID || '-')}">
+                                        <input type="text" name="RUNWAY_RUBBER_SKID" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_RUBBER_SKID || d.RUNWAY_SKID || '-')}">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Rubber Removal - Performance (Opsional)</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="RUNWAY_RUBBER_PERF" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUNWAY_RUBBER_PERF || '')}" placeholder="(Opsional, misal: 88,88%)">
                                     </div>
                                 </div>
                             </div>
@@ -6278,24 +6343,24 @@
                             </div>
                             <div class="doc-pairs-container">
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Kondisi keseluruhan Taxiway (sebutkan nama-nama taxiway)</div>
+                                    <div class="doc-pair-key">Kondisi keseluruhan Taxiway</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="TAXIWAY_NAMA" class="doc-inline-input" value="${safe(d.TAXIWAY_NAMA || 'TWY A, B, C')}" placeholder="Contoh: TWY A, B, C">
+                                        <input type="text" name="TAXIWAY_STATUS" class="doc-inline-input" value="${safe(d.TAXIWAY_STATUS || 'Clear & Serviceable')}" placeholder="Contoh: Clear & Serviceable">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Status Taxiway</div>
+                                    <div class="doc-pair-key">Spesifikasi Nama Taxiway (Opsional)</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="TAXIWAY_STATUS" class="doc-inline-input" value="${safe(d.TAXIWAY_STATUS || 'SERVICEABLE')}" placeholder="Contoh: SERVICEABLE">
+                                        <input type="text" name="TAXIWAY_NAMA" class="doc-inline-input" value="${safe(d.TAXIWAY_NAMA)}" placeholder="(Opsional, kosongkan jika keseluruhan)">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
                                     <div class="doc-pair-key">Performance pavement</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="TAXIWAY_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.TAXIWAY_PCI, '100%'))}" placeholder="Contoh: 100%">
+                                        <input type="text" name="TAXIWAY_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.TAXIWAY_PCI, '100%'))}" placeholder="Contoh: 97,21%">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6303,7 +6368,7 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="TWY_TITIK_RUSAK" class="doc-inline-input num-input" value="${safe(d.TWY_TITIK_RUSAK || '0')}">
+                                            <input type="text" name="TWY_TITIK_RUSAK" class="doc-inline-input num-input" value="${safe(d.TWY_TITIK_RUSAK || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
@@ -6313,7 +6378,7 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="TWY_TITIK_DIPERBAIKI" class="doc-inline-input num-input" value="${safe(d.TWY_TITIK_DIPERBAIKI || '0')}">
+                                            <input type="text" name="TWY_TITIK_DIPERBAIKI" class="doc-inline-input num-input" value="${safe(d.TWY_TITIK_DIPERBAIKI || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
@@ -6322,7 +6387,7 @@
                                     <div class="doc-pair-key">Jenis kerusakan</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="TWY_JENIS_DIPERBAIKI" class="doc-inline-input" value="${safe(d.TWY_JENIS_DIPERBAIKI)}" placeholder="Contoh: Crack filling, patch">
+                                        <input type="text" name="TWY_JENIS_DIPERBAIKI" class="doc-inline-input" value="${safe(d.TWY_JENIS_DIPERBAIKI)}" placeholder="Contoh: 10 titik lendutan, 1 pothole">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6330,30 +6395,27 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="TWY_TITIK_BELUM" class="doc-inline-input num-input" value="${safe(d.TWY_TITIK_BELUM || '0')}">
+                                            <input type="text" name="TWY_TITIK_BELUM" class="doc-inline-input num-input" value="${safe(d.TWY_TITIK_BELUM || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Jenis kerusakan yang belum diperbaiki</div>
+                                    <div class="doc-pair-key">Jenis kerusakan (belum diperbaiki)</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="TWY_JENIS_BELUM" class="doc-inline-input" value="${safe(d.TWY_JENIS_BELUM)}" placeholder="Contoh: Spalling / Nihil">
+                                        <input type="text" name="TWY_JENIS_BELUM" class="doc-inline-input" value="${safe(d.TWY_JENIS_BELUM)}" placeholder="Contoh: Lendutan & retak memanjang di Twy E / -">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
                                     <div class="doc-pair-key">Jml titik rusak berulang > 1x</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <div class="doc-inline-group">
-                                            <input type="number" min="0" name="TWY_TITIK_BERULANG" class="doc-inline-input num-input" value="${safe(d.TWY_TITIK_BERULANG || '0')}">
-                                            <span class="doc-inline-suffix">titik</span>
-                                        </div>
+                                        <input type="text" name="TWY_TITIK_BERULANG" class="doc-inline-input" style="max-width:280px;" value="${safe(d.TWY_TITIK_BERULANG || d.TWY_RUSAK_BERULANG || '0')}" placeholder="Contoh: 0, -, atau 3 titik (rutting/deflection)">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Marka - Standard</div>
+                                    <div class="doc-pair-key">Marka - Standar</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <input type="text" name="TWY_MARKA_STD" class="doc-inline-input" style="max-width:280px;" value="${safe(d.TWY_MARKA_STD || '1x / Tahun')}">
@@ -6367,6 +6429,13 @@
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Marka - Persentase (Opsional)</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="TWY_MARKA_PERSENTASE" class="doc-inline-input" style="max-width:280px;" value="${safe(d.TWY_MARKA_PERSENTASE || '')}" placeholder="(Opsional, misal: 0,72%)">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
                                     <div class="doc-pair-key">Marka - Performance</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
@@ -6377,7 +6446,14 @@
                                     <div class="doc-pair-key">Standing Water - Pengukuran</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="TWY_STANDING_WATER" class="doc-inline-input" style="max-width:280px;" value="${safe(d.TWY_STANDING_WATER || 'Nihil / Sesuai Standar')}">
+                                        <input type="text" name="TWY_STANDING_WATER" class="doc-inline-input" style="max-width:280px;" value="${safe(d.TWY_STANDING_WATER || 'DRY/DRY/DRY')}">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Standing Water - Prosentase DRY (Opsional)</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="TWY_WATER_DRY" class="doc-inline-input" style="max-width:280px;" value="${safe(d.TWY_WATER_DRY || '')}" placeholder="(Opsional, misal: 100%)">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6399,14 +6475,14 @@
                                     <div class="doc-pair-key">Kondisi keseluruhan Apron</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="APRON_KONDISI" class="doc-inline-input" value="${safe(d.APRON_KONDISI || 'SERVICEABLE')}" placeholder="Contoh: SERVICEABLE">
+                                        <input type="text" name="APRON_KONDISI" class="doc-inline-input" value="${safe(d.APRON_KONDISI || 'Clear & Serviceable')}" placeholder="Contoh: Clear & Serviceable">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
                                     <div class="doc-pair-key">Performance pavement</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="APRON_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.APRON_PCI, '100%'))}" placeholder="Contoh: 100%">
+                                        <input type="text" name="APRON_PCI" class="doc-inline-input" value="${safe(formatCleanPercent(d.APRON_PCI, '100%'))}" placeholder="Contoh: 89,3%">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6414,7 +6490,7 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="APN_TITIK_RUSAK" class="doc-inline-input num-input" value="${safe(d.APN_TITIK_RUSAK || '0')}">
+                                            <input type="text" name="APN_TITIK_RUSAK" class="doc-inline-input num-input" value="${safe(d.APN_TITIK_RUSAK || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
@@ -6424,7 +6500,7 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="APN_TITIK_DIPERBAIKI" class="doc-inline-input num-input" value="${safe(d.APN_TITIK_DIPERBAIKI || '0')}">
+                                            <input type="text" name="APN_TITIK_DIPERBAIKI" class="doc-inline-input num-input" value="${safe(d.APN_TITIK_DIPERBAIKI || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
@@ -6433,7 +6509,7 @@
                                     <div class="doc-pair-key">Jenis kerusakan</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="APN_JENIS_DIPERBAIKI" class="doc-inline-input" value="${safe(d.APN_JENIS_DIPERBAIKI)}" placeholder="Contoh: Joint sealant / Spalling">
+                                        <input type="text" name="APN_JENIS_DIPERBAIKI" class="doc-inline-input" value="${safe(d.APN_JENIS_DIPERBAIKI)}" placeholder="Contoh: Joint Sealant Damage, Joint Spalling">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6441,30 +6517,27 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <div class="doc-inline-group">
-                                            <input type="number" min="0" name="APN_TITIK_BELUM" class="doc-inline-input num-input" value="${safe(d.APN_TITIK_BELUM || '0')}">
+                                            <input type="text" name="APN_TITIK_BELUM" class="doc-inline-input num-input" value="${safe(d.APN_TITIK_BELUM || '0')}">
                                             <span class="doc-inline-suffix">titik</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Jenis kerusakan yang belum diperbaiki</div>
+                                    <div class="doc-pair-key">Jenis kerusakan (belum diperbaiki)</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="APN_JENIS_BELUM" class="doc-inline-input" value="${safe(d.APN_JENIS_BELUM)}" placeholder="Contoh: Retak sudut / Nihil">
+                                        <input type="text" name="APN_JENIS_BELUM" class="doc-inline-input" value="${safe(d.APN_JENIS_BELUM)}" placeholder="Contoh: a. 8 Joint Sealant Damage / -">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
                                     <div class="doc-pair-key">Jml titik rusak berulang > 1x</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <div class="doc-inline-group">
-                                            <input type="number" min="0" name="APN_TITIK_BERULANG" class="doc-inline-input num-input" value="${safe(d.APN_TITIK_BERULANG || '0')}">
-                                            <span class="doc-inline-suffix">titik</span>
-                                        </div>
+                                        <input type="text" name="APN_TITIK_BERULANG" class="doc-inline-input" style="max-width:280px;" value="${safe(d.APN_TITIK_BERULANG || d.APN_RUSAK_BERULANG || '0')}" placeholder="Contoh: 0">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Marka - Standard</div>
+                                    <div class="doc-pair-key">Marka - Standar</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <input type="text" name="APN_MARKA_STD" class="doc-inline-input" style="max-width:280px;" value="${safe(d.APN_MARKA_STD || '1x / Tahun')}">
@@ -6478,6 +6551,13 @@
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Marka - Persentase (Opsional)</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="APN_MARKA_PERSENTASE" class="doc-inline-input" style="max-width:280px;" value="${safe(d.APN_MARKA_PERSENTASE || '')}" placeholder="(Opsional, misal: 9,18%)">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
                                     <div class="doc-pair-key">Marka - Performance</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
@@ -6488,7 +6568,14 @@
                                     <div class="doc-pair-key">Standing Water - Pengukuran</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
-                                        <input type="text" name="APN_STANDING_WATER" class="doc-inline-input" style="max-width:280px;" value="${safe(d.APN_STANDING_WATER || 'Nihil / Sesuai Standar')}">
+                                        <input type="text" name="APN_STANDING_WATER" class="doc-inline-input" style="max-width:280px;" value="${safe(d.APN_STANDING_WATER || 'DRY/DRY/DRY')}">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Standing Water - Prosentase DRY (Opsional)</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="APN_WATER_DRY" class="doc-inline-input" style="max-width:280px;" value="${safe(d.APN_WATER_DRY || '')}" placeholder="(Opsional, misal: 100%)">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6498,22 +6585,30 @@
                                         <input type="text" name="APN_WATER_PERF" class="doc-inline-input" style="max-width:280px;" value="${safe(d.APN_WATER_PERF || '100%')}">
                                     </div>
                                 </div>
+                            </div>
+
+                            <!-- D. PEMELIHARAAN POTONG RUMPUT -->
+                            <div class="doc-section-head">
+                                <div class="doc-section-badge">D</div>
+                                <h2 class="doc-section-heading">PEMELIHARAAN POTONG RUMPUT</h2>
+                            </div>
+                            <div class="doc-pairs-container">
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Pemeliharaan Potong Rumput - Standard</div>
+                                    <div class="doc-pair-key">Standar</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <input type="text" name="RUMPUT_STD" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUMPUT_STD || '12 x / 1 Tahun')}">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Pemeliharaan Potong Rumput - Realisasi</div>
+                                    <div class="doc-pair-key">Realisasi</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <input type="text" name="RUMPUT_REALISASI" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUMPUT_REALISASI || '-')}">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
-                                    <div class="doc-pair-key">Pemeliharaan Potong Rumput - Performance</div>
+                                    <div class="doc-pair-key">Performance</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <input type="text" name="RUMPUT_PERF" class="doc-inline-input" style="max-width:280px;" value="${safe(d.RUMPUT_PERF || '100%')}">

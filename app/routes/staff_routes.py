@@ -14,16 +14,24 @@ def require_login():
         return redirect(url_for('auth.index'))
 
 def generate_wa_message(data, airport_code):
+    import re
     def v(key):
         val = str(data.get(key, '') or '').strip()
         return val if val and val != '-' else '-'
         
     def f_titik(jml):
-        if jml == '-' or not jml:
+        if jml is None or str(jml).strip() == '':
             return '0 titik'
         s = str(jml).strip()
+        if s == '-':
+            return '-'
+        if s.lower() == 'nihil':
+            return 'Nihil'
         if 'titik' in s.lower():
             return s
+        m = re.match(r'^(\d+)\s*(\(.+\))$', s)
+        if m:
+            return f"{m.group(1)} titik {m.group(2)}"
         return f"{s} titik"
 
     def f_percent(val):
@@ -39,13 +47,11 @@ def generate_wa_message(data, airport_code):
             return f"{s}%"
         except:
             pass
-        import re
         m = re.match(r'^(\d+(?:[.,]\d+)?)\s+(.+)$', s)
         if m:
             return f"{m.group(1)}% {m.group(2)}"
         return s
-    
-    import re
+
     tgl = v('TANGGAL')
     if not re.match(r'^\d{4}-\d{2}-\d{2}$', tgl):
         tgl_alt = v('TANGGAL_LAPORAN')
@@ -58,7 +64,7 @@ def generate_wa_message(data, airport_code):
         months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
         tgl_str = f"{dt.day} {months[dt.month-1]} {dt.year}"
     except:
-        tgl_str = tgl if tgl != '-' else '27 Agustus 2026'
+        tgl_str = tgl if tgl != '-' else '28 Oktober 2026'
         
     penerima_items = []
     for pk in ['PENERIMA_1', 'PENERIMA_2', 'PENERIMA_3', 'PENERIMA_4']:
@@ -73,7 +79,7 @@ def generate_wa_message(data, airport_code):
     idx = 1
     for i in range(1, 8):
         c = v(f'CATATAN_{i}')
-        if c != '-':
+        if c != '-' and c.lower() != 'nihil':
             catatan += f"{idx}. {c}\n"
             idx += 1
     if not catatan:
@@ -85,30 +91,45 @@ def generate_wa_message(data, airport_code):
         cabang_str = f"1. {airport_code}"
     elif 'Kantor Cabang ' in cabang_raw:
         clean = cabang_raw.replace('Kantor Cabang ', '').strip()
-        cabang_str = clean if clean.startswith('1.') else f"1. {clean}"
-    elif cabang_raw.startswith('1.'):
+        cabang_str = clean if re.match(r'^\d+\.', clean) else f"1. {clean}"
+    elif re.match(r'^\d+\.', cabang_raw):
         cabang_str = cabang_raw
     else:
         cabang_str = f"1. {cabang_raw}"
 
-    # Helper for single damage type
-    def format_single_damage(label, val):
-        if not val or val == '-' or str(val).strip().lower() == 'nihil':
-            return ""
+    def format_damage_line(val):
+        if not val or val == '-':
+            return "•  Jenis kerusakan : -\n"
         lines = [l.strip() for l in str(val).strip().split('\n') if l.strip()]
         if not lines:
-            return ""
-        formatted_items = "\n".join(f"   {l}" if l.startswith('-') else f"   - {l}" for l in lines)
-        return f"   {label} : \n{formatted_items}\n"
+            return "•  Jenis kerusakan : -\n"
+        if len(lines) == 1:
+            return f"•  Jenis kerusakan : {lines[0]}\n"
+        formatted_items = "\n".join(f"  {l}" for l in lines)
+        return f"•  Jenis kerusakan :\n{formatted_items}\n"
 
     sapaan_val = v('SAPAAN')
     if sapaan_val == '-':
-        sapaan_val = 'Selamat Pagi'
+        sapaan_val = 'Selamat Malam'
 
     if 'assalamu' in sapaan_val.lower():
-        greeting_block = f"*{sapaan_val}*"
+        greeting_block = f"{sapaan_val}"
     else:
-        greeting_block = f"*Assalamu’alaikum Wr. Wb*\n*{sapaan_val}*"
+        greeting_block = f"Assalamu’alaikum Wr. Wb\n{sapaan_val}"
+
+    rwy_marka_pct = f"       Persentase : {f_percent(v('RUNWAY_MARKA_PERSENTASE'))}\n" if v('RUNWAY_MARKA_PERSENTASE') != '-' else ""
+    rwy_rub_prog = f"       Progres : {f_percent(v('RUNWAY_RUBBER_PROGRES'))}\n" if v('RUNWAY_RUBBER_PROGRES') != '-' else ""
+    rwy_rub_perf = f"\n       Performance : {f_percent(v('RUNWAY_RUBBER_PERF'))}" if v('RUNWAY_RUBBER_PERF') != '-' else ""
+
+    twy_nama = v('TAXIWAY_NAMA')
+    twy_ket = f" ({twy_nama})" if twy_nama != '-' else ""
+    twy_marka_pct = f"      Persentase : {f_percent(v('TWY_MARKA_PERSENTASE'))}\n" if v('TWY_MARKA_PERSENTASE') != '-' else ""
+    twy_water_dry = f"      Prosentase DRY : {f_percent(v('TWY_WATER_DRY'))}\n" if v('TWY_WATER_DRY') != '-' else ""
+    twy_water_perf = f_percent(v('TWY_WATER_PERF')) if v('TWY_WATER_PERF') != '-' else '100%'
+
+    apn_marka_pct = f"      Persentase : {f_percent(v('APN_MARKA_PERSENTASE'))}\n" if v('APN_MARKA_PERSENTASE') != '-' else ""
+    apn_water_dry = f"      Prosentase DRY : {f_percent(v('APN_WATER_DRY'))}\n" if v('APN_WATER_DRY') != '-' else ""
+    apn_water_perf = f_percent(v('APN_WATER_PERF')) if v('APN_WATER_PERF') != '-' else '100%'
 
     msg = f"""{greeting_block}
 
@@ -116,66 +137,71 @@ Kepada Yth. :
 {penerima}
 
 Mohon izin,  menyampaikan Laporan Harian Kondisi Fasilitas Sisi Udara di PT Angkasa Pura Indonesia 
-Tanggal : *{tgl_str}*
+Tanggal : {tgl_str}
 
 Region II
 {cabang_str}
-*A. RUNWAY*
+A. RUNWAY
 •  Kondisi keseluruhan runway : {v('RUNWAY_KONDISI')}
 •  Performance pavement : {f_percent(v('RUNWAY_PCI'))}
-•  Jml Titik Rusak : {f_titik(v('RUNWAY_TITIK_RUSAK'))}
-•  Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
-{format_single_damage('Jenis kerusakan', v('RUNWAY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
-{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('RUNWAY_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
+    Jml Titik Rusak : {f_titik(v('RUNWAY_TITIK_RUSAK'))}
+    Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
+{format_damage_line(v('RUNWAY_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
+{format_damage_line(v('RUNWAY_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
 •  Marka :
        Standar : {v('RUNWAY_MARKA_STD')}
        Realisasi : {v('RUNWAY_MARKA_REALISASI')}
-       Performance : {f_percent(v('RUNWAY_MARKA_PERF'))}
+{rwy_marka_pct}       Performance : {f_percent(v('RUNWAY_MARKA_PERF'))}
 •  Standing Water :
        Pengukuran : {v('RUNWAY_STANDING_WATER')}
        Performance : {f_percent(v('RUNWAY_WATER_PERF')) if v('RUNWAY_WATER_PERF') != '-' else '100%'}
 •  Rubber Removal :  
        Standar ketentuan : {v('RUNWAY_RUBBER_STD')}
        Realisasi : {v('RUNWAY_RUBBER_REAL')}
-       Nilai Skid : {v('RUNWAY_RUBBER_SKID')}
+{rwy_rub_prog}       Nilai Skid : {v('RUNWAY_RUBBER_SKID')}{rwy_rub_perf}
 
-*B. TAXIWAY*
-•  Kondisi keseluruhan Taxiway : {v('TAXIWAY_STATUS')}
+B. TAXIWAY
+•  Kondisi keseluruhan Taxiway{twy_ket} : {v('TAXIWAY_STATUS')}
 •  Performance pavement : {f_percent(v('TAXIWAY_PCI'))}
-•  Jml Titik Rusak : {f_titik(v('TWY_TITIK_RUSAK'))}
-•  Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
-{format_single_damage('Jenis kerusakan', v('TWY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
-{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('TWY_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
+    Jml Titik Rusak : {f_titik(v('TWY_TITIK_RUSAK'))}
+    Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
+{format_damage_line(v('TWY_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
+{format_damage_line(v('TWY_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
 •  Marka :
       Standar : {v('TWY_MARKA_STD')}
       Realisasi : {v('TWY_MARKA_REALISASI')}
-      Performance : {f_percent(v('TWY_MARKA_PERF'))}
+{twy_marka_pct}      Performance : {f_percent(v('TWY_MARKA_PERF'))}
 •  Standing Water : 
       Pengukuran : {v('TWY_STANDING_WATER')}
-      Performance : 100%
+{twy_water_dry}      Performance : {twy_water_perf}
 
-*C. APRON*
+C. APRON
 •  Kondisi keseluruhan Apron : {v('APRON_KONDISI')}
 •  Performance pavement : {f_percent(v('APRON_PCI'))}
-•  Jml Titik Rusak : {f_titik(v('APN_TITIK_RUSAK'))}
-•  Jml titik yang sudah diperbaiki : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
-{format_single_damage('Jenis kerusakan', v('APN_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('APN_TITIK_BELUM'))}
-{format_single_damage('Jenis kerusakan yang belum diperbaiki', v('APN_JENIS_BELUM'))}•  Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
+    Jml Titik Rusak : {f_titik(v('APN_TITIK_RUSAK'))}
+    Jml titik yang sudah diperbaiki : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
+{format_damage_line(v('APN_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : {f_titik(v('APN_TITIK_BELUM'))}
+{format_damage_line(v('APN_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
 •  Marka :
       Standar : {v('APN_MARKA_STD')}
       Realisasi : {v('APN_MARKA_REALISASI')}
-      Performance : {f_percent(v('APN_MARKA_PERF'))}
+{apn_marka_pct}      Performance : {f_percent(v('APN_MARKA_PERF'))}
 •  Standing Water :
       Pengukuran : {v('APN_STANDING_WATER')}
-      Performance : 100%
+{apn_water_dry}      Performance : {apn_water_perf}
 
-•  Pemeliharaan Potong Rumput :
+D. Pemeliharaan Potong Rumput
       Standar : {v('RUMPUT_STD')}
       Realisasi : {v('RUMPUT_REALISASI')}
       Performance : {f_percent(v('RUMPUT_PERF'))}
 
 Catatan Khusus : 
-{catatan.strip()}"""
+{catatan.strip()}
+
+Demikian disampaikan, atas perhatiannya diucapkan terima kasih
+
+Ttd
+REGION II"""
     return msg
 
 from app.services.staging_service import (
