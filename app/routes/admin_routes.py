@@ -250,6 +250,20 @@ def api_list_sheets():
     
     if not drive_folder:
         return jsonify({"success": False, "error": "Folder ID Google Drive kosong."})
+
+    fallback_file = None
+    if airport_code:
+        conf = get_airport_config(airport_code)
+        saved_url = conf.get('sheet_url', '').strip()
+        saved_name = conf.get('sheet_name', '').strip()
+        if saved_url:
+            saved_id = extract_drive_id(saved_url) or airport_code
+            fallback_file = {
+                "id": saved_id,
+                "name": (saved_name or f"{airport_code}_{conf.get('active_month', '2026')}").replace(' ', '_'),
+                "webViewLink": saved_url,
+                "modifiedTime": ""
+            }
         
     try:
         from app.services.drive_service import get_drive_service
@@ -265,6 +279,11 @@ def api_list_sheets():
         
         all_files = results.get('files', [])
         
+        if fallback_file:
+            existing_ids = {f.get('id') for f in all_files if f.get('id')}
+            if fallback_file['id'] not in existing_ids:
+                all_files.append(fallback_file)
+        
         if airport_code:
             code_upper = airport_code.upper()
             matching = [f for f in all_files if code_upper in f.get('name', '').upper()]
@@ -273,6 +292,8 @@ def api_list_sheets():
             
         return jsonify({"success": True, "files": all_files})
     except Exception as e:
+        if fallback_file:
+            return jsonify({"success": True, "files": [fallback_file], "warning": str(e)})
         return jsonify({"success": False, "error": str(e)})
 
 @bp.route('/api/schema', methods=['GET'])

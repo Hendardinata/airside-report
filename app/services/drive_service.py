@@ -1,17 +1,56 @@
 import os
 import re
 import requests
-from googleapiclient.discovery import build
+from google.auth.transport.requests import AuthorizedSession
 from google.oauth2.service_account import Credentials
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 CREDENTIALS_FILE = os.path.join(os.path.dirname(__file__), '..', '..', 'credentials.json')
 
+
+class _DriveRequest:
+    def __init__(self, session, method, url, params=None):
+        self._session = session
+        self._method = method
+        self._url = url
+        self._params = params or {}
+
+    def execute(self):
+        resp = self._session.request(self._method, self._url, params=self._params, timeout=20)
+        if resp.status_code >= 400:
+            raise Exception(f"Google Drive API Error ({resp.status_code}): {resp.text}")
+        if not resp.text or not resp.text.strip():
+            return {}
+        return resp.json()
+
+
+class _DriveFilesResource:
+    BASE_URL = "https://www.googleapis.com/drive/v3/files"
+
+    def __init__(self, session):
+        self._session = session
+
+    def list(self, **kwargs):
+        params = {k: v for k, v in kwargs.items() if v is not None}
+        return _DriveRequest(self._session, "GET", self.BASE_URL, params=params)
+
+    def emptyTrash(self):
+        return _DriveRequest(self._session, "DELETE", f"{self.BASE_URL}/trash")
+
+
+class _DriveService:
+    def __init__(self, creds):
+        self._session = AuthorizedSession(creds)
+
+    def files(self):
+        return _DriveFilesResource(self._session)
+
+
 def get_drive_service():
     if not os.path.exists(CREDENTIALS_FILE):
         raise FileNotFoundError("File credentials.json tidak ditemukan.")
     creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=SCOPES)
-    return build('drive', 'v3', credentials=creds)
+    return _DriveService(creds)
 
 def create_monthly_sheet(new_file_name, target_folder_id, template_file_id):
     """

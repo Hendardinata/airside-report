@@ -7804,7 +7804,21 @@
             return;
         }
 
-        const allFiles = window.fleetRawFiles[code] || [];
+        const allFiles = [...(window.fleetRawFiles[code] || [])];
+        if (currentActiveUrl && savedName) {
+            const currentId = extractDriveIdFromText(currentActiveUrl);
+            const alreadyInList = allFiles.some(f =>
+                f.webViewLink === currentActiveUrl ||
+                (currentId && ((f.id && f.id === currentId) || (f.webViewLink && f.webViewLink.includes(currentId))))
+            );
+            if (!alreadyInList) {
+                allFiles.push({
+                    id: currentId || code,
+                    name: savedName,
+                    webViewLink: currentActiveUrl
+                });
+            }
+        }
         
         // Filter file yang memiliki ekor tahun sesuai selectedYear
         const matchingFiles = allFiles.filter(f => {
