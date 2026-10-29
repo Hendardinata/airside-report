@@ -59,6 +59,17 @@ STANDARD_CORE_FIELDS = [
     'CATATAN_1', 'CATATAN_2', 'CATATAN_3', 'CATATAN_4', 'CATATAN_5', 'CATATAN_6', 'CATATAN_7'
 ]
 
+OPTIONAL_INLINE_FIELDS = {
+    'RUNWAY_MARKA_PERSENTASE', 'RUNWAY_RUBBER_PROGRES', 'RUNWAY_RUBBER_PERF',
+    'TWY_MARKA_PERSENTASE', 'TWY_WATER_DRY',
+    'APN_MARKA_PERSENTASE', 'APN_WATER_DRY'
+}
+
+SYSTEM_META_FIELDS = [
+    'REPORT_ID', 'SUBMITTED_BY', 'SUBMITTED_BY_USERNAME', 'CATATAN_DH', 'CATATAN_GM',
+    '_submitted_by_name', '_submitted_by_username', 'STATUS', 'TIMESTAMP_SUBMIT', 'TIMESTAMP_UPDATE', 'TANGGAL_LAPORAN'
+]
+
 def write_daily_report(sheet_url, form_data):
     if not sheet_url:
         raise ValueError("URL Spreadsheet belum dikonfigurasi untuk bandara ini.")
@@ -95,7 +106,11 @@ def write_daily_report(sheet_url, form_data):
                 for step in schema.get('steps', []):
                     for section in step.get('sections', []):
                         for field in section.get('fields', []):
-                            new_headers.append(field['name'])
+                            if field['name'] not in new_headers:
+                                new_headers.append(field['name'])
+            for meta_col in ('REPORT_ID', 'SUBMITTED_BY', 'SUBMITTED_BY_USERNAME', 'CATATAN_DH'):
+                if meta_col not in new_headers:
+                    new_headers.append(meta_col)
             
             # Tulis ke Sheet Baris 1
             rekap_sheet.update(values=[new_headers], range_name='A1')
@@ -109,6 +124,27 @@ def write_daily_report(sheet_url, form_data):
             if 'TANGGAL' in row or 'KANTOR_CABANG' in row:
                 header_row = row
                 break
+
+    # Pastikan seluruh field dari form_schema.json dan metadata penting tersedia di header_row DATABASE_REKAP
+    if header_row:
+        try:
+            schema_fields_now = get_schema_field_names()
+            existing_set = {str(h).strip() for h in header_row if str(h).strip()}
+            added_headers = False
+            for sf in schema_fields_now + ['REPORT_ID', 'SUBMITTED_BY', 'SUBMITTED_BY_USERNAME', 'CATATAN_DH']:
+                if sf not in existing_set:
+                    header_row.append(sf)
+                    existing_set.add(sf)
+                    added_headers = True
+            if added_headers:
+                rekap_sheet.update(values=[header_row], range_name='A1')
+        except Exception as hdr_err:
+            print(f"Warning auto-expand header_row: {hdr_err}")
+
+    if form_data.get('_submitted_by_name') and not form_data.get('SUBMITTED_BY'):
+        form_data['SUBMITTED_BY'] = form_data['_submitted_by_name']
+    if form_data.get('_submitted_by_username') and not form_data.get('SUBMITTED_BY_USERNAME'):
+        form_data['SUBMITTED_BY_USERNAME'] = form_data['_submitted_by_username']
 
     # --- Validasi & Normalisasi Nilai Tanggal Secara Defensif ---
     import re
@@ -372,6 +408,10 @@ def write_daily_report(sheet_url, form_data):
                             
                             # Tambahkan Field Pertanyaan (Format seperti Baris 53 "Marka")
                             label = field.get('label', field['name'])
+                            if field['name'] in OPTIONAL_INLINE_FIELDS:
+                                sec_badge = sec.get('badge', '')
+                                sec_prefix = f"[{sec_badge}. {sec.get('title', '')}] " if sec_badge else f"[{sec.get('title', '')}] "
+                                label = sec_prefix + label.replace(' (Opsional)', '')
                             extra_data.append([label, sanitize_sheet_value(val)])
                             format_requests.append({
                                 "copyPaste": {
@@ -526,15 +566,16 @@ def get_daily_summary(date_str):
 
                 # --- PEMETAAN FIELD BERBASIS NAMA KOLOM (ANTI-GESER) ---
                 field_dict = {}
-                for idx_std, std_key in enumerate(STANDARD_CORE_FIELDS):
-                    pos = idx_std + 1
-                    if pos < len(row_data):
-                        field_dict[std_key] = str(row_data[pos]).strip()
                 if header_row:
                     for idx_col, h_name in enumerate(header_row):
                         c_key = str(h_name).strip()
                         if c_key and idx_col < len(row_data):
                             field_dict[c_key] = str(row_data[idx_col]).strip()
+                for idx_std, std_key in enumerate(STANDARD_CORE_FIELDS):
+                    if std_key not in field_dict:
+                        pos = idx_std + 1
+                        if pos < len(row_data):
+                            field_dict[std_key] = str(row_data[pos]).strip()
                 summary[code]["fields"] = field_dict
 
                 # --- EXTRACT DATA TAMBAHAN UNTUK WA ---
@@ -603,9 +644,14 @@ def sync_sheets_to_rekap(sheet_url):
     label_to_name = {}
     for step in schema.get('steps', []):
         for sec in step.get('sections', []):
+            sec_badge = sec.get('badge', '')
+            sec_prefix = f"[{sec_badge}. {sec.get('title', '')}] " if sec_badge else f"[{sec.get('title', '')}] "
             for field in sec.get('fields', []):
                 lbl = field.get('label', field['name'])
+                clean_lbl = lbl.replace(' (Opsional)', '')
                 label_to_name[lbl] = field['name']
+                label_to_name[clean_lbl] = field['name']
+                label_to_name[sec_prefix + clean_lbl] = field['name']
                 label_to_name[field['name']] = field['name'] # Fallback
                 
     rekap_sheet = sheet.worksheet('DATABASE_REKAP')
@@ -760,6 +806,9 @@ def sync_schema_to_sheets(sheet_url, schema=None):
         
     schema_fields = get_schema_field_names(schema)
     new_headers = ['TIMESTAMP'] + schema_fields
+    for meta_col in ('REPORT_ID', 'SUBMITTED_BY', 'SUBMITTED_BY_USERNAME', 'CATATAN_DH'):
+        if meta_col not in new_headers:
+            new_headers.append(meta_col)
     
     all_values = rekap_sheet.get_all_values()
     if not all_values or len(all_values) == 0:
@@ -810,7 +859,7 @@ def sync_schema_to_sheets(sheet_url, schema=None):
                 is_standard_sec = any(f.get('name') in STANDARD_CORE_FIELDS for f in sec.get('fields', []))
                 
                 for field in sec.get('fields', []):
-                    if field.get('name') not in STANDARD_CORE_FIELDS:
+                    if field.get('name') not in STANDARD_CORE_FIELDS and field.get('name') not in OPTIONAL_INLINE_FIELDS:
                         if not sec_added and not is_standard_sec:
                             sec_title = sec.get('title', 'TAMBAHAN')
                             extra_template.append([sec_title.upper(), ''])
@@ -945,7 +994,7 @@ def sync_sheets_to_schema(sheet_url):
     
     # 1. Deteksi field non-standar yang DIHAPUS dari spreadsheet
     for fname in list(existing_schema_fields.keys()):
-        if fname not in STANDARD_CORE_FIELDS and fname != 'TIMESTAMP':
+        if fname not in STANDARD_CORE_FIELDS and fname not in OPTIONAL_INLINE_FIELDS and fname not in SYSTEM_META_FIELDS and fname != 'TIMESTAMP':
             if fname not in sheet_headers:
                 s_idx, sec_idx, f_idx, _ = existing_schema_fields[fname]
                 schema['steps'][s_idx]['sections'][sec_idx]['fields'] = [
@@ -967,7 +1016,7 @@ def sync_sheets_to_schema(sheet_url):
                 current_names_now.add(f.get('name'))
                 
     for h in sheet_headers:
-        if h == 'TIMESTAMP' or h in current_names_now:
+        if h == 'TIMESTAMP' or h in current_names_now or h in SYSTEM_META_FIELDS:
             continue
             
         info = custom_labels_map.get(h)

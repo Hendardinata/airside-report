@@ -5797,78 +5797,29 @@
                     </div>
                 </div>
 
-                <!-- 2. 4 AIRPORT STATUS CARDS (MATCHING SKETCH) -->
+                <!-- 2. 4 AIRPORT STATUS CARDS (URUTAN STANDAR REGIONAL II: DPS, LOP, KOE, BWX) -->
                 <div class="airports-grid" id="airportsSection">
-                    <!-- 1. LOP (Lombok) -->
-                    <div class="airport-card" id="card-LOP">
-                        <div>
-                            <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
-                            <div class="airport-card-header">
-                                <span class="iata-badge iata-LOP warning" id="iata-badge-LOP">LOP</span>
-                                <span class="card-status-indicator warning" id="status-icon-LOP">
-                                    <i class="fa-solid fa-circle-exclamation"></i>
-                                </span>
-                                <!-- Legacy anchor for safe DOM binding -->
-                                <div id="badge-LOP" style="display: none;"></div>
-                            </div>
-
-                            <!-- Media: Real Airport Media Thumbnail -->
-                            <div class="airport-card-media">
-                                <img src="{{ url_for('static', filename='img/airport-lop.webp') }}" alt="Bandara Lombok" loading="lazy">
-                            </div>
-
-                            <!-- Title & Subtitle -->
-                            <div class="airport-card-body">
-                                <h3 class="airport-title">Lombok</h3>
-                                <p class="airport-fullname">Bandara Internasional Zainuddin Abdul Madjid</p>
-                            </div>
-
-                            <!-- Hidden telemetric anchors for safe JS telemetry binding -->
-                            <span id="pci-val-LOP" style="display: none;"></span>
-                            <span id="pci-tag-LOP" style="display: none;"></span>
-                            <span id="pci-LOP" style="display: none;"></span>
-                        </div>
-
-                        <!-- Bottom: Single Rounded Status Button (SUDAH/BELUM) -->
-                        <div class="airport-action-area" id="action-LOP">
-                            <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('LOP')" title="Klik untuk tindakan pengingat / tarik data">
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <span>Belum Mengirim</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 2. DPS (Bali) -->
+                    <!-- 1. DPS (Bali) -->
                     <div class="airport-card" id="card-DPS">
                         <div>
-                            <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
                                 <span class="iata-badge iata-DPS warning" id="iata-badge-DPS">DPS</span>
                                 <span class="card-status-indicator warning" id="status-icon-DPS">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                 </span>
-                                <!-- Legacy anchor for safe DOM binding -->
                                 <div id="badge-DPS" style="display: none;"></div>
                             </div>
-
-                            <!-- Media: Real Airport Media Thumbnail -->
                             <div class="airport-card-media">
                                 <img src="{{ url_for('static', filename='img/airport-dps.webp') }}" alt="Bandara Bali" loading="lazy">
                             </div>
-
-                            <!-- Title & Subtitle -->
                             <div class="airport-card-body">
                                 <h3 class="airport-title">Bali</h3>
                                 <p class="airport-fullname">Bandara Internasional I Gusti Ngurah Rai</p>
                             </div>
-
-                            <!-- Hidden telemetric anchors for safe JS telemetry binding -->
                             <span id="pci-val-DPS" style="display: none;"></span>
                             <span id="pci-tag-DPS" style="display: none;"></span>
                             <span id="pci-DPS" style="display: none;"></span>
                         </div>
-
-                        <!-- Bottom: Single Rounded Status Button (SUDAH/BELUM) -->
                         <div class="airport-action-area" id="action-DPS">
                             <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('DPS')" title="Klik untuk tindakan pengingat / tarik data">
                                 <i class="fa-solid fa-circle-exclamation"></i>
@@ -5877,78 +5828,87 @@
                         </div>
                     </div>
 
-                    <!-- 3. BWX (Banyuwangi) -->
-                    <div class="airport-card" id="card-BWX">
+                    <!-- 2. LOP (Lombok) -->
+                    <div class="airport-card" id="card-LOP">
                         <div>
-                            <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
-                                <span class="iata-badge iata-BWX warning" id="iata-badge-BWX">BWX</span>
-                                <span class="card-status-indicator warning" id="status-icon-BWX">
+                                <span class="iata-badge iata-LOP warning" id="iata-badge-LOP">LOP</span>
+                                <span class="card-status-indicator warning" id="status-icon-LOP">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                 </span>
-                                <!-- Legacy anchor for safe DOM binding -->
-                                <div id="badge-BWX" style="display: none;"></div>
+                                <div id="badge-LOP" style="display: none;"></div>
                             </div>
-
-                            <!-- Media: Real Airport Media Thumbnail -->
                             <div class="airport-card-media">
-                                <img src="{{ url_for('static', filename='img/airport-bwx.webp') }}" alt="Bandara Banyuwangi" loading="lazy">
+                                <img src="{{ url_for('static', filename='img/airport-lop.webp') }}" alt="Bandara Lombok" loading="lazy">
                             </div>
-
-                            <!-- Title & Subtitle -->
                             <div class="airport-card-body">
-                                <h3 class="airport-title">Banyuwangi</h3>
-                                <p class="airport-fullname">Bandara Internasional Banyuwangi</p>
+                                <h3 class="airport-title">Lombok</h3>
+                                <p class="airport-fullname">Bandara Internasional Zainuddin Abdul Madjid</p>
                             </div>
-
-                            <!-- Hidden telemetric anchors for safe JS telemetry binding -->
-                            <span id="pci-val-BWX" style="display: none;"></span>
-                            <span id="pci-tag-BWX" style="display: none;"></span>
-                            <span id="pci-BWX" style="display: none;"></span>
+                            <span id="pci-val-LOP" style="display: none;"></span>
+                            <span id="pci-tag-LOP" style="display: none;"></span>
+                            <span id="pci-LOP" style="display: none;"></span>
                         </div>
-
-                        <!-- Bottom: Single Rounded Status Button (SUDAH/BELUM) -->
-                        <div class="airport-action-area" id="action-BWX">
-                            <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('BWX')" title="Klik untuk tindakan pengingat / tarik data">
+                        <div class="airport-action-area" id="action-LOP">
+                            <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('LOP')" title="Klik untuk tindakan pengingat / tarik data">
                                 <i class="fa-solid fa-circle-exclamation"></i>
                                 <span>Belum Mengirim</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- 4. KOE (Kupang) -->
+                    <!-- 3. KOE (Kupang) -->
                     <div class="airport-card" id="card-KOE">
                         <div>
-                            <!-- Header: IATA Pill on Left, Warning/Check Icon on Right -->
                             <div class="airport-card-header">
                                 <span class="iata-badge iata-KOE warning" id="iata-badge-KOE">KOE</span>
                                 <span class="card-status-indicator warning" id="status-icon-KOE">
                                     <i class="fa-solid fa-circle-exclamation"></i>
                                 </span>
-                                <!-- Legacy anchor for safe DOM binding -->
                                 <div id="badge-KOE" style="display: none;"></div>
                             </div>
-
-                            <!-- Media: Real Airport Media Thumbnail -->
                             <div class="airport-card-media">
                                 <img src="{{ url_for('static', filename='img/airport-koe.webp') }}" alt="Bandara Kupang" loading="lazy">
                             </div>
-
-                            <!-- Title & Subtitle -->
                             <div class="airport-card-body">
                                 <h3 class="airport-title">Kupang</h3>
                                 <p class="airport-fullname">Bandara Internasional El Tari</p>
                             </div>
-
-                            <!-- Hidden telemetric anchors for safe JS telemetry binding -->
                             <span id="pci-val-KOE" style="display: none;"></span>
                             <span id="pci-tag-KOE" style="display: none;"></span>
                             <span id="pci-KOE" style="display: none;"></span>
                         </div>
-
-                        <!-- Bottom: Single Rounded Status Button (SUDAH/BELUM) -->
                         <div class="airport-action-area" id="action-KOE">
                             <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('KOE')" title="Klik untuk tindakan pengingat / tarik data">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <span>Belum Mengirim</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4. BWX (Banyuwangi) -->
+                    <div class="airport-card" id="card-BWX">
+                        <div>
+                            <div class="airport-card-header">
+                                <span class="iata-badge iata-BWX warning" id="iata-badge-BWX">BWX</span>
+                                <span class="card-status-indicator warning" id="status-icon-BWX">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                </span>
+                                <div id="badge-BWX" style="display: none;"></div>
+                            </div>
+                            <div class="airport-card-media">
+                                <img src="{{ url_for('static', filename='img/airport-bwx.webp') }}" alt="Bandara Banyuwangi" loading="lazy">
+                            </div>
+                            <div class="airport-card-body">
+                                <h3 class="airport-title">Banyuwangi</h3>
+                                <p class="airport-fullname">Bandara Internasional Banyuwangi</p>
+                            </div>
+                            <span id="pci-val-BWX" style="display: none;"></span>
+                            <span id="pci-tag-BWX" style="display: none;"></span>
+                            <span id="pci-BWX" style="display: none;"></span>
+                        </div>
+                        <div class="airport-action-area" id="action-BWX">
+                            <button type="button" class="btn-status-pill warning" onclick="openBranchActionSheet('BWX')" title="Klik untuk tindakan pengingat / tarik data">
                                 <i class="fa-solid fa-circle-exclamation"></i>
                                 <span>Belum Mengirim</span>
                             </button>
@@ -6088,7 +6048,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.825rem;">
-                                <i class="fa-solid fa-layer-group me-1"></i> Semua Cabang (LOP, DPS, BWX, KOE)
+                                <i class="fa-solid fa-layer-group me-1"></i> Semua Cabang (DPS, LOP, KOE, BWX)
                             </span>
                         </div>
                     </div>
@@ -6196,7 +6156,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for code in ['LOP', 'DPS', 'BWX', 'KOE'] %}
+                                {% for code in ['DPS', 'LOP', 'KOE', 'BWX'] %}
                                 {% set c = config.airports.get(code, {}) if config and config.airports else {} %}
                                 <tr>
                                     <td style="text-align: center;">
@@ -6329,7 +6289,7 @@
 
                                 <div class="contact-subcard-body">
                                     <div class="branch-dh-grid">
-                                        {% for code in ['LOP', 'DPS', 'BWX', 'KOE'] %}
+                                        {% for code in ['DPS', 'LOP', 'KOE', 'BWX'] %}
                                         {% set c = config.airports.get(code, {}) if config and config.airports else {} %}
                                         <div class="branch-dh-card">
                                             <div class="branch-dh-card-header">
@@ -7030,15 +6990,68 @@
             `;
         }
 
+        const fd = info.fields || {};
+        const vVal = (k, def = '-') => (fd[k] !== undefined && fd[k] !== null && String(fd[k]).trim() !== '') ? escapeHtml(String(fd[k]).trim()) : def;
+        let catItems = [];
+        for (let i = 1; i <= 7; i++) {
+            const c = vVal('CATATAN_' + i, '');
+            if (c && c !== '-' && c.toLowerCase() !== 'nihil') catItems.push(`${catItems.length + 1}. ${c}`);
+        }
+        const sectionsSummaryHtml = Object.keys(fd).length > 0 ? `
+            <div style="margin-top: 0.85rem; display: grid; gap: 0.55rem; max-height: 310px; overflow-y: auto; padding-right: 0.25rem;">
+                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
+                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">A</span> RUNWAY
+                    </div>
+                    <div style="font-size: 0.8rem; color: #334155;">
+                        Kondisi: <strong>${vVal('RUNWAY_KONDISI')}</strong> • Pavement: <strong>${vVal('RUNWAY_PCI', info.pci || '-')}</strong> • Rusak/Perbaikan/Belum: <strong>${vVal('RUNWAY_TITIK_RUSAK', '0')} / ${vVal('RUNWAY_TITIK_DIPERBAIKI', '0')} / ${vVal('RUNWAY_TITIK_BELUM', '0')} titik</strong>
+                    </div>
+                </div>
+                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
+                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">B</span> TAXIWAY
+                    </div>
+                    <div style="font-size: 0.8rem; color: #334155;">
+                        Kondisi: <strong>${vVal('TAXIWAY_STATUS')}</strong> • Pavement: <strong>${vVal('TAXIWAY_PCI')}</strong> • Rusak/Perbaikan/Belum: <strong>${vVal('TWY_TITIK_RUSAK', '0')} / ${vVal('TWY_TITIK_DIPERBAIKI', '0')} / ${vVal('TWY_TITIK_BELUM', '0')} titik</strong>
+                    </div>
+                </div>
+                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
+                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">C</span> APRON
+                    </div>
+                    <div style="font-size: 0.8rem; color: #334155;">
+                        Kondisi: <strong>${vVal('APRON_KONDISI')}</strong> • Pavement: <strong>${vVal('APRON_PCI')}</strong> • Rusak/Perbaikan/Belum: <strong>${vVal('APN_TITIK_RUSAK', '0')} / ${vVal('APN_TITIK_DIPERBAIKI', '0')} / ${vVal('APN_TITIK_BELUM', '0')} titik</strong>
+                    </div>
+                </div>
+                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
+                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">D</span> PEMELIHARAAN POTONG RUMPUT
+                    </div>
+                    <div style="font-size: 0.8rem; color: #334155;">
+                        Standar: <strong>${vVal('RUMPUT_STD')}</strong> • Realisasi: <strong>${vVal('RUMPUT_REALISASI')}</strong> • Performance: <strong>${vVal('RUMPUT_PERF')}</strong>
+                    </div>
+                </div>
+                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
+                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">E</span> CATATAN KHUSUS
+                    </div>
+                    <div style="font-size: 0.8rem; color: #334155;">
+                        ${catItems.length > 0 ? catItems.join('<br>') : '- (Nihil)'}
+                    </div>
+                </div>
+            </div>
+        ` : '';
+
         Swal.fire({
             title: `Laporan ${code} Terverifikasi`,
-            width: photos.length > 0 ? 600 : 480,
+            width: 640,
             html: `
                 <div style="text-align: left; font-size: 0.9rem; line-height: 1.6; padding: 0.5rem;">
                     <div style="margin-bottom: 0.35rem;"><strong>Cabang:</strong> ${airportMeta.city} (${airportMeta.fullname})</div>
                     <div style="margin-bottom: 0.35rem;"><strong>Tanggal:</strong> ${formatDateIndonesian(dStr)}</div>
                     <div style="margin-bottom: 0.35rem;"><strong>Status:</strong> <span style="background:rgba(0, 183, 205, 0.1); color:#00B7CD; border:1px solid rgba(0, 183, 205, 0.3); padding:0.2rem 0.6rem; border-radius:6px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Sudah Mengirim</span></div>
                     <div><strong>PCI Runway:</strong> ${info.pci || '-'}</div>
+                    ${sectionsSummaryHtml}
                     ${photosHtml}
                 </div>
             `,
@@ -7061,7 +7074,7 @@
         const pendingAirports = [];
         const submittedAirports = [];
 
-        ['DPS', 'LOP', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             const info = (data && data[code]) || { is_submitted: false };
             if (info.is_submitted) {
                 submittedCount++;
@@ -7097,7 +7110,7 @@
 
         if (notifListBody) {
             let html = '';
-            ['DPS', 'LOP', 'BWX', 'KOE'].forEach(code => {
+            ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
                 const info = (data && data[code]) || { is_submitted: false, pci: '-' };
                 const meta = AIRPORT_NAMES[code] || { city: code, fullname: code };
                 if (info.is_submitted) {
@@ -7207,14 +7220,14 @@
     function handleAdminSearch(e) {
         const query = (e.target.value || '').toLowerCase().trim();
         if (!query) {
-            ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+            ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
                 const card = document.getElementById(`card-${code}`);
                 if (card) card.style.display = 'flex';
             });
             return;
         }
 
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             const card = document.getElementById(`card-${code}`);
             if (card) {
                 const text = card.textContent.toLowerCase();
@@ -7330,7 +7343,7 @@
         }
 
         // Otomatis terapkan pembuatan ke seluruh cabang bandara
-        const selectedAirports = ['LOP', 'DPS', 'BWX', 'KOE'];
+        const selectedAirports = ['DPS', 'LOP', 'KOE', 'BWX'];
 
         Swal.fire({
             title: 'Terbitkan Sheet ke Semua Cabang?',
@@ -7423,7 +7436,7 @@
         const activeMonthLabel = bulkMonth ? (bulkMonth.startsWith('Bulan') ? bulkMonth : `Bulan ${bulkMonth}`) : `Bulan NOV ${selectedYear}`;
 
         const airportsData = {};
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             const selectEl = document.getElementById(`matrixSheetSelect-${code}`);
             const currentUrl = selectEl ? selectEl.value : '';
             const activeOpt = selectEl && selectEl.selectedIndex >= 0 ? selectEl.options[selectEl.selectedIndex] : null;
@@ -7495,7 +7508,7 @@
                 if (hiddenDep) hiddenDep.value = adminData.deputy_phone || '';
                 if (hiddenAdm) hiddenAdm.value = adminData.admin_phone || '';
 
-                ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+                ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
                     const s = document.getElementById(`matrixSheetSelect-${code}`);
                     if (s) {
                         s.setAttribute('data-active-url', s.value);
@@ -7611,7 +7624,7 @@
         }
 
         // 2. Instan set ke-4 cabang dari konfigurasi tersimpan
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             const branch = airports[code] || {};
             const select = document.getElementById(`matrixSheetSelect-${code}`);
             const statusText = document.getElementById(`matrixSheetStatusText-${code}`);
@@ -7656,7 +7669,7 @@
                 if (parsed && parsed.timestamp && (Date.now() - parsed.timestamp < maxAge) && fileCount > 0) {
                     window.fleetRawFiles = files;
                     discoverAvailableYears();
-                    ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+                    ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
                         renderBranchSheetOptions(code, window.fleetSelectedYear);
                     });
                     populateBulkMonthOptions(window.fleetSelectedYear);
@@ -7759,7 +7772,7 @@
         const refreshTopIcon = document.getElementById('matrixRefreshTopIcon');
         if (refreshTopIcon && isManual) refreshTopIcon.classList.add('fa-spin');
 
-        const codes = ['LOP', 'DPS', 'BWX', 'KOE'];
+        const codes = ['DPS', 'LOP', 'KOE', 'BWX'];
         await Promise.all(codes.map(code => loadSheetsForBranch(code, false, isSilent)));
         saveDriveCacheToLocalStorage();
 
@@ -7790,7 +7803,7 @@
 
     function discoverAvailableYears() {
         const yearsSet = new Set();
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             (window.fleetRawFiles[code] || []).forEach(f => {
                 const y = extractYearFromFileName(f.name);
                 if (y) yearsSet.add(y);
@@ -7851,7 +7864,7 @@
         window.fleetSelectedYear = selectedYear;
 
         // Render ulang dropdown seluruh cabang agar hanya memuat file tahun bersangkutan
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             renderBranchSheetOptions(code, selectedYear);
         });
 
@@ -8015,7 +8028,7 @@
         const monthsSet = new Set();
         const monthRegex = /(JAN|FEB|MAR|APR|MEI|JUN|JUL|AGS|SEP|OKT|NOV|DES)[_\s\-]+(20\d\d)/i;
 
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             (window.fleetRawFiles[code] || []).forEach(f => {
                 const match = (f.name || '').match(monthRegex);
                 if (match && match[2] === currentYear) {
@@ -8074,11 +8087,11 @@
             window.fleetSelectedYear = yearTag;
             const ySelect = document.getElementById('matrixYearSelect');
             if (ySelect) ySelect.value = yearTag;
-            ['LOP', 'DPS', 'BWX', 'KOE'].forEach(c => renderBranchSheetOptions(c, yearTag));
+            ['DPS', 'LOP', 'KOE', 'BWX'].forEach(c => renderBranchSheetOptions(c, yearTag));
         }
 
         let matchCount = 0;
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             const select = document.getElementById(`matrixSheetSelect-${code}`);
             if (!select) return;
 
@@ -8626,7 +8639,7 @@
             'JUL': '07', 'AGS': '08', 'SEP': '09', 'OKT': '10', 'NOV': '11', 'DES': '12'
         };
 
-        ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             const conf = airports[code] || {};
             const domSelect = document.getElementById(`matrixSheetSelect-${code}`);
             let sheetName = conf.sheet_name || '';
@@ -9415,7 +9428,7 @@ REGION II`;
         if (!panel || !grid) return;
 
         const allPhotos = [];
-        ['DPS', 'LOP', 'BWX', 'KOE'].forEach(code => {
+        ['DPS', 'LOP', 'KOE', 'BWX'].forEach(code => {
             const info = (rekapData && rekapData[code]) || {};
             const branchPhotos = Array.isArray(info.photos) ? info.photos : [];
             branchPhotos.forEach(p => {
@@ -9856,12 +9869,13 @@ REGION II`;
         currentSchema.steps.forEach((step, sIdx) => {
             const isActive = sIdx === activeStepIdx;
             const stepNum = sIdx + 1;
+            const firstSecBadge = (step.sections && step.sections[0] && step.sections[0].badge) ? step.sections[0].badge : stepNum;
             const title = step.title || `Langkah ${stepNum}`;
             const subtitle = step.subtitle || 'Bagian formulir laporan';
 
             stepsHtml += `
                 <div class="vfb-step-item ${isActive ? 'active' : ''}" onclick="selectStep(${sIdx})">
-                    <div class="vfb-step-badge">${stepNum}</div>
+                    <div class="vfb-step-badge">${escapeHtml(String(firstSecBadge))}</div>
                     <div class="vfb-step-info">
                         <div class="vfb-step-name">${escapeHtml(title)}</div>
                         <div class="vfb-step-desc">${escapeHtml(subtitle)}</div>
@@ -9925,8 +9939,10 @@ REGION II`;
                         </div>
                     `;
                 } else {
+                    const badgePill = sec.badge ? `<span style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:6px; background:#00B7CD; color:#fff; font-weight:800; font-size:0.78rem; margin-right:0.5rem;">${escapeHtml(sec.badge)}</span>` : '';
                     headerHtml = `
-                        <div class="vfb-section-title">
+                        <div class="vfb-section-title" style="display:flex; align-items:center;">
+                            ${badgePill}
                             <span>${escapeHtml(sec.title || 'Data Laporan')}</span>
                         </div>
                     `;

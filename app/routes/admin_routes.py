@@ -208,10 +208,10 @@ def api_create_sheet():
         new_url = create_monthly_sheet(new_name, drive_folder, template_id)
         # Update config to point to new sheet
         update_airport_config(airport_code, new_url, active_month=target_month_str)
-        from app.services.gsheets_service import invalidate_calendar_cache
+        from app.services.gsheets_service import invalidate_calendar_cache, sync_schema_to_sheets
         invalidate_calendar_cache(airport_code)
         
-        # --- Update Judul di dalam Spreadsheet (Cell A1) ---
+        # --- Update Judul di dalam Spreadsheet (Cell A1) & Sinkronisasi Schema ---
         try:
             client = get_client()
             sheet = client.open_by_url(new_url)
@@ -233,6 +233,11 @@ def api_create_sheet():
                 pass
         except Exception as sheet_err:
             print("Warning: Gagal mengganti teks judul di dalam sheet:", sheet_err)
+
+        try:
+            sync_schema_to_sheets(new_url)
+        except Exception as sync_err:
+            print("Warning: Gagal sinkronisasi schema pada sheet baru:", sync_err)
             
         return jsonify({"success": True, "url": new_url})
     except Exception as e:
@@ -398,7 +403,7 @@ def api_batch_create_sheets():
     target_month_str = data.get('targetMonth')
     raw_template_id = data.get('templateId') or DEFAULT_TEMPLATE_ID
     template_id = extract_drive_id(raw_template_id)
-    airport_codes = data.get('airports', ['LOP', 'DPS', 'BWX', 'KOE'])
+    airport_codes = data.get('airports', ['DPS', 'LOP', 'KOE', 'BWX'])
     
     if not target_month_str:
         return jsonify({"success": False, "error": "Target Bulan Laporan belum dipilih."}), 400
