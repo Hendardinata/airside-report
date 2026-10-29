@@ -482,7 +482,15 @@
           ],
           "icon": "fa-square-parking",
           "title": "APRON"
-        },
+        }
+      ],
+      "subtitle": "Kondisi dan perkerasan Apron",
+      "title": "Fasilitas Apron"
+    },
+    {
+      "icon": "fa-seedling",
+      "id": "step_5",
+      "sections": [
         {
           "badge": "D",
           "fields": [
@@ -512,12 +520,12 @@
           "title": "PEMELIHARAAN POTONG RUMPUT"
         }
       ],
-      "subtitle": "Kondisi Apron dan Pemeliharaan Potong Rumput",
-      "title": "Fasilitas Apron & Rumput"
+      "subtitle": "Standar, realisasi, dan performa potong rumput",
+      "title": "Pemeliharaan Potong Rumput"
     },
     {
       "icon": "fa-clipboard-check",
-      "id": "step_5",
+      "id": "step_6",
       "sections": [
         {
           "badge": "E",

@@ -1,7 +1,8 @@
 // wizard.js
 
 function getCurrentStepNum() {
-    for (let i = 1; i <= 5; i++) {
+    const totalSteps = document.querySelectorAll('.wizard-step').length || 6;
+    for (let i = 1; i <= totalSteps; i++) {
         const stepEl = document.getElementById(`step-${i}`);
         if (stepEl && (stepEl.style.display !== 'none' || stepEl.classList.contains('active'))) {
             return i;
@@ -210,8 +211,9 @@ if (reportWizardForm) {
     reportWizardForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Validasi menyeluruh seluruh langkah 1 sampai 5
-        for (let s = 1; s <= 5; s++) {
+        // Validasi menyeluruh seluruh langkah formulir
+        const totalSteps = document.querySelectorAll('.wizard-step').length || 6;
+        for (let s = 1; s <= totalSteps; s++) {
             if (!validateStepFields(s)) {
                 goToStepDirect(s);
                 return;

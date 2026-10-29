@@ -1,8 +1,8 @@
 AIRPORTS = {
-    'LOP': {'name': 'Lombok', 'id': 'LOP', 'code': '1. Kantor Cabang LOP'},
-    'DPS': {'name': 'Bali', 'id': 'DPS', 'code': '2. Kantor Cabang DPS'},
-    'BWX': {'name': 'Banyuwangi', 'id': 'BWX', 'code': '3. Kantor Cabang BWX'},
-    'KOE': {'name': 'Kupang', 'id': 'KOE', 'code': '4. Kantor Cabang KOE'}
+    'DPS': {'name': 'Bali', 'id': 'DPS', 'code': '1. Kantor Cabang DPS'},
+    'LOP': {'name': 'Lombok', 'id': 'LOP', 'code': '2. Kantor Cabang LOP'},
+    'KOE': {'name': 'Kupang', 'id': 'KOE', 'code': '3. Kantor Cabang KOE'},
+    'BWX': {'name': 'Banyuwangi', 'id': 'BWX', 'code': '4. Kantor Cabang BWX'}
 }
 
 from app.models.user_store import (

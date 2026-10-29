@@ -9913,9 +9913,10 @@ REGION II`;
                                 <span class="badge bg-light text-muted border ms-1" style="font-size: 0.72rem;">${fieldCount} pertanyaan</span>
                             </div>
                             <div class="d-flex align-items-center gap-2">
+                                ${!sec.badge ? `
                                 <button type="button" class="btn text-danger btn-sm p-0 me-2" onclick="deleteSection(${secIdx})" title="Hapus Sub-bab ini">
                                     <i class="fa-solid fa-trash-can"></i>
-                                </button>
+                                </button>` : ''}
                                 <button type="button" class="vfb-btn-toggle-sec" onclick="toggleSectionCard(${activeStepIdx}, ${secIdx})">
                                     <span>Sembunyikan</span>
                                     <i class="fa-solid fa-chevron-up ms-1"></i>
