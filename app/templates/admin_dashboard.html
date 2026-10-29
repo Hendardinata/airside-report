@@ -3201,14 +3201,138 @@
     /* Central Controls & Batch Tools */
     .central-controls-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr;
         gap: 1.25rem;
     }
 
+    /* Hub Contacts Combined Grid */
+    .contacts-combined-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 1.25rem;
+        align-items: stretch;
+    }
+
     @media (max-width: 992px) {
-        .central-controls-grid {
+        .contacts-combined-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+    }
+
+    .contact-subcard {
+        background: #f8fafc;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1.2rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+    }
+
+    .contact-subcard-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding-bottom: 0.85rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .contact-subcard-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+    .contact-subcard-icon.purple {
+        background: #f3e8ff;
+        color: #7e22ce;
+        border: 1px solid #e9d5ff;
+    }
+    .contact-subcard-icon.cyan {
+        background: #e0f2fe;
+        color: #0284c7;
+        border: 1px solid #bae6fd;
+    }
+
+    .contact-subcard-title {
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .contact-subcard-desc {
+        font-size: 0.73rem;
+        color: #64748b;
+        display: block;
+        margin-top: 2px;
+        line-height: 1.3;
+    }
+
+    .contact-subcard-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        flex: 1;
+    }
+
+    .branch-dh-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.85rem;
+        flex: 1;
+    }
+
+    @media (max-width: 576px) {
+        .branch-dh-grid {
             grid-template-columns: 1fr;
         }
+    }
+
+    .branch-dh-card {
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.75rem 0.85rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .branch-dh-card:focus-within {
+        border-color: #00B7CD;
+        box-shadow: 0 0 0 3px rgba(0, 183, 205, 0.12);
+    }
+
+    .branch-dh-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .branch-dh-city {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .branch-dh-airport-name {
+        font-size: 0.69rem;
+        color: #94a3b8;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
     }
 
     .batch-tools-stack {
@@ -5999,7 +6123,7 @@
                             </div>
                             <div>
                                 <h4 class="hub-card-title">Pengaturan Cabang Bandara</h4>
-                                <p class="hub-card-desc">Kelola Folder Google Drive, Spreadsheet Aktif, dan Kontak DH tiap cabang.</p>
+                                <p class="hub-card-desc">Kelola Folder Google Drive dan Spreadsheet Aktif tiap cabang.</p>
                             </div>
                         </div>
                     </div>
@@ -6041,18 +6165,16 @@
                         <table class="hub-table">
                             <colgroup>
                                 <col style="width: 10%;">
-                                <col style="width: 25%;">
+                                <col style="width: 42%;">
                                 <col style="width: 40%;">
-                                <col style="width: 18%;">
-                                <col style="width: 7%;">
+                                <col style="width: 8%;">
                             </colgroup>
                             <thead>
                                 <tr>
                                     <th style="width: 10%; text-align: center;">Cabang</th>
-                                    <th style="width: 25%;">Folder Google Drive</th>
+                                    <th style="width: 42%;">Folder Google Drive</th>
                                     <th style="width: 40%;">Spreadsheet Aktif</th>
-                                    <th style="width: 18%;">WhatsApp DH</th>
-                                    <th style="width: 7%; text-align: center;">Aksi</th>
+                                    <th style="width: 8%; text-align: center;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -6098,12 +6220,6 @@
                                             <span id="matrixSheetStatusText-{{ code }}"><span style="color: #00B7CD; font-weight: 600;"><i class="fa-solid fa-circle-check me-1"></i>Aktif Terhubung</span></span>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div class="input-with-icon">
-                                            <i class="fa-brands fa-whatsapp input-icon text-success"></i>
-                                            <input type="text" class="table-input with-icon monospace" id="matrixGM-{{ code }}" value="{{ c.dh_phone | default(c.gm_phone | default('')) }}" placeholder="62812..." title="Nomor WhatsApp Department Head (DH)">
-                                        </div>
-                                    </td>
                                     <td style="text-align: center;">
                                         <button class="btn-table-action" type="button" onclick="loadSheetsForBranch('{{ code }}', true)" title="Segarkan Spreadsheet Cabang {{ code }}" style="margin: 0 auto;">
                                             <i class="fa-solid fa-arrows-rotate" id="matrixRefreshIcon-{{ code }}"></i>
@@ -6126,9 +6242,9 @@
                     </div>
                 </div>
 
-                <!-- Bagian 3: Global Central Controls & Batch Utilities -->
+                <!-- Bagian 3: Global Central Controls & Kontak WhatsApp Terpadu -->
                 <div class="central-controls-grid">
-                    <!-- Panel Kontak Regional -->
+                    <!-- Panel Kontak Pimpinan & Cabang -->
                     <div class="hub-card" style="margin-bottom: 0;">
                         <div class="hub-card-header">
                             <div class="hub-card-title-group">
@@ -6136,34 +6252,97 @@
                                     <i class="fa-solid fa-bullhorn"></i>
                                 </div>
                                 <div>
-                                    <h4 class="hub-card-title">Kontak Pimpinan Regional</h4>
-                                    <p class="hub-card-desc">Nomor WhatsApp penerima laporan rekapitulasi harian otomatis.</p>
+                                    <h4 class="hub-card-title">Kontak Pimpinan Regional & DH Cabang</h4>
+                                    <p class="hub-card-desc">Nomor WhatsApp penerima laporan rekapitulasi harian otomatis, notifikasi sistem, dan Department Head cabang.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="d-flex flex-column gap-3">
-                            <div class="form-group-modern">
-                                <label class="form-label-modern" for="matrixAdminPhone">
-                                    <i class="fa-solid fa-user-shield text-primary me-1"></i> WhatsApp Administrator
-                                </label>
-                                <div class="input-with-icon">
-                                    <i class="fa-brands fa-whatsapp input-icon text-success"></i>
-                                    <input type="text" class="table-input with-icon monospace" id="matrixAdminPhone" value="{{ config.admin.admin_phone | default('') if config and config.admin else '' }}" placeholder="Contoh: 6281326488542">
+                        <!-- Combined Grid (2 Columns: Pimpinan Regional & DH Cabang) -->
+                        <div class="contacts-combined-grid">
+                            <!-- Kolom 1: Pimpinan Regional II -->
+                            <div class="contact-subcard">
+                                <div class="contact-subcard-header">
+                                    <div class="contact-subcard-icon purple">
+                                        <i class="fa-solid fa-crown"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="contact-subcard-title">Pimpinan Regional II</h5>
+                                        <span class="contact-subcard-desc">Rekapitulasi otomatis & notifikasi sistem bandara</span>
+                                    </div>
                                 </div>
-                                <span class="form-helper-modern">Menerima rekapitulasi seluruh cabang dan notifikasi sistem</span>
+
+                                <div class="contact-subcard-body">
+                                    <div class="form-group-modern">
+                                        <label class="form-label-modern" for="matrixAdminPhone">
+                                            <i class="fa-solid fa-user-shield text-primary me-1"></i> WhatsApp Administrator
+                                        </label>
+                                        <div class="input-with-icon">
+                                            <i class="fa-brands fa-whatsapp input-icon text-success"></i>
+                                            <input type="text" class="table-input with-icon monospace" id="matrixAdminPhone" value="{{ config.admin.admin_phone | default('') if config and config.admin else '' }}" placeholder="Contoh: 6281326488542">
+                                        </div>
+                                        <span class="form-helper-modern">Menerima rekapitulasi seluruh cabang dan notifikasi sistem</span>
+                                    </div>
+
+                                    <div class="form-group-modern">
+                                        <label class="form-label-modern" for="matrixDeputyPhone">
+                                            <i class="fa-solid fa-user-tie text-purple me-1"></i> WhatsApp Deputy Regional
+                                        </label>
+                                        <div class="input-with-icon">
+                                            <i class="fa-brands fa-whatsapp input-icon text-success"></i>
+                                            <input type="text" class="table-input with-icon monospace" id="matrixDeputyPhone" value="{{ config.admin.deputy_phone | default('') if config and config.admin else '' }}" placeholder="Contoh: 6281234567890">
+                                        </div>
+                                        <span class="form-helper-modern">Menerima ringkasan eksekutif harian 4 cabang bandara</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group-modern">
-                                <label class="form-label-modern" for="matrixDeputyPhone">
-                                    <i class="fa-solid fa-user-tie text-purple me-1"></i> WhatsApp Deputy Regional
-                                </label>
-                                <div class="input-with-icon">
-                                    <i class="fa-brands fa-whatsapp input-icon text-success"></i>
-                                    <input type="text" class="table-input with-icon monospace" id="matrixDeputyPhone" value="{{ config.admin.deputy_phone | default('') if config and config.admin else '' }}" placeholder="Contoh: 6281234567890">
+                            <!-- Kolom 2: Department Head (DH) Bandara Cabang -->
+                            <div class="contact-subcard">
+                                <div class="contact-subcard-header">
+                                    <div class="contact-subcard-icon cyan">
+                                        <i class="fa-solid fa-building-user"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="contact-subcard-title">Department Head (DH) Cabang</h5>
+                                        <span class="contact-subcard-desc">Reminder pelaporan & eskalasi fasilitas sisi udara</span>
+                                    </div>
                                 </div>
-                                <span class="form-helper-modern">Menerima ringkasan eksekutif harian 4 cabang bandara</span>
+
+                                <div class="contact-subcard-body">
+                                    <div class="branch-dh-grid">
+                                        {% for code in ['LOP', 'DPS', 'BWX', 'KOE'] %}
+                                        {% set c = config.airports.get(code, {}) if config and config.airports else {} %}
+                                        <div class="branch-dh-card">
+                                            <div class="branch-dh-card-header">
+                                                <span class="branch-iata-pill branch-iata-{{ code }}">{{ code }}</span>
+                                                <span class="branch-dh-city">
+                                                    {% if code == 'LOP' %}Lombok (ZAM){% elif code == 'DPS' %}Bali (DPS){% elif code == 'BWX' %}Banyuwangi (BWX){% elif code == 'KOE' %}Kupang (KOE){% endif %}
+                                                </span>
+                                            </div>
+                                            <div class="input-with-icon">
+                                                <i class="fa-brands fa-whatsapp input-icon text-success"></i>
+                                                <input type="text" class="table-input with-icon monospace" id="matrixGM-{{ code }}" value="{{ c.dh_phone | default(c.gm_phone | default('')) }}" placeholder="62812..." title="Nomor WhatsApp Department Head {{ code }}">
+                                            </div>
+                                            <span class="branch-dh-airport-name" title="{% if code == 'LOP' %}Bandara Zainuddin Abdul Madjid{% elif code == 'DPS' %}Bandara I Gusti Ngurah Rai{% elif code == 'BWX' %}Bandara Banyuwangi{% elif code == 'KOE' %}Bandara El Tari Kupang{% endif %}">
+                                                {% if code == 'LOP' %}Bandara Zainuddin Abdul Madjid{% elif code == 'DPS' %}Bandara I Gusti Ngurah Rai{% elif code == 'BWX' %}Bandara Banyuwangi{% elif code == 'KOE' %}Bandara El Tari Kupang{% endif %}
+                                            </span>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+
+                        <!-- Footer Simpan Kontak -->
+                        <div class="matrix-card-footer mt-4 pt-3" style="border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <div class="matrix-footer-note" style="margin: 0;">
+                                <i class="fa-solid fa-shield-halved text-primary me-1"></i>
+                                Kontak WhatsApp tersimpan digunakan untuk notifikasi laporan dan tindak lanjut harian.
+                            </div>
+                            <button type="button" class="modal-btn-save" onclick="saveFleetMatrix()">
+                                <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Kontak
+                            </button>
                         </div>
                     </div>
                 </div>
