@@ -149,3 +149,88 @@ def logout():
     session.clear()
     session['_csrf_token'] = secrets.token_hex(32)
     return redirect(url_for('auth.index'))
+
+
+def _format_tanggal_indo(d_str):
+    if not d_str:
+        return "-"
+    try:
+        parts = str(d_str)[:10].split("-")
+        if len(parts) == 3:
+            months = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ]
+            d = int(parts[2])
+            m = months[int(parts[1]) - 1]
+            y = parts[0]
+            return f"{d} {m} {y}"
+    except Exception:
+        pass
+    return str(d_str)
+
+
+@bp.route('/dokumentasi/<date_str>', methods=['GET'])
+@bp.route('/dokumentasi/<date_str>/<airport_code>', methods=['GET'])
+def public_dokumentasi(date_str, airport_code=None):
+    """
+    Halaman publik (tanpa login) untuk melihat & mencetak PDF dokumentasi foto lapangan
+    yang dikirimkan melalui tautan di laporan WhatsApp ke Deputy / Pimpinan.
+    """
+    from app.services.photo_service import get_all_airports_photos_by_date, get_photos_by_date
+
+    clean_date = str(date_str or '').strip()[:10]
+    if airport_code and airport_code.upper() in ('DPS', 'LOP', 'BWX', 'KOE'):
+        code = airport_code.upper()
+        photos_by_airport = {c: ([] if c != code else get_photos_by_date(code, clean_date)) for c in ('DPS', 'LOP', 'BWX', 'KOE')}
+    else:
+        photos_by_airport = get_all_airports_photos_by_date(clean_date)
+
+    total_photos = sum(len(v) for v in photos_by_airport.values())
+    airport_names = {
+        "DPS": "Bandara Internasional I Gusti Ngurah Rai — Bali",
+        "LOP": "Bandara Internasional Zainuddin Abdul Madjid — Lombok",
+        "BWX": "Bandara Internasional Banyuwangi",
+        "KOE": "Bandara El Tari — Kupang"
+    }
+
+    og_image_url = url_for('auth.public_dokumentasi_preview', date_str=clean_date, _external=True)
+
+    return render_template(
+        'public_dokumentasi.html',
+        date_str=clean_date,
+        formatted_date=_format_tanggal_indo(clean_date),
+        photos_by_airport=photos_by_airport,
+        total_photos=total_photos,
+        airport_names=airport_names,
+        og_image_url=og_image_url
+    )
+
+
+@bp.route('/dokumentasi/<date_str>/preview.jpg', methods=['GET'])
+def public_dokumentasi_preview(date_str):
+    """
+    Endpoint gambar untuk OpenGraph Link Preview otomatis di WhatsApp (status 200 langsung).
+    """
+    from flask import Response, send_from_directory, send_file
+    from app.services.photo_service import generate_og_preview_jpeg, get_all_airports_photos_by_date, UPLOADS_ROOT
+    import os
+
+    clean_date = str(date_str or '').strip()[:10]
+    jpeg_bytes = generate_og_preview_jpeg(clean_date)
+    if jpeg_bytes:
+        return Response(jpeg_bytes, mimetype='image/jpeg')
+
+    # Fallback langsung kirim file gambar pertama dengan status 200 OK agar crawler WhatsApp merender thumbnail
+    grouped = get_all_airports_photos_by_date(clean_date)
+    for code in ('DPS', 'LOP', 'BWX', 'KOE'):
+        if grouped.get(code):
+            first_url = grouped[code][0]['url']
+            rel_path = first_url.replace('/static/uploads/', '').replace('/', os.sep)
+            abs_path = os.path.join(UPLOADS_ROOT, rel_path)
+            if os.path.exists(abs_path):
+                return send_file(abs_path, mimetype='image/webp')
+
+    static_dir = os.path.join(os.path.dirname(__file__), '..', 'static', 'img')
+    return send_from_directory(static_dir, 'logo-kawung.png')
+

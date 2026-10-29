@@ -344,3 +344,79 @@ def get_storage_stats():
         "retention_days": DEFAULT_RETENTION_DAYS
     }
 
+
+def generate_og_preview_jpeg(tanggal, airport_code=None):
+    """
+    Membuat gambar pratinjau OpenGraph (1200x630 JPEG) untuk preview link WhatsApp.
+    Menggabungkan hingga 4 foto dokumentasi pada tanggal tersebut menjadi kolase rapi.
+    """
+    all_photos = []
+    if airport_code:
+        all_photos = get_photos_by_date(airport_code, tanggal)
+    else:
+        grouped = get_all_airports_photos_by_date(tanggal)
+        for code in ["DPS", "LOP", "BWX", "KOE"]:
+            all_photos.extend(grouped.get(code, []))
+
+    if not all_photos:
+        return None
+
+    try:
+        from PIL import Image, ImageOps
+        import io
+
+        canvas_w, canvas_h = 1200, 630
+        canvas = Image.new("RGB", (canvas_w, canvas_h), (15, 23, 42))
+
+        sample = all_photos[:4]
+        n = len(sample)
+        pad = 12
+
+        if n == 1:
+            boxes = [(pad, pad, canvas_w - pad, canvas_h - pad)]
+        elif n == 2:
+            mid_x = canvas_w // 2
+            boxes = [
+                (pad, pad, mid_x - pad // 2, canvas_h - pad),
+                (mid_x + pad // 2, pad, canvas_w - pad, canvas_h - pad)
+            ]
+        elif n == 3:
+            mid_x = canvas_w // 2
+            mid_y = canvas_h // 2
+            boxes = [
+                (pad, pad, mid_x - pad // 2, canvas_h - pad),
+                (mid_x + pad // 2, pad, canvas_w - pad, mid_y - pad // 2),
+                (mid_x + pad // 2, mid_y + pad // 2, canvas_w - pad, canvas_h - pad)
+            ]
+        else:
+            mid_x = canvas_w // 2
+            mid_y = canvas_h // 2
+            boxes = [
+                (pad, pad, mid_x - pad // 2, mid_y - pad // 2),
+                (mid_x + pad // 2, pad, canvas_w - pad, mid_y - pad // 2),
+                (pad, mid_y + pad // 2, mid_x - pad // 2, canvas_h - pad),
+                (mid_x + pad // 2, mid_y + pad // 2, canvas_w - pad, canvas_h - pad)
+            ]
+
+        for idx, p in enumerate(sample):
+            rel = p["url"].replace("/static/uploads/", "").replace("/", os.sep)
+            abs_p = os.path.join(UPLOADS_ROOT, rel)
+            if not os.path.exists(abs_p):
+                continue
+            x1, y1, x2, y2 = boxes[idx]
+            w, h = x2 - x1, y2 - y1
+            with Image.open(abs_p) as img:
+                img_rgb = img.convert("RGB")
+                fitted = ImageOps.fit(img_rgb, (w, h), method=Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.LANCZOS)
+                canvas.paste(fitted, (x1, y1))
+
+        buf = io.BytesIO()
+        canvas.save(buf, format="JPEG", quality=82, optimize=True)
+        return buf.getvalue()
+    except ImportError:
+        return None
+    except Exception as e:
+        print(f"Warning generate_og_preview_jpeg: {e}")
+        return None
+
+

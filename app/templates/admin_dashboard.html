@@ -6030,9 +6030,9 @@
                                 </span>
                                 <h4 style="margin: 0; font-size: 0.88rem; font-weight: 800; color: #0f172a;" id="deputyPhotosTitle">Dokumentasi Foto Lapangan Regional II</h4>
                             </div>
-                            <span style="font-size: 0.73rem; color: #0369a1; background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.2rem 0.65rem; border-radius: 999px; font-weight: 600;">
-                                <i class="fa-solid fa-bolt me-1"></i> Otomatis disertakan saat klik Kirim Serentak
-                            </span>
+                            <a id="deputyPublicDocLink" href="/dokumentasi" target="_blank" style="text-decoration: none; font-size: 0.73rem; color: #0369a1; background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.22rem 0.7rem; border-radius: 999px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <i class="fa-solid fa-up-right-from-square"></i> Buka Halaman Galeri / PDF Deputy
+                            </a>
                         </div>
 
                         <div id="deputyPhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem;"></div>
@@ -9197,7 +9197,17 @@
                     const kpiSync = document.getElementById('kpiLastSync');
                     if (kpiSync) kpiSync.textContent = `Pukul ${hh}.${mm}`;
 
-                    // Build Deputy WhatsApp Text
+                    // Build Deputy WhatsApp Text (Sertakan tautan Galeri/PDF Dokumentasi otomatis jika ada foto)
+                    let totalDocPhotos = 0;
+                    ['DPS', 'LOP', 'KOE', 'BWX'].forEach(c => {
+                        const pList = (data[c] && Array.isArray(data[c].photos)) ? data[c].photos : [];
+                        totalDocPhotos += pList.length;
+                    });
+                    const docUrl = `${window.location.origin}/dokumentasi/${res.date}`;
+                    const docSection = totalDocPhotos > 0
+                        ? `\nLampiran Dokumentasi Foto Lapangan (${totalDocPhotos} Foto) :\n${docUrl}\n`
+                        : '';
+
                     const kompilasi = `Assalamu'alaikum Wr. Wb
 Selamat Malam
 
@@ -9210,7 +9220,7 @@ Tanggal : *${formatTanggalIndo(res.date)}*
 
 Region II
 ${branchText.trim()}
-
+${docSection}
 Demikian disampaikan, atas perhatiannya diucapkan terima kasih
 
 Ttd
@@ -9335,58 +9345,30 @@ REGION II`;
 
         if (window.currentDeputyPhotos && window.currentDeputyPhotos.length > 0) {
             const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || '');
-            const blob = window.currentDeputyCollageBlob || await buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate);
-
-            // Jika dibuka dari HP & mendukung Web Share API file, langsung bagikan Gambar + Teks sekaligus
-            if (isMobile && blob && navigator.canShare) {
-                const file = new File([blob], `Dokumentasi_Regional_II_${lastRekapDate || 'Harian'}.png`, { type: 'image/png' });
-                if (navigator.canShare({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            title: 'Laporan Harian Airside Regional II',
-                            text: text,
-                            files: [file]
-                        });
-                        return;
-                    } catch (err) {
-                        if (err && err.name === 'AbortError') return;
+            if (isMobile && navigator.canShare) {
+                const blob = window.currentDeputyCollageBlob || await buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate);
+                if (blob) {
+                    const file = new File([blob], `Dokumentasi_Regional_II_${lastRekapDate || 'Harian'}.png`, { type: 'image/png' });
+                    if (navigator.canShare({ files: [file] })) {
+                        try {
+                            await navigator.share({
+                                title: 'Laporan Harian Airside Regional II',
+                                text: text,
+                                files: [file]
+                            });
+                            return;
+                        } catch (err) {
+                            if (err && err.name === 'AbortError') return;
+                        }
                     }
                 }
             }
 
-            // Di PC / Laptop: Salin gambar kolase ke Clipboard terlebih dahulu
-            const copied = await copyDeputyCollageToClipboard(false);
-            const previewUrl = blob ? URL.createObjectURL(blob) : '';
-
-            await Swal.fire({
-                title: copied ? 'Gambar Kolase Siap Ditempel (Ctrl + V)' : 'Gambar Kolase Diunduh',
-                html: `
-                    <div style="text-align: left; font-size: 0.85rem; color: #334155; line-height: 1.55;">
-                        ${previewUrl ? `<div style="margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; max-height: 210px; background: #0f172a; text-align: center;"><img src="${previewUrl}" style="max-width: 100%; max-height: 210px; object-fit: contain;"></div>` : ''}
-                        <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 0.65rem 0.8rem; color: #0369a1;">
-                            <i class="fa-solid fa-circle-info me-1"></i>
-                            ${copied
-                                ? `Karena tautan resmi WhatsApp Web (<code>wa.me</code>) hanya mengizinkan pengiriman teks lewat link, <b>gambar kolase ${window.currentDeputyPhotos.length} foto di atas sudah otomatis disalin ke Clipboard Anda</b>.<br><br>👉 Saat ruang chat WhatsApp terbuka dan teks muncul, cukup tekan <b>Ctrl + V (Paste)</b> di keyboard lalu klik Kirim.`
-                                : `File gambar kolase telah diunduh otomatis. Lampirkan gambar tersebut di ruang chat WhatsApp.`
-                            }
-                        </div>
-                    </div>
-                `,
-                confirmButtonText: '<i class="fa-brands fa-whatsapp me-1"></i> Lanjut Buka WhatsApp',
-                confirmButtonColor: '#16a34a',
-                showCancelButton: true,
-                cancelButtonText: 'Batal'
-            }).then((res) => {
-                if (previewUrl) setTimeout(() => URL.revokeObjectURL(previewUrl), 2000);
-                if (res.isConfirmed) {
-                    if (!copied) downloadDeputyCollage();
-                    window.open(url, '_blank');
-                    promptAdminFollowup();
-                }
-            });
-            return;
+            // Salin kolase ke Clipboard secara senyap di latar belakang (opsional bagi pengguna)
+            copyDeputyCollageToClipboard(false).catch(() => {});
         }
 
+        // Langsung buka WhatsApp dalam 1x klik tanpa popup yang menghalangi
         window.open(url, '_blank');
         promptAdminFollowup();
     }
@@ -9427,6 +9409,10 @@ REGION II`;
         panel.style.display = 'block';
         if (titleEl) {
             titleEl.textContent = `Dokumentasi Foto Lapangan Regional II (${allPhotos.length} Foto Terkumpul)`;
+        }
+        const docLinkEl = document.getElementById('deputyPublicDocLink');
+        if (docLinkEl && dateStr) {
+            docLinkEl.href = `/dokumentasi/${dateStr}`;
         }
 
         grid.innerHTML = allPhotos.map((p, idx) => `

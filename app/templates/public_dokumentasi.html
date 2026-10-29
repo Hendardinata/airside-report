@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentasi Airside Regional II — {{ formatted_date }}</title>
+
+    <!-- OpenGraph Meta Tags untuk Rich Preview Gambar Otomatis di WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Dokumentasi Laporan Harian Airside Regional II ({{ formatted_date }})">
+    <meta property="og:description" content="Lampiran {{ total_photos }} foto dokumentasi kondisi fasilitas sisi udara (Runway, Taxiway, Apron) PT Angkasa Pura Indonesia Regional II.">
+    <meta property="og:image" content="{{ og_image_url }}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --navy: #002b49;
+            --teal: #00b7cd;
+            --slate-900: #0f172a;
+            --slate-700: #334155;
+            --slate-500: #64748b;
+            --slate-200: #e2e8f0;
+            --bg: #f1f5f9;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--slate-900);
+            line-height: 1.5;
+            padding-bottom: 3rem;
+        }
+        .top-banner {
+            background: linear-gradient(135deg, #002b49 0%, #00426e 100%);
+            color: #fff;
+            padding: 1.5rem 1.25rem;
+            border-bottom: 4px solid var(--teal);
+            box-shadow: 0 4px 16px rgba(0, 43, 73, 0.15);
+        }
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+        .banner-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .badge-reg {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(0, 183, 205, 0.2);
+            border: 1px solid rgba(0, 183, 205, 0.5);
+            color: #7dd3fc;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.22rem 0.65rem;
+            border-radius: 999px;
+            letter-spacing: 0.4px;
+            margin-bottom: 0.45rem;
+        }
+        .banner-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+        .banner-sub {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-top: 0.2rem;
+        }
+        .btn-pdf {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: #fff;
+            color: var(--navy);
+            border: none;
+            padding: 0.55rem 1rem;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.15s ease;
+        }
+        .btn-pdf:hover {
+            transform: translateY(-1px);
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1.25rem auto;
+            padding: 0 1rem;
+        }
+        .filter-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+        .pill-btn {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            color: var(--slate-700);
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .pill-btn.active {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy);
+        }
+        .branch-section {
+            margin: 1.25rem auto;
+            padding: 0 1rem;
+        }
+        .branch-card {
+            background: #fff;
+            border: 1px solid var(--slate-200);
+            border-radius: 14px;
+            padding: 1.2rem;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        }
+        .branch-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.85rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .branch-badge {
+            background: var(--navy);
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.82rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 8px;
+        }
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+        .photo-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            break-inside: avoid;
+        }
+        .photo-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+        }
+        .photo-thumb-wrap {
+            position: relative;
+            height: 210px;
+            background: #0f172a;
+        }
+        .photo-thumb-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .area-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 43, 73, 0.9);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.22rem 0.65rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .photo-meta {
+            padding: 0.75rem 0.9rem;
+        }
+        .photo-caption {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+        .photo-time {
+            font-size: 0.72rem;
+            color: var(--slate-500);
+        }
+        .empty-box {
+            background: #fff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: var(--slate-500);
+            margin: 1.5rem 1rem;
+        }
+        /* Lightbox */
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.92);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        @media print {
+            body { background: #fff; padding: 0; }
+            .no-print { display: none !important; }
+            .top-banner { background: #002b49 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .branch-card { box-shadow: none; border: 1px solid #cbd5e1; margin-bottom: 1rem; }
+            .photo-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-banner">
+        <div class="container banner-flex">
+            <div>
+                <div class="badge-reg">
+                    <i class="fa-solid fa-plane-departure"></i> PT ANGKASA PURA INDONESIA — REGIONAL II
+                </div>
+                <h1 class="banner-title">Dokumentasi Laporan Harian Fasilitas Sisi Udara</h1>
+                <div class="banner-sub">
+                    <i class="fa-regular fa-calendar-check"></i> Tanggal Laporan: <strong>{{ formatted_date }}</strong>
+                    &nbsp;•&nbsp; Total: <strong>{{ total_photos }} Foto Lapangan</strong>
+                </div>
+            </div>
+            <div class="no-print">
+                <button type="button" class="btn-pdf" onclick="window.print()">
+                    <i class="fa-solid fa-file-pdf" style="color: #dc2626;"></i> Simpan / Cetak PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        {% if total_photos > 0 %}
+        <div class="toolbar no-print">
+            <div class="filter-pills">
+                <button type="button" class="pill-btn active" onclick="filterBranch('ALL', this)">
+                    Semua Cabang ({{ total_photos }})
+                </button>
+                {% for code in ['DPS', 'LOP', 'BWX', 'KOE'] %}
+                    {% set b_photos = photos_by_airport.get(code, []) %}
+                    {% if b_photos %}
+                    <button type="button" class="pill-btn" onclick="filterBranch('{{ code }}', this)">
+                        {{ code }} ({{ b_photos|length }})
+                    </button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div style="font-size: 0.78rem; color: #64748b;">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> Ketuk foto untuk memperbesar
+            </div>
+        </div>
+
+        {% for code in ['DPS', 'LOP', 'BWX', 'KOE'] %}
+            {% set b_photos = photos_by_airport.get(code, []) %}
+            {% if b_photos %}
+            <section class="branch-section" data-branch="{{ code }}">
+                <div class="branch-card">
+                    <div class="branch-header">
+                        <div style="display: flex; align-items: center; gap: 0.65rem;">
+                            <span class="branch-badge">{{ code }}</span>
+                            <div>
+                                <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">
+                                    {{ airport_names.get(code, code) }}
+                                </div>
+                                <div style="font-size: 0.75rem; color: #64748b;">
+                                    {{ b_photos|length }} Dokumentasi Terlampir
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="photo-grid">
+                        {% for p in b_photos %}
+                        <div class="photo-item" onclick="openLightbox('{{ p.url }}', '{{ code }} • {{ p.area_tag }}', '{{ p.caption|e }}')">
+                            <div class="photo-thumb-wrap">
+                                <img src="{{ p.url }}" alt="Foto {{ code }} {{ loop.index }}" loading="lazy">
+                                <span class="area-tag">
+                                    <i class="fa-solid fa-location-dot"></i> {{ p.area_tag or 'Umum' }}
+                                </span>
+                            </div>
+                            <div class="photo-meta">
+                                <div class="photo-caption">
+                                    {{ p.caption if p.caption else 'Dokumentasi pemeriksaan rutin fasilitas sisi udara' }}
+                                </div>
+                                <div class="photo-time">
+                                    Cabang {{ code }} • Area {{ p.area_tag or 'Umum' }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+        {% endfor %}
+
+        {% else %}
+        <div class="empty-box">
+            <i class="fa-regular fa-images" style="font-size: 2.5rem; color: #94a3b8; margin-bottom: 0.75rem;"></i>
+            <h3 style="font-size: 1rem; color: #334155; margin-bottom: 0.25rem;">Belum Ada Lampiran Foto</h3>
+            <p style="font-size: 0.85rem;">Tidak ditemukan dokumentasi foto lapangan untuk tanggal {{ formatted_date }}.</p>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="no-print" onclick="closeLightbox()">
+        <button type="button" onclick="closeLightbox()" style="position: absolute; top: 18px; right: 20px; background: rgba(255,255,255,0.15); border: none; color: #fff; width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; cursor: pointer;">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="lbImg" src="" alt="Preview" style="max-width: 94vw; max-height: 80vh; border-radius: 10px; object-fit: contain; box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
+        <div style="margin-top: 0.85rem; text-align: center; color: #fff;">
+            <div id="lbTitle" style="font-weight: 800; font-size: 0.95rem; color: #38bdf8;"></div>
+            <div id="lbCap" style="font-size: 0.85rem; color: #e2e8f0; margin-top: 0.2rem;"></div>
+        </div>
+    </div>
+
+    <script>
+        function filterBranch(code, btn) {
+            document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            document.querySelectorAll('.branch-section').forEach(sec => {
+                if (code === 'ALL' || sec.getAttribute('data-branch') === code) {
+                    sec.style.display = 'block';
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+        }
+        function openLightbox(url, title, cap) {
+            document.getElementById('lbImg').src = url;
+            document.getElementById('lbTitle').textContent = title;
+            document.getElementById('lbCap').textContent = cap || 'Dokumentasi pemeriksaan rutin fasilitas sisi udara';
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
