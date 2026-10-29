@@ -176,6 +176,9 @@ def get_staging_reports(airport_code):
         if not sub_uname and r['submitted_by_username']:
             sub_uname = r['submitted_by_username']
 
+        from app.services.photo_service import get_photos_by_date
+        photos_list = get_photos_by_date(airport_code, r['tanggal'])
+
         reports.append({
             "report_id": r['report_id'],
             "status": display_status,
@@ -189,6 +192,7 @@ def get_staging_reports(airport_code):
             "timestamp_update": r['timestamp_update'] or '',
             "pci_runway": row_dict.get('RUNWAY_PCI', '-'),
             "kondisi_runway": row_dict.get('RUNWAY_KONDISI', '-'),
+            "photos": photos_list,
             "data": row_dict
         })
 
@@ -224,6 +228,9 @@ def get_staging_report_by_id(airport_code, report_id):
     if not sub_uname and r['submitted_by_username']:
         sub_uname = r['submitted_by_username']
 
+    from app.services.photo_service import get_photos_by_date
+    photos_list = get_photos_by_date(airport_code, r['tanggal'])
+
     return {
         "report_id": r['report_id'],
         "status": display_status,
@@ -237,6 +244,7 @@ def get_staging_report_by_id(airport_code, report_id):
         "timestamp_update": r['timestamp_update'] or '',
         "pci_runway": row_dict.get('RUNWAY_PCI', '-'),
         "kondisi_runway": row_dict.get('RUNWAY_KONDISI', '-'),
+        "photos": photos_list,
         "data": row_dict
     }
 
@@ -431,6 +439,12 @@ def delete_staging_report(airport_code, report_id):
         DELETE FROM staging_reports 
         WHERE report_id = ? AND UPPER(airport_code) = ?;
         """, (report_id, airport_code))
+
+    try:
+        from app.services.photo_service import delete_photos_for_report
+        delete_photos_for_report(airport_code, report_id=report_id)
+    except Exception as e:
+        print(f"Warning deleting photos for report {report_id}: {e}")
 
     try:
         from app.services.notification_service import delete_notifications_by_report_id

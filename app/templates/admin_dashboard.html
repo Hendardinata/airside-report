@@ -6021,6 +6021,24 @@
                         <textarea class="console-textarea" id="kompilasiText" rows="14" placeholder="Menarik data dari server..."></textarea>
                     </div>
 
+                    <!-- Panel Lampiran Foto Dokumentasi 4 Bandara & Kolase Otomatis -->
+                    <div id="deputyPhotosPanel" style="display: none; margin: 0 1.5rem 1.25rem 1.5rem; padding: 0.95rem 1.15rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.55rem;">
+                                <span style="background: #002b49; color: #fff; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 6px; letter-spacing: 0.3px;">
+                                    <i class="fa-solid fa-camera-retro me-1"></i> LAMPIRAN FOTO
+                                </span>
+                                <h4 style="margin: 0; font-size: 0.88rem; font-weight: 800; color: #0f172a;" id="deputyPhotosTitle">Dokumentasi Foto Lapangan Regional II</h4>
+                            </div>
+                            <span style="font-size: 0.73rem; color: #0369a1; background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.2rem 0.65rem; border-radius: 999px; font-weight: 600;">
+                                <i class="fa-solid fa-bolt me-1"></i> Otomatis disertakan saat klik Kirim Serentak
+                            </span>
+                        </div>
+
+                        <div id="deputyPhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem;"></div>
+                        <canvas id="deputyCollageCanvas" style="display: none;"></canvas>
+                    </div>
+
                     <div class="console-footer">
                         <div class="console-stats">
                             <span id="charCount"><i class="fa-solid fa-font me-1"></i> 0 karakter</span>
@@ -6343,6 +6361,29 @@
                             <button type="button" class="modal-btn-save" onclick="saveFleetMatrix()">
                                 <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Kontak
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- Panel Manajemen Penyimpanan Foto Dokumentasi (.webp & Auto-Cleanup 90 Hari) -->
+                    <div class="hub-card" style="margin-top: 1.25rem; margin-bottom: 0;">
+                        <div class="hub-card-header" style="margin-bottom: 0.5rem;">
+                            <div class="hub-card-title-group">
+                                <div class="hub-card-icon navy" style="background: rgba(0, 183, 205, 0.12); color: #00B7CD;">
+                                    <i class="fa-solid fa-hard-drive"></i>
+                                </div>
+                                <div>
+                                    <h4 class="hub-card-title">Penyimpanan Dokumentasi Foto (.webp) &amp; Auto-Cleanup</h4>
+                                    <p class="hub-card-desc">Otomatis menghapus foto dokumentasi yang berumur lebih dari <b>90 hari (3 bulan)</b> agar penyimpanan server tetap lega.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span id="adminPhotoStorageBadge" class="badge bg-info bg-opacity-10 text-dark border px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.8rem;">
+                                    <i class="fa-solid fa-images me-1 text-primary"></i> Memuat status memori...
+                                </span>
+                                <button type="button" class="btn-outline-action" onclick="triggerManualPhotoCleanup()" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                                    <i class="fa-solid fa-broom me-1 text-danger"></i> Bersihkan Foto &gt; 90 Hari
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -6939,19 +6980,66 @@
         });
     }
 
+    function openAdminPhotoLightbox(url, title, caption) {
+        Swal.fire({
+            title: title || 'Dokumentasi Lapangan',
+            text: caption || '',
+            imageUrl: url,
+            imageAlt: title || 'Dokumentasi',
+            width: 740,
+            confirmButtonText: 'Tutup',
+            confirmButtonColor: '#002b49'
+        });
+    }
+
     function openBranchSuccessSheet(code) {
         const info = (lastRekapData && lastRekapData[code]) || {};
         const airportMeta = AIRPORT_NAMES[code] || { city: code, fullname: code };
         const dStr = lastRekapDate || document.getElementById('filterDate')?.value || '';
+        const photos = Array.isArray(info.photos) ? info.photos : [];
+
+        let photosHtml = '';
+        if (photos.length > 0) {
+            photosHtml = `
+                <div style="margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0;">
+                    <div style="font-weight: 700; font-size: 0.82rem; color: #0f172a; margin-bottom: 0.5rem;">
+                        <i class="fa-solid fa-camera text-info me-1"></i> Dokumentasi Foto Lapangan (${photos.length} Foto):
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); gap: 0.55rem; max-height: 240px; overflow-y: auto;">
+                        ${photos.map((p, idx) => `
+                            <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #fff; cursor: pointer;" onclick="openAdminPhotoLightbox('${p.url}', '${code} - ${(p.area_tag || 'Umum').replace(/'/g, '')}', '${(p.caption || '').replace(/'/g, '')}')">
+                                <div style="position: relative; height: 90px; background: #0f172a;">
+                                    <img src="${p.url}" alt="Foto ${idx + 1}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <span style="position: absolute; top: 4px; left: 4px; background: rgba(0,43,73,0.88); color: #fff; font-size: 0.62rem; font-weight: 700; padding: 1px 6px; border-radius: 4px;">
+                                        ${p.area_tag || 'Umum'}
+                                    </span>
+                                </div>
+                                <div style="padding: 0.35rem 0.45rem; font-size: 0.68rem; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    ${p.caption || 'Klik perbesar'}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        } else {
+            photosHtml = `
+                <div style="margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: #f8fafc; border-radius: 8px; font-size: 0.78rem; color: #64748b;">
+                    <i class="fa-regular fa-image me-1"></i> Tidak ada lampiran foto dokumentasi pada tanggal ini.
+                </div>
+            `;
+        }
 
         Swal.fire({
             title: `Laporan ${code} Terverifikasi`,
+            width: photos.length > 0 ? 600 : 480,
             html: `
                 <div style="text-align: left; font-size: 0.9rem; line-height: 1.6; padding: 0.5rem;">
                     <div style="margin-bottom: 0.35rem;"><strong>Cabang:</strong> ${airportMeta.city} (${airportMeta.fullname})</div>
                     <div style="margin-bottom: 0.35rem;"><strong>Tanggal:</strong> ${formatDateIndonesian(dStr)}</div>
                     <div style="margin-bottom: 0.35rem;"><strong>Status:</strong> <span style="background:rgba(0, 183, 205, 0.1); color:#00B7CD; border:1px solid rgba(0, 183, 205, 0.3); padding:0.2rem 0.6rem; border-radius:6px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Sudah Mengirim</span></div>
                     <div><strong>PCI Runway:</strong> ${info.pci || '-'}</div>
+                    ${photosHtml}
                 </div>
             `,
             icon: 'success',
@@ -9133,6 +9221,9 @@ REGION II`;
                         textarea.value = kompilasi;
                         updateConsoleStats(kompilasi);
                     }
+                    if (typeof renderDeputyPhotosPanel === 'function') {
+                        renderDeputyPhotosPanel(data, res.date);
+                    }
                 } else {
                     Swal.fire('Error', res.error || 'Gagal menarik data rekapitulasi', 'error');
                 }
@@ -9191,7 +9282,7 @@ REGION II`;
         });
     }
 
-    function kirimWhatsAppDeputy() {
+    async function kirimWhatsAppDeputy() {
         const text = document.getElementById('kompilasiText')?.value;
         const deputyPhone = document.getElementById('matrixDeputyPhone')?.value?.trim()
             || document.getElementById('hiddenWaDeputy')?.value?.trim()
@@ -9219,29 +9310,334 @@ REGION II`;
         if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
         const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
 
-        window.open(url, '_blank');
+        const promptAdminFollowup = () => {
+            if (adminPhone && adminPhone.trim()) {
+                setTimeout(() => {
+                    Swal.fire({
+                        title: 'Kirim ke Admin?',
+                        text: 'Apakah Anda juga ingin mengirim laporan ini ke nomor Admin Regional?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Kirim ke Admin',
+                        cancelButtonText: 'Tidak',
+                        confirmButtonColor: '#00B7CD'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let cleanAdmin = adminPhone.trim().replace(/\D/g, '');
+                            if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                            const adminUrl = `https://wa.me/${cleanAdmin}?text=${encodeURIComponent(text)}`;
+                            window.open(adminUrl, '_blank');
+                        }
+                    });
+                }, 1000);
+            }
+        };
 
-        if (adminPhone && adminPhone.trim()) {
-            setTimeout(() => {
-                Swal.fire({
-                    title: 'Kirim ke Admin?',
-                    text: 'Apakah Anda juga ingin mengirim laporan ini ke nomor Admin Regional?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, Kirim ke Admin',
-                    cancelButtonText: 'Tidak',
-                    confirmButtonColor: '#00B7CD'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        let cleanAdmin = adminPhone.trim().replace(/\D/g, '');
-                        if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
-                        const adminUrl = `https://wa.me/${cleanAdmin}?text=${encodeURIComponent(text)}`;
-                        window.open(adminUrl, '_blank');
+        if (window.currentDeputyPhotos && window.currentDeputyPhotos.length > 0) {
+            const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || '');
+            const blob = window.currentDeputyCollageBlob || await buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate);
+
+            // Jika dibuka dari HP & mendukung Web Share API file, langsung bagikan Gambar + Teks sekaligus
+            if (isMobile && blob && navigator.canShare) {
+                const file = new File([blob], `Dokumentasi_Regional_II_${lastRekapDate || 'Harian'}.png`, { type: 'image/png' });
+                if (navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            title: 'Laporan Harian Airside Regional II',
+                            text: text,
+                            files: [file]
+                        });
+                        return;
+                    } catch (err) {
+                        if (err && err.name === 'AbortError') return;
                     }
+                }
+            }
+
+            // Di PC / Laptop: Salin gambar kolase ke Clipboard terlebih dahulu
+            const copied = await copyDeputyCollageToClipboard(false);
+            const previewUrl = blob ? URL.createObjectURL(blob) : '';
+
+            await Swal.fire({
+                title: copied ? 'Gambar Kolase Siap Ditempel (Ctrl + V)' : 'Gambar Kolase Diunduh',
+                html: `
+                    <div style="text-align: left; font-size: 0.85rem; color: #334155; line-height: 1.55;">
+                        ${previewUrl ? `<div style="margin-bottom: 0.75rem; border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; max-height: 210px; background: #0f172a; text-align: center;"><img src="${previewUrl}" style="max-width: 100%; max-height: 210px; object-fit: contain;"></div>` : ''}
+                        <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 0.65rem 0.8rem; color: #0369a1;">
+                            <i class="fa-solid fa-circle-info me-1"></i>
+                            ${copied
+                                ? `Karena tautan resmi WhatsApp Web (<code>wa.me</code>) hanya mengizinkan pengiriman teks lewat link, <b>gambar kolase ${window.currentDeputyPhotos.length} foto di atas sudah otomatis disalin ke Clipboard Anda</b>.<br><br>👉 Saat ruang chat WhatsApp terbuka dan teks muncul, cukup tekan <b>Ctrl + V (Paste)</b> di keyboard lalu klik Kirim.`
+                                : `File gambar kolase telah diunduh otomatis. Lampirkan gambar tersebut di ruang chat WhatsApp.`
+                            }
+                        </div>
+                    </div>
+                `,
+                confirmButtonText: '<i class="fa-brands fa-whatsapp me-1"></i> Lanjut Buka WhatsApp',
+                confirmButtonColor: '#16a34a',
+                showCancelButton: true,
+                cancelButtonText: 'Batal'
+            }).then((res) => {
+                if (previewUrl) setTimeout(() => URL.revokeObjectURL(previewUrl), 2000);
+                if (res.isConfirmed) {
+                    if (!copied) downloadDeputyCollage();
+                    window.open(url, '_blank');
+                    promptAdminFollowup();
+                }
+            });
+            return;
+        }
+
+        window.open(url, '_blank');
+        promptAdminFollowup();
+    }
+
+    // ==============================================================================
+    // KOMPILASI FOTO 4 BANDARA, GENERATOR KOLASE & AUTO-CLEANUP 90 HARI
+    // ==============================================================================
+    window.currentDeputyPhotos = [];
+    window.currentDeputyCollageBlob = null;
+
+    function renderDeputyPhotosPanel(rekapData, dateStr) {
+        const panel = document.getElementById('deputyPhotosPanel');
+        const grid = document.getElementById('deputyPhotosGrid');
+        const titleEl = document.getElementById('deputyPhotosTitle');
+        if (!panel || !grid) return;
+
+        const allPhotos = [];
+        ['DPS', 'LOP', 'BWX', 'KOE'].forEach(code => {
+            const info = (rekapData && rekapData[code]) || {};
+            const branchPhotos = Array.isArray(info.photos) ? info.photos : [];
+            branchPhotos.forEach(p => {
+                allPhotos.push({
+                    ...p,
+                    airport_code: code
                 });
-            }, 1000);
+            });
+        });
+
+        window.currentDeputyPhotos = allPhotos;
+        window.currentDeputyCollageBlob = null;
+
+        if (allPhotos.length === 0) {
+            panel.style.display = 'none';
+            grid.innerHTML = '';
+            return;
+        }
+
+        panel.style.display = 'block';
+        if (titleEl) {
+            titleEl.textContent = `Dokumentasi Foto Lapangan Regional II (${allPhotos.length} Foto Terkumpul)`;
+        }
+
+        grid.innerHTML = allPhotos.map((p, idx) => `
+            <div style="border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: #fff; cursor: pointer; box-shadow: 0 1px 4px rgba(15,23,42,0.05);" onclick="openAdminPhotoLightbox('${p.url}', '${p.airport_code} - ${(p.area_tag || 'Umum').replace(/'/g, '')}', '${(p.caption || '').replace(/'/g, '')}')">
+                <div style="position: relative; height: 110px; background: #0f172a;">
+                    <img src="${p.url}" alt="Foto ${idx + 1}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <span style="position: absolute; top: 6px; left: 6px; background: #002b49; color: #fff; font-size: 0.66rem; font-weight: 800; padding: 2px 7px; border-radius: 5px;">
+                        ${p.airport_code} • ${p.area_tag || 'Umum'}
+                    </span>
+                </div>
+                <div style="padding: 0.45rem 0.6rem; font-size: 0.72rem; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    ${p.caption || '<em>Dokumentasi Airside</em>'}
+                </div>
+            </div>
+        `).join('');
+
+        // Pre-build collage canvas in background
+        buildDeputyCollageBlob(allPhotos, dateStr).then(blob => {
+            window.currentDeputyCollageBlob = blob;
+        }).catch(err => console.warn('Gagal membuat kolase foto:', err));
+    }
+
+    function loadImageElement(src) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            if (src && !src.startsWith('/')) {
+                img.crossOrigin = 'anonymous';
+            }
+            img.onload = () => resolve(img);
+            img.onerror = (e) => reject(e);
+            img.src = src;
+        });
+    }
+
+    async function buildDeputyCollageBlob(photos, dateStr) {
+        if (!photos || photos.length === 0) return null;
+        const canvas = document.getElementById('deputyCollageCanvas') || document.createElement('canvas');
+        const cols = photos.length === 1 ? 1 : 2;
+        const rows = Math.ceil(photos.length / cols);
+        const cellW = 600;
+        const cellH = 420;
+        const pad = 20;
+        const headerH = 85;
+
+        canvas.width = cols * cellW + (cols + 1) * pad;
+        canvas.height = headerH + rows * cellH + (rows + 1) * pad;
+
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Header banner
+        ctx.fillStyle = '#002b49';
+        ctx.fillRect(0, 0, canvas.width, headerH);
+        ctx.fillStyle = '#00B7CD';
+        ctx.fillRect(0, headerH - 4, canvas.width, 4);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('DOKUMENTASI LAPORAN HARIAN AIRSIDE — REGIONAL II', pad, 38);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '16px sans-serif';
+        const dFormatted = typeof formatTanggalIndo === 'function' ? formatTanggalIndo(dateStr) : dateStr;
+        ctx.fillText(`Tanggal: ${dFormatted}  •  Total: ${photos.length} Dokumentasi Cabang`, pad, 65);
+
+        for (let i = 0; i < photos.length; i++) {
+            const p = photos[i];
+            const r = Math.floor(i / cols);
+            const c = i % cols;
+            const x = pad + c * (cellW + pad);
+            const y = headerH + pad + r * (cellH + pad);
+
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(x, y, cellW, cellH);
+
+            try {
+                const img = await loadImageElement(p.url);
+                const imgH = cellH - 52;
+                const scale = Math.max(cellW / img.width, imgH / img.height);
+                const sw = cellW / scale;
+                const sh = imgH / scale;
+                const sx = Math.max(0, (img.width - sw) / 2);
+                const sy = Math.max(0, (img.height - sh) / 2);
+                ctx.drawImage(img, sx, sy, sw, sh, x, y, cellW, imgH);
+            } catch (e) {
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(x, y, cellW, cellH - 52);
+            }
+
+            // Label bar bawah tiap foto
+            ctx.fillStyle = '#002b49';
+            ctx.fillRect(x, y + cellH - 52, cellW, 52);
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = 'bold 17px sans-serif';
+            ctx.fillText(`[${p.airport_code}] Area: ${p.area_tag || 'Umum'}`, x + 14, y + cellH - 28);
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = '14px sans-serif';
+            const cap = (p.caption || 'Dokumentasi kondisi fasilitas sisi udara').substring(0, 62);
+            ctx.fillText(cap, x + 14, y + cellH - 9);
+        }
+
+        return new Promise((resolve) => {
+            canvas.toBlob((blob) => resolve(blob), 'image/png', 0.92);
+        });
+    }
+
+    async function copyDeputyCollageToClipboard(showAlert = true) {
+        try {
+            if (!window.currentDeputyPhotos || window.currentDeputyPhotos.length === 0) {
+                if (showAlert) Swal.fire('Info', 'Belum ada foto dokumentasi pada tanggal ini.', 'info');
+                return false;
+            }
+            const blob = window.currentDeputyCollageBlob || await buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate);
+            if (!blob || !navigator.clipboard || typeof ClipboardItem === 'undefined') {
+                if (showAlert) Swal.fire('Info', 'Browser tidak mendukung salin gambar otomatis. Silakan klik tombol Unduh Gambar.', 'info');
+                return false;
+            }
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+            if (showAlert) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Gambar Kolase Dokumentasi berhasil disalin! Tekan Ctrl+V di WhatsApp.',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+            return true;
+        } catch (err) {
+            console.warn('Clipboard image write failed:', err);
+            if (showAlert) {
+                Swal.fire('Info', 'Gagal menyalin gambar ke clipboard secara otomatis. Silakan gunakan tombol Unduh Gambar.', 'info');
+            }
+            return false;
         }
     }
+
+    async function downloadDeputyCollage() {
+        if (!window.currentDeputyPhotos || window.currentDeputyPhotos.length === 0) return;
+        const blob = window.currentDeputyCollageBlob || await buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate);
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Dokumentasi_Airside_Regional_II_${lastRekapDate || 'Harian'}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+
+    async function shareDeputyTextAndPhotos() {
+        const text = document.getElementById('kompilasiText')?.value || '';
+        if (!window.currentDeputyPhotos || window.currentDeputyPhotos.length === 0) {
+            return Swal.fire('Info', 'Tidak ada foto untuk dibagikan.', 'info');
+        }
+        try {
+            const blob = window.currentDeputyCollageBlob || await buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate);
+            if (blob && navigator.canShare) {
+                const file = new File([blob], `Dokumentasi_Regional_II_${lastRekapDate || 'Harian'}.png`, { type: 'image/png' });
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: 'Laporan Harian Airside Regional II',
+                        text: text,
+                        files: [file]
+                    });
+                    return;
+                }
+            }
+            await copyDeputyCollageToClipboard(true);
+        } catch (err) {
+            console.warn('Web Share API cancelled or unsupported:', err);
+        }
+    }
+
+    async function loadAdminPhotoStorageStats() {
+        const badge = document.getElementById('adminPhotoStorageBadge');
+        if (!badge) return;
+        try {
+            const res = await fetch('/admin/api/photos/stats');
+            const data = await res.json();
+            if (data.success && data.stats) {
+                const s = data.stats;
+                badge.innerHTML = `<i class="fa-solid fa-images me-1 text-primary"></i> ${s.total_files} Foto Tersimpan (${s.total_mb} MB / ${s.quota_mb} MB • Retensi ${s.retention_days} Hari)`;
+            }
+        } catch (e) {}
+    }
+
+    async function triggerManualPhotoCleanup() {
+        try {
+            const res = await fetch('/admin/api/photos/cleanup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ retention_days: 90 })
+            });
+            const data = await res.json();
+            if (data.success) {
+                await loadAdminPhotoStorageStats();
+                Swal.fire('Pembersihan Selesai', data.message, 'success');
+            } else {
+                Swal.fire('Gagal', data.error || 'Gagal membersihkan penyimpanan foto', 'error');
+            }
+        } catch (err) {
+            Swal.fire('Error', err.message, 'error');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadAdminPhotoStorageStats();
+    });
 
     function unduhTeksRekap() {
         const text = document.getElementById('kompilasiText')?.value;

@@ -105,11 +105,29 @@ def init_db():
         );
         """)
 
+        # 4. Tabel Report Photos (Dokumentasi Foto Lapangan .webp)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS report_photos (
+            id TEXT PRIMARY KEY,
+            airport_code TEXT NOT NULL,
+            tanggal TEXT NOT NULL,
+            report_id TEXT,
+            area_tag TEXT DEFAULT 'Umum',
+            caption TEXT DEFAULT '',
+            file_path TEXT NOT NULL,
+            url TEXT NOT NULL,
+            size_kb REAL DEFAULT 0,
+            created_at TEXT NOT NULL
+        );
+        """)
+
         # Indeks untuk query cepat
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_staging_airport_status ON staging_reports(airport_code, status);")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_staging_airport_tanggal ON staging_reports(airport_code, tanggal);")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_notif_airport_role ON notifications(airport, recipient_role, is_read);")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_notif_user ON notifications(recipient_username, is_read);")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_photos_airport_tanggal ON report_photos(airport_code, tanggal);")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_photos_created_at ON report_photos(created_at);")
 
         # --- SEEDING USERS ---
         cursor.execute("SELECT COUNT(*) FROM users;")

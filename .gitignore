@@ -8,3 +8,5 @@ credentials.json
 *.db-wal
 *.db-shm
 debug_staging.log
+app/static/uploads/*
+!app/static/uploads/.gitkeep

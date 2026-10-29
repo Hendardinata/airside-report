@@ -229,6 +229,9 @@ if (reportWizardForm) {
         }
 
         const formData = new FormData(this);
+        if (typeof window.appendStaffPhotosToFormData === 'function') {
+            window.appendStaffPhotosToFormData(formData);
+        }
         
         fetch('/staff/submit', {
             method: 'POST',

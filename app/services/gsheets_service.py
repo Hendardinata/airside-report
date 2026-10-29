@@ -423,13 +423,17 @@ def get_daily_summary(date_str):
     month_abbr = indonesian_months[dt.month - 1]
     year_str = dt.strftime("%Y")
 
+    from app.services.photo_service import get_photos_by_date
+
     for code, conf in airports.items():
         summary[code] = {
             "status": "Belum Mengirim",
             "pci": "-",
             "is_submitted": False,
             "pic_phone": conf.get("pic_phone", ""),
-            "gm_phone": conf.get("gm_phone", "")
+            "gm_phone": conf.get("gm_phone", ""),
+            "dh_phone": conf.get("dh_phone") or conf.get("gm_phone", ""),
+            "photos": get_photos_by_date(code, date_str)
         }
         
         default_url = conf.get('sheet_url')
@@ -1445,6 +1449,12 @@ def get_production_approved_reports(airport_code, force_refresh=False):
 
             kondisi_rw = row_dict.get('RUNWAY_KONDISI', 'SERVICEABLE')
 
+            try:
+                from app.services.photo_service import get_photos_by_date
+                rep_photos = get_photos_by_date(airport_code, norm_tgl)
+            except Exception:
+                rep_photos = []
+
             reports.append({
                 "report_id": rep_id,
                 "status": "APPROVED",
@@ -1461,6 +1471,7 @@ def get_production_approved_reports(airport_code, force_refresh=False):
                 "kondisi_runway": kondisi_rw,
                 "airport": airport_code,
                 "is_production": True,
+                "photos": rep_photos,
                 "data": row_dict
             })
 

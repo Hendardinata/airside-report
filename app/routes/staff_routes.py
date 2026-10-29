@@ -342,6 +342,30 @@ def submit():
         sender_name = user.get('name', f"Petugas {airport_code}")
         sender_username = user.get('username', '')
 
+        # Proses unggahan foto dokumentasi lapangan (.webp) jika ada
+        uploaded_files = request.files.getlist('photos')
+        photo_areas = request.form.getlist('photo_areas')
+        photo_captions = request.form.getlist('photo_captions')
+        keep_photo_ids = request.form.getlist('keep_photo_ids')
+        has_photo_sync_flag = request.form.get('photo_sync_active') == '1'
+
+        try:
+            from app.services.photo_service import save_uploaded_photos
+            saved_photos = save_uploaded_photos(
+                airport_code=airport_code,
+                tanggal=tgl_str,
+                report_id=report_id,
+                uploaded_files=uploaded_files,
+                areas=photo_areas,
+                captions=photo_captions,
+                keep_photo_ids=keep_photo_ids if (has_photo_sync_flag or report_id) else None,
+                is_edit=bool(report_id or has_photo_sync_flag)
+            )
+            if saved_photos:
+                data['DOKUMENTASI_FOTO'] = ", ".join(p.get('url', '') for p in saved_photos if p.get('url'))
+        except Exception as photo_err:
+            print(f"Warning menyimpan foto dokumentasi: {photo_err}")
+
         # Simpan ke spreadsheet staging khusus bandara ini
         staging_res = save_report_to_staging(
             airport_code=airport_code,

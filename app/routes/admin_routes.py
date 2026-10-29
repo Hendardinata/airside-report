@@ -722,3 +722,33 @@ def api_delete_user():
         })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
+
+
+@bp.route('/api/photos/stats', methods=['GET'])
+def api_photo_stats():
+    """Mengambil ringkasan pemakaian ruang penyimpanan foto (.webp)."""
+    try:
+        from app.services.photo_service import get_storage_stats
+        stats = get_storage_stats()
+        return jsonify({"success": True, "stats": stats})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@bp.route('/api/photos/cleanup', methods=['POST'])
+def api_photo_cleanup():
+    """Menjalankan pembersihan foto berumur > 90 hari (3 bulan)."""
+    data = request.json or {}
+    retention_days = int(data.get('retention_days', 90))
+    try:
+        from app.services.photo_service import cleanup_old_photos, get_storage_stats
+        result = cleanup_old_photos(retention_days=retention_days)
+        stats = get_storage_stats()
+        return jsonify({
+            "success": True,
+            "result": result,
+            "stats": stats,
+            "message": f"Pembersihan selesai: {result['deleted_count']} foto lama (> {retention_days} hari) dihapus ({result['freed_kb']} KB dibebaskan)."
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500

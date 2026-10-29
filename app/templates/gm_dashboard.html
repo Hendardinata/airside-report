@@ -5717,6 +5717,37 @@
                             </div>` : '').join('')}
                         </div>
 
+                        <!-- E. DOKUMENTASI FOTO LAPANGAN -->
+                        <div class="doc-section-head">
+                            <div class="doc-section-badge" style="background: #00B7CD;">E</div>
+                            <h2 class="doc-section-heading">DOKUMENTASI FOTO LAPANGAN (${(rep.photos || []).length} FOTO)</h2>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            ${(rep.photos && rep.photos.length > 0) ? `
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.85rem;">
+                                    ${rep.photos.map((p, idx) => `
+                                        <div style="border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; background: #fff; cursor: pointer; transition: transform 0.15s ease;" onclick="openDhPhotoLightbox('${p.url}', '${(p.area_tag || 'Umum').replace(/'/g, '')}', '${(p.caption || '').replace(/'/g, '')}')">
+                                            <div style="position: relative; height: 135px; background: #0f172a;">
+                                                <img src="${p.url}" alt="Dokumentasi ${idx + 1}" style="width: 100%; height: 100%; object-fit: cover;">
+                                                <span style="position: absolute; top: 6px; left: 6px; background: rgba(0,43,73,0.88); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;">
+                                                    ${p.area_tag || 'Umum'}
+                                                </span>
+                                                <span style="position: absolute; bottom: 6px; right: 6px; background: rgba(15,23,42,0.75); color: #38bdf8; font-size: 0.65rem; font-weight: 600; padding: 1px 6px; border-radius: 5px;">
+                                                    <i class="fa-solid fa-magnifying-glass-plus me-1"></i>Perbesar
+                                                </span>
+                                            </div>
+                                            <div style="padding: 0.55rem 0.65rem; font-size: 0.75rem; color: #334155;">
+                                                ${p.caption ? `<strong>Keterangan:</strong> ${p.caption}` : '<span style="color:#94a3b8;"><em>Klik untuk memperbesar foto</em></span>'}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : `
+                                <div class="doc-empty-box" style="padding: 0.85rem 1rem; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; color: #64748b; font-size: 0.82rem;">
+                                    <i class="fa-regular fa-image me-2"></i>Tidak ada lampiran foto dokumentasi lapangan pada laporan ini.
+                                </div>
+                            `}
+                        </div>
 
                         <!-- LEMBAR PENGESAHAN DOKUMEN -->
                         <div class="doc-sign-wrapper">
@@ -5814,6 +5845,18 @@
         const sections = document.querySelectorAll('.detail-card-group');
         sections.forEach(sec => {
             sec.style.display = 'block';
+        });
+    }
+
+    function openDhPhotoLightbox(url, area, caption) {
+        Swal.fire({
+            title: `Dokumentasi Area: ${area || 'Umum'}`,
+            text: caption || '',
+            imageUrl: url,
+            imageAlt: area || 'Dokumentasi Airside',
+            width: 760,
+            confirmButtonText: 'Tutup',
+            confirmButtonColor: '#002b49'
         });
     }
 
