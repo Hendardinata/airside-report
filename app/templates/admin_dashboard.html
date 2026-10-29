@@ -6029,8 +6029,8 @@
                         </div>
 
                         <div class="console-actions">
-                            <input type="hidden" id="hiddenWaDeputy" value="">
-                            <input type="hidden" id="hiddenWaAdmin" value="">
+                            <input type="hidden" id="hiddenWaDeputy" value="{{ config.admin.deputy_phone | default('') if config and config.admin else '' }}">
+                            <input type="hidden" id="hiddenWaAdmin" value="{{ config.admin.admin_phone | default('') if config and config.admin else '' }}">
                             <button class="btn-outline-action" type="button" onclick="salinTeksRekap()">
                                 <i class="fa-regular fa-copy me-1"></i> Salin Teks
                             </button>
@@ -6862,7 +6862,8 @@
     function contactGMWhatsApp(code) {
         const info = (lastRekapData && lastRekapData[code]) || {};
         const fleetConf = (window.FLEET_CONFIG && window.FLEET_CONFIG[code]) || {};
-        const dhPhone = info.dh_phone || fleetConf.dh_phone || info.gm_phone || fleetConf.gm_phone || '';
+        const matrixDhInput = document.getElementById(`matrixGM-${code}`)?.value?.trim() || '';
+        const dhPhone = matrixDhInput || info.dh_phone || fleetConf.dh_phone || info.gm_phone || fleetConf.gm_phone || '';
         const airportMeta = AIRPORT_NAMES[code] || { city: code, fullname: code };
         const dStr = lastRekapDate || document.getElementById('filterDate')?.value || '';
 
@@ -7396,6 +7397,15 @@
                 window.FULL_CONFIG.active_month_label = activeMonthLabel;
                 window.FULL_CONFIG.active_month = detectedActiveMonth;
                 if (!window.FULL_CONFIG.airports) window.FULL_CONFIG.airports = {};
+                window.FULL_CONFIG.admin = {
+                    ...(window.FULL_CONFIG.admin || {}),
+                    ...adminData
+                };
+
+                const hiddenDep = document.getElementById('hiddenWaDeputy');
+                const hiddenAdm = document.getElementById('hiddenWaAdmin');
+                if (hiddenDep) hiddenDep.value = adminData.deputy_phone || '';
+                if (hiddenAdm) hiddenAdm.value = adminData.admin_phone || '';
 
                 ['LOP', 'DPS', 'BWX', 'KOE'].forEach(code => {
                     const s = document.getElementById(`matrixSheetSelect-${code}`);
@@ -7411,6 +7421,11 @@
                     };
                     if (window.FLEET_CONFIG) {
                         window.FLEET_CONFIG[code] = window.FULL_CONFIG.airports[code];
+                    }
+                    if (lastRekapData && lastRekapData[code]) {
+                        lastRekapData[code].dh_phone = airportsData[code].dh_phone;
+                        lastRekapData[code].gm_phone = airportsData[code].gm_phone;
+                        lastRekapData[code].pic_phone = airportsData[code].pic_phone;
                     }
                 });
                 applyFleetCalendarBounds(true);
@@ -9164,8 +9179,14 @@ REGION II`;
 
     function kirimWhatsAppDeputy() {
         const text = document.getElementById('kompilasiText')?.value;
-        const deputyPhone = document.getElementById('hiddenWaDeputy')?.value;
-        const adminPhone = document.getElementById('hiddenWaAdmin')?.value;
+        const deputyPhone = document.getElementById('matrixDeputyPhone')?.value?.trim()
+            || document.getElementById('hiddenWaDeputy')?.value?.trim()
+            || window.FULL_CONFIG?.admin?.deputy_phone
+            || '';
+        const adminPhone = document.getElementById('matrixAdminPhone')?.value?.trim()
+            || document.getElementById('hiddenWaAdmin')?.value?.trim()
+            || window.FULL_CONFIG?.admin?.admin_phone
+            || '';
 
         if (!text) {
             return Swal.fire('Perhatian', 'Tidak ada pesan rekapitulasi untuk dikirim.', 'warning');
