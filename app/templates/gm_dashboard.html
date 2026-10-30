@@ -6078,6 +6078,15 @@
 
     async function buildDhBranchCollageBlob(photos, airportCode, dateStr) {
         if (!photos || photos.length === 0) return null;
+        if (window.AirsidePhotoPdf && typeof window.AirsidePhotoPdf.buildStructuredDocumentBlob === 'function') {
+            const docRes = await window.AirsidePhotoPdf.buildStructuredDocumentBlob({
+                photos: photos,
+                airportCode: airportCode,
+                dateStr: dateStr,
+                singleBranch: true
+            });
+            if (docRes && docRes.blob) return docRes.blob;
+        }
         const canvas = document.createElement('canvas');
         const cols = photos.length === 1 ? 1 : 2;
         const rows = Math.ceil(photos.length / cols);
@@ -6217,6 +6226,10 @@
         const airportCode = res.airport_code || 'LOP';
         const reportDate = res.report_date || '';
         window.currentDhModalPhotos = photos;
+        window.currentDhCollageBlob = null;
+        if (photos.length > 0) {
+            buildDhBranchCollageBlob(photos, airportCode, reportDate).then(b => { window.currentDhCollageBlob = b; }).catch(() => {});
+        }
 
         const photoNoticeHtml = photos.length > 0 ? `
             <div style="background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 10px; padding: 0.75rem 0.9rem; margin-top: 0.85rem; text-align: left; font-size: 0.82rem; color: #0c4a6e;">
@@ -6255,16 +6268,21 @@
                 const adminWaUrl = `https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`;
 
                 if (photos.length > 0 && window.AirsidePhotoPdf) {
+                    const safeDate = (reportDate || 'Harian').replace(/[^0-9a-zA-Z_-]/g, '-');
+                    const cachedDocRes = window.currentDhCollageBlob ? {
+                        blob: window.currentDhCollageBlob,
+                        filename: `Dokumentasi_Foto_Airside_${airportCode}_${safeDate}.png`
+                    } : null;
                     await window.AirsidePhotoPdf.sendPdfAndTextViaWhatsApp({
                         photos: photos,
                         airportCode: airportCode,
                         dateStr: reportDate,
                         singleBranch: true,
+                        cachedDocRes: cachedDocRes,
                         waUrl: adminWaUrl,
                         waText: res.admin_message,
                         recipientLabel: 'Admin Regional II',
-                        shareTitle: `Laporan & Dokumentasi Airside ${airportCode}`,
-                        alreadyConfirmedOnDesktop: true
+                        shareTitle: `Laporan & Dokumentasi Airside ${airportCode}`
                     });
                 } else {
                     window.open(adminWaUrl, '_blank');

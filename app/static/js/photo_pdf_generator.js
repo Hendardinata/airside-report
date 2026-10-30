@@ -1,16 +1,16 @@
 /**
- * Generator Dokumen PDF Resmi Lampiran Foto Lapangan Airside (Standar A4 Korporat)
+ * Generator Dokumen Resmi Lampiran Foto Lapangan Airside (Standar A4 Korporat)
  * PT Angkasa Pura Indonesia (InJourney Airports) — Regional II
  *
- * Fitur Utama:
- * - Kertas A4 Portrait (210mm x 297mm) berlatar putih bersih standar dokumen eksekutif.
- * - Setiap Kantor Cabang (1. DPS, 2. LOP, 3. KOE, 4. BWX) dipisahkan pada halaman tersendiri
- *   sehingga foto antarbandara tidak pernah tercampur.
- * - Tata letak Grid 2x2 (maksimal 4 foto per halaman A4) dengan proporsi foto terjaga tajam,
- *   dilengkapi badge Area (Runway/Taxiway/Apron) dan deskripsi lengkap di bawah foto.
- * - Kop dokumen resmi + nomor halaman ("Halaman X dari Y") otomatis di setiap lembar.
- * - Alur Dual-Send Mobile & Desktop: Menjamin File PDF Dokumentasi DAN Pesan Teks Laporan Lengkap
- *   sama-sama terkirim ke WhatsApp tanpa terpotong.
+ * Mendukung 2 Output Dokumen Resmi:
+ * 1. Lembar Dokumen A4 Terstruktur per Cabang (PNG Resolusi Tinggi):
+ *    - Berlatar putih bersih standar dokumen A4 korporat InJourney Airports.
+ *    - Dikelompokkan rapi per cabang (1. DPS, 2. LOP, 3. KOE, 4. BWX) dengan banner pemisah cabang.
+ *    - Jika jumlah foto ganjil (misal 1 atau 3 foto), foto terakhir otomatis ditempatkan simetris di tengah
+ *      sehingga tidak pernah ada ruang kosong pincang.
+ *    - Memungkinkan pengiriman 1x Kerja di HP (navigator.share mengirim Dokumen + Teks sekaligus dalam 1 langkah!)
+ *      dan 1x Kerja di Laptop/PC (otomatis disalin ke Clipboard untuk Ctrl+V sekaligus membuka chat WA).
+ * 2. File Dokumen PDF Multi-Halaman (.PDF) untuk unduhan arsip resmi A4.
  */
 (function (window) {
     'use strict';
@@ -30,6 +30,7 @@
     };
 
     let cachedLogoDataUrl = null;
+    let cachedLogoImg = null;
 
     function ensureJsPdfLoaded() {
         if (window.jspdf && window.jspdf.jsPDF) {
@@ -70,10 +71,21 @@
         });
     }
 
+    async function getLogoImage() {
+        if (cachedLogoImg) return cachedLogoImg;
+        try {
+            cachedLogoImg = await loadImage('/static/img/logo-kawung.png');
+            return cachedLogoImg;
+        } catch (e) {
+            return null;
+        }
+    }
+
     async function getLogoDataUrl() {
         if (cachedLogoDataUrl) return cachedLogoDataUrl;
         try {
-            const img = await loadImage('/static/img/logo-kawung.png');
+            const img = await getLogoImage();
+            if (!img) return null;
             const canvas = document.createElement('canvas');
             canvas.width = img.width || 120;
             canvas.height = img.height || 120;
@@ -84,43 +96,6 @@
         } catch (e) {
             return null;
         }
-    }
-
-    /**
-     * Render foto ke kanvas proporsional (1000 x 720 px) dengan center-crop rapi
-     * agar tidak gepeng dan tajam ketika di-zoom di dalam PDF.
-     */
-    async function renderHighResPhotoBox(src) {
-        const targetW = 1000;
-        const targetH = 720;
-        const canvas = document.createElement('canvas');
-        canvas.width = targetW;
-        canvas.height = targetH;
-        const ctx = canvas.getContext('2d');
-
-        ctx.fillStyle = '#f1f5f9';
-        ctx.fillRect(0, 0, targetW, targetH);
-
-        try {
-            const img = await loadImage(src);
-            const iw = img.width || targetW;
-            const ih = img.height || targetH;
-            const scale = Math.max(targetW / iw, targetH / ih);
-            const sw = targetW / scale;
-            const sh = targetH / scale;
-            const sx = Math.max(0, (iw - sw) / 2);
-            const sy = Math.max(0, (ih - sh) / 2);
-            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
-        } catch (err) {
-            ctx.fillStyle = '#e2e8f0';
-            ctx.fillRect(0, 0, targetW, targetH);
-            ctx.fillStyle = '#64748b';
-            ctx.font = 'bold 28px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('Foto Dokumentasi Tidak Dapat Dimuat', targetW / 2, targetH / 2);
-        }
-
-        return canvas.toDataURL('image/jpeg', 0.90);
     }
 
     function formatIndonesianDateStr(dateStr) {
@@ -138,10 +113,6 @@
         return `${day} ${months[monthIdx] || m[2]} ${year}`;
     }
 
-    /**
-     * Normalisasi daftar foto menjadi dikelompokkan per bandara sesuai urutan resmi:
-     * 1. DPS, 2. LOP, 3. KOE, 4. BWX
-     */
     function groupPhotosByAirport(photosInput, defaultAirportCode) {
         const grouped = { DPS: [], LOP: [], KOE: [], BWX: [] };
         if (!photosInput) return grouped;
@@ -179,8 +150,365 @@
         return grouped;
     }
 
+    function drawRoundedRect(ctx, x, y, w, h, r, fillStyle, strokeStyle, lineWidth) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+        if (fillStyle) {
+            ctx.fillStyle = fillStyle;
+            ctx.fill();
+        }
+        if (strokeStyle) {
+            ctx.strokeStyle = strokeStyle;
+            ctx.lineWidth = lineWidth || 1;
+            ctx.stroke();
+        }
+    }
+
+    function wrapCanvasText(ctx, text, maxWidth, maxLines) {
+        const words = String(text || '').split(/\s+/);
+        const lines = [];
+        let currentLine = '';
+
+        for (let i = 0; i < words.length; i++) {
+            const testLine = currentLine ? `${currentLine} ${words[i]}` : words[i];
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && currentLine) {
+                lines.push(currentLine);
+                currentLine = words[i];
+                if (lines.length >= maxLines - 1) {
+                    break;
+                }
+            } else {
+                currentLine = testLine;
+            }
+        }
+        if (currentLine && lines.length < maxLines) {
+            lines.push(currentLine);
+        }
+        return lines;
+    }
+
     /**
-     * Buat objek jsPDF dan kembalikan { doc, blob, filename, totalPhotos, totalPages }
+     * Bangun Lembar Dokumen A4 Putih Resmi Terstruktur per Cabang (Blob PNG)
+     * Digunakan untuk pengiriman 1x Kerja di WhatsApp Mobile (navigator.share) & Desktop (Ctrl+V).
+     */
+    async function buildStructuredDocumentBlob(options) {
+        const opts = options || {};
+        const dateStr = opts.dateStr || '';
+        const formattedDate = opts.formattedDate || formatIndonesianDateStr(dateStr);
+        const defaultBranch = opts.airportCode ? String(opts.airportCode).toUpperCase() : '';
+        const isSingleBranch = Boolean(opts.singleBranch && defaultBranch);
+
+        const grouped = groupPhotosByAirport(opts.photos, defaultBranch || 'DPS');
+        const activeCodes = AIRPORT_ORDER.filter(c => grouped[c] && grouped[c].length > 0);
+        Object.keys(grouped).forEach(c => {
+            if (!AIRPORT_ORDER.includes(c) && grouped[c] && grouped[c].length > 0) {
+                activeCodes.push(c);
+            }
+        });
+
+        const totalPhotos = activeCodes.reduce((acc, c) => acc + grouped[c].length, 0);
+        if (totalPhotos === 0) return null;
+
+        const docW = 1400;
+        const marginX = 48;
+        const contentW = docW - marginX * 2; // 1304 px
+        const gapX = 28;
+        const gapY = 24;
+        const cardW = (contentW - gapX) / 2; // 638 px
+        const cardH = 468;
+        const imgH = 362;
+
+        const headerH = 142;
+        const branchBannerH = 58;
+        const branchGap = 34;
+        const footerH = 66;
+
+        // Hitung tinggi total dokumen secara presisi
+        let totalHeight = headerH + 24;
+        activeCodes.forEach((code, idx) => {
+            const count = grouped[code].length;
+            const rows = Math.ceil(count / 2);
+            totalHeight += branchBannerH + 18 + rows * cardH + Math.max(0, rows - 1) * gapY;
+            if (idx < activeCodes.length - 1) {
+                totalHeight += branchGap;
+            }
+        });
+        totalHeight += 30 + footerH;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = docW;
+        canvas.height = totalHeight;
+        const ctx = canvas.getContext('2d');
+
+        // Background Kertas Dokumen Putih Bersih
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, docW, totalHeight);
+
+        // Top Corporate Accent Bar
+        ctx.fillStyle = '#002b49';
+        ctx.fillRect(0, 0, docW, 12);
+        ctx.fillStyle = '#00B7CD';
+        ctx.fillRect(0, 12, docW, 5);
+
+        // Logo Kawung
+        const logoImg = await getLogoImage();
+        let titleStartX = marginX;
+        if (logoImg) {
+            ctx.drawImage(logoImg, marginX, 34, 76, 76);
+            titleStartX = marginX + 94;
+        }
+
+        // Kop Surat Resmi
+        ctx.fillStyle = '#008ca5';
+        ctx.font = 'bold 19px sans-serif';
+        ctx.fillText('INJOURNEY AIRPORTS — PT ANGKASA PURA INDONESIA', titleStartX, 52);
+
+        ctx.fillStyle = '#002b49';
+        ctx.font = 'bold 30px sans-serif';
+        ctx.fillText('LAMPIRAN DOKUMENTASI FOTO FASILITAS SISI UDARA', titleStartX, 86);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '19px sans-serif';
+        ctx.fillText(
+            isSingleBranch
+                ? `Laporan Harian Kondisi Fasilitas Airside — Kantor Cabang ${defaultBranch}`
+                : `Laporan Harian Kondisi Fasilitas Airside — Kantor Regional II (${activeCodes.length} Cabang)`,
+            titleStartX,
+            114
+        );
+
+        // Kotak Metadata Kanan Atas
+        const metaW = 340;
+        const metaX = docW - marginX - metaW;
+        drawRoundedRect(ctx, metaX, 30, metaW, 92, 12, '#f8fafc', '#cbd5e1', 2);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.fillText('TANGGAL LAPORAN', metaX + 20, 54);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 21px sans-serif';
+        ctx.fillText(String(formattedDate), metaX + 20, 82);
+
+        ctx.fillStyle = '#0369a1';
+        ctx.font = 'bold 15px sans-serif';
+        ctx.fillText(`Total Dokumentasi: ${totalPhotos} Foto Lapangan`, metaX + 20, 107);
+
+        // Garis Pemisah Kop
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(marginX, headerH);
+        ctx.lineTo(docW - marginX, headerH);
+        ctx.stroke();
+
+        let curY = headerH + 24;
+
+        // Render Setiap Cabang Secara Terpisah & Berurutan
+        for (let bIdx = 0; bIdx < activeCodes.length; bIdx++) {
+            const code = activeCodes[bIdx];
+            const branchPhotos = grouped[code];
+            const numLabel = AIRPORT_NUMBERS[code] ? `${AIRPORT_NUMBERS[code]}. ` : '';
+            const fullAirportName = AIRPORT_NAMES[code] || `Kantor Cabang ${code}`;
+
+            // Banner Header Cabang
+            drawRoundedRect(ctx, marginX, curY, contentW, branchBannerH, 12, '#002b49', null, 0);
+
+            // Pill Kode Cabang
+            drawRoundedRect(ctx, marginX + 14, curY + 11, 110, 36, 8, '#00B7CD', null, 0);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 20px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${numLabel}${code}`, marginX + 69, curY + 36);
+            ctx.textAlign = 'left';
+
+            // Nama Bandara
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 22px sans-serif';
+            ctx.fillText(fullAirportName.toUpperCase(), marginX + 140, curY + 36);
+
+            // Jumlah Foto Cabang di Kanan Banner
+            ctx.fillStyle = '#bae6fd';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText(`${branchPhotos.length} Foto Terlampir`, docW - marginX - 20, curY + 36);
+            ctx.textAlign = 'left';
+
+            curY += branchBannerH + 18;
+
+            const rows = Math.ceil(branchPhotos.length / 2);
+            for (let r = 0; r < rows; r++) {
+                const idxLeft = r * 2;
+                const idxRight = idxLeft + 1;
+                const isLastSingleRow = idxRight >= branchPhotos.length;
+
+                const rowItems = isLastSingleRow
+                    ? [{ photo: branchPhotos[idxLeft], pIdx: idxLeft, x: marginX + Math.round((contentW - cardW) / 2) }]
+                    : [
+                        { photo: branchPhotos[idxLeft], pIdx: idxLeft, x: marginX },
+                        { photo: branchPhotos[idxRight], pIdx: idxRight, x: marginX + cardW + gapX }
+                    ];
+
+                for (let c = 0; c < rowItems.length; c++) {
+                    const item = rowItems[c];
+                    const p = item.photo;
+                    const cardX = item.x;
+                    const cardY = curY;
+
+                    // Kerangka Kartu Putih Bersih
+                    drawRoundedRect(ctx, cardX, cardY, cardW, cardH, 12, '#ffffff', '#cbd5e1', 2);
+
+                    // Area Gambar
+                    const imgX = cardX + 8;
+                    const imgY = cardY + 8;
+                    const innerImgW = cardW - 16;
+
+                    ctx.fillStyle = '#f1f5f9';
+                    ctx.fillRect(imgX, imgY, innerImgW, imgH);
+
+                    try {
+                        const img = await loadImage(p.url);
+                        const iw = img.width || innerImgW;
+                        const ih = img.height || imgH;
+                        const scale = Math.max(innerImgW / iw, imgH / ih);
+                        const sw = innerImgW / scale;
+                        const sh = imgH / scale;
+                        const sx = Math.max(0, (iw - sw) / 2);
+                        const sy = Math.max(0, (ih - sh) / 2);
+                        ctx.drawImage(img, sx, sy, sw, sh, imgX, imgY, innerImgW, imgH);
+                    } catch (e) {
+                        ctx.fillStyle = '#e2e8f0';
+                        ctx.fillRect(imgX, imgY, innerImgW, imgH);
+                        ctx.fillStyle = '#64748b';
+                        ctx.font = 'bold 20px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('Foto Dokumentasi', imgX + innerImgW / 2, imgY + imgH / 2);
+                        ctx.textAlign = 'left';
+                    }
+
+                    // Kotak Keterangan di Bawah Foto
+                    const metaY = imgY + imgH + 6;
+                    const metaH = cardH - imgH - 22;
+                    drawRoundedRect(ctx, imgX, metaY, innerImgW, metaH, 8, '#f8fafc', '#e2e8f0', 1);
+
+                    // Badge Area
+                    const areaLabel = `AREA: ${(p.area_tag || 'UMUM').toUpperCase()}`;
+                    drawRoundedRect(ctx, imgX + 12, metaY + 10, 210, 28, 6, '#002b49', null, 0);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.font = 'bold 14px sans-serif';
+                    ctx.fillText(areaLabel.substring(0, 24), imgX + 22, metaY + 29);
+
+                    // Nomor Foto di Kanan
+                    ctx.fillStyle = '#64748b';
+                    ctx.font = 'bold 14px sans-serif';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(`Foto #${item.pIdx + 1} (${code})`, imgX + innerImgW - 12, metaY + 29);
+                    ctx.textAlign = 'left';
+
+                    // Keterangan / Caption (Multi-baris rapi)
+                    const rawCap = (p.caption && String(p.caption).trim())
+                        ? String(p.caption).trim()
+                        : `Dokumentasi pemeriksaan kondisi fasilitas ${p.area_tag || 'sisi udara'} cabang ${code}.`;
+                    ctx.fillStyle = '#1e293b';
+                    ctx.font = '16px sans-serif';
+                    const capLines = wrapCanvasText(ctx, rawCap, innerImgW - 24, 2);
+                    capLines.forEach((line, lIdx) => {
+                        ctx.fillText(line, imgX + 12, metaY + 56 + lIdx * 20);
+                    });
+                }
+
+                curY += cardH + (r < rows - 1 ? gapY : 0);
+            }
+
+            if (bIdx < activeCodes.length - 1) {
+                curY += branchGap;
+            }
+        }
+
+        // Footer Dokumen Resmi
+        const footerTopY = totalHeight - footerH;
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(marginX, footerTopY);
+        ctx.lineTo(docW - marginX, footerTopY);
+        ctx.stroke();
+
+        ctx.fillStyle = '#475569';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.fillText('PT Angkasa Pura Indonesia (InJourney Airports) — Regional II', marginX, footerTopY + 34);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '16px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(
+            `Dokumen Resmi Lampiran Foto Airside • Tanggal: ${formattedDate}`,
+            docW - marginX,
+            footerTopY + 34
+        );
+        ctx.textAlign = 'left';
+
+        const safeDate = (dateStr || 'Harian').replace(/[^0-9a-zA-Z_-]/g, '-');
+        const filename = isSingleBranch
+            ? `Dokumentasi_Foto_Airside_${defaultBranch}_${safeDate}.png`
+            : `Dokumentasi_Foto_Airside_Regional_II_${safeDate}.png`;
+
+        const blob = await new Promise((resolve) => {
+            canvas.toBlob((b) => resolve(b), 'image/png', 0.94);
+        });
+
+        return {
+            blob,
+            filename,
+            totalPhotos
+        };
+    }
+
+    async function renderHighResPhotoBox(src) {
+        const targetW = 1000;
+        const targetH = 720;
+        const canvas = document.createElement('canvas');
+        canvas.width = targetW;
+        canvas.height = targetH;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#f1f5f9';
+        ctx.fillRect(0, 0, targetW, targetH);
+
+        try {
+            const img = await loadImage(src);
+            const iw = img.width || targetW;
+            const ih = img.height || targetH;
+            const scale = Math.max(targetW / iw, targetH / ih);
+            const sw = targetW / scale;
+            const sh = targetH / scale;
+            const sx = Math.max(0, (iw - sw) / 2);
+            const sy = Math.max(0, (ih - sh) / 2);
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
+        } catch (err) {
+            ctx.fillStyle = '#e2e8f0';
+            ctx.fillRect(0, 0, targetW, targetH);
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'bold 28px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Foto Dokumentasi Tidak Dapat Dimuat', targetW / 2, targetH / 2);
+        }
+
+        return canvas.toDataURL('image/jpeg', 0.90);
+    }
+
+    /**
+     * Buat objek jsPDF (.PDF A4 Multi-Halaman) untuk diunduh/diarsipkan
      */
     async function buildPhotoDocumentPdf(options) {
         const opts = options || {};
@@ -225,9 +553,9 @@
         let currentPage = 0;
 
         function drawPageHeaderAndFooter(code, branchPhotoCount, branchPageIdx, branchTotalPages) {
-            doc.setFillColor(0, 43, 73); // #002b49
+            doc.setFillColor(0, 43, 73);
             doc.rect(0, 0, pageW, 4, 'F');
-            doc.setFillColor(0, 183, 205); // #00B7CD
+            doc.setFillColor(0, 183, 205);
             doc.rect(0, 4, pageW, 1.5, 'F');
 
             let textStartX = marginX;
@@ -354,7 +682,11 @@
                 const cardH = 112;
                 const imgH = 82;
 
-                const cardX = marginX + col * (cardW + gapX);
+                // Jika foto ini adalah foto ganjil terakhir pada halaman tersebut, posisikan simetris di tengah!
+                const isLastOddInBranch = (pIdx === branchPhotos.length - 1) && (slotInPage % 2 === 0);
+                const cardX = isLastOddInBranch
+                    ? marginX + (contentW - cardW) / 2
+                    : marginX + col * (cardW + gapX);
                 const cardY = 46 + row * (cardH + gapY);
 
                 doc.setFillColor(255, 255, 255);
@@ -437,220 +769,63 @@
         }
     }
 
-    async function copyTextSafe(txt) {
-        if (!txt) return false;
-        try {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                await navigator.clipboard.writeText(txt);
-                return true;
-            }
-        } catch (e) {}
-        try {
-            const ta = document.createElement('textarea');
-            ta.value = txt;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            return true;
-        } catch (e2) {
-            return false;
-        }
-    }
-
     /**
-     * Alur Pengiriman WhatsApp Lengkap (Teks Laporan + File PDF Dokumentasi Foto)
+     * PENGIRIMAN 1X KERJA (SATU LANGKAH LANGSUNG TERKIRIM DOKUMEN + TEKS)
      *
-     * Mengatasi limitasi teknis aplikasi WhatsApp di HP (Android/iOS):
-     * Saat mengirim file dokumen (.pdf) melalui sistem Share HP (Intent.ACTION_SEND),
-     * aplikasi WhatsApp secara bawaan mengabaikan teks panjang atau memotongnya.
-     *
-     * Solusi Dual-Send:
-     * 1. Di HP (Mobile):
-     *    - Otomatis menyalin Teks Laporan Lengkap ke Clipboard HP.
-     *    - Membagikan File PDF Dokumentasi via menu Share WhatsApp.
-     *    - Begitu selesai mengirim PDF, langsung menampilkan tombol 1-Ketuk
-     *      "Kirim Teks Laporan ke WhatsApp" (membuka wa.me dengan teks penuh utuh),
-     *      atau pengguna bisa langsung Tempel (Paste) teks di ruang chat WhatsApp!
-     * 2. Di Laptop / PC (Desktop):
-     *    - Mengunduh File PDF Resmi A4 dan langsung membuka tab WhatsApp dengan teks laporan lengkap.
+     * - Di HP (Mobile):
+     *   Menggunakan Lembar Dokumen A4 Putih Resmi (PNG) di dalam navigator.share({ files: [docFile], text: waText })
+     *   sehingga aplikasi WhatsApp di HP langsung menyertakan Dokumen A4 + Teks Laporan sekaligus dalam 1x Kirim!
+     * - Di Laptop / PC (Desktop):
+     *   Otomatis menyalin Lembar Dokumen A4 Putih Resmi ke Clipboard (siap Ctrl+V) DAN langsung membuka ruang chat
+     *   WhatsApp dalam 1x klik tanpa popup yang menghalangi!
      */
     async function sendPdfAndTextViaWhatsApp(options) {
         const opts = options || {};
         const waUrl = opts.waUrl || '';
         const waText = opts.waText || '';
-        const recipientLabel = opts.recipientLabel || 'Penerima';
         const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || '');
 
-        // 1. Salin teks laporan lengkap ke Clipboard terlebih dahulu selagi user-gesture masih aktif
-        await copyTextSafe(waText);
-
-        // 2. Bangun dokumen PDF A4
-        if (typeof window.showKawungLoading === 'function') {
-            window.showKawungLoading('Menyiapkan PDF & Teks Laporan...', 'Menyusun halaman dokumentasi foto A4...');
-        }
-        let pdfRes = null;
-        try {
-            pdfRes = await buildPhotoDocumentPdf(opts);
-        } catch (err) {
-            console.error('Gagal membuat PDF:', err);
-        }
-        if (typeof window.hideKawungLoading === 'function') {
-            window.hideKawungLoading();
-        }
-
-        if (!pdfRes || !pdfRes.blob) {
-            if (waUrl) window.open(waUrl, '_blank');
-            return { completed: true };
-        }
-
-        // 3. Alur Khusus Mobile (Android / iOS)
+        // 1. Di HP (Mobile): Kirim Lembar Dokumen A4 Resmi + Teks sekaligus dalam 1x Kerja via navigator.share
         if (isMobile && navigator.canShare) {
-            const pdfFile = new File([pdfRes.blob], pdfRes.filename, { type: 'application/pdf' });
-            if (navigator.canShare({ files: [pdfFile] })) {
-                const promptStep2SendText = async () => {
-                    if (!window.Swal || !waUrl) {
-                        if (waUrl) window.open(waUrl, '_blank');
-                        return;
-                    }
-                    const step2 = await Swal.fire({
-                        icon: 'success',
-                        title: 'Langkah 2: Kirim Teks Laporan',
-                        html: `
-                            <div style="text-align: left; font-size: 0.88rem; color: #334155; line-height: 1.55;">
-                                <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 0.8rem 0.95rem; margin-bottom: 0.8rem;">
-                                    <div style="font-weight: 800; color: #15803d; margin-bottom: 0.25rem;">
-                                        <i class="fa-solid fa-circle-check me-1"></i> File PDF Dokumentasi Siap / Terkirim!
-                                    </div>
-                                    <div style="font-size: 0.81rem; color: #1e293b;">
-                                        Karena WhatsApp di HP memisahkan pengiriman <b>File Dokumen PDF</b> dan <b>Pesan Teks Panjang</b>, silakan ketuk tombol hijau di bawah untuk mengirim <b>Teks Laporan Lengkap</b> ke <b>${recipientLabel}</b>:
-                                    </div>
-                                </div>
-                                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 9px; padding: 0.6rem 0.8rem; font-size: 0.78rem; color: #475569;">
-                                    <i class="fa-regular fa-clipboard me-1 text-primary"></i>
-                                    <b>Tips Cepat:</b> Teks laporan lengkap juga <b>sudah disalin otomatis ke Clipboard HP Anda</b>. Anda dapat langsung menekan <b>Tempel (Paste)</b> di ruang chat WhatsApp!
-                                </div>
-                            </div>
-                        `,
-                        showCancelButton: true,
-                        confirmButtonText: `<i class="fa-brands fa-whatsapp me-1"></i> Kirim Teks Laporan ke ${recipientLabel}`,
-                        cancelButtonText: 'Sudah Saya Tempel / Selesai',
-                        confirmButtonColor: '#16a34a',
-                        cancelButtonColor: '#64748b',
-                        allowOutsideClick: false
-                    });
-
-                    if (step2.isConfirmed && waUrl) {
-                        await copyTextSafe(waText);
-                        window.open(waUrl, '_blank');
-                    }
-                };
-
-                try {
-                    await navigator.share({
-                        title: opts.shareTitle || 'Dokumentasi Foto Laporan Harian Airside',
-                        text: waText,
-                        files: [pdfFile]
-                    });
-                    // Setelah pengguna kembali dari memilih kontak & mengirim PDF di WhatsApp,
-                    // tampilkan tombol Langkah 2 untuk mengirim Teks Laporan Lengkap!
-                    await promptStep2SendText();
-                    return { shared: true, completed: true };
-                } catch (shareErr) {
-                    if (shareErr && shareErr.name === 'AbortError') {
-                        return { aborted: true, completed: false };
-                    }
-                    // Jika browser HP menolak navigator.share otomatis karena jeda pembuatan PDF (NotAllowedError),
-                    // tampilkan modal 2-Langkah interaktif agar pengguna mendapat user-gesture baru (0ms).
-                    if (window.Swal) {
-                        const manualShareModal = await Swal.fire({
-                            title: 'Kirim PDF Foto & Teks Laporan',
-                            html: `
-                                <div style="text-align: left; font-size: 0.86rem; color: #334155; line-height: 1.5;">
-                                    <div style="background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 11px; padding: 0.8rem 0.95rem; margin-bottom: 0.75rem;">
-                                        <div style="font-weight: 800; color: #002b49; margin-bottom: 0.3rem;">
-                                            <i class="fa-solid fa-file-pdf text-danger me-1"></i> ${pdfRes.filename} (${pdfRes.totalPhotos} Foto)
-                                        </div>
-                                        <div style="font-size: 0.8rem; color: #0c4a6e;">
-                                            <b>Teks laporan sudah disalin ke Clipboard Anda.</b><br>
-                                            Ketuk <b>Bagikan File PDF</b> di bawah untuk mengirim PDF ke WhatsApp, lalu lanjutkan dengan mengirim Teks Laporan.
-                                        </div>
-                                    </div>
-                                </div>
-                            `,
-                            showCancelButton: true,
-                            showDenyButton: true,
-                            confirmButtonText: '<i class="fa-solid fa-file-pdf me-1"></i> 1. Bagikan File PDF ke WA',
-                            denyButtonText: '<i class="fa-brands fa-whatsapp me-1"></i> Langsung Kirim Teks Saja',
-                            cancelButtonText: 'Batal',
-                            confirmButtonColor: '#002b49',
-                            denyButtonColor: '#16a34a',
-                            cancelButtonColor: '#64748b'
+            let docRes = opts.cachedDocRes || null;
+            if (!docRes) {
+                docRes = await buildStructuredDocumentBlob(opts);
+            }
+            if (docRes && docRes.blob) {
+                const docFile = new File([docRes.blob], docRes.filename, { type: 'image/png' });
+                if (navigator.canShare({ files: [docFile] })) {
+                    try {
+                        await navigator.share({
+                            title: opts.shareTitle || 'Laporan Harian & Dokumentasi Airside',
+                            text: waText,
+                            files: [docFile]
                         });
-
-                        if (manualShareModal.isConfirmed) {
-                            try {
-                                await navigator.share({
-                                    title: opts.shareTitle || 'Dokumentasi Foto Laporan Harian Airside',
-                                    text: waText,
-                                    files: [pdfFile]
-                                });
-                            } catch (e2) {
-                                pdfRes.doc.save(pdfRes.filename);
-                            }
-                            await promptStep2SendText();
-                            return { shared: true, completed: true };
-                        } else if (manualShareModal.isDenied) {
-                            pdfRes.doc.save(pdfRes.filename);
-                            if (waUrl) window.open(waUrl, '_blank');
-                            return { downloaded: true, completed: true };
+                        return { shared: true, completed: true };
+                    } catch (shareErr) {
+                        if (shareErr && shareErr.name === 'AbortError') {
+                            return { aborted: true, completed: false };
                         }
-                        return { aborted: true, completed: false };
                     }
                 }
             }
         }
 
-        // 4. Alur Desktop / Laptop (atau fallback jika Web Share file tidak didukung)
-        if (!opts.alreadyConfirmedOnDesktop && window.Swal) {
-            const stepRes = await Swal.fire({
-                title: 'Kirim Laporan & PDF Dokumentasi Foto',
-                html: `
-                    <div style="text-align: left; font-size: 0.88rem; color: #334155; line-height: 1.55;">
-                        <div style="background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 0.85rem;">
-                            <div style="font-weight: 800; color: #002b49; font-size: 0.93rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.45rem;">
-                                <i class="fa-solid fa-file-pdf text-danger" style="font-size: 1.15rem;"></i>
-                                <span>${pdfRes.totalPhotos} Foto Disusun ke PDF A4 (${pdfRes.totalPages} Halaman)</span>
-                            </div>
-                            <div style="font-size: 0.82rem; color: #1e293b;">
-                                Saat klik tombol di bawah:
-                                <ol style="margin: 0.45rem 0 0.25rem 1.2rem; padding: 0;">
-                                    <li style="margin-bottom: 0.3rem;">File <b>${pdfRes.filename}</b> otomatis terunduh (rapi per cabang di kertas A4).</li>
-                                    <li>Setelah WhatsApp terbuka, kirim teks laporan lalu <b>tarik (Drag & Drop)</b> file PDF dari bilah unduhan browser ke ruang chat WhatsApp!</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: '<i class="fa-solid fa-file-pdf me-1"></i> Unduh PDF Foto & Buka WhatsApp',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#16a34a',
-                cancelButtonColor: '#64748b',
-                width: 520
-            });
-            if (!stepRes.isConfirmed) {
-                return { aborted: true, completed: false };
+        // 2. Di Laptop / PC (Desktop): Salin Lembar Dokumen A4 Resmi ke Clipboard (Ctrl+V) + Langsung Buka WA (1x Klik!)
+        try {
+            if (navigator.clipboard && typeof ClipboardItem !== 'undefined') {
+                const blobPromise = opts.cachedDocRes && opts.cachedDocRes.blob
+                    ? Promise.resolve(opts.cachedDocRes.blob)
+                    : buildStructuredDocumentBlob(opts).then(r => (r ? r.blob : null));
+                await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
             }
+        } catch (clipErr) {
+            console.warn('Auto-copy dokumen A4 ke clipboard gagal:', clipErr);
         }
 
-        pdfRes.doc.save(pdfRes.filename);
         if (waUrl) {
             window.open(waUrl, '_blank');
         }
-        return { downloaded: true, completed: true };
+        return { completed: true };
     }
 
     async function shareOrDownloadPhotoPdf(options) {
@@ -658,6 +833,7 @@
     }
 
     window.AirsidePhotoPdf = {
+        buildStructuredDocumentBlob,
         buildPhotoDocumentPdf,
         downloadPhotoPdf,
         shareOrDownloadPhotoPdf,

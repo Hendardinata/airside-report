@@ -3359,7 +3359,7 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
-<script src="{{ url_for('static', filename='js/wizard.js') }}?v=7"></script>
+<script src="{{ url_for('static', filename='js/wizard.js') }}?v=8"></script>
 <script>
     // Cek apakah halaman sedang dimuat ulang setelah pengiriman laporan
     (function() {
@@ -4804,6 +4804,20 @@ REGION II`;
         window.buildStaffCollageBlob = async function(overrideServerPhotos, airportCode, dateStr) {
             const photos = window.getActiveStaffPhotoItems(overrideServerPhotos);
             if (!photos || photos.length === 0) return null;
+            if (window.AirsidePhotoPdf && typeof window.AirsidePhotoPdf.buildStructuredDocumentBlob === 'function') {
+                const docRes = await window.AirsidePhotoPdf.buildStructuredDocumentBlob({
+                    photos: photos.map(it => ({
+                        url: it.src,
+                        area_tag: it.area,
+                        caption: it.caption,
+                        airport_code: airportCode || '{{ airport_code }}'
+                    })),
+                    airportCode: airportCode || '{{ airport_code }}',
+                    dateStr: dateStr,
+                    singleBranch: true
+                });
+                if (docRes && docRes.blob) return docRes.blob;
+            }
 
             const loadImg = (src) => new Promise((resolve, reject) => {
                 const img = new Image();

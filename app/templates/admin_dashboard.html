@@ -9407,15 +9407,21 @@ REGION II`;
         };
 
         if (window.currentDeputyPhotos && window.currentDeputyPhotos.length > 0 && window.AirsidePhotoPdf) {
+            const safeDate = (lastRekapDate || 'Harian').replace(/[^0-9a-zA-Z_-]/g, '-');
+            const cachedDocRes = window.currentDeputyCollageBlob ? {
+                blob: window.currentDeputyCollageBlob,
+                filename: `Dokumentasi_Foto_Airside_Regional_II_${safeDate}.png`
+            } : null;
+
             const res = await window.AirsidePhotoPdf.sendPdfAndTextViaWhatsApp({
                 photos: window.currentDeputyPhotos,
                 dateStr: lastRekapDate,
                 singleBranch: false,
+                cachedDocRes: cachedDocRes,
                 waUrl: url,
                 waText: text,
                 recipientLabel: 'Deputy Regional II',
-                shareTitle: 'Laporan Harian & Dokumentasi Airside Regional II',
-                alreadyConfirmedOnDesktop: false
+                shareTitle: 'Laporan Harian & Dokumentasi Airside Regional II'
             });
             if (res && res.completed) {
                 promptAdminFollowup();
@@ -9506,6 +9512,14 @@ REGION II`;
 
     async function buildDeputyCollageBlob(photos, dateStr) {
         if (!photos || photos.length === 0) return null;
+        if (window.AirsidePhotoPdf && typeof window.AirsidePhotoPdf.buildStructuredDocumentBlob === 'function') {
+            const docRes = await window.AirsidePhotoPdf.buildStructuredDocumentBlob({
+                photos: photos,
+                dateStr: dateStr,
+                singleBranch: false
+            });
+            if (docRes && docRes.blob) return docRes.blob;
+        }
         const canvas = document.getElementById('deputyCollageCanvas') || document.createElement('canvas');
         const cols = photos.length === 1 ? 1 : 2;
         const rows = Math.ceil(photos.length / cols);

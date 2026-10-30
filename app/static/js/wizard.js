@@ -291,16 +291,21 @@ if (reportWizardForm) {
 
                             const dhWaUrl = `https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`;
                             if (serverPhotos.length > 0 && window.AirsidePhotoPdf) {
+                                const safeDate = (data.tanggal || 'Harian').replace(/[^0-9a-zA-Z_-]/g, '-');
+                                const cachedDocRes = window.currentStaffCollageBlob ? {
+                                    blob: window.currentStaffCollageBlob,
+                                    filename: `Dokumentasi_Foto_Airside_${data.airport_code}_${safeDate}.png`
+                                } : null;
                                 await window.AirsidePhotoPdf.sendPdfAndTextViaWhatsApp({
                                     photos: serverPhotos,
                                     airportCode: data.airport_code,
                                     dateStr: data.tanggal,
                                     singleBranch: true,
+                                    cachedDocRes: cachedDocRes,
                                     waUrl: dhWaUrl,
                                     waText: text,
                                     recipientLabel: 'Department Head',
-                                    shareTitle: `Laporan & Dokumentasi Airside ${data.airport_code}`,
-                                    alreadyConfirmedOnDesktop: true
+                                    shareTitle: `Laporan & Dokumentasi Airside ${data.airport_code}`
                                 });
                             } else {
                                 window.open(dhWaUrl, '_blank');
