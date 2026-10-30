@@ -62,7 +62,8 @@ STANDARD_CORE_FIELDS = [
 OPTIONAL_INLINE_FIELDS = {
     'RUNWAY_MARKA_PERSENTASE', 'RUNWAY_RUBBER_PROGRES', 'RUNWAY_RUBBER_PERF',
     'TWY_MARKA_PERSENTASE', 'TWY_WATER_DRY',
-    'APN_MARKA_PERSENTASE', 'APN_WATER_DRY'
+    'APN_MARKA_PERSENTASE', 'APN_WATER_DRY',
+    'RUNWAY_JENIS_BERULANG', 'TWY_JENIS_BERULANG', 'APN_JENIS_BERULANG'
 }
 
 SYSTEM_META_FIELDS = [
@@ -584,7 +585,8 @@ def get_daily_summary(date_str):
                     'TIMESTAMP',
                     'RUNWAY_MARKA_PERSENTASE', 'RUNWAY_RUBBER_PROGRES', 'RUNWAY_RUBBER_PERF',
                     'TWY_MARKA_PERSENTASE', 'TWY_WATER_DRY',
-                    'APN_MARKA_PERSENTASE', 'APN_WATER_DRY'
+                    'APN_MARKA_PERSENTASE', 'APN_WATER_DRY',
+                    'RUNWAY_JENIS_BERULANG', 'TWY_JENIS_BERULANG', 'APN_JENIS_BERULANG'
                 }
                 if header_row and len(row_data) > 57:
                     # Load schema on demand to get nice labels & sections

@@ -4373,11 +4373,11 @@
         }
         if (!catatanStr) catatanStr = '- (Nihil)\n';
 
-        const formatJenis = (val) => {
-            if (!val || val === '-' || val.trim().toLowerCase() === 'nihil') return '•  Jenis kerusakan : -\n';
+        const formatJenis = (val, label = 'Jenis kerusakan') => {
+            if (!val || val === '-' || val.trim().toLowerCase() === 'nihil') return `    ${label} : -\n`;
             const cleaned = val.trim();
-            if (cleaned.includes('\n')) return `•  Jenis kerusakan :\n${cleaned}\n`;
-            return `•  Jenis kerusakan : ${cleaned}\n`;
+            if (cleaned.includes('\n')) return `    ${label} :\n${cleaned}\n`;
+            return `    ${label} : ${cleaned}\n`;
         };
 
         const optLine = (indent, label, val, isPct = false) => {
@@ -4401,11 +4401,11 @@ ${cabang}
 A. RUNWAY
 •  Kondisi keseluruhan runway : ${v('RUNWAY_KONDISI')}
 •  Performance pavement : ${f_percent(v('RUNWAY_PCI'))}
-    Jml Titik Rusak : ${f_titik(v('RUNWAY_TITIK_RUSAK'))}
-    Jml titik yang sudah diperbaiki : ${f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
-${formatJenis(v('RUNWAY_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : ${f_titik(v('RUNWAY_TITIK_BELUM'))}
-${formatJenis(v('RUNWAY_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
-•  Marka :
+•  Jml Titik Rusak : ${f_titik(v('RUNWAY_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : ${f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
+${formatJenis(v('RUNWAY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : ${f_titik(v('RUNWAY_TITIK_BELUM'))}
+${formatJenis(v('RUNWAY_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
+${formatJenis(v('RUNWAY_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
        Standar : ${v('RUNWAY_MARKA_STD')}
        Realisasi : ${v('RUNWAY_MARKA_REALISASI')}
 ${optLine('       ', 'Persentase', v('RUNWAY_MARKA_PERSENTASE'), true)}       Performance : ${f_percent(v('RUNWAY_MARKA_PERF'))}
@@ -4420,11 +4420,11 @@ ${optLine('       ', 'Performance', v('RUNWAY_RUBBER_PERF'), true)}
 B. TAXIWAY
 •  Kondisi keseluruhan Taxiway${twyKet} : ${v('TAXIWAY_STATUS')}
 •  Performance pavement : ${f_percent(v('TAXIWAY_PCI'))}
-    Jml Titik Rusak : ${f_titik(v('TWY_TITIK_RUSAK'))}
-    Jml titik yang sudah diperbaiki : ${f_titik(v('TWY_TITIK_DIPERBAIKI'))}
-${formatJenis(v('TWY_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : ${f_titik(v('TWY_TITIK_BELUM'))}
-${formatJenis(v('TWY_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
-•  Marka :
+•  Jml Titik Rusak : ${f_titik(v('TWY_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : ${f_titik(v('TWY_TITIK_DIPERBAIKI'))}
+${formatJenis(v('TWY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : ${f_titik(v('TWY_TITIK_BELUM'))}
+${formatJenis(v('TWY_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
+${formatJenis(v('TWY_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
       Standar : ${v('TWY_MARKA_STD')}
       Realisasi : ${v('TWY_MARKA_REALISASI')}
 ${optLine('      ', 'Persentase', v('TWY_MARKA_PERSENTASE'), true)}      Performance : ${f_percent(v('TWY_MARKA_PERF'))}
@@ -4435,11 +4435,11 @@ ${optLine('      ', 'Prosentase DRY', v('TWY_WATER_DRY'), true)}      Performanc
 C. APRON
 •  Kondisi keseluruhan Apron : ${v('APRON_KONDISI')}
 •  Performance pavement : ${f_percent(v('APRON_PCI'))}
-    Jml Titik Rusak : ${f_titik(v('APN_TITIK_RUSAK'))}
-    Jml titik yang sudah diperbaiki : ${f_titik(v('APN_TITIK_DIPERBAIKI'))}
-${formatJenis(v('APN_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : ${f_titik(v('APN_TITIK_BELUM'))}
-${formatJenis(v('APN_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
-•  Marka :
+•  Jml Titik Rusak : ${f_titik(v('APN_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : ${f_titik(v('APN_TITIK_DIPERBAIKI'))}
+${formatJenis(v('APN_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : ${f_titik(v('APN_TITIK_BELUM'))}
+${formatJenis(v('APN_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
+${formatJenis(v('APN_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
       Standar : ${v('APN_MARKA_STD')}
       Realisasi : ${v('APN_MARKA_REALISASI')}
 ${optLine('      ', 'Persentase', v('APN_MARKA_PERSENTASE'), true)}      Performance : ${f_percent(v('APN_MARKA_PERF'))}

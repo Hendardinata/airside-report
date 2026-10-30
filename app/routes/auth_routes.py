@@ -172,6 +172,10 @@ def _format_tanggal_indo(d_str):
 
 @bp.route('/dokumentasi/<date_str>', methods=['GET'])
 @bp.route('/dokumentasi/<date_str>/<airport_code>', methods=['GET'])
+@bp.route('/dok/<date_str>', methods=['GET'])
+@bp.route('/dok/<date_str>/<airport_code>', methods=['GET'])
+@bp.route('/d/<date_str>', methods=['GET'])
+@bp.route('/d/<date_str>/<airport_code>', methods=['GET'])
 def public_dokumentasi(date_str, airport_code=None):
     """
     Halaman publik (tanpa login) untuk melihat & mencetak PDF dokumentasi foto lapangan

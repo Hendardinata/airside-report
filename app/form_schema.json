@@ -148,6 +148,13 @@
               "unit": "titik"
             },
             {
+              "label": "Jenis kerusakan titik rusak berulang",
+              "name": "RUNWAY_JENIS_BERULANG",
+              "placeholder": "Contoh: Deflection di TH 09 / -",
+              "required": false,
+              "type": "text"
+            },
+            {
               "label": "Marka - Standar",
               "name": "RUNWAY_MARKA_STD",
               "placeholder": "Contoh: 1x / Tahun atau 1x kali / thn",
@@ -307,6 +314,13 @@
               "unit": "titik"
             },
             {
+              "label": "Jenis kerusakan titik rusak berulang",
+              "name": "TWY_JENIS_BERULANG",
+              "placeholder": "Contoh: Rutting di Twy E / -",
+              "required": false,
+              "type": "text"
+            },
+            {
               "label": "Marka - Standar",
               "name": "TWY_MARKA_STD",
               "placeholder": "Contoh: 1x / Tahun atau 1x kali / thn",
@@ -429,6 +443,13 @@
               "required": true,
               "type": "text",
               "unit": "titik"
+            },
+            {
+              "label": "Jenis kerusakan titik rusak berulang",
+              "name": "APN_JENIS_BERULANG",
+              "placeholder": "Contoh: Joint Sealant Damage / -",
+              "required": false,
+              "type": "text"
             },
             {
               "label": "Marka - Standar",

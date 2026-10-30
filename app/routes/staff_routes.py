@@ -97,16 +97,16 @@ def generate_wa_message(data, airport_code):
     else:
         cabang_str = f"1. {cabang_raw}"
 
-    def format_damage_line(val):
+    def format_damage_line(val, label="Jenis kerusakan"):
         if not val or val == '-':
-            return "•  Jenis kerusakan : -\n"
+            return f"    {label} : -\n"
         lines = [l.strip() for l in str(val).strip().split('\n') if l.strip()]
         if not lines:
-            return "•  Jenis kerusakan : -\n"
+            return f"    {label} : -\n"
         if len(lines) == 1:
-            return f"•  Jenis kerusakan : {lines[0]}\n"
-        formatted_items = "\n".join(f"  {l}" for l in lines)
-        return f"•  Jenis kerusakan :\n{formatted_items}\n"
+            return f"    {label} : {lines[0]}\n"
+        formatted_items = "\n".join(f"      {l}" for l in lines)
+        return f"    {label} :\n{formatted_items}\n"
 
     sapaan_val = v('SAPAAN')
     if sapaan_val == '-':
@@ -139,7 +139,7 @@ def generate_wa_message(data, airport_code):
             branch_photos = get_photos_by_date(airport_code, clean_tgl)
             if branch_photos:
                 host_base = request.host_url.rstrip('/') if request else ''
-                doc_section = f"\nLampiran Dokumentasi Foto Lapangan ({len(branch_photos)} Foto):\n{host_base}/dokumentasi/{clean_tgl}/{airport_code}\n\n"
+                doc_section = f"\n\nLampiran Dokumentasi Foto Lapangan ({len(branch_photos)} Foto):\n\n{host_base}/dokumentasi/{clean_tgl}/{airport_code}\n\n"
     except Exception:
         doc_section = ""
 
@@ -156,11 +156,11 @@ Region II
 A. RUNWAY
 •  Kondisi keseluruhan runway : {v('RUNWAY_KONDISI')}
 •  Performance pavement : {f_percent(v('RUNWAY_PCI'))}
-    Jml Titik Rusak : {f_titik(v('RUNWAY_TITIK_RUSAK'))}
-    Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
-{format_damage_line(v('RUNWAY_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
-{format_damage_line(v('RUNWAY_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
-•  Marka :
+•  Jml Titik Rusak : {f_titik(v('RUNWAY_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : {f_titik(v('RUNWAY_TITIK_DIPERBAIKI'))}
+{format_damage_line(v('RUNWAY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('RUNWAY_TITIK_BELUM'))}
+{format_damage_line(v('RUNWAY_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : {f_titik(v('RUNWAY_TITIK_BERULANG'))}
+{format_damage_line(v('RUNWAY_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
        Standar : {v('RUNWAY_MARKA_STD')}
        Realisasi : {v('RUNWAY_MARKA_REALISASI')}
 {rwy_marka_pct}       Performance : {f_percent(v('RUNWAY_MARKA_PERF'))}
@@ -175,11 +175,11 @@ A. RUNWAY
 B. TAXIWAY
 •  Kondisi keseluruhan Taxiway{twy_ket} : {v('TAXIWAY_STATUS')}
 •  Performance pavement : {f_percent(v('TAXIWAY_PCI'))}
-    Jml Titik Rusak : {f_titik(v('TWY_TITIK_RUSAK'))}
-    Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
-{format_damage_line(v('TWY_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
-{format_damage_line(v('TWY_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
-•  Marka :
+•  Jml Titik Rusak : {f_titik(v('TWY_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : {f_titik(v('TWY_TITIK_DIPERBAIKI'))}
+{format_damage_line(v('TWY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('TWY_TITIK_BELUM'))}
+{format_damage_line(v('TWY_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : {f_titik(v('TWY_TITIK_BERULANG'))}
+{format_damage_line(v('TWY_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
       Standar : {v('TWY_MARKA_STD')}
       Realisasi : {v('TWY_MARKA_REALISASI')}
 {twy_marka_pct}      Performance : {f_percent(v('TWY_MARKA_PERF'))}
@@ -190,11 +190,11 @@ B. TAXIWAY
 C. APRON
 •  Kondisi keseluruhan Apron : {v('APRON_KONDISI')}
 •  Performance pavement : {f_percent(v('APRON_PCI'))}
-    Jml Titik Rusak : {f_titik(v('APN_TITIK_RUSAK'))}
-    Jml titik yang sudah diperbaiki : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
-{format_damage_line(v('APN_JENIS_DIPERBAIKI'))}    Jml titik yang belum diperbaiki : {f_titik(v('APN_TITIK_BELUM'))}
-{format_damage_line(v('APN_JENIS_BELUM'))}    Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
-•  Marka :
+•  Jml Titik Rusak : {f_titik(v('APN_TITIK_RUSAK'))}
+•  Jml titik yang sudah diperbaiki : {f_titik(v('APN_TITIK_DIPERBAIKI'))}
+{format_damage_line(v('APN_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : {f_titik(v('APN_TITIK_BELUM'))}
+{format_damage_line(v('APN_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : {f_titik(v('APN_TITIK_BERULANG'))}
+{format_damage_line(v('APN_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
       Standar : {v('APN_MARKA_STD')}
       Realisasi : {v('APN_MARKA_REALISASI')}
 {apn_marka_pct}      Performance : {f_percent(v('APN_MARKA_PERF'))}
@@ -433,7 +433,7 @@ def submit():
 
         host_base = request.host_url.rstrip('/') if request else ''
         photo_info_line = (
-            f"Lampiran Dokumentasi Foto ({len(current_photos)} Foto):\n"
+            f"\nLampiran Dokumentasi Foto ({len(current_photos)} Foto):\n\n"
             f"{host_base}/dokumentasi/{tgl_str}/{airport_code}\n\n"
         ) if current_photos else ""
 

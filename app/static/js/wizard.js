@@ -260,8 +260,12 @@ if (reportWizardForm) {
                         if (phone) {
                             let text = data.dh_message || data.gm_message || `Halo Department Head, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon direview di portal.`;
                             let cleanDH = phone.replace(/\D/g, '');
-                            if (cleanDH.startsWith('0')) cleanDH = '62' + cleanDH.substring(1);
-                            window.open(`https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`, '_blank');
+                            if (typeof window.openWhatsAppDirect === 'function') {
+                                window.openWhatsAppDirect(cleanDH, text);
+                            } else {
+                                if (cleanDH.startsWith('0')) cleanDH = '62' + cleanDH.substring(1);
+                                window.open(`https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`, '_blank');
+                            }
                         } else {
                             Swal.fire('Info', 'Nomor WA Department Head belum dikonfigurasi.', 'info');
                         }

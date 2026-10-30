@@ -6889,8 +6889,11 @@
 
         const waMsg = `Yth. Department Head Bandara ${airportMeta.fullname} (${code}),\n\nMohon izin menginformasikan bahwa Laporan Harian Kondisi Fasilitas Sisi Udara (Airside) untuk tanggal *${dStr}* belum kami terima di sistem Regional II.\n\nMohon arahan kepada tim terkait di cabang untuk segera melakukan pengisian dan verifikasi. Atas perhatian dan kerjasamanya kami ucapkan terima kasih.\n\nSalam hormat,\n*Administrator Regional II - InJourney Airports*`;
 
-        const waUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(waMsg)}`;
-        window.open(waUrl, '_blank');
+        if (typeof window.openWhatsAppDirect === 'function') {
+            window.openWhatsAppDirect(cleanNum, waMsg);
+        } else {
+            window.open(`https://wa.me/${cleanNum}?text=${encodeURIComponent(waMsg)}`, '_blank');
+        }
     }
     window.contactDHWhatsApp = contactGMWhatsApp;
 
@@ -9031,23 +9034,24 @@
                                 const rd = info.raw_data;
                                 const fd = info.fields || {};
                                 const gf = (key, fallbackIdx) => (fd[key] !== undefined && fd[key] !== null) ? fd[key] : (fallbackIdx !== undefined ? rd[fallbackIdx] : "");
-                                const fmtJenis = (val) => {
+                                const fmtJenis = (val, label = "Jenis kerusakan") => {
                                     const c = vClean(val);
-                                    if (c === "-" || c.toLowerCase() === "nihil") return "•  Jenis kerusakan : -\n";
-                                    if (c.includes("\n")) return `•  Jenis kerusakan :\n${c}\n`;
-                                    return `•  Jenis kerusakan : ${c}\n`;
+                                    if (c === "-" || c.toLowerCase() === "nihil") return `    ${label} : -\n`;
+                                    if (c.includes("\n")) return `    ${label} :\n${c}\n`;
+                                    return `    ${label} : ${c}\n`;
                                 };
 
                                 branchText += `${index + 1}. ${code}\n`;
                                 branchText += `A. RUNWAY\n`;
                                 branchText += `•  Kondisi keseluruhan runway : ${vClean(gf("RUNWAY_KONDISI", 8))}\n`;
                                 branchText += `•  Performance pavement : ${fPercent(gf("RUNWAY_PCI", 9))}\n`;
-                                branchText += `    Jml Titik Rusak : ${fTitik(gf("RUNWAY_TITIK_RUSAK", 10))}\n`;
-                                branchText += `    Jml titik yang sudah diperbaiki : ${fTitik(gf("RUNWAY_TITIK_DIPERBAIKI", 11))}\n`;
+                                branchText += `•  Jml Titik Rusak : ${fTitik(gf("RUNWAY_TITIK_RUSAK", 10))}\n`;
+                                branchText += `•  Jml titik yang sudah diperbaiki : ${fTitik(gf("RUNWAY_TITIK_DIPERBAIKI", 11))}\n`;
                                 branchText += fmtJenis(gf("RUNWAY_JENIS_DIPERBAIKI", 12));
-                                branchText += `    Jml titik yang belum diperbaiki : ${fTitik(gf("RUNWAY_TITIK_BELUM", 13))}\n`;
-                                branchText += fmtJenis(gf("RUNWAY_JENIS_BELUM", 14));
-                                branchText += `    Jml titik rusak berulang > 1x : ${fTitik(gf("RUNWAY_TITIK_BERULANG", 15))}\n`;
+                                branchText += `•  Jml titik yang belum diperbaiki : ${fTitik(gf("RUNWAY_TITIK_BELUM", 13))}\n`;
+                                branchText += fmtJenis(gf("RUNWAY_JENIS_BELUM", 14), "Jenis kerusakan yang belum diperbaiki");
+                                branchText += `•  Jml titik rusak berulang > 1x : ${fTitik(gf("RUNWAY_TITIK_BERULANG", 15))}\n`;
+                                branchText += fmtJenis(gf("RUNWAY_JENIS_BERULANG"), "Jenis kerusakan titik rusak berulang");
                                 branchText += `•  Marka :\n`;
                                 branchText += `       Standar : ${vClean(gf("RUNWAY_MARKA_STD", 16))}\n`;
                                 branchText += `       Realisasi : ${vClean(gf("RUNWAY_MARKA_REALISASI", 17))}\n`;
@@ -9078,12 +9082,13 @@
                                 branchText += `B. TAXIWAY\n`;
                                 branchText += `•  Kondisi keseluruhan Taxiway${twyKet} : ${vClean(gf("TAXIWAY_STATUS", 25))}\n`;
                                 branchText += `•  Performance pavement : ${fPercent(gf("TAXIWAY_PCI", 26))}\n`;
-                                branchText += `    Jml Titik Rusak : ${fTitik(gf("TWY_TITIK_RUSAK", 27))}\n`;
-                                branchText += `    Jml titik yang sudah diperbaiki : ${fTitik(gf("TWY_TITIK_DIPERBAIKI", 28))}\n`;
+                                branchText += `•  Jml Titik Rusak : ${fTitik(gf("TWY_TITIK_RUSAK", 27))}\n`;
+                                branchText += `•  Jml titik yang sudah diperbaiki : ${fTitik(gf("TWY_TITIK_DIPERBAIKI", 28))}\n`;
                                 branchText += fmtJenis(gf("TWY_JENIS_DIPERBAIKI", 29));
-                                branchText += `    Jml titik yang belum diperbaiki : ${fTitik(gf("TWY_TITIK_BELUM", 30))}\n`;
-                                branchText += fmtJenis(gf("TWY_JENIS_BELUM", 31));
-                                branchText += `    Jml titik rusak berulang > 1x : ${fTitik(gf("TWY_TITIK_BERULANG", 32))}\n`;
+                                branchText += `•  Jml titik yang belum diperbaiki : ${fTitik(gf("TWY_TITIK_BELUM", 30))}\n`;
+                                branchText += fmtJenis(gf("TWY_JENIS_BELUM", 31), "Jenis kerusakan yang belum diperbaiki");
+                                branchText += `•  Jml titik rusak berulang > 1x : ${fTitik(gf("TWY_TITIK_BERULANG", 32))}\n`;
+                                branchText += fmtJenis(gf("TWY_JENIS_BERULANG"), "Jenis kerusakan titik rusak berulang");
                                 branchText += `•  Marka :\n`;
                                 branchText += `      Standar : ${vClean(gf("TWY_MARKA_STD", 33))}\n`;
                                 branchText += `      Realisasi : ${vClean(gf("TWY_MARKA_REALISASI", 34))}\n`;
@@ -9103,12 +9108,13 @@
                                 branchText += `C. APRON\n`;
                                 branchText += `•  Kondisi keseluruhan Apron : ${vClean(gf("APRON_KONDISI", 38))}\n`;
                                 branchText += `•  Performance pavement : ${fPercent(gf("APRON_PCI", 39))}\n`;
-                                branchText += `    Jml Titik Rusak : ${fTitik(gf("APN_TITIK_RUSAK", 40))}\n`;
-                                branchText += `    Jml titik yang sudah diperbaiki : ${fTitik(gf("APN_TITIK_DIPERBAIKI", 41))}\n`;
+                                branchText += `•  Jml Titik Rusak : ${fTitik(gf("APN_TITIK_RUSAK", 40))}\n`;
+                                branchText += `•  Jml titik yang sudah diperbaiki : ${fTitik(gf("APN_TITIK_DIPERBAIKI", 41))}\n`;
                                 branchText += fmtJenis(gf("APN_JENIS_DIPERBAIKI", 42));
-                                branchText += `    Jml titik yang belum diperbaiki : ${fTitik(gf("APN_TITIK_BELUM", 43))}\n`;
-                                branchText += fmtJenis(gf("APN_JENIS_BELUM", 44));
-                                branchText += `    Jml titik rusak berulang > 1x : ${fTitik(gf("APN_TITIK_BERULANG", 45))}\n`;
+                                branchText += `•  Jml titik yang belum diperbaiki : ${fTitik(gf("APN_TITIK_BELUM", 43))}\n`;
+                                branchText += fmtJenis(gf("APN_JENIS_BELUM", 44), "Jenis kerusakan yang belum diperbaiki");
+                                branchText += `•  Jml titik rusak berulang > 1x : ${fTitik(gf("APN_TITIK_BERULANG", 45))}\n`;
+                                branchText += fmtJenis(gf("APN_JENIS_BERULANG"), "Jenis kerusakan titik rusak berulang");
                                 branchText += `•  Marka :\n`;
                                 branchText += `      Standar : ${vClean(gf("APN_MARKA_STD", 46))}\n`;
                                 branchText += `      Realisasi : ${vClean(gf("APN_MARKA_REALISASI", 47))}\n`;
@@ -9246,8 +9252,8 @@
                     });
                     const docUrl = `${window.location.origin}/dokumentasi/${res.date}`;
                     const docSection = totalDocPhotos > 0
-                        ? `\nLampiran Dokumentasi Foto Lapangan (${totalDocPhotos} Foto):\n${docUrl}\n\n`
-                        : '\n';
+                        ? `\n\nLampiran Dokumentasi Foto Lapangan (${totalDocPhotos} Foto):\n\n${docUrl}\n\n`
+                        : '\n\n';
 
                     const kompilasi = `Assalamu'alaikum Wr. Wb
 Selamat Malam
@@ -9308,8 +9314,11 @@ REGION II`;
         let cleanNum = phone.trim().replace(/\D/g, '');
         if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
         const waMsg = `Halo tim Fasilitas Sisi Udara ${code} - ${branchCity}, mohon segera mengisi laporan harian Airside untuk tanggal *${dateStr}* melalui Dashboard Petugas. Terima kasih.`;
-        const waUrl = `https://wa.me/${cleanNum}?text=${encodeURIComponent(waMsg)}`;
-        window.open(waUrl, '_blank');
+        if (typeof window.openWhatsAppDirect === 'function') {
+            window.openWhatsAppDirect(cleanNum, waMsg);
+        } else {
+            window.open(`https://wa.me/${cleanNum}?text=${encodeURIComponent(waMsg)}`, '_blank');
+        }
     }
 
     // --- WHATSAPP CONSOLE ACTIONS ---
@@ -9359,7 +9368,6 @@ REGION II`;
 
         let cleanNum = numbers[0];
         if (cleanNum.startsWith('0')) cleanNum = '62' + cleanNum.substring(1);
-        const url = `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
 
         const promptAdminFollowup = () => {
             if (adminPhone && adminPhone.trim()) {
@@ -9375,16 +9383,23 @@ REGION II`;
                     }).then((result) => {
                         if (result.isConfirmed) {
                             let cleanAdmin = adminPhone.trim().replace(/\D/g, '');
-                            if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
-                            const adminUrl = `https://wa.me/${cleanAdmin}?text=${encodeURIComponent(text)}`;
-                            window.open(adminUrl, '_blank');
+                            if (typeof window.openWhatsAppDirect === 'function') {
+                                window.openWhatsAppDirect(cleanAdmin, text);
+                            } else {
+                                if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                                window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(text)}`, '_blank');
+                            }
                         }
                     });
                 }, 1000);
             }
         };
 
-        window.open(url, '_blank');
+        if (typeof window.openWhatsAppDirect === 'function') {
+            window.openWhatsAppDirect(cleanNum, text);
+        } else {
+            window.open(`https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`, '_blank');
+        }
         promptAdminFollowup();
     }
 

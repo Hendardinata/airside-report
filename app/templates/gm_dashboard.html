@@ -5657,6 +5657,11 @@
                                 <div class="doc-pair-val">${fmtTitik(d.RUNWAY_RUSAK_BERULANG || d.RUNWAY_TITIK_BERULANG, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
+                                <div class="doc-pair-key">Jenis kerusakan titik rusak berulang</div>
+                                <div class="doc-pair-sep">:</div>
+                                <div class="doc-pair-val">${fmt(d.RUNWAY_JENIS_BERULANG, '-')}</div>
+                            </div>
+                            <div class="doc-pair-row">
                                 <div class="doc-pair-key">Marka - Standar</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.RUNWAY_MARKA_STD, '1x / Tahun')}</div>
@@ -5749,6 +5754,11 @@
                                 <div class="doc-pair-val">${fmtTitik(d.TWY_RUSAK_BERULANG || d.TWY_TITIK_BERULANG, '0')}</div>
                             </div>
                             <div class="doc-pair-row">
+                                <div class="doc-pair-key">Jenis kerusakan titik rusak berulang</div>
+                                <div class="doc-pair-sep">:</div>
+                                <div class="doc-pair-val">${fmt(d.TWY_JENIS_BERULANG, '-')}</div>
+                            </div>
+                            <div class="doc-pair-row">
                                 <div class="doc-pair-key">Marka - Standar</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmt(d.TWY_MARKA_STD, '1x / Tahun')}</div>
@@ -5822,6 +5832,11 @@
                                 <div class="doc-pair-key">Jml titik rusak berulang > 1x</div>
                                 <div class="doc-pair-sep">:</div>
                                 <div class="doc-pair-val">${fmtTitik(d.APN_RUSAK_BERULANG || d.APN_TITIK_BERULANG, '0')}</div>
+                            </div>
+                            <div class="doc-pair-row">
+                                <div class="doc-pair-key">Jenis kerusakan titik rusak berulang</div>
+                                <div class="doc-pair-sep">:</div>
+                                <div class="doc-pair-val">${fmt(d.APN_JENIS_BERULANG, '-')}</div>
                             </div>
                             <div class="doc-pair-row">
                                 <div class="doc-pair-key">Marka - Standar</div>
@@ -6259,6 +6274,13 @@
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Jenis kerusakan titik rusak berulang</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="RUNWAY_JENIS_BERULANG" class="doc-inline-input" value="${safe(d.RUNWAY_JENIS_BERULANG)}" placeholder="Contoh: Deflection di TH 09 / -">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
                                     <div class="doc-pair-key">Marka - Standar</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
@@ -6416,6 +6438,13 @@
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Jenis kerusakan titik rusak berulang</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="TWY_JENIS_BERULANG" class="doc-inline-input" value="${safe(d.TWY_JENIS_BERULANG)}" placeholder="Contoh: Rutting di Twy E / -">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
                                     <div class="doc-pair-key">Marka - Standar</div>
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
@@ -6535,6 +6564,13 @@
                                     <div class="doc-pair-sep">:</div>
                                     <div class="doc-pair-val">
                                         <input type="text" name="APN_TITIK_BERULANG" class="doc-inline-input" style="max-width:280px;" value="${safe(d.APN_TITIK_BERULANG || d.APN_RUSAK_BERULANG || '0')}" placeholder="Contoh: 0">
+                                    </div>
+                                </div>
+                                <div class="doc-pair-row">
+                                    <div class="doc-pair-key">Jenis kerusakan titik rusak berulang</div>
+                                    <div class="doc-pair-sep">:</div>
+                                    <div class="doc-pair-val">
+                                        <input type="text" name="APN_JENIS_BERULANG" class="doc-inline-input" value="${safe(d.APN_JENIS_BERULANG)}" placeholder="Contoh: Joint Sealant Damage / -">
                                     </div>
                                 </div>
                                 <div class="doc-pair-row">
@@ -6768,8 +6804,12 @@
                                     if (forwardRes.isConfirmed) {
                                         if (res.admin_phone) {
                                             let cleanAdmin = res.admin_phone.replace(/\D/g, '');
-                                            if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
-                                            window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
+                                            if (typeof window.openWhatsAppDirect === 'function') {
+                                                window.openWhatsAppDirect(cleanAdmin, res.admin_message);
+                                            } else {
+                                                if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                                                window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
+                                            }
                                         } else {
                                             Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
                                         }
@@ -6935,8 +6975,12 @@
                         if (result.isConfirmed) {
                             if (res.pic_phone) {
                                 let cleanPhone = res.pic_phone.replace(/\D/g, '');
-                                if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
-                                window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(res.staff_message)}`, '_blank');
+                                if (typeof window.openWhatsAppDirect === 'function') {
+                                    window.openWhatsAppDirect(cleanPhone, res.staff_message);
+                                } else {
+                                    if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
+                                    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(res.staff_message)}`, '_blank');
+                                }
                             } else {
                                 Swal.fire('Info', 'Nomor WhatsApp Petugas/PIC cabang belum terdaftar di konfigurasi.', 'info');
                             }
@@ -7045,8 +7089,12 @@
                                 if (forwardRes.isConfirmed) {
                                     if (res.admin_phone) {
                                         let cleanAdmin = res.admin_phone.replace(/\D/g, '');
-                                        if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
-                                        window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
+                                        if (typeof window.openWhatsAppDirect === 'function') {
+                                            window.openWhatsAppDirect(cleanAdmin, res.admin_message);
+                                        } else {
+                                            if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                                            window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
+                                        }
                                     } else {
                                         Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
                                     }

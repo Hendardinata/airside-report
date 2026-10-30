@@ -1091,6 +1091,29 @@
         // Aliases for unified system access
         window.showDriveLoading = window.showKawungLoading;
         window.hideDriveLoading = window.hideKawungLoading;
+
+        /**
+         * Peluncur WhatsApp Cerdas (Direct Native App di Mobile, Web di Desktop)
+         * - Mobile (Android / iOS): Langsung meluncurkan aplikasi WhatsApp native via whatsapp://send
+         *   tanpa membuka browser atau halaman perantara wa.me.
+         * - Desktop / PC: Membuka tab wa.me baru untuk kompatibilitas WhatsApp Web.
+         */
+        window.openWhatsAppDirect = function(phone, text) {
+            if (!phone) return;
+            let clean = String(phone).replace(/\D/g, '');
+            if (clean.startsWith('0')) clean = '62' + clean.substring(1);
+            const encodedText = encodeURIComponent(text || '');
+
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent || '');
+
+            if (isMobile) {
+                const nativeUrl = 'whatsapp://send?phone=' + clean + '&text=' + encodedText;
+                window.location.href = nativeUrl;
+            } else {
+                const webUrl = 'https://wa.me/' + clean + '?text=' + encodedText;
+                window.open(webUrl, '_blank');
+            }
+        };
     </script>
 
     {% block scripts %}{% endblock %}
