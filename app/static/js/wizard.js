@@ -289,21 +289,22 @@ if (reportWizardForm) {
                             let cleanDH = phone.replace(/\D/g, '');
                             if (cleanDH.startsWith('0')) cleanDH = '62' + cleanDH.substring(1);
 
+                            const dhWaUrl = `https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`;
                             if (serverPhotos.length > 0 && window.AirsidePhotoPdf) {
-                                const shareRes = await window.AirsidePhotoPdf.shareOrDownloadPhotoPdf({
+                                await window.AirsidePhotoPdf.sendPdfAndTextViaWhatsApp({
                                     photos: serverPhotos,
                                     airportCode: data.airport_code,
                                     dateStr: data.tanggal,
                                     singleBranch: true,
+                                    waUrl: dhWaUrl,
+                                    waText: text,
+                                    recipientLabel: 'Department Head',
                                     shareTitle: `Laporan & Dokumentasi Airside ${data.airport_code}`,
-                                    shareText: text
+                                    alreadyConfirmedOnDesktop: true
                                 });
-                                if (shareRes && shareRes.shared) {
-                                    // Jika sudah terkirim via native mobile share
-                                }
+                            } else {
+                                window.open(dhWaUrl, '_blank');
                             }
-
-                            window.open(`https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`, '_blank');
                         } else {
                             Swal.fire('Info', 'Nomor WA Department Head belum dikonfigurasi.', 'info');
                         }

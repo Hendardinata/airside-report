@@ -6252,23 +6252,23 @@
             if (res.admin_phone) {
                 let cleanAdmin = res.admin_phone.replace(/\D/g, '');
                 if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+                const adminWaUrl = `https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`;
 
                 if (photos.length > 0 && window.AirsidePhotoPdf) {
-                    const shareRes = await window.AirsidePhotoPdf.shareOrDownloadPhotoPdf({
+                    await window.AirsidePhotoPdf.sendPdfAndTextViaWhatsApp({
                         photos: photos,
                         airportCode: airportCode,
                         dateStr: reportDate,
                         singleBranch: true,
+                        waUrl: adminWaUrl,
+                        waText: res.admin_message,
+                        recipientLabel: 'Admin Regional II',
                         shareTitle: `Laporan & Dokumentasi Airside ${airportCode}`,
-                        shareText: res.admin_message
+                        alreadyConfirmedOnDesktop: true
                     });
-                    if (shareRes && shareRes.shared) {
-                        setTimeout(() => window.location.reload(), 400);
-                        return;
-                    }
+                } else {
+                    window.open(adminWaUrl, '_blank');
                 }
-
-                window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
             } else {
                 await Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
             }

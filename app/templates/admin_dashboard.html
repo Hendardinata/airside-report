@@ -9406,72 +9406,21 @@ REGION II`;
             }
         };
 
-        if (window.currentDeputyPhotos && window.currentDeputyPhotos.length > 0) {
-            const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || '');
-            if (isMobile && navigator.canShare && window.AirsidePhotoPdf) {
-                const pdfRes = await window.AirsidePhotoPdf.buildPhotoDocumentPdf({
-                    photos: window.currentDeputyPhotos,
-                    dateStr: lastRekapDate,
-                    singleBranch: false
-                });
-                if (pdfRes && pdfRes.blob) {
-                    const pdfFile = new File([pdfRes.blob], pdfRes.filename, { type: 'application/pdf' });
-                    if (navigator.canShare({ files: [pdfFile] })) {
-                        try {
-                            await navigator.share({
-                                title: 'Laporan Harian & Dokumentasi Airside Regional II',
-                                text: text,
-                                files: [pdfFile]
-                            });
-                            return;
-                        } catch (err) {
-                            if (err && err.name === 'AbortError') return;
-                        }
-                    }
-                }
-            }
-
-            // Mode Desktop / Laptop: Unduh Dokumen PDF Resmi A4 (terpisah rapi per cabang)
-            const branchSet = new Set(window.currentDeputyPhotos.map(p => p.airport_code).filter(Boolean));
-            const safeDate = (lastRekapDate || 'Harian').replace(/[^0-9a-zA-Z_-]/g, '-');
-            const expectedPdfName = `Dokumentasi_Foto_Airside_Regional_II_${safeDate}.pdf`;
-
-            const stepRes = await Swal.fire({
-                title: 'Kirim Laporan & PDF Dokumentasi Foto',
-                html: `
-                    <div style="text-align: left; font-size: 0.88rem; color: #334155; line-height: 1.55;">
-                        <div style="background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 0.85rem;">
-                            <div style="font-weight: 800; color: #002b49; font-size: 0.93rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.45rem;">
-                                <i class="fa-solid fa-file-pdf text-danger" style="font-size: 1.15rem;"></i>
-                                <span>${window.currentDeputyPhotos.length} Foto dari ${branchSet.size} Cabang Disusun ke PDF A4</span>
-                            </div>
-                            <div style="font-size: 0.82rem; color: #1e293b;">
-                                Saat klik tombol di bawah:
-                                <ol style="margin: 0.45rem 0 0.25rem 1.2rem; padding: 0;">
-                                    <li style="margin-bottom: 0.3rem;">File <b>${expectedPdfName}</b> otomatis terunduh (setiap cabang terpisah rapi per halaman A4).</li>
-                                    <li>Setelah WhatsApp terbuka, kirim teks laporan lalu <b>tarik (Drag & Drop)</b> file PDF dari bilah unduhan browser ke ruang chat WhatsApp!</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: '<i class="fa-solid fa-file-pdf me-1"></i> Unduh PDF Foto & Buka WhatsApp',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#16a34a',
-                cancelButtonColor: '#64748b',
-                width: 520
+        if (window.currentDeputyPhotos && window.currentDeputyPhotos.length > 0 && window.AirsidePhotoPdf) {
+            const res = await window.AirsidePhotoPdf.sendPdfAndTextViaWhatsApp({
+                photos: window.currentDeputyPhotos,
+                dateStr: lastRekapDate,
+                singleBranch: false,
+                waUrl: url,
+                waText: text,
+                recipientLabel: 'Deputy Regional II',
+                shareTitle: 'Laporan Harian & Dokumentasi Airside Regional II',
+                alreadyConfirmedOnDesktop: false
             });
-
-            if (!stepRes.isConfirmed) return;
-
-            if (window.AirsidePhotoPdf) {
-                await window.AirsidePhotoPdf.downloadPhotoPdf({
-                    photos: window.currentDeputyPhotos,
-                    dateStr: lastRekapDate,
-                    singleBranch: false
-                });
+            if (res && res.completed) {
+                promptAdminFollowup();
             }
+            return;
         }
 
         window.open(url, '_blank');

@@ -9,6 +9,8 @@
  * - Tata letak Grid 2x2 (maksimal 4 foto per halaman A4) dengan proporsi foto terjaga tajam,
  *   dilengkapi badge Area (Runway/Taxiway/Apron) dan deskripsi lengkap di bawah foto.
  * - Kop dokumen resmi + nomor halaman ("Halaman X dari Y") otomatis di setiap lembar.
+ * - Alur Dual-Send Mobile & Desktop: Menjamin File PDF Dokumentasi DAN Pesan Teks Laporan Lengkap
+ *   sama-sama terkirim ke WhatsApp tanpa terpotong.
  */
 (function (window) {
     'use strict';
@@ -178,7 +180,7 @@
     }
 
     /**
-     * Buat objek jsPDF dan kembalikan { blob, filename, totalPhotos, totalPages }
+     * Buat objek jsPDF dan kembalikan { doc, blob, filename, totalPhotos, totalPages }
      */
     async function buildPhotoDocumentPdf(options) {
         const opts = options || {};
@@ -214,7 +216,6 @@
         const marginX = 14;
         const contentW = pageW - marginX * 2; // 182 mm
 
-        // Pre-calculate total pages (maks 4 foto per halaman, dan setiap cabang mulai di halaman baru)
         let totalPages = 0;
         activeCodes.forEach(code => {
             const count = grouped[code].length;
@@ -224,13 +225,11 @@
         let currentPage = 0;
 
         function drawPageHeaderAndFooter(code, branchPhotoCount, branchPageIdx, branchTotalPages) {
-            // Top Navy & Cyan Bar
             doc.setFillColor(0, 43, 73); // #002b49
             doc.rect(0, 0, pageW, 4, 'F');
             doc.setFillColor(0, 183, 205); // #00B7CD
             doc.rect(0, 4, pageW, 1.5, 'F');
 
-            // Header Box
             let textStartX = marginX;
             if (logoData) {
                 try {
@@ -260,7 +259,6 @@
                 24.2
             );
 
-            // Right Meta Pill Box
             const metaW = 54;
             const metaX = pageW - marginX - metaW;
             doc.setFillColor(248, 250, 252);
@@ -283,18 +281,15 @@
             doc.setTextColor(3, 105, 161);
             doc.text(`Total Dokumentasi: ${totalPhotos} Foto`, metaX + 3.5, 23.2);
 
-            // Divider Line
             doc.setDrawColor(226, 232, 240);
             doc.setLineWidth(0.4);
             doc.line(marginX, 28.5, pageW - marginX, 28.5);
 
-            // Branch Banner Bar
             const numLabel = AIRPORT_NUMBERS[code] ? `${AIRPORT_NUMBERS[code]}. ` : '';
             const fullAirportName = AIRPORT_NAMES[code] || `Kantor Cabang ${code}`;
             doc.setFillColor(0, 43, 73);
             doc.roundedRect(marginX, 31.5, contentW, 11, 2, 2, 'F');
 
-            // IATA Badge inside Banner
             doc.setFillColor(0, 183, 205);
             doc.roundedRect(marginX + 2.5, 33.5, 18, 7, 1.5, 1.5, 'F');
             doc.setFont('helvetica', 'bold');
@@ -302,20 +297,17 @@
             doc.setTextColor(255, 255, 255);
             doc.text(`${numLabel}${code}`, marginX + 11.5, 38.2, { align: 'center' });
 
-            // Airport Name inside Banner
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(9.5);
             doc.setTextColor(255, 255, 255);
             doc.text(fullAirportName.toUpperCase(), marginX + 23.5, 38.2);
 
-            // Right Count inside Banner
             const pageSuffix = branchTotalPages > 1 ? ` (Lembar ${branchPageIdx}/${branchTotalPages})` : '';
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(8);
             doc.setTextColor(186, 230, 253);
             doc.text(`${branchPhotoCount} Foto Terlampir${pageSuffix}`, pageW - marginX - 3.5, 38.2, { align: 'right' });
 
-            // Footer
             doc.setDrawColor(203, 213, 225);
             doc.setLineWidth(0.3);
             doc.line(marginX, pageH - 14, pageW - marginX, pageH - 14);
@@ -336,7 +328,6 @@
             );
         }
 
-        // Loop per cabang
         for (let bIdx = 0; bIdx < activeCodes.length; bIdx++) {
             const code = activeCodes[bIdx];
             const branchPhotos = grouped[code];
@@ -360,28 +351,24 @@
                 const gapX = 6;
                 const gapY = 6;
                 const cardW = (contentW - gapX) / 2; // 88 mm
-                const cardH = 112; // 2 rows * 112 + 6 = 230mm (fits between y=46 and y=278)
+                const cardH = 112;
                 const imgH = 82;
 
                 const cardX = marginX + col * (cardW + gapX);
                 const cardY = 46 + row * (cardH + gapY);
 
-                // Card Outer Border & Background
                 doc.setFillColor(255, 255, 255);
                 doc.setDrawColor(203, 213, 225);
                 doc.setLineWidth(0.35);
                 doc.roundedRect(cardX, cardY, cardW, cardH, 2.5, 2.5, 'FD');
 
-                // Render & Embed Image
                 const dataUrl = await renderHighResPhotoBox(photo.url);
                 doc.addImage(dataUrl, 'JPEG', cardX + 1.5, cardY + 1.5, cardW - 3, imgH);
 
-                // Metadata Footer Box inside Card
                 const metaTopY = cardY + imgH + 3;
                 doc.setFillColor(248, 250, 252);
                 doc.rect(cardX + 0.5, cardY + imgH + 1.5, cardW - 1, cardH - imgH - 2, 'F');
 
-                // Area Badge Pill
                 const areaText = `AREA: ${(photo.area_tag || 'UMUM').toUpperCase()}`;
                 doc.setFillColor(0, 43, 73);
                 doc.roundedRect(cardX + 3, metaTopY + 1, 36, 5.5, 1.2, 1.2, 'F');
@@ -390,13 +377,11 @@
                 doc.setTextColor(56, 189, 248);
                 doc.text(areaText.substring(0, 22), cardX + 5, metaTopY + 4.8);
 
-                // Photo Number Label on Right
                 doc.setFont('helvetica', 'bold');
                 doc.setFontSize(7);
                 doc.setTextColor(100, 116, 139);
                 doc.text(`Foto #${pIdx + 1} (${code})`, cardX + cardW - 3, metaTopY + 4.8, { align: 'right' });
 
-                // Caption Text (Multi-line wrapped cleanly up to 3 lines)
                 const rawCaption = (photo.caption && String(photo.caption).trim())
                     ? String(photo.caption).trim()
                     : `Dokumentasi pemeriksaan rutin kondisi fasilitas ${photo.area_tag || 'sisi udara'} cabang ${code}.`;
@@ -452,52 +437,231 @@
         }
     }
 
-    async function shareOrDownloadPhotoPdf(options) {
+    async function copyTextSafe(txt) {
+        if (!txt) return false;
         try {
-            if (typeof window.showKawungLoading === 'function') {
-                window.showKawungLoading('Menyiapkan Dokumen PDF Resmi...', 'Menyusun halaman dokumentasi foto A4...');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(txt);
+                return true;
             }
-            const res = await buildPhotoDocumentPdf(options);
-            if (typeof window.hideKawungLoading === 'function') {
-                window.hideKawungLoading();
-            }
-            if (!res) return { shared: false, downloaded: false };
+        } catch (e) {}
+        try {
+            const ta = document.createElement('textarea');
+            ta.value = txt;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            return true;
+        } catch (e2) {
+            return false;
+        }
+    }
 
-            const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || '');
-            const pdfFile = new File([res.blob], res.filename, { type: 'application/pdf' });
+    /**
+     * Alur Pengiriman WhatsApp Lengkap (Teks Laporan + File PDF Dokumentasi Foto)
+     *
+     * Mengatasi limitasi teknis aplikasi WhatsApp di HP (Android/iOS):
+     * Saat mengirim file dokumen (.pdf) melalui sistem Share HP (Intent.ACTION_SEND),
+     * aplikasi WhatsApp secara bawaan mengabaikan teks panjang atau memotongnya.
+     *
+     * Solusi Dual-Send:
+     * 1. Di HP (Mobile):
+     *    - Otomatis menyalin Teks Laporan Lengkap ke Clipboard HP.
+     *    - Membagikan File PDF Dokumentasi via menu Share WhatsApp.
+     *    - Begitu selesai mengirim PDF, langsung menampilkan tombol 1-Ketuk
+     *      "Kirim Teks Laporan ke WhatsApp" (membuka wa.me dengan teks penuh utuh),
+     *      atau pengguna bisa langsung Tempel (Paste) teks di ruang chat WhatsApp!
+     * 2. Di Laptop / PC (Desktop):
+     *    - Mengunduh File PDF Resmi A4 dan langsung membuka tab WhatsApp dengan teks laporan lengkap.
+     */
+    async function sendPdfAndTextViaWhatsApp(options) {
+        const opts = options || {};
+        const waUrl = opts.waUrl || '';
+        const waText = opts.waText || '';
+        const recipientLabel = opts.recipientLabel || 'Penerima';
+        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || '');
 
-            if (isMobile && navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+        // 1. Salin teks laporan lengkap ke Clipboard terlebih dahulu selagi user-gesture masih aktif
+        await copyTextSafe(waText);
+
+        // 2. Bangun dokumen PDF A4
+        if (typeof window.showKawungLoading === 'function') {
+            window.showKawungLoading('Menyiapkan PDF & Teks Laporan...', 'Menyusun halaman dokumentasi foto A4...');
+        }
+        let pdfRes = null;
+        try {
+            pdfRes = await buildPhotoDocumentPdf(opts);
+        } catch (err) {
+            console.error('Gagal membuat PDF:', err);
+        }
+        if (typeof window.hideKawungLoading === 'function') {
+            window.hideKawungLoading();
+        }
+
+        if (!pdfRes || !pdfRes.blob) {
+            if (waUrl) window.open(waUrl, '_blank');
+            return { completed: true };
+        }
+
+        // 3. Alur Khusus Mobile (Android / iOS)
+        if (isMobile && navigator.canShare) {
+            const pdfFile = new File([pdfRes.blob], pdfRes.filename, { type: 'application/pdf' });
+            if (navigator.canShare({ files: [pdfFile] })) {
+                const promptStep2SendText = async () => {
+                    if (!window.Swal || !waUrl) {
+                        if (waUrl) window.open(waUrl, '_blank');
+                        return;
+                    }
+                    const step2 = await Swal.fire({
+                        icon: 'success',
+                        title: 'Langkah 2: Kirim Teks Laporan',
+                        html: `
+                            <div style="text-align: left; font-size: 0.88rem; color: #334155; line-height: 1.55;">
+                                <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 0.8rem 0.95rem; margin-bottom: 0.8rem;">
+                                    <div style="font-weight: 800; color: #15803d; margin-bottom: 0.25rem;">
+                                        <i class="fa-solid fa-circle-check me-1"></i> File PDF Dokumentasi Siap / Terkirim!
+                                    </div>
+                                    <div style="font-size: 0.81rem; color: #1e293b;">
+                                        Karena WhatsApp di HP memisahkan pengiriman <b>File Dokumen PDF</b> dan <b>Pesan Teks Panjang</b>, silakan ketuk tombol hijau di bawah untuk mengirim <b>Teks Laporan Lengkap</b> ke <b>${recipientLabel}</b>:
+                                    </div>
+                                </div>
+                                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 9px; padding: 0.6rem 0.8rem; font-size: 0.78rem; color: #475569;">
+                                    <i class="fa-regular fa-clipboard me-1 text-primary"></i>
+                                    <b>Tips Cepat:</b> Teks laporan lengkap juga <b>sudah disalin otomatis ke Clipboard HP Anda</b>. Anda dapat langsung menekan <b>Tempel (Paste)</b> di ruang chat WhatsApp!
+                                </div>
+                            </div>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: `<i class="fa-brands fa-whatsapp me-1"></i> Kirim Teks Laporan ke ${recipientLabel}`,
+                        cancelButtonText: 'Sudah Saya Tempel / Selesai',
+                        confirmButtonColor: '#16a34a',
+                        cancelButtonColor: '#64748b',
+                        allowOutsideClick: false
+                    });
+
+                    if (step2.isConfirmed && waUrl) {
+                        await copyTextSafe(waText);
+                        window.open(waUrl, '_blank');
+                    }
+                };
+
                 try {
                     await navigator.share({
-                        title: options.shareTitle || 'Dokumentasi Foto Laporan Harian Airside',
-                        text: options.shareText || '',
+                        title: opts.shareTitle || 'Dokumentasi Foto Laporan Harian Airside',
+                        text: waText,
                         files: [pdfFile]
                     });
-                    return { shared: true, downloaded: false, ...res };
+                    // Setelah pengguna kembali dari memilih kontak & mengirim PDF di WhatsApp,
+                    // tampilkan tombol Langkah 2 untuk mengirim Teks Laporan Lengkap!
+                    await promptStep2SendText();
+                    return { shared: true, completed: true };
                 } catch (shareErr) {
                     if (shareErr && shareErr.name === 'AbortError') {
-                        return { shared: false, aborted: true, ...res };
+                        return { aborted: true, completed: false };
+                    }
+                    // Jika browser HP menolak navigator.share otomatis karena jeda pembuatan PDF (NotAllowedError),
+                    // tampilkan modal 2-Langkah interaktif agar pengguna mendapat user-gesture baru (0ms).
+                    if (window.Swal) {
+                        const manualShareModal = await Swal.fire({
+                            title: 'Kirim PDF Foto & Teks Laporan',
+                            html: `
+                                <div style="text-align: left; font-size: 0.86rem; color: #334155; line-height: 1.5;">
+                                    <div style="background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 11px; padding: 0.8rem 0.95rem; margin-bottom: 0.75rem;">
+                                        <div style="font-weight: 800; color: #002b49; margin-bottom: 0.3rem;">
+                                            <i class="fa-solid fa-file-pdf text-danger me-1"></i> ${pdfRes.filename} (${pdfRes.totalPhotos} Foto)
+                                        </div>
+                                        <div style="font-size: 0.8rem; color: #0c4a6e;">
+                                            <b>Teks laporan sudah disalin ke Clipboard Anda.</b><br>
+                                            Ketuk <b>Bagikan File PDF</b> di bawah untuk mengirim PDF ke WhatsApp, lalu lanjutkan dengan mengirim Teks Laporan.
+                                        </div>
+                                    </div>
+                                </div>
+                            `,
+                            showCancelButton: true,
+                            showDenyButton: true,
+                            confirmButtonText: '<i class="fa-solid fa-file-pdf me-1"></i> 1. Bagikan File PDF ke WA',
+                            denyButtonText: '<i class="fa-brands fa-whatsapp me-1"></i> Langsung Kirim Teks Saja',
+                            cancelButtonText: 'Batal',
+                            confirmButtonColor: '#002b49',
+                            denyButtonColor: '#16a34a',
+                            cancelButtonColor: '#64748b'
+                        });
+
+                        if (manualShareModal.isConfirmed) {
+                            try {
+                                await navigator.share({
+                                    title: opts.shareTitle || 'Dokumentasi Foto Laporan Harian Airside',
+                                    text: waText,
+                                    files: [pdfFile]
+                                });
+                            } catch (e2) {
+                                pdfRes.doc.save(pdfRes.filename);
+                            }
+                            await promptStep2SendText();
+                            return { shared: true, completed: true };
+                        } else if (manualShareModal.isDenied) {
+                            pdfRes.doc.save(pdfRes.filename);
+                            if (waUrl) window.open(waUrl, '_blank');
+                            return { downloaded: true, completed: true };
+                        }
+                        return { aborted: true, completed: false };
                     }
                 }
             }
-
-            // Desktop / Fallback: Trigger automatic download of the PDF file
-            res.doc.save(res.filename);
-            return { shared: false, downloaded: true, ...res };
-        } catch (err) {
-            if (typeof window.hideKawungLoading === 'function') {
-                window.hideKawungLoading();
-            }
-            console.error('Error shareOrDownloadPhotoPdf:', err);
-            return { shared: false, downloaded: false, error: err };
         }
+
+        // 4. Alur Desktop / Laptop (atau fallback jika Web Share file tidak didukung)
+        if (!opts.alreadyConfirmedOnDesktop && window.Swal) {
+            const stepRes = await Swal.fire({
+                title: 'Kirim Laporan & PDF Dokumentasi Foto',
+                html: `
+                    <div style="text-align: left; font-size: 0.88rem; color: #334155; line-height: 1.55;">
+                        <div style="background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 0.85rem;">
+                            <div style="font-weight: 800; color: #002b49; font-size: 0.93rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.45rem;">
+                                <i class="fa-solid fa-file-pdf text-danger" style="font-size: 1.15rem;"></i>
+                                <span>${pdfRes.totalPhotos} Foto Disusun ke PDF A4 (${pdfRes.totalPages} Halaman)</span>
+                            </div>
+                            <div style="font-size: 0.82rem; color: #1e293b;">
+                                Saat klik tombol di bawah:
+                                <ol style="margin: 0.45rem 0 0.25rem 1.2rem; padding: 0;">
+                                    <li style="margin-bottom: 0.3rem;">File <b>${pdfRes.filename}</b> otomatis terunduh (rapi per cabang di kertas A4).</li>
+                                    <li>Setelah WhatsApp terbuka, kirim teks laporan lalu <b>tarik (Drag & Drop)</b> file PDF dari bilah unduhan browser ke ruang chat WhatsApp!</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa-solid fa-file-pdf me-1"></i> Unduh PDF Foto & Buka WhatsApp',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#16a34a',
+                cancelButtonColor: '#64748b',
+                width: 520
+            });
+            if (!stepRes.isConfirmed) {
+                return { aborted: true, completed: false };
+            }
+        }
+
+        pdfRes.doc.save(pdfRes.filename);
+        if (waUrl) {
+            window.open(waUrl, '_blank');
+        }
+        return { downloaded: true, completed: true };
+    }
+
+    async function shareOrDownloadPhotoPdf(options) {
+        return sendPdfAndTextViaWhatsApp(options);
     }
 
     window.AirsidePhotoPdf = {
         buildPhotoDocumentPdf,
         downloadPhotoPdf,
         shareOrDownloadPhotoPdf,
+        sendPdfAndTextViaWhatsApp,
         formatIndonesianDateStr
     };
 })(window);
-
