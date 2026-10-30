@@ -139,7 +139,7 @@ def generate_wa_message(data, airport_code):
             branch_photos = get_photos_by_date(airport_code, clean_tgl)
             if branch_photos:
                 host_base = request.host_url.rstrip('/') if request else ''
-                doc_section = f"\nLampiran Dokumentasi Foto Lapangan ({len(branch_photos)} Foto) :\n{host_base}/dokumentasi/{clean_tgl}/{airport_code}\n"
+                doc_section = f"\nLampiran Dokumentasi Foto Lapangan ({len(branch_photos)} Foto):\n{host_base}/dokumentasi/{clean_tgl}/{airport_code}\n\n"
     except Exception:
         doc_section = ""
 
@@ -434,7 +434,7 @@ def submit():
         host_base = request.host_url.rstrip('/') if request else ''
         photo_info_line = (
             f"Lampiran Dokumentasi Foto ({len(current_photos)} Foto):\n"
-            f"{host_base}/dokumentasi/{tgl_str}/{airport_code}\n"
+            f"{host_base}/dokumentasi/{tgl_str}/{airport_code}\n\n"
         ) if current_photos else ""
 
         dh_message = (
