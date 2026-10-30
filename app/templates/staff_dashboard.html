@@ -3280,9 +3280,17 @@
                                     <p style="margin: 0.15rem 0 0 0; font-size: 0.78rem; color: #64748b;">Lampirkan foto kondisi Runway, Taxiway, Apron, atau temuan lapangan (jumlah fleksibel sesuai kondisi).</p>
                                 </div>
                             </div>
-                            <span id="staffPhotoCountBadge" style="background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 999px;">
-                                <i class="fa-solid fa-images me-1"></i> 0 Foto Terlampir
-                            </span>
+                            <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;">
+                                <button type="button" id="btnStaffDownloadPdf" onclick="window.downloadStaffPhotoPdf(null, '{{ airport_code }}', document.getElementById('input-TANGGAL')?.value || '')" style="display: none; background: #002b49; color: #fff; border: none; font-size: 0.74rem; font-weight: 700; padding: 0.32rem 0.82rem; border-radius: 999px; cursor: pointer; align-items: center; gap: 0.38rem; box-shadow: 0 2px 6px rgba(0,43,73,0.16);" title="Unduh Dokumen PDF Resmi A4 untuk foto dokumentasi yang dilampirkan">
+                                    <i class="fa-solid fa-file-pdf" style="color: #38bdf8;"></i> Unduh PDF Foto (A4)
+                                </button>
+                                <button type="button" id="btnStaffCopyCollage" onclick="window.copyStaffCollageToClipboard(null, '{{ airport_code }}', document.getElementById('input-TANGGAL')?.value || '', true)" style="display: none; background: #fff; color: #0f172a; border: 1px solid #cbd5e1; font-size: 0.73rem; font-weight: 700; padding: 0.3rem 0.72rem; border-radius: 999px; cursor: pointer; align-items: center; gap: 0.35rem;" title="Salin gambar kolase foto ke Clipboard">
+                                    <i class="fa-regular fa-paste text-primary"></i> Salin Kolase
+                                </button>
+                                <span id="staffPhotoCountBadge" style="background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 999px;">
+                                    <i class="fa-solid fa-images me-1"></i> 0 Foto Terlampir
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -3351,7 +3359,7 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
-<script src="{{ url_for('static', filename='js/wizard.js') }}?v=4"></script>
+<script src="{{ url_for('static', filename='js/wizard.js') }}?v=6"></script>
 <script>
     // Cek apakah halaman sedang dimuat ulang setelah pengiriman laporan
     (function() {
@@ -4669,8 +4677,16 @@ REGION II`;
             const pending = window.staffPendingPhotos || [];
             const total = existing.length + pending.length;
 
+            const pdfBtn = document.getElementById('btnStaffDownloadPdf');
+            const copyBtn = document.getElementById('btnStaffCopyCollage');
             if (badge) {
                 badge.innerHTML = `<i class="fa-solid fa-images me-1"></i> ${total} Foto Terlampir`;
+            }
+            if (pdfBtn) {
+                pdfBtn.style.display = total > 0 ? 'inline-flex' : 'none';
+            }
+            if (copyBtn) {
+                copyBtn.style.display = total > 0 ? 'inline-flex' : 'none';
             }
 
             if (total === 0) {
@@ -4745,6 +4761,162 @@ REGION II`;
                     formData.append('photo_captions', p.caption || '');
                 }
             });
+        };
+
+        window.downloadStaffPhotoPdf = async function(overrideServerPhotos, airportCode, dateStr) {
+            const items = window.getActiveStaffPhotoItems(overrideServerPhotos);
+            if (!items || items.length === 0) {
+                return Swal.fire('Info', 'Belum ada foto dokumentasi yang dilampirkan.', 'info');
+            }
+            if (window.AirsidePhotoPdf) {
+                await window.AirsidePhotoPdf.downloadPhotoPdf({
+                    photos: items.map(it => ({
+                        url: it.src,
+                        area_tag: it.area,
+                        caption: it.caption,
+                        airport_code: airportCode || '{{ airport_code }}'
+                    })),
+                    airportCode: airportCode || '{{ airport_code }}',
+                    dateStr: dateStr,
+                    singleBranch: true
+                });
+            }
+        };
+
+        window.getActiveStaffPhotoItems = function(overrideServerPhotos) {
+            if (Array.isArray(overrideServerPhotos) && overrideServerPhotos.length > 0) {
+                return overrideServerPhotos.map(p => ({
+                    src: p.url,
+                    area: p.area_tag || 'Umum',
+                    caption: p.caption || ''
+                }));
+            }
+            const items = [];
+            (window.staffExistingPhotos || []).forEach(p => {
+                if (p.url) items.push({ src: p.url, area: p.area_tag || 'Umum', caption: p.caption || '' });
+            });
+            (window.staffPendingPhotos || []).forEach(p => {
+                if (p.previewUrl) items.push({ src: p.previewUrl, area: p.area || 'Umum', caption: p.caption || '' });
+            });
+            return items;
+        };
+
+        window.buildStaffCollageBlob = async function(overrideServerPhotos, airportCode, dateStr) {
+            const photos = window.getActiveStaffPhotoItems(overrideServerPhotos);
+            if (!photos || photos.length === 0) return null;
+
+            const loadImg = (src) => new Promise((resolve, reject) => {
+                const img = new Image();
+                if (src && !src.startsWith('/') && !src.startsWith('blob:') && !src.startsWith('data:')) {
+                    img.crossOrigin = 'anonymous';
+                }
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+
+            const canvas = document.createElement('canvas');
+            const cols = photos.length === 1 ? 1 : 2;
+            const rows = Math.ceil(photos.length / cols);
+            const cellW = 600;
+            const cellH = 420;
+            const pad = 20;
+            const headerH = 85;
+
+            canvas.width = cols * cellW + (cols + 1) * pad;
+            canvas.height = headerH + rows * cellH + (rows + 1) * pad;
+
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#002b49';
+            ctx.fillRect(0, 0, canvas.width, headerH);
+            ctx.fillStyle = '#00B7CD';
+            ctx.fillRect(0, headerH - 4, canvas.width, 4);
+
+            const branch = airportCode || '{{ airport_code }}';
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 24px sans-serif';
+            ctx.fillText(`DOKUMENTASI LAPORAN HARIAN AIRSIDE — CABANG ${branch}`, pad, 38);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '16px sans-serif';
+            ctx.fillText(`Tanggal: ${dateStr || 'Harian'}  •  Total: ${photos.length} Dokumentasi Lapangan`, pad, 65);
+
+            for (let i = 0; i < photos.length; i++) {
+                const p = photos[i];
+                const r = Math.floor(i / cols);
+                const c = i % cols;
+                const x = pad + c * (cellW + pad);
+                const y = headerH + pad + r * (cellH + pad);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(x, y, cellW, cellH);
+
+                try {
+                    const img = await loadImg(p.src);
+                    const imgH = cellH - 52;
+                    const scale = Math.max(cellW / img.width, imgH / img.height);
+                    const sw = cellW / scale;
+                    const sh = imgH / scale;
+                    const sx = Math.max(0, (img.width - sw) / 2);
+                    const sy = Math.max(0, (img.height - sh) / 2);
+                    ctx.drawImage(img, sx, sy, sw, sh, x, y, cellW, imgH);
+                } catch (e) {
+                    ctx.fillStyle = '#334155';
+                    ctx.fillRect(x, y, cellW, cellH - 52);
+                }
+
+                ctx.fillStyle = '#002b49';
+                ctx.fillRect(x, y + cellH - 52, cellW, 52);
+                ctx.fillStyle = '#38bdf8';
+                ctx.font = 'bold 17px sans-serif';
+                ctx.fillText(`[${branch}] Area: ${p.area || 'Umum'}`, x + 14, y + cellH - 28);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '14px sans-serif';
+                const cap = (p.caption || 'Dokumentasi kondisi fasilitas sisi udara').substring(0, 62);
+                ctx.fillText(cap, x + 14, y + cellH - 9);
+            }
+
+            return new Promise((resolve) => {
+                canvas.toBlob((blob) => resolve(blob), 'image/png', 0.92);
+            });
+        };
+
+        window.copyStaffCollageToClipboard = async function(overrideServerPhotos, airportCode, dateStr, showAlert = true) {
+            try {
+                const items = window.getActiveStaffPhotoItems(overrideServerPhotos);
+                if (!items || items.length === 0) {
+                    if (showAlert) Swal.fire('Info', 'Belum ada foto dokumentasi yang dilampirkan.', 'info');
+                    return false;
+                }
+                if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
+                    if (showAlert) Swal.fire('Info', 'Browser tidak mendukung salin gambar otomatis ke Clipboard.', 'info');
+                    return false;
+                }
+                const blobPromise = window.currentStaffCollageBlob
+                    ? Promise.resolve(window.currentStaffCollageBlob)
+                    : window.buildStaffCollageBlob(overrideServerPhotos, airportCode, dateStr).then(b => {
+                        window.currentStaffCollageBlob = b;
+                        return b;
+                    });
+                await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
+                if (showAlert) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Kolase Foto disalin ke Clipboard! Tekan Ctrl + V di WhatsApp.',
+                        showConfirmButton: false,
+                        timer: 3500
+                    });
+                }
+                return true;
+            } catch (err) {
+                console.warn('Staff Clipboard write failed:', err);
+                if (showAlert) Swal.fire('Info', 'Gagal menyalin gambar kolase ke Clipboard.', 'info');
+                return false;
+            }
         };
 
         // Drag & Drop support on dropzone (langsung aktif karena kita sudah berada di dalam DOMContentLoaded)

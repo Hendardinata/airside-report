@@ -275,6 +275,13 @@ def api_edit_report():
             admin_phone = admin_conf.get('admin_phone', '')
             wa_report = generate_wa_message(final_form_data, airport_code)
 
+            branch_photos = []
+            try:
+                from app.services.photo_service import get_photos_by_date
+                branch_photos = get_photos_by_date(airport_code, tgl)
+            except Exception:
+                branch_photos = []
+
             full_admin_message = wa_report
 
             return jsonify({
@@ -282,7 +289,10 @@ def api_edit_report():
                 "action": "approved",
                 "message": "Koreksi mandiri berhasil disimpan dan laporan langsung disetujui ke Spreadsheet Produksi!",
                 "admin_phone": admin_phone,
-                "admin_message": full_admin_message
+                "admin_message": full_admin_message,
+                "photos": branch_photos,
+                "airport_code": airport_code,
+                "report_date": tgl
             })
 
         # Jika hanya Simpan Koreksi (tetap di staging)
@@ -350,6 +360,13 @@ def api_approve():
         admin_phone = admin_conf.get('admin_phone', '')
         wa_report = generate_wa_message(form_data, airport_code)
 
+        branch_photos = []
+        try:
+            from app.services.photo_service import get_photos_by_date
+            branch_photos = get_photos_by_date(airport_code, tgl)
+        except Exception:
+            branch_photos = []
+
         full_admin_message = wa_report
 
         # Invalidate cache kalender
@@ -363,7 +380,10 @@ def api_approve():
             "success": True,
             "message": "Laporan berhasil disetujui, dimasukkan ke Spreadsheet Produksi, dan dihapus dari Staging.",
             "admin_phone": admin_phone,
-            "admin_message": full_admin_message
+            "admin_message": full_admin_message,
+            "photos": branch_photos,
+            "airport_code": airport_code,
+            "report_date": tgl
         })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500

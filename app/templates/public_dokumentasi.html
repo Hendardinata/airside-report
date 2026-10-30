@@ -586,6 +586,14 @@
                 <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports" class="topbar-brand-logo">
                 <span class="topbar-brand-title">InJourney Airports</span>
             </a>
+            {% if total_photos > 0 %}
+            <div class="no-print" style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" onclick="downloadPublicDocPdf()" style="background: #002b49; color: #fff; border: none; padding: 0.48rem 1rem; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.45rem; box-shadow: 0 2px 8px rgba(0,43,73,0.18);">
+                    <i class="fa-solid fa-file-pdf" style="color: #38bdf8;"></i>
+                    <span>Unduh Dokumen PDF Resmi (A4)</span>
+                </button>
+            </div>
+            {% endif %}
         </div>
     </header>
 
@@ -632,7 +640,7 @@
                         <span>Semua Cabang</span>
                         <span class="filter-count-badge">{{ total_photos }}</span>
                     </button>
-                    {% for code in ['DPS', 'LOP', 'BWX', 'KOE'] %}
+                    {% for code in ['DPS', 'LOP', 'KOE', 'BWX'] %}
                         {% set b_photos = photos_by_airport.get(code, []) %}
                         {% if b_photos %}
                         <button type="button" class="status-filter-btn" onclick="filterBranch('{{ code }}', this)">
@@ -647,7 +655,7 @@
             </div>
 
             {% if total_photos > 0 %}
-                {% for code in ['DPS', 'LOP', 'BWX', 'KOE'] %}
+                {% for code in ['DPS', 'LOP', 'KOE', 'BWX'] %}
                     {% set b_photos = photos_by_airport.get(code, []) %}
                     {% if b_photos %}
                     <section class="branch-section" data-branch="{{ code }}">
@@ -744,6 +752,25 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeLightbox();
         });
+
+        window.PUBLIC_PHOTOS_BY_AIRPORT = {{ photos_by_airport | tojson }};
+        window.PUBLIC_DOC_DATE = {{ date_str | tojson }};
+        window.PUBLIC_DOC_FORMATTED_DATE = {{ formatted_date | tojson }};
+
+        async function downloadPublicDocPdf() {
+            if (window.AirsidePhotoPdf) {
+                await window.AirsidePhotoPdf.downloadPhotoPdf({
+                    photos: window.PUBLIC_PHOTOS_BY_AIRPORT,
+                    dateStr: window.PUBLIC_DOC_DATE,
+                    formattedDate: window.PUBLIC_DOC_FORMATTED_DATE,
+                    singleBranch: false
+                });
+            } else {
+                window.print();
+            }
+        }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='js/photo_pdf_generator.js') }}?v=1"></script>
 </body>
 </html>

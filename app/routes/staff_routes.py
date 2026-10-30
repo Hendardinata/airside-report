@@ -412,11 +412,21 @@ def submit():
             
         action_text = "diperbarui (hasil revisi)" if staging_res.get('action') == 'updated' else "berhasil disimpan"
         
+        current_photos = []
+        try:
+            from app.services.photo_service import get_photos_by_date
+            current_photos = get_photos_by_date(airport_code, tgl_str)
+        except Exception:
+            current_photos = []
+
+        photo_info_line = f"Lampiran Foto: *{len(current_photos)} Dokumentasi Lapangan*\n" if current_photos else ""
+
         dh_message = (
             f"*Laporan Harian Fasilitas Sisi Udara*\n"
             f"Cabang: *{airport_code}*\n"
             f"Tanggal: *{tgl_str}*\n"
-            f"Petugas Pengirim: *{sender_name}* (@{sender_username})\n\n"
+            f"Petugas Pengirim: *{sender_name}* (@{sender_username})\n"
+            f"{photo_info_line}\n"
             f"Mohon izin menyampaikan kepada Yth. Department Head {airport_code}, bahwa laporan harian airside telah {action_text} di sistem dan siap untuk direview/dikoreksi.\n\n"
             f"Mohon kesediaan Bapak/Ibu untuk memeriksa di Portal Airside. Terima kasih."
         )
@@ -480,7 +490,9 @@ def submit():
             "gm_phone": dh_phone,
             "dh_message": dh_message,
             "gm_message": dh_message,
-            "airport_code": airport_code
+            "airport_code": airport_code,
+            "tanggal": tgl_str,
+            "photos": current_photos
         })
     except Exception as e:
         print(f"Error saving to staging: {str(e)}")

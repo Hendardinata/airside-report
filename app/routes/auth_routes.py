@@ -180,9 +180,9 @@ def public_dokumentasi(date_str, airport_code=None):
     from app.services.photo_service import get_all_airports_photos_by_date, get_photos_by_date
 
     clean_date = str(date_str or '').strip()[:10]
-    if airport_code and airport_code.upper() in ('DPS', 'LOP', 'BWX', 'KOE'):
+    if airport_code and airport_code.upper() in ('DPS', 'LOP', 'KOE', 'BWX'):
         code = airport_code.upper()
-        photos_by_airport = {c: ([] if c != code else get_photos_by_date(code, clean_date)) for c in ('DPS', 'LOP', 'BWX', 'KOE')}
+        photos_by_airport = {c: ([] if c != code else get_photos_by_date(code, clean_date)) for c in ('DPS', 'LOP', 'KOE', 'BWX')}
     else:
         photos_by_airport = get_all_airports_photos_by_date(clean_date)
 
@@ -223,7 +223,7 @@ def public_dokumentasi_preview(date_str):
 
     # Fallback langsung kirim file gambar pertama dengan status 200 OK agar crawler WhatsApp merender thumbnail
     grouped = get_all_airports_photos_by_date(clean_date)
-    for code in ('DPS', 'LOP', 'BWX', 'KOE'):
+    for code in ('DPS', 'LOP', 'KOE', 'BWX'):
         if grouped.get(code):
             first_url = grouped[code][0]['url']
             rel_path = first_url.replace('/static/uploads/', '').replace('/', os.sep)

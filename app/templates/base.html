@@ -1093,6 +1093,10 @@
         window.hideDriveLoading = window.hideKawungLoading;
     </script>
 
+    <!-- Pustaka Pembuat Dokumen PDF Resmi Dokumentasi Foto Airside (A4) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='js/photo_pdf_generator.js') }}?v=1"></script>
+
     {% block scripts %}{% endblock %}
 </body>
 </html>

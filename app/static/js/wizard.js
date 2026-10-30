@@ -245,22 +245,64 @@ if (reportWizardForm) {
             Swal.close();
 
             if (data.status === 'success') {
+                const serverPhotos = Array.isArray(data.photos) ? data.photos : [];
+                window.currentStaffCollageBlob = null;
+                if (serverPhotos.length > 0 && typeof window.buildStaffCollageBlob === 'function') {
+                    window.buildStaffCollageBlob(serverPhotos, data.airport_code, data.tanggal).then(b => {
+                        window.currentStaffCollageBlob = b;
+                    }).catch(() => {});
+                }
+
+                const photoCtrlVHtml = serverPhotos.length > 0 ? `
+                    <div style="background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 10px; padding: 0.75rem 0.9rem; margin-top: 0.85rem; text-align: left; font-size: 0.82rem; color: #0c4a6e;">
+                        <div style="font-weight: 800; color: #002b49; margin-bottom: 0.25rem;">
+                            <i class="fa-solid fa-file-pdf text-danger me-1"></i> ${serverPhotos.length} Foto Dokumentasi Siap Dijadikan PDF A4
+                        </div>
+                        <div>
+                            Saat klik tombol di bawah, <b>Dokumen PDF Foto (${data.airport_code})</b> akan otomatis diunduh/dibagikan agar dapat dilampirkan dengan rapi di WhatsApp Department Head!
+                        </div>
+                    </div>
+                ` : '';
+
                 Swal.fire({
                     title: 'Laporan Diajukan ke DH!', 
-                    text: 'Data telah berhasil disimpan di Database Staging sementara.\n\nApakah Anda ingin mengirimkan notifikasi review ke WhatsApp Department Head?', 
+                    html: `
+                        <div style="font-size: 0.92rem; color: #334155; line-height: 1.5;">
+                            Data telah berhasil disimpan di Database Staging sementara.<br><br>
+                            Apakah Anda ingin mengirimkan notifikasi review ke WhatsApp Department Head?
+                            ${photoCtrlVHtml}
+                        </div>
+                    `,
                     icon: 'success',
                     showCancelButton: true,
-                    confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Beritahu DH',
+                    confirmButtonText: serverPhotos.length > 0
+                        ? '<i class="fa-solid fa-file-pdf me-1"></i> Ya, Unduh PDF Foto & Beritahu DH'
+                        : '<i class="fab fa-whatsapp"></i> Ya, Beritahu DH',
                     cancelButtonText: 'Kembali ke Dashboard',
                     confirmButtonColor: '#16a34a',
                     cancelButtonColor: '#64748b'
-                }).then((result) => {
+                }).then(async (result) => {
                     if (result.isConfirmed) {
                         const phone = data.dh_phone || data.gm_phone;
                         if (phone) {
                             let text = data.dh_message || data.gm_message || `Halo Department Head, Laporan Harian Airside baru saja diajukan dari cabang ${data.airport_code}. Mohon direview di portal.`;
                             let cleanDH = phone.replace(/\D/g, '');
                             if (cleanDH.startsWith('0')) cleanDH = '62' + cleanDH.substring(1);
+
+                            if (serverPhotos.length > 0 && window.AirsidePhotoPdf) {
+                                const shareRes = await window.AirsidePhotoPdf.shareOrDownloadPhotoPdf({
+                                    photos: serverPhotos,
+                                    airportCode: data.airport_code,
+                                    dateStr: data.tanggal,
+                                    singleBranch: true,
+                                    shareTitle: `Laporan & Dokumentasi Airside ${data.airport_code}`,
+                                    shareText: text
+                                });
+                                if (shareRes && shareRes.shared) {
+                                    // Jika sudah terkirim via native mobile share
+                                }
+                            }
+
                             window.open(`https://wa.me/${cleanDH}?text=${encodeURIComponent(text)}`, '_blank');
                         } else {
                             Swal.fire('Info', 'Nomor WA Department Head belum dikonfigurasi.', 'info');

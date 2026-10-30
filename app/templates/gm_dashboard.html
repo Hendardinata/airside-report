@@ -5382,6 +5382,11 @@
                 if (res.success && res.report) {
                     currentLoadedReportData = res.report;
                     const rep = res.report;
+                    window.currentDhModalPhotos = Array.isArray(rep.photos) ? rep.photos : [];
+                    window.currentDhCollageBlob = null;
+                    if (window.currentDhModalPhotos.length > 0) {
+                        buildDhBranchCollageBlob(window.currentDhModalPhotos, (rep.airport || 'LOP').toUpperCase(), rep.tanggal || '').then(b => { window.currentDhCollageBlob = b; }).catch(() => {});
+                    }
                     const d = rep.data || {};
 
                     // Client-side self-healing jika SAPAAN dan TANGGAL tertukar
@@ -5905,9 +5910,20 @@
                         </div>
 
                         <!-- F. DOKUMENTASI FOTO LAPANGAN -->
-                        <div class="doc-section-head">
-                            <div class="doc-section-badge" style="background: #00B7CD;">F</div>
-                            <h2 class="doc-section-heading">DOKUMENTASI FOTO LAPANGAN (${(rep.photos || []).length} FOTO)</h2>
+                        <div class="doc-section-head" style="justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.65rem;">
+                                <div class="doc-section-badge" style="background: #00B7CD;">F</div>
+                                <h2 class="doc-section-heading">DOKUMENTASI FOTO LAPANGAN (${(rep.photos || []).length} FOTO)</h2>
+                            </div>
+                            ${(rep.photos && rep.photos.length > 0) ? `
+                            <div class="no-print" style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;">
+                                <button type="button" onclick="downloadDhPhotoPdf(window.currentDhModalPhotos, '${branchCode}', '${activeReportDate}')" style="background: #002b49; color: #fff; border: none; padding: 0.32rem 0.8rem; border-radius: 7px; font-size: 0.74rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.38rem; box-shadow: 0 2px 6px rgba(0,43,73,0.15);">
+                                    <i class="fa-solid fa-file-pdf" style="color: #38bdf8;"></i> Unduh PDF Foto (A4)
+                                </button>
+                                <button type="button" onclick="copyDhCollageToClipboard(window.currentDhModalPhotos, '${branchCode}', '${activeReportDate}', true)" style="background: #fff; color: #0f172a; border: 1px solid #cbd5e1; padding: 0.3rem 0.68rem; border-radius: 7px; font-size: 0.73rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                    <i class="fa-regular fa-paste text-primary"></i> Salin Kolase
+                                </button>
+                            </div>` : ''}
                         </div>
                         <div style="margin-bottom: 1.5rem;">
                             ${(rep.photos && rep.photos.length > 0) ? `
@@ -6045,6 +6061,219 @@
             confirmButtonText: 'Tutup',
             confirmButtonColor: '#002b49'
         });
+    }
+
+    window.currentDhModalPhotos = [];
+    window.currentDhCollageBlob = null;
+
+    function loadDhImageElement(src) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            if (src && !src.startsWith('/')) img.crossOrigin = 'anonymous';
+            img.onload = () => resolve(img);
+            img.onerror = (e) => reject(e);
+            img.src = src;
+        });
+    }
+
+    async function buildDhBranchCollageBlob(photos, airportCode, dateStr) {
+        if (!photos || photos.length === 0) return null;
+        const canvas = document.createElement('canvas');
+        const cols = photos.length === 1 ? 1 : 2;
+        const rows = Math.ceil(photos.length / cols);
+        const cellW = 600;
+        const cellH = 420;
+        const pad = 20;
+        const headerH = 85;
+
+        canvas.width = cols * cellW + (cols + 1) * pad;
+        canvas.height = headerH + rows * cellH + (rows + 1) * pad;
+
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#002b49';
+        ctx.fillRect(0, 0, canvas.width, headerH);
+        ctx.fillStyle = '#00B7CD';
+        ctx.fillRect(0, headerH - 4, canvas.width, 4);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText(`DOKUMENTASI LAPORAN HARIAN AIRSIDE — CABANG ${airportCode || ''}`, pad, 38);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '16px sans-serif';
+        const dFormatted = typeof formatIndonesianDate === 'function' ? formatIndonesianDate(dateStr) : dateStr;
+        ctx.fillText(`Tanggal: ${dFormatted}  •  Total: ${photos.length} Dokumentasi Lapangan`, pad, 65);
+
+        for (let i = 0; i < photos.length; i++) {
+            const p = photos[i];
+            const r = Math.floor(i / cols);
+            const c = i % cols;
+            const x = pad + c * (cellW + pad);
+            const y = headerH + pad + r * (cellH + pad);
+
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(x, y, cellW, cellH);
+
+            try {
+                const img = await loadDhImageElement(p.url);
+                const imgH = cellH - 52;
+                const scale = Math.max(cellW / img.width, imgH / img.height);
+                const sw = cellW / scale;
+                const sh = imgH / scale;
+                const sx = Math.max(0, (img.width - sw) / 2);
+                const sy = Math.max(0, (img.height - sh) / 2);
+                ctx.drawImage(img, sx, sy, sw, sh, x, y, cellW, imgH);
+            } catch (e) {
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(x, y, cellW, cellH - 52);
+            }
+
+            ctx.fillStyle = '#002b49';
+            ctx.fillRect(x, y + cellH - 52, cellW, 52);
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = 'bold 17px sans-serif';
+            ctx.fillText(`[${p.airport_code || airportCode || 'AIRSIDE'}] Area: ${p.area_tag || 'Umum'}`, x + 14, y + cellH - 28);
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = '14px sans-serif';
+            const cap = (p.caption || 'Dokumentasi kondisi fasilitas sisi udara').substring(0, 62);
+            ctx.fillText(cap, x + 14, y + cellH - 9);
+        }
+
+        return new Promise((resolve) => {
+            canvas.toBlob((blob) => resolve(blob), 'image/png', 0.92);
+        });
+    }
+
+    async function copyDhCollageToClipboard(photos, airportCode, dateStr, showAlert = true) {
+        try {
+            const list = photos || window.currentDhModalPhotos || [];
+            if (list.length === 0) {
+                if (showAlert) Swal.fire('Info', 'Tidak ada foto dokumentasi pada laporan ini.', 'info');
+                return false;
+            }
+            if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
+                if (showAlert) Swal.fire('Info', 'Browser tidak mendukung salin gambar otomatis. Silakan gunakan tombol Unduh (.PNG).', 'info');
+                return false;
+            }
+            const blobPromise = window.currentDhCollageBlob
+                ? Promise.resolve(window.currentDhCollageBlob)
+                : buildDhBranchCollageBlob(list, airportCode, dateStr).then(b => {
+                    window.currentDhCollageBlob = b;
+                    return b;
+                });
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
+            if (showAlert) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Kolase Foto disalin ke Clipboard! Tekan Ctrl + V di WhatsApp.',
+                    showConfirmButton: false,
+                    timer: 3500
+                });
+            }
+            return true;
+        } catch (err) {
+            console.warn('DH Clipboard write failed:', err);
+            if (showAlert) Swal.fire('Info', 'Gagal menyalin gambar otomatis. Silakan gunakan tombol Unduh (.PNG).', 'info');
+            return false;
+        }
+    }
+
+    async function downloadDhCollage(photos, airportCode, dateStr) {
+        const list = photos || window.currentDhModalPhotos || [];
+        if (list.length === 0) return;
+        const blob = window.currentDhCollageBlob || await buildDhBranchCollageBlob(list, airportCode, dateStr);
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Dokumentasi_Airside_${airportCode || 'Cabang'}_${dateStr || 'Harian'}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+
+    async function downloadDhPhotoPdf(photos, airportCode, dateStr) {
+        const list = photos || window.currentDhModalPhotos || [];
+        if (list.length === 0) {
+            return Swal.fire('Info', 'Tidak ada foto dokumentasi pada laporan ini.', 'info');
+        }
+        if (window.AirsidePhotoPdf) {
+            await window.AirsidePhotoPdf.downloadPhotoPdf({
+                photos: list,
+                airportCode: airportCode,
+                dateStr: dateStr,
+                singleBranch: true
+            });
+        }
+    }
+
+    async function forwardApprovedReportToAdminWA(res) {
+        const photos = Array.isArray(res.photos) ? res.photos : [];
+        const airportCode = res.airport_code || 'LOP';
+        const reportDate = res.report_date || '';
+        window.currentDhModalPhotos = photos;
+
+        const photoNoticeHtml = photos.length > 0 ? `
+            <div style="background: #f0f9ff; border: 1.5px solid #7dd3fc; border-radius: 10px; padding: 0.75rem 0.9rem; margin-top: 0.85rem; text-align: left; font-size: 0.82rem; color: #0c4a6e;">
+                <div style="font-weight: 800; color: #002b49; margin-bottom: 0.25rem;">
+                    <i class="fa-solid fa-file-pdf text-danger me-1"></i> ${photos.length} Foto Dokumentasi Siap Dijadikan PDF A4
+                </div>
+                <div>
+                    Saat klik tombol <b>Teruskan ke Admin Regional</b> di bawah, dokumen <b>PDF Dokumentasi Foto (${airportCode})</b> akan otomatis diunduh/dibagikan agar dapat dilampirkan dengan rapi di WhatsApp Admin Regional!
+                </div>
+            </div>
+        ` : '';
+
+        const forwardRes = await Swal.fire({
+            title: 'Laporan Berhasil Disetujui!',
+            html: `
+                <div style="font-size: 0.92rem; color: #334155; line-height: 1.5;">
+                    Laporan resmi telah tercatat di Spreadsheet Produksi Utama dan dihapus dari Staging.<br><br>
+                    Apakah Anda ingin meneruskan laporan ke WhatsApp Admin Regional II?
+                    ${photoNoticeHtml}
+                </div>
+            `,
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonText: photos.length > 0
+                ? '<i class="fa-solid fa-file-pdf me-1"></i> Ya, Unduh PDF Foto & Teruskan ke WA'
+                : '<i class="fa-brands fa-whatsapp"></i> Ya, Teruskan ke Admin Regional',
+            cancelButtonText: 'Selesai & Segarkan',
+            confirmButtonColor: '#16a34a',
+            cancelButtonColor: '#64748b'
+        });
+
+        if (forwardRes.isConfirmed) {
+            if (res.admin_phone) {
+                let cleanAdmin = res.admin_phone.replace(/\D/g, '');
+                if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
+
+                if (photos.length > 0 && window.AirsidePhotoPdf) {
+                    const shareRes = await window.AirsidePhotoPdf.shareOrDownloadPhotoPdf({
+                        photos: photos,
+                        airportCode: airportCode,
+                        dateStr: reportDate,
+                        singleBranch: true,
+                        shareTitle: `Laporan & Dokumentasi Airside ${airportCode}`,
+                        shareText: res.admin_message
+                    });
+                    if (shareRes && shareRes.shared) {
+                        setTimeout(() => window.location.reload(), 400);
+                        return;
+                    }
+                }
+
+                window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
+            } else {
+                await Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
+            }
+        }
+        setTimeout(() => window.location.reload(), 400);
     }
 
     // Open Executive DH Self-Edit Mode (Option 1: Inline Live Document Editor - WYSIWYG)
@@ -6755,27 +6984,7 @@
                                 if (tr) tr.remove();
                                 refreshFilterCounts();
 
-                                Swal.fire({
-                                    title: 'Laporan Berhasil Dikoreksi & Disetujui!',
-                                    text: 'Laporan resmi telah tercatat di Spreadsheet Produksi Utama dan dihapus dari Staging.\n\nApakah Anda ingin meneruskan laporan ke WhatsApp Admin Regional II?',
-                                    icon: 'success',
-                                    showCancelButton: true,
-                                    confirmButtonText: '<i class="fa-brands fa-whatsapp"></i> Ya, Teruskan ke Admin Regional',
-                                    cancelButtonText: 'Selesai & Segarkan',
-                                    confirmButtonColor: '#16a34a',
-                                    cancelButtonColor: '#64748b'
-                                }).then((forwardRes) => {
-                                    if (forwardRes.isConfirmed) {
-                                        if (res.admin_phone) {
-                                            let cleanAdmin = res.admin_phone.replace(/\D/g, '');
-                                            if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
-                                            window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
-                                        } else {
-                                            Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
-                                        }
-                                    }
-                                    setTimeout(() => window.location.reload(), 400);
-                                });
+                                forwardApprovedReportToAdminWA(res);
                             } else {
                                 Swal.fire({
                                     icon: 'success',
@@ -7032,27 +7241,7 @@
                                 }
                             }
 
-                            Swal.fire({
-                                title: 'Laporan Berhasil Disetujui!',
-                                text: 'Laporan resmi telah tercatat di Spreadsheet Produksi Utama dan dihapus dari Staging.\n\nApakah Anda ingin meneruskan laporan ke WhatsApp Admin Regional II?',
-                                icon: 'success',
-                                showCancelButton: true,
-                                confirmButtonText: '<i class="fa-brands fa-whatsapp"></i> Ya, Teruskan ke Admin Regional',
-                                cancelButtonText: 'Selesai & Segarkan',
-                                confirmButtonColor: '#16a34a',
-                                cancelButtonColor: '#64748b'
-                            }).then((forwardRes) => {
-                                if (forwardRes.isConfirmed) {
-                                    if (res.admin_phone) {
-                                        let cleanAdmin = res.admin_phone.replace(/\D/g, '');
-                                        if (cleanAdmin.startsWith('0')) cleanAdmin = '62' + cleanAdmin.substring(1);
-                                        window.open(`https://wa.me/${cleanAdmin}?text=${encodeURIComponent(res.admin_message)}`, '_blank');
-                                    } else {
-                                        Swal.fire('Info', 'Nomor WA Admin Regional belum dikonfigurasi.', 'info');
-                                    }
-                                }
-                                setTimeout(() => window.location.reload(), 400);
-                            });
+                            forwardApprovedReportToAdminWA(res);
                         } else {
                             const errorMsg = res.error || 'Terjadi kesalahan sistem saat memindahkan data.';
                             const isDuplicate = errorMsg.includes('SUDAH PERNAH DIISI') || errorMsg.includes('duplikasi');
