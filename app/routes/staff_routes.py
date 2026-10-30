@@ -131,6 +131,18 @@ def generate_wa_message(data, airport_code):
     apn_water_dry = f"      Prosentase DRY : {f_percent(v('APN_WATER_DRY'))}\n" if v('APN_WATER_DRY') != '-' else ""
     apn_water_perf = f_percent(v('APN_WATER_PERF')) if v('APN_WATER_PERF') != '-' else '100%'
 
+    doc_section = ""
+    try:
+        from app.services.photo_service import get_photos_by_date
+        clean_tgl = tgl.split('T')[0] if tgl and tgl != '-' else ''
+        if clean_tgl:
+            branch_photos = get_photos_by_date(airport_code, clean_tgl)
+            if branch_photos:
+                host_base = request.host_url.rstrip('/') if request else ''
+                doc_section = f"\nLampiran Dokumentasi Foto Lapangan ({len(branch_photos)} Foto) :\n{host_base}/dokumentasi/{clean_tgl}/{airport_code}\n"
+    except Exception:
+        doc_section = ""
+
     msg = f"""{greeting_block}
 
 Kepada Yth. :
@@ -197,7 +209,7 @@ D. Pemeliharaan Potong Rumput
 
 Catatan Khusus : 
 {catatan.strip()}
-
+{doc_section}
 Demikian disampaikan, atas perhatiannya diucapkan terima kasih
 
 Ttd
@@ -419,7 +431,11 @@ def submit():
         except Exception:
             current_photos = []
 
-        photo_info_line = f"Lampiran Foto: *{len(current_photos)} Dokumentasi Lapangan*\n" if current_photos else ""
+        host_base = request.host_url.rstrip('/') if request else ''
+        photo_info_line = (
+            f"Lampiran Dokumentasi Foto ({len(current_photos)} Foto):\n"
+            f"{host_base}/dokumentasi/{tgl_str}/{airport_code}\n"
+        ) if current_photos else ""
 
         dh_message = (
             f"*Laporan Harian Fasilitas Sisi Udara*\n"
@@ -490,9 +506,7 @@ def submit():
             "gm_phone": dh_phone,
             "dh_message": dh_message,
             "gm_message": dh_message,
-            "airport_code": airport_code,
-            "tanggal": tgl_str,
-            "photos": current_photos
+            "airport_code": airport_code
         })
     except Exception as e:
         print(f"Error saving to staging: {str(e)}")

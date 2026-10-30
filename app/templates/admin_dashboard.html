@@ -5981,40 +5981,21 @@
                         <textarea class="console-textarea" id="kompilasiText" rows="14" placeholder="Menarik data dari server..."></textarea>
                     </div>
 
-                    <!-- Panel Lampiran Foto Dokumentasi 4 Bandara & Dokumen PDF A4 Otomatis -->
-                    <div id="deputyPhotosPanel" style="display: none; margin: 0 1.5rem 1.25rem 1.5rem; padding: 1rem 1.2rem; background: #f8fafc; border: 1.5px solid #bae6fd; border-radius: 14px; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.06);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.65rem; margin-bottom: 0.8rem;">
-                            <div style="display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap;">
-                                <span style="background: #002b49; color: #fff; font-size: 0.68rem; font-weight: 700; padding: 0.22rem 0.6rem; border-radius: 6px; letter-spacing: 0.3px;">
-                                    <i class="fa-solid fa-file-pdf me-1" style="color: #38bdf8;"></i> LAMPIRAN PDF DOKUMENTASI
+                    <!-- Panel Lampiran Foto Dokumentasi 4 Bandara -->
+                    <div id="deputyPhotosPanel" style="display: none; margin: 0 1.5rem 1.25rem 1.5rem; padding: 0.95rem 1.15rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.55rem;">
+                                <span style="background: #002b49; color: #fff; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 6px; letter-spacing: 0.3px;">
+                                    <i class="fa-solid fa-camera-retro me-1"></i> LAMPIRAN FOTO
                                 </span>
                                 <h4 style="margin: 0; font-size: 0.88rem; font-weight: 800; color: #0f172a;" id="deputyPhotosTitle">Dokumentasi Foto Lapangan Regional II</h4>
-                                <span id="deputyCollageReadyBadge" style="display: inline-flex; align-items: center; gap: 0.3rem; background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-size: 0.68rem; font-weight: 700; padding: 0.18rem 0.55rem; border-radius: 999px;">
-                                    <i class="fa-solid fa-file-circle-check"></i> Dokumen PDF A4 per Cabang Siap
-                                </span>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;">
-                                <button type="button" onclick="downloadDeputyPhotoPdf()" style="background: #002b49; color: #fff; border: none; padding: 0.35rem 0.85rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 2px 6px rgba(0,43,73,0.18);" title="Unduh Dokumen PDF Resmi A4 (Foto dikelompokkan rapi per halaman per cabang)">
-                                    <i class="fa-solid fa-file-pdf" style="color: #38bdf8;"></i> Unduh PDF Dokumentasi Foto (A4)
-                                </button>
-                                <button type="button" onclick="copyDeputyCollageToClipboard(true)" style="background: #fff; color: #0f172a; border: 1px solid #cbd5e1; padding: 0.32rem 0.72rem; border-radius: 8px; font-size: 0.73rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;" title="Opsi cadangan: Salin gambar kolase ke Clipboard (Ctrl+V)">
-                                    <i class="fa-regular fa-paste text-primary"></i> Salin Kolase
-                                </button>
-                                <a id="deputyPublicDocLink" href="/dokumentasi" target="_blank" style="text-decoration: none; font-size: 0.73rem; color: #0369a1; background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.28rem 0.72rem; border-radius: 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;">
-                                    <i class="fa-solid fa-up-right-from-square"></i> Galeri Web
-                                </a>
-                            </div>
-                        </div>
-
-                        <div style="background: #f0f9ff; border: 1px dashed #7dd3fc; border-radius: 10px; padding: 0.55rem 0.85rem; margin-bottom: 0.8rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.76rem; color: #0c4a6e;">
-                            <div>
-                                <i class="fa-solid fa-file-pdf me-1 text-danger"></i>
-                                <strong>Standar Dokumen PDF A4 per Cabang:</strong> Seluruh foto dari 4 cabang otomatis disusun rapi ke dalam <b>1 File PDF Resmi</b> (setiap bandara <b>DPS, LOP, KOE, BWX</b> berada di halaman terpisah, maks. 4 foto/halaman). Saat klik <b>Kirim Serentak</b>, file PDF otomatis terunduh untuk dilampirkan ke WhatsApp!
-                            </div>
+                            <a id="deputyPublicDocLink" href="/dokumentasi" target="_blank" style="text-decoration: none; font-size: 0.73rem; color: #0369a1; background: #e0f2fe; border: 1px solid #bae6fd; padding: 0.22rem 0.7rem; border-radius: 999px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <i class="fa-solid fa-up-right-from-square"></i> Buka Halaman Galeri Dokumentasi
+                            </a>
                         </div>
 
                         <div id="deputyPhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem;"></div>
-                        <canvas id="deputyCollageCanvas" style="display: none;"></canvas>
                     </div>
 
                     <div class="console-footer">
@@ -6027,9 +6008,6 @@
                         <div class="console-actions">
                             <input type="hidden" id="hiddenWaDeputy" value="{{ config.admin.deputy_phone | default('') if config and config.admin else '' }}">
                             <input type="hidden" id="hiddenWaAdmin" value="{{ config.admin.admin_phone | default('') if config and config.admin else '' }}">
-                            <button class="btn-outline-action" type="button" id="btnCopyCollageFooter" style="display: none; border-color: #0284c7; color: #0369a1; background: #f0f9ff;" onclick="downloadDeputyPhotoPdf()" title="Unduh Dokumen PDF Resmi Lampiran Foto 4 Cabang (A4)">
-                                <i class="fa-solid fa-file-pdf me-1 text-danger"></i> Unduh PDF Foto (A4)
-                            </button>
                             <button class="btn-outline-action" type="button" onclick="salinTeksRekap()">
                                 <i class="fa-regular fa-copy me-1"></i> Salin Teks
                             </button>
@@ -9406,38 +9384,14 @@ REGION II`;
             }
         };
 
-        if (window.currentDeputyPhotos && window.currentDeputyPhotos.length > 0 && window.AirsidePhotoPdf) {
-            const safeDate = (lastRekapDate || 'Harian').replace(/[^0-9a-zA-Z_-]/g, '-');
-            const cachedDocRes = window.currentDeputyCollageBlob ? {
-                blob: window.currentDeputyCollageBlob,
-                filename: `Dokumentasi_Foto_Airside_Regional_II_${safeDate}.png`
-            } : null;
-
-            const res = await window.AirsidePhotoPdf.sendPdfAndTextViaWhatsApp({
-                photos: window.currentDeputyPhotos,
-                dateStr: lastRekapDate,
-                singleBranch: false,
-                cachedDocRes: cachedDocRes,
-                waUrl: url,
-                waText: text,
-                recipientLabel: 'Deputy Regional II',
-                shareTitle: 'Laporan Harian & Dokumentasi Airside Regional II'
-            });
-            if (res && res.completed) {
-                promptAdminFollowup();
-            }
-            return;
-        }
-
         window.open(url, '_blank');
         promptAdminFollowup();
     }
 
     // ==============================================================================
-    // KOMPILASI FOTO 4 BANDARA, GENERATOR KOLASE & AUTO-CLEANUP 90 HARI
+    // KOMPILASI FOTO 4 BANDARA & AUTO-CLEANUP 90 HARI
     // ==============================================================================
     window.currentDeputyPhotos = [];
-    window.currentDeputyCollageBlob = null;
 
     function renderDeputyPhotosPanel(rekapData, dateStr) {
         const panel = document.getElementById('deputyPhotosPanel');
@@ -9458,18 +9412,14 @@ REGION II`;
         });
 
         window.currentDeputyPhotos = allPhotos;
-        window.currentDeputyCollageBlob = null;
 
-        const footerBtn = document.getElementById('btnCopyCollageFooter');
         if (allPhotos.length === 0) {
             panel.style.display = 'none';
-            if (footerBtn) footerBtn.style.display = 'none';
             grid.innerHTML = '';
             return;
         }
 
         panel.style.display = 'block';
-        if (footerBtn) footerBtn.style.display = 'inline-flex';
         if (titleEl) {
             titleEl.textContent = `Dokumentasi Foto Lapangan Regional II (${allPhotos.length} Foto Terkumpul)`;
         }
@@ -9491,193 +9441,6 @@ REGION II`;
                 </div>
             </div>
         `).join('');
-
-        // Pre-build collage canvas in background
-        buildDeputyCollageBlob(allPhotos, dateStr).then(blob => {
-            window.currentDeputyCollageBlob = blob;
-        }).catch(err => console.warn('Gagal membuat kolase foto:', err));
-    }
-
-    function loadImageElement(src) {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            if (src && !src.startsWith('/')) {
-                img.crossOrigin = 'anonymous';
-            }
-            img.onload = () => resolve(img);
-            img.onerror = (e) => reject(e);
-            img.src = src;
-        });
-    }
-
-    async function buildDeputyCollageBlob(photos, dateStr) {
-        if (!photos || photos.length === 0) return null;
-        if (window.AirsidePhotoPdf && typeof window.AirsidePhotoPdf.buildStructuredDocumentBlob === 'function') {
-            const docRes = await window.AirsidePhotoPdf.buildStructuredDocumentBlob({
-                photos: photos,
-                dateStr: dateStr,
-                singleBranch: false
-            });
-            if (docRes && docRes.blob) return docRes.blob;
-        }
-        const canvas = document.getElementById('deputyCollageCanvas') || document.createElement('canvas');
-        const cols = photos.length === 1 ? 1 : 2;
-        const rows = Math.ceil(photos.length / cols);
-        const cellW = 600;
-        const cellH = 420;
-        const pad = 20;
-        const headerH = 85;
-
-        canvas.width = cols * cellW + (cols + 1) * pad;
-        canvas.height = headerH + rows * cellH + (rows + 1) * pad;
-
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#0f172a';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Header banner
-        ctx.fillStyle = '#002b49';
-        ctx.fillRect(0, 0, canvas.width, headerH);
-        ctx.fillStyle = '#00B7CD';
-        ctx.fillRect(0, headerH - 4, canvas.width, 4);
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 24px sans-serif';
-        ctx.fillText('DOKUMENTASI LAPORAN HARIAN AIRSIDE — REGIONAL II', pad, 38);
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '16px sans-serif';
-        const dFormatted = typeof formatTanggalIndo === 'function' ? formatTanggalIndo(dateStr) : dateStr;
-        ctx.fillText(`Tanggal: ${dFormatted}  •  Total: ${photos.length} Dokumentasi Cabang`, pad, 65);
-
-        for (let i = 0; i < photos.length; i++) {
-            const p = photos[i];
-            const r = Math.floor(i / cols);
-            const c = i % cols;
-            const x = pad + c * (cellW + pad);
-            const y = headerH + pad + r * (cellH + pad);
-
-            ctx.fillStyle = '#1e293b';
-            ctx.fillRect(x, y, cellW, cellH);
-
-            try {
-                const img = await loadImageElement(p.url);
-                const imgH = cellH - 52;
-                const scale = Math.max(cellW / img.width, imgH / img.height);
-                const sw = cellW / scale;
-                const sh = imgH / scale;
-                const sx = Math.max(0, (img.width - sw) / 2);
-                const sy = Math.max(0, (img.height - sh) / 2);
-                ctx.drawImage(img, sx, sy, sw, sh, x, y, cellW, imgH);
-            } catch (e) {
-                ctx.fillStyle = '#334155';
-                ctx.fillRect(x, y, cellW, cellH - 52);
-            }
-
-            // Label bar bawah tiap foto
-            ctx.fillStyle = '#002b49';
-            ctx.fillRect(x, y + cellH - 52, cellW, 52);
-            ctx.fillStyle = '#38bdf8';
-            ctx.font = 'bold 17px sans-serif';
-            ctx.fillText(`[${p.airport_code}] Area: ${p.area_tag || 'Umum'}`, x + 14, y + cellH - 28);
-            ctx.fillStyle = '#e2e8f0';
-            ctx.font = '14px sans-serif';
-            const cap = (p.caption || 'Dokumentasi kondisi fasilitas sisi udara').substring(0, 62);
-            ctx.fillText(cap, x + 14, y + cellH - 9);
-        }
-
-        return new Promise((resolve) => {
-            canvas.toBlob((blob) => resolve(blob), 'image/png', 0.92);
-        });
-    }
-
-    async function copyDeputyCollageToClipboard(showAlert = true) {
-        try {
-            if (!window.currentDeputyPhotos || window.currentDeputyPhotos.length === 0) {
-                if (showAlert) Swal.fire('Info', 'Belum ada foto dokumentasi pada tanggal ini.', 'info');
-                return false;
-            }
-            if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
-                if (showAlert) Swal.fire('Info', 'Browser tidak mendukung salin gambar otomatis. Silakan klik tombol Unduh Kolase (.PNG).', 'info');
-                return false;
-            }
-            // Gunakan Promise langsung di dalam ClipboardItem agar user-gesture browser tidak kedaluwarsa
-            const blobPromise = window.currentDeputyCollageBlob
-                ? Promise.resolve(window.currentDeputyCollageBlob)
-                : buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate).then(b => {
-                    window.currentDeputyCollageBlob = b;
-                    return b;
-                });
-
-            await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]);
-            if (showAlert) {
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Kolase Foto disalin ke Clipboard! Tekan Ctrl + V di ruang chat WhatsApp.',
-                    showConfirmButton: false,
-                    timer: 3500
-                });
-            }
-            return true;
-        } catch (err) {
-            console.warn('Clipboard image write failed:', err);
-            if (showAlert) {
-                Swal.fire('Info', 'Gagal menyalin gambar otomatis. Silakan klik tombol Unduh Kolase (.PNG).', 'info');
-            }
-            return false;
-        }
-    }
-
-    async function downloadDeputyPhotoPdf() {
-        if (!window.currentDeputyPhotos || window.currentDeputyPhotos.length === 0) {
-            return Swal.fire('Info', 'Belum ada foto dokumentasi pada tanggal ini.', 'info');
-        }
-        if (window.AirsidePhotoPdf) {
-            await window.AirsidePhotoPdf.downloadPhotoPdf({
-                photos: window.currentDeputyPhotos,
-                dateStr: lastRekapDate,
-                singleBranch: false
-            });
-        }
-    }
-
-    async function downloadDeputyCollage() {
-        if (!window.currentDeputyPhotos || window.currentDeputyPhotos.length === 0) return;
-        const blob = window.currentDeputyCollageBlob || await buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate);
-        if (!blob) return;
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Dokumentasi_Airside_Regional_II_${lastRekapDate || 'Harian'}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 2000);
-    }
-
-    async function shareDeputyTextAndPhotos() {
-        const text = document.getElementById('kompilasiText')?.value || '';
-        if (!window.currentDeputyPhotos || window.currentDeputyPhotos.length === 0) {
-            return Swal.fire('Info', 'Tidak ada foto untuk dibagikan.', 'info');
-        }
-        try {
-            const blob = window.currentDeputyCollageBlob || await buildDeputyCollageBlob(window.currentDeputyPhotos, lastRekapDate);
-            if (blob && navigator.canShare) {
-                const file = new File([blob], `Dokumentasi_Regional_II_${lastRekapDate || 'Harian'}.png`, { type: 'image/png' });
-                if (navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        title: 'Laporan Harian Airside Regional II',
-                        text: text,
-                        files: [file]
-                    });
-                    return;
-                }
-            }
-            await copyDeputyCollageToClipboard(true);
-        } catch (err) {
-            console.warn('Web Share API cancelled or unsupported:', err);
-        }
     }
 
     async function loadAdminPhotoStorageStats() {
