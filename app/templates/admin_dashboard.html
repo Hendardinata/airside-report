@@ -6412,10 +6412,12 @@
                         <h2 class="console-title mb-1">Visual Form Builder</h2>
                         <p class="console-subtitle">Desain struktur form laporan dengan mudah. Perubahan akan langsung disinkronkan ke aplikasi petugas dan Google Sheets.</p>
                     </div>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
                         <button type="button" class="btn-outline-action" onclick="syncFromSheet()" title="Tarik perubahan kolom/baris dari Google Sheets">
                             <i class="fa-solid fa-arrows-rotate me-1 text-primary"></i> Tarik dari Spreadsheet
                         </button>
+                        <button type="button" class="vfb-btn-discard" onclick="discardSchemaChanges()">Batalkan Perubahan</button>
+                        <button type="button" class="vfb-btn-save" id="vfbBtnSave" onclick="saveSchema()">Simpan Perubahan</button>
                     </div>
                 </div>
 
@@ -10061,13 +10063,7 @@ REGION II`;
                     </div>
                 </div>
 
-                <!-- Sticky Action Footer -->
-                <div class="vfb-sticky-footer" style="justify-content: flex-end;">
-                    <div class="d-flex align-items-center gap-2">
-                        <button type="button" class="vfb-btn-discard" onclick="discardSchemaChanges()">Batalkan Perubahan</button>
-                        <button type="button" class="vfb-btn-save" id="vfbBtnSave" onclick="saveSchema()">Simpan Perubahan</button>
-                    </div>
-                </div>
+
             </div>
         `;
 
