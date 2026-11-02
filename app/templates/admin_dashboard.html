@@ -9096,16 +9096,24 @@
                                     if (!c || c === "-" || c.toLowerCase() === "nihil") return `${prefix}-\n`;
                                     const lines = String(c).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(l => l.length > 0);
                                     if (lines.length === 0) return `${prefix}-\n`;
-                                    const indent = ' '.repeat(prefix.length);
+                                    if (lines.length === 1) return `${prefix}${lines[0]}\n`;
+                                    const leadingSpaces = (prefix.match(/^ +/) || [''])[0].length;
+                                    const textPart = prefix.slice(leadingSpaces);
+                                    const visualSpaces = Math.round(textPart.length * 1.42);
+                                    const indent = ' '.repeat(leadingSpaces + visualSpaces);
                                     return `${prefix}${lines.join('\n' + indent)}\n`;
                                 };
                                 const fmtJenis = (val, label = "Jenis kerusakan") => {
                                     const c = vClean(val);
                                     if (!c || c === "-" || c.toLowerCase() === "nihil") return `    ${label} : -\n`;
                                     const prefix = `    ${label} : `;
-                                    const indent = ' '.repeat(prefix.length);
                                     const lines = String(c).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(l => l.length > 0);
                                     if (lines.length === 0) return `${prefix}-\n`;
+                                    if (lines.length === 1) return `${prefix}${lines[0]}\n`;
+                                    const leadingSpaces = (prefix.match(/^ +/) || [''])[0].length;
+                                    const textPart = prefix.slice(leadingSpaces);
+                                    const visualSpaces = Math.round(textPart.length * 1.42);
+                                    const indent = ' '.repeat(leadingSpaces + visualSpaces);
                                     return `${prefix}${lines.join('\n' + indent)}\n`;
                                 };
 

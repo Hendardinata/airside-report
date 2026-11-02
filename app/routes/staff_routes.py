@@ -62,7 +62,13 @@ def generate_wa_message(data, airport_code):
         lines = [l.strip() for l in str(val).replace('\r\n', '\n').replace('\r', '\n').split('\n') if l.strip()]
         if not lines:
             return f"{prefix}-\n"
-        indent = " " * len(prefix)
+        if len(lines) == 1:
+            return f"{prefix}{lines[0]}\n"
+        m = re.match(r'^( *)', prefix)
+        leading_spaces = len(m.group(1)) if m else 0
+        text_part = prefix[leading_spaces:]
+        visual_spaces = round(len(text_part) * 1.42)
+        indent = " " * (leading_spaces + visual_spaces)
         return f"{prefix}" + f"\n{indent}".join(lines) + "\n"
 
     tgl = v('TANGGAL')
@@ -118,10 +124,16 @@ def generate_wa_message(data, airport_code):
         if not val or val == '-' or str(val).lower() == 'nihil':
             return f"    {label} : -\n"
         prefix = f"    {label} : "
-        indent = " " * len(prefix)
         lines = [l.strip() for l in str(val).replace('\r\n', '\n').replace('\r', '\n').split('\n') if l.strip()]
         if not lines:
             return f"{prefix}-\n"
+        if len(lines) == 1:
+            return f"{prefix}{lines[0]}\n"
+        m = re.match(r'^( *)', prefix)
+        leading_spaces = len(m.group(1)) if m else 0
+        text_part = prefix[leading_spaces:]
+        visual_spaces = round(len(text_part) * 1.42)
+        indent = " " * (leading_spaces + visual_spaces)
         return f"{prefix}" + f"\n{indent}".join(lines) + "\n"
 
     sapaan_val = v('SAPAAN')
