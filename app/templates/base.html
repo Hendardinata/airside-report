@@ -527,48 +527,77 @@
         div:where(.swal2-container) .swal2-popup.swal2-toast,
         .swal2-popup.swal2-toast {
             pointer-events: auto !important;
-            border-radius: 16px !important;
-            padding: 0.85rem 1.25rem !important;
-            box-shadow: 0 10px 25px -5px rgba(0, 43, 73, 0.18), 0 8px 10px -6px rgba(0, 43, 73, 0.1), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+            border-radius: 12px !important;
+            padding: 0.65rem 0.95rem !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 43, 73, 0.12), 0 8px 10px -6px rgba(0, 43, 73, 0.08), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
             background: #ffffff !important;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
             max-width: 420px !important;
             width: auto !important;
             box-sizing: border-box !important;
             display: flex !important;
+            flex-direction: row !important;
             align-items: center !important;
+            gap: 0.65rem !important;
         }
 
+        /* Toast Icon - Compact, crisp, and proportional (28px) */
         div:where(.swal2-container) .swal2-popup.swal2-toast .swal2-icon,
         .swal2-popup.swal2-toast .swal2-icon {
-            width: 32px !important;
-            height: 32px !important;
-            min-width: 32px !important;
-            min-height: 32px !important;
-            margin: 0 0.75rem 0 0 !important;
-            border-radius: 10px !important;
-            font-size: 1rem !important;
+            width: 28px !important;
+            height: 28px !important;
+            min-width: 28px !important;
+            min-height: 28px !important;
+            max-width: 28px !important;
+            max-height: 28px !important;
+            margin: 0 !important;
+            border-radius: 8px !important;
+            border-width: 1px !important;
+            border-style: solid !important;
             flex-shrink: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: none !important;
         }
 
+        div:where(.swal2-container) .swal2-popup.swal2-toast .swal2-icon::after,
+        .swal2-popup.swal2-toast .swal2-icon::after {
+            width: 14px !important;
+            height: 14px !important;
+            min-width: 14px !important;
+            min-height: 14px !important;
+            margin: 0 auto !important;
+        }
+
+        /* Toast Title & Text */
         div:where(.swal2-container) .swal2-popup.swal2-toast .swal2-title,
         .swal2-popup.swal2-toast .swal2-title {
-            font-size: 0.88rem !important;
+            font-size: 0.84rem !important;
             margin: 0 !important;
             padding: 0 !important;
             text-align: left !important;
             font-weight: 600 !important;
             color: #0f172a !important;
             line-height: 1.35 !important;
+            flex: 1 1 auto !important;
         }
 
+        div:where(.swal2-container) .swal2-popup.swal2-toast .swal2-html-container,
+        .swal2-popup.swal2-toast .swal2-html-container {
+            font-size: 0.8rem !important;
+            margin: 0.15rem 0 0 0 !important;
+            padding: 0 !important;
+            text-align: left !important;
+            color: #475569 !important;
+            line-height: 1.35 !important;
+        }
+
+        /* Always hide close button on toast notifications */
+        body.swal2-toast-shown .swal2-close,
         div:where(.swal2-container) .swal2-popup.swal2-toast .swal2-close,
         .swal2-popup.swal2-toast .swal2-close {
-            position: static !important;
-            margin-left: auto !important;
-            padding: 0 0 0 0.5rem !important;
-            font-size: 1.1rem !important;
-            color: #94a3b8 !important;
+            display: none !important;
         }
 
         /* Strictly hide swal2-icon if SweetAlert hides it or if it lacks an icon type */
@@ -578,28 +607,37 @@
             display: none !important;
         }
 
-        /* Top Squircle Icon Badges for Active Icons & Custom Icon Tiles */
-        div:where(.swal2-container) .swal2-icon.swal2-warning:not([style*="display: none"]),
-        div:where(.swal2-container) .swal2-icon.swal2-success:not([style*="display: none"]),
-        div:where(.swal2-container) .swal2-icon.swal2-error:not([style*="display: none"]),
-        div:where(.swal2-container) .swal2-icon.swal2-info:not([style*="display: none"]),
-        div:where(.swal2-container) .swal2-icon.swal2-question:not([style*="display: none"]),
+        /* Top Squircle Icon Badges for Active Icons & Custom Icon Tiles (Modal Dialogs ONLY) */
+        div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-warning:not([style*="display: none"]),
+        div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-success:not([style*="display: none"]),
+        div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-error:not([style*="display: none"]),
+        div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-info:not([style*="display: none"]),
+        div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-question:not([style*="display: none"]),
+        div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal-corp-icon-tile,
         .swal-corp-icon-tile {
-            width: 64px !important;
-            height: 64px !important;
-            min-width: 64px !important;
-            min-height: 64px !important;
-            margin: 0 auto 1.25rem auto !important;
-            border-radius: 20px !important;
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
+            min-height: 48px !important;
+            margin: 0 auto 1.15rem auto !important;
+            border-radius: 14px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             box-sizing: border-box !important;
             border-width: 1.5px !important;
             border-style: solid !important;
-            font-size: 1.75rem !important;
+            font-size: 1.4rem !important;
             position: relative !important;
             overflow: hidden !important;
+        }
+
+        div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon::after {
+            width: 22px !important;
+            height: 22px !important;
+            min-width: 22px !important;
+            min-height: 22px !important;
+            margin: 0 auto !important;
         }
 
         /* Clear and hide ALL default fragile Swal2 internal line artifacts, spans, and rings */
@@ -915,16 +953,22 @@
         }
 
         /* Close Button */
-        div:where(.swal2-container) .swal2-close,
-        .swal2-close {
+        div:where(.swal2-container) .swal2-close[style*="display: none"],
+        .swal2-close[style*="display: none"] {
+            display: none !important;
+        }
+
+        div:where(.swal2-container) .swal2-close:not([style*="display: none"]),
+        .swal2-close:not([style*="display: none"]) {
             color: #94a3b8 !important;
-            font-size: 1.4rem !important;
+            font-size: 1.3rem !important;
             transition: all 0.15s ease !important;
+            position: absolute !important;
             top: 0.9rem !important;
             right: 0.9rem !important;
             border-radius: 50% !important;
-            width: 34px !important;
-            height: 34px !important;
+            width: 32px !important;
+            height: 32px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
