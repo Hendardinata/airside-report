@@ -856,23 +856,36 @@
         box-shadow: 0 4px 12px rgba(0, 43, 73, 0.14);
     }
 
-    .notif-badge-dot {
+    .notif-badge-count {
         position: absolute;
-        top: 8px;
-        right: 9px;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #ef4444;
+        top: -3px;
+        right: -3px;
+        min-width: 19px;
+        height: 19px;
+        padding: 0 4px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+        color: #ffffff;
+        font-size: 0.68rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border: 2px solid #ffffff;
+        box-shadow: 0 2px 6px rgba(234, 88, 12, 0.4);
+        font-family: 'Outfit', sans-serif;
+        line-height: 1;
+        box-sizing: border-box;
+        transition: all 0.2s ease;
     }
 
-    .notif-badge-dot.success {
-        background-color: #22c55e;
+    .notif-badge-count.success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
     }
 
-    .notif-badge-dot.warning {
-        background-color: #ea580c;
+    .notif-badge-dot {
+        display: none !important;
     }
 
     /* Notification Dropdown Menu */
@@ -5736,7 +5749,7 @@
                     <div class="topbar-notif-wrap" id="topbarNotifWrap">
                         <button type="button" class="topbar-notif-btn" id="topbarNotifBtn" title="Status Notifikasi Laporan Cabang" onclick="toggleNotifDropdown(event)">
                             <i class="fa-regular fa-bell"></i>
-                            <span class="notif-badge-dot warning" id="notifBadgeDot"></span>
+                            <span class="notif-badge-count" id="notifBadgeCount">4</span>
                         </button>
 
                         <!-- Notification Dropdown Flyout Card -->
@@ -7158,8 +7171,22 @@
         const notifSubtext = document.getElementById('notifSubtext');
         const notifListBody = document.getElementById('notifListBody');
 
+        const notifBadgeCount = document.getElementById('notifBadgeCount');
+        if (notifBadgeCount) {
+            if (pendingCount > 0) {
+                notifBadgeCount.className = 'notif-badge-count';
+                notifBadgeCount.textContent = pendingCount;
+                notifBadgeCount.style.display = 'flex';
+                notifBadgeCount.title = `${pendingCount} bandara belum mengirim laporan`;
+            } else {
+                notifBadgeCount.className = 'notif-badge-count success';
+                notifBadgeCount.innerHTML = '<i class="fa-solid fa-check" style="font-size: 0.58rem;"></i>';
+                notifBadgeCount.style.display = 'flex';
+                notifBadgeCount.title = 'Seluruh bandara sudah mengirim laporan';
+            }
+        }
         if (notifBadgeDot) {
-            notifBadgeDot.className = pendingCount > 0 ? 'notif-badge-dot warning' : 'notif-badge-dot success';
+            notifBadgeDot.style.display = 'none';
         }
 
         if (notifCountBadge) {
