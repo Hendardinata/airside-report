@@ -1028,7 +1028,7 @@
         font-size: 0.74rem;
         color: #64748b;
         line-height: 1.35;
-        margin-bottom: 0.45rem;
+        margin-bottom: 0;
     }
 
     .notif-item-actions {
@@ -7191,11 +7191,6 @@
                                     <span class="notif-pill success">Sudah Mengirim</span>
                                 </div>
                                 <div class="notif-item-desc">Laporan harian terverifikasi (PCI Runway: <strong>${info.pci || '-'}</strong>).</div>
-                                <div class="notif-item-actions">
-                                    <button type="button" class="notif-mini-btn" onclick="openBranchSuccessSheet('${code}')">
-                                        <i class="fa-solid fa-eye"></i> Detail
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     `;
@@ -7209,17 +7204,6 @@
                                     <span class="notif-pill warning">Belum Mengirim</span>
                                 </div>
                                 <div class="notif-item-desc">Laporan tanggal ${dateStr} belum diinput ke sistem.</div>
-                                <div class="notif-item-actions">
-                                    <button type="button" class="notif-mini-btn btn-gm" onclick="contactGMWhatsApp('${code}')" title="Hubungi General Manager ${code}">
-                                        <i class="fa-solid fa-user-tie"></i> WhatsApp GM
-                                    </button>
-                                    <button type="button" class="notif-mini-btn" onclick="remindPicWhatsApp('${code}', '${info.pic_phone || ''}', '${meta.city}', '${dateStr}')" title="WhatsApp PIC">
-                                        <i class="fa-brands fa-whatsapp text-success"></i> PIC
-                                    </button>
-                                    <button type="button" class="notif-mini-btn" onclick="syncRekap('${code}')" title="Tarik data sheet">
-                                        <i class="fa-solid fa-cloud-arrow-down text-primary"></i> Tarik
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     `;
