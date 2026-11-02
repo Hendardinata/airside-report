@@ -7127,106 +7127,17 @@
     }
 
     function openBranchSuccessSheet(code) {
-        const info = (lastRekapData && lastRekapData[code]) || {};
         const airportMeta = AIRPORT_NAMES[code] || { city: code, fullname: code };
         const dStr = lastRekapDate || document.getElementById('filterDate')?.value || '';
-        const photos = Array.isArray(info.photos) ? info.photos : [];
-
-        let photosHtml = '';
-        if (photos.length > 0) {
-            photosHtml = `
-                <div style="margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0;">
-                    <div style="font-weight: 700; font-size: 0.82rem; color: #0f172a; margin-bottom: 0.5rem;">
-                        <i class="fa-solid fa-camera text-info me-1"></i> Dokumentasi Foto Lapangan (${photos.length} Foto):
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); gap: 0.55rem; max-height: 240px; overflow-y: auto;">
-                        ${photos.map((p, idx) => `
-                            <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #fff; cursor: pointer;" onclick="openAdminPhotoLightbox('${p.url}', '${code} - ${(p.area_tag || 'Umum').replace(/'/g, '')}', '${(p.caption || '').replace(/'/g, '')}')">
-                                <div style="position: relative; height: 90px; background: #0f172a;">
-                                    <img src="${p.url}" alt="Foto ${idx + 1}" style="width: 100%; height: 100%; object-fit: cover;">
-                                    <span style="position: absolute; top: 4px; left: 4px; background: rgba(0,43,73,0.88); color: #fff; font-size: 0.62rem; font-weight: 700; padding: 1px 6px; border-radius: 4px;">
-                                        ${p.area_tag || 'Umum'}
-                                    </span>
-                                </div>
-                                <div style="padding: 0.35rem 0.45rem; font-size: 0.68rem; color: #475569; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                    ${p.caption || 'Klik perbesar'}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        } else {
-            photosHtml = `
-                <div style="margin-top: 0.75rem; padding: 0.5rem 0.75rem; background: #f8fafc; border-radius: 8px; font-size: 0.78rem; color: #64748b;">
-                    <i class="fa-regular fa-image me-1"></i> Tidak ada lampiran foto dokumentasi pada tanggal ini.
-                </div>
-            `;
-        }
-
-        const fd = info.fields || {};
-        const vVal = (k, def = '-') => (fd[k] !== undefined && fd[k] !== null && String(fd[k]).trim() !== '') ? escapeHtml(String(fd[k]).trim()) : def;
-        let catItems = [];
-        for (let i = 1; i <= 7; i++) {
-            const c = vVal('CATATAN_' + i, '');
-            if (c && c !== '-' && c.toLowerCase() !== 'nihil') catItems.push(`${catItems.length + 1}. ${c}`);
-        }
-        const sectionsSummaryHtml = Object.keys(fd).length > 0 ? `
-            <div style="margin-top: 0.85rem; display: grid; gap: 0.55rem; max-height: 310px; overflow-y: auto; padding-right: 0.25rem;">
-                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
-                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">A</span> RUNWAY
-                    </div>
-                    <div style="font-size: 0.8rem; color: #334155;">
-                        Kondisi: <strong>${vVal('RUNWAY_KONDISI')}</strong> • Pavement: <strong>${vVal('RUNWAY_PCI', info.pci || '-')}</strong> • Rusak/Perbaikan/Belum: <strong>${vVal('RUNWAY_TITIK_RUSAK', '0')} / ${vVal('RUNWAY_TITIK_DIPERBAIKI', '0')} / ${vVal('RUNWAY_TITIK_BELUM', '0')} titik</strong>
-                    </div>
-                </div>
-                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
-                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">B</span> TAXIWAY
-                    </div>
-                    <div style="font-size: 0.8rem; color: #334155;">
-                        Kondisi: <strong>${vVal('TAXIWAY_STATUS')}</strong> • Pavement: <strong>${vVal('TAXIWAY_PCI')}</strong> • Rusak/Perbaikan/Belum: <strong>${vVal('TWY_TITIK_RUSAK', '0')} / ${vVal('TWY_TITIK_DIPERBAIKI', '0')} / ${vVal('TWY_TITIK_BELUM', '0')} titik</strong>
-                    </div>
-                </div>
-                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
-                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">C</span> APRON
-                    </div>
-                    <div style="font-size: 0.8rem; color: #334155;">
-                        Kondisi: <strong>${vVal('APRON_KONDISI')}</strong> • Pavement: <strong>${vVal('APRON_PCI')}</strong> • Rusak/Perbaikan/Belum: <strong>${vVal('APN_TITIK_RUSAK', '0')} / ${vVal('APN_TITIK_DIPERBAIKI', '0')} / ${vVal('APN_TITIK_BELUM', '0')} titik</strong>
-                    </div>
-                </div>
-                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
-                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">D</span> PEMELIHARAAN POTONG RUMPUT
-                    </div>
-                    <div style="font-size: 0.8rem; color: #334155;">
-                        Standar: <strong>${vVal('RUMPUT_STD')}</strong> • Realisasi: <strong>${vVal('RUMPUT_REALISASI')}</strong> • Performance: <strong>${vVal('RUMPUT_PERF')}</strong>
-                    </div>
-                </div>
-                <div style="padding: 0.6rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-                    <div style="font-weight: 800; font-size: 0.78rem; color: #002b49; margin-bottom: 0.25rem;">
-                        <span style="display:inline-block; background:#002b49; color:#fff; border-radius:4px; padding:1px 6px; margin-right:5px; font-size:0.7rem;">E</span> CATATAN KHUSUS
-                    </div>
-                    <div style="font-size: 0.8rem; color: #334155;">
-                        ${catItems.length > 0 ? catItems.join('<br>') : '- (Nihil)'}
-                    </div>
-                </div>
-            </div>
-        ` : '';
 
         Swal.fire({
             title: `Laporan ${code} Terverifikasi`,
-            width: 640,
+            width: 480,
             html: `
                 <div style="text-align: left; font-size: 0.9rem; line-height: 1.6; padding: 0.5rem;">
                     <div style="margin-bottom: 0.35rem;"><strong>Cabang:</strong> ${airportMeta.city} (${airportMeta.fullname})</div>
                     <div style="margin-bottom: 0.35rem;"><strong>Tanggal:</strong> ${formatDateIndonesian(dStr)}</div>
-                    <div style="margin-bottom: 0.35rem;"><strong>Status:</strong> <span style="background:rgba(0, 183, 205, 0.1); color:#00B7CD; border:1px solid rgba(0, 183, 205, 0.3); padding:0.2rem 0.6rem; border-radius:6px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Sudah Mengirim</span></div>
-                    <div><strong>PCI Runway:</strong> ${info.pci || '-'}</div>
-                    ${sectionsSummaryHtml}
-                    ${photosHtml}
+                    <div><strong>Status:</strong> <span style="background:rgba(0, 183, 205, 0.1); color:#00B7CD; border:1px solid rgba(0, 183, 205, 0.3); padding:0.2rem 0.6rem; border-radius:6px; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Sudah Mengirim</span></div>
                 </div>
             `,
             icon: 'success',
