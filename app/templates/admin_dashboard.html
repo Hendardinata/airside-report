@@ -2373,7 +2373,7 @@
         border: 1.5px solid var(--theme-border);
         border-radius: 14px;
         padding: 1.25rem;
-        font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         font-size: 0.88rem;
         color: var(--theme-slate-900);
         line-height: 1.6;
@@ -3043,7 +3043,7 @@
     }
 
     .table-input.monospace {
-        font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         font-size: 0.77rem;
         letter-spacing: -0.2px;
     }
@@ -9228,7 +9228,7 @@
                                     if (lines.length === 1) return `${prefix}${lines[0]}\n`;
                                     const leadingSpaces = (prefix.match(/^ +/) || [''])[0].length;
                                     const textPart = prefix.slice(leadingSpaces);
-                                    const visualSpaces = Math.round(textPart.length * 1.42);
+                                    const visualSpaces = textPart.includes('Realisasi') ? 17 : Math.round(textPart.length * 1.5);
                                     const indent = ' '.repeat(leadingSpaces + visualSpaces);
                                     return `${prefix}${lines.join('\n' + indent)}\n`;
                                 };
@@ -9241,7 +9241,7 @@
                                     if (lines.length === 1) return `${prefix}${lines[0]}\n`;
                                     const leadingSpaces = (prefix.match(/^ +/) || [''])[0].length;
                                     const textPart = prefix.slice(leadingSpaces);
-                                    const visualSpaces = Math.round(textPart.length * 1.42);
+                                    const visualSpaces = Math.round(textPart.length * 1.67);
                                     const indent = ' '.repeat(leadingSpaces + visualSpaces);
                                     return `${prefix}${lines.join('\n' + indent)}\n`;
                                 };

@@ -67,7 +67,7 @@ def generate_wa_message(data, airport_code):
         m = re.match(r'^( *)', prefix)
         leading_spaces = len(m.group(1)) if m else 0
         text_part = prefix[leading_spaces:]
-        visual_spaces = round(len(text_part) * 1.42)
+        visual_spaces = 17 if 'Realisasi' in text_part else round(len(text_part) * 1.5)
         indent = " " * (leading_spaces + visual_spaces)
         return f"{prefix}" + f"\n{indent}".join(lines) + "\n"
 
@@ -132,7 +132,7 @@ def generate_wa_message(data, airport_code):
         m = re.match(r'^( *)', prefix)
         leading_spaces = len(m.group(1)) if m else 0
         text_part = prefix[leading_spaces:]
-        visual_spaces = round(len(text_part) * 1.42)
+        visual_spaces = round(len(text_part) * 1.67)
         indent = " " * (leading_spaces + visual_spaces)
         return f"{prefix}" + f"\n{indent}".join(lines) + "\n"
 

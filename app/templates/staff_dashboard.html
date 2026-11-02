@@ -1291,7 +1291,7 @@
         font-size: 0.72rem;
         color: #64748b;
         margin-bottom: 0.45rem;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     .notif-action-btn-revisi {
@@ -2715,7 +2715,7 @@
     }
 
     .wa-preview-body {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         font-size: 0.84rem;
         white-space: pre-wrap;
         background-color: #ffffff;
@@ -4448,7 +4448,7 @@
             if (lines.length === 1) return `${prefix}${lines[0]}\n`;
             const leadingSpaces = (prefix.match(/^ +/) || [''])[0].length;
             const textPart = prefix.slice(leadingSpaces);
-            const visualSpaces = Math.round(textPart.length * 1.42);
+            const visualSpaces = textPart.includes('Realisasi') ? 17 : Math.round(textPart.length * 1.5);
             const indent = ' '.repeat(leadingSpaces + visualSpaces);
             return `${prefix}${lines.join('\n' + indent)}\n`;
         };
@@ -4526,7 +4526,7 @@
             if (lines.length === 1) return `${prefix}${lines[0]}\n`;
             const leadingSpaces = (prefix.match(/^ +/) || [''])[0].length;
             const textPart = prefix.slice(leadingSpaces);
-            const visualSpaces = Math.round(textPart.length * 1.42);
+            const visualSpaces = Math.round(textPart.length * 1.67);
             const indent = ' '.repeat(leadingSpaces + visualSpaces);
             return `${prefix}${lines.join('\n' + indent)}\n`;
         };
