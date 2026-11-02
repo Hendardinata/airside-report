@@ -120,6 +120,41 @@ def api_report_detail(report_id):
         return jsonify({"success": False, "error": "Laporan tidak ditemukan"}), 404
     return jsonify({"success": True, "report": report})
 
+@bp.route('/api/report/<report_id>/wa-alert', methods=['GET'])
+def api_report_wa_alert(report_id):
+    user = USERS.get(session['user_id'])
+    airport_code = user.get('airport', 'LOP')
+
+    # 1. Cari di staging dulu, jika tidak ada cari di production
+    report = get_staging_report_by_id(airport_code, report_id)
+    is_staging = True
+    if not report:
+        from app.services.gsheets_service import get_production_report_by_id
+        report = get_production_report_by_id(airport_code, report_id)
+        is_staging = False
+
+    if not report:
+        return jsonify({"success": False, "error": "Laporan tidak ditemukan"}), 404
+
+    form_data = report.get('data') or report.get('form_data') or report
+    admin_conf = get_admin_config()
+    # Prioritaskan nomor admin_phone, jika kosong gunakan deputy_phone
+    admin_phone = (admin_conf.get('admin_phone') or admin_conf.get('deputy_phone') or '').strip()
+
+    wa_message = generate_wa_message(form_data, airport_code)
+    tgl = form_data.get('TANGGAL') or form_data.get('TANGGAL_LAPORAN') or report.get('tanggal', '')
+
+    return jsonify({
+        "success": True,
+        "report_id": report_id,
+        "tanggal": tgl,
+        "status": report.get('status', 'APPROVED'),
+        "is_staging": is_staging,
+        "admin_phone": admin_phone,
+        "admin_message": wa_message
+    })
+
+
 @bp.route('/api/revision', methods=['POST'])
 def api_revision():
     data = request.json or {}

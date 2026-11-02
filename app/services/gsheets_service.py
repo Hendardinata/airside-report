@@ -32,6 +32,18 @@ def sanitize_sheet_value(val):
             return "'" + s_val
     return s_val
 
+def unsanitize_sheet_value(val):
+    """
+    Menghapus petik satu escape formula injection saat membaca dari Spreadsheet
+    agar tampilan di web/dokumen kembali persis seperti yang diinputkan pengguna.
+    """
+    if val is None:
+        return ''
+    s = str(val)
+    if s.startswith("'") and len(s) > 1 and s[1] in ('=', '+', '-', '@', '\t', '\r'):
+        return s[1:]
+    return s
+
 def get_client():
     if not os.path.exists(CREDENTIALS_FILE):
         raise FileNotFoundError("File credentials.json tidak ditemukan. Harap masukkan kredensial Service Account GCP di root folder.")
@@ -726,7 +738,7 @@ def sync_sheets_to_rekap(sheet_url):
             row_idx = 3 + i # index 3 = Baris 4 di Excel
             if row_idx < len(ws_data):
                 row = ws_data[row_idx]
-                val = str(row[1]).strip() if len(row) > 1 else ""
+                val = unsanitize_sheet_value(str(row[1]).strip() if len(row) > 1 else "")
                 form_data[field_name] = val
                 
         # 2. Map data tambahan HANYA untuk baris ke-67 ke bawah (berdasarkan label)
@@ -734,7 +746,7 @@ def sync_sheets_to_rekap(sheet_url):
             row = ws_data[row_idx]
             if len(row) >= 2:
                 lbl = str(row[0]).strip()
-                val = str(row[1]).strip()
+                val = unsanitize_sheet_value(str(row[1]).strip())
                 if lbl in label_to_name and val:
                     form_data[label_to_name[lbl]] = val
                 
@@ -1482,7 +1494,7 @@ def get_production_approved_reports(airport_code, force_refresh=False):
             row_dict = {}
             for c_idx, h_name in enumerate(header_row):
                 if h_name:
-                    row_dict[h_name] = row[c_idx].strip() if c_idx < len(row) else ''
+                    row_dict[h_name] = unsanitize_sheet_value(row[c_idx].strip() if c_idx < len(row) else '')
 
             raw_tgl = row_dict.get('TANGGAL') or row_dict.get('TANGGAL_LAPORAN', '')
             norm_tgl = normalize_date_str(raw_tgl)

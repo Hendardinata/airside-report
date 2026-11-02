@@ -2443,6 +2443,26 @@
         box-sizing: border-box;
     }
 
+    textarea.report-clean-input {
+        max-width: 100%;
+        min-height: 76px;
+        line-height: 1.5;
+        resize: vertical;
+        white-space: pre-wrap;
+    }
+
+    .report-table-row:has(textarea),
+    .report-table-row.has-textarea {
+        align-items: flex-start;
+    }
+
+    .report-table-row:has(textarea) .report-colon-cell,
+    .report-table-row.has-textarea .report-colon-cell,
+    .report-table-row:has(textarea) .report-label-cell,
+    .report-table-row.has-textarea .report-label-cell {
+        padding-top: 0.5rem;
+    }
+
     .report-clean-input:hover {
         border-color: #94a3b8;
     }
@@ -3237,7 +3257,7 @@
 
                             {% elif field.type == 'textarea' %}
                             <!-- Input Textarea -->
-                            <div class="report-table-row">
+                            <div class="report-table-row has-textarea">
                                 <div class="report-label-cell">
                                     <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                 </div>
@@ -4309,7 +4329,10 @@
         const v = (id) => {
             const el = document.getElementById('input-' + id) || document.querySelector(`[name="${id}"]`);
             if (!el) return '-';
-            const val = (el.value || '').trim();
+            let val = (el.value || '').trim();
+            if (val.startsWith("'") && val.length > 1 && ['=', '+', '-', '@', '\t', '\r'].includes(val[1])) {
+                val = val.slice(1).trim();
+            }
             return val || '-';
         };
 

@@ -17,6 +17,8 @@ def generate_wa_message(data, airport_code):
     import re
     def v(key):
         val = str(data.get(key, '') or '').strip()
+        if val.startswith("'") and len(val) > 1 and val[1] in ('=', '+', '-', '@', '\t', '\r'):
+            val = val[1:].strip()
         return val if val and val != '-' else '-'
         
     def f_titik(jml):
