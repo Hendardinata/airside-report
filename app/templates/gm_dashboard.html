@@ -7068,28 +7068,7 @@
                                 </div>
                             </div>
 
-                            <div style="margin-bottom: 0.85rem;">
-                                <label style="display: block; font-weight: 700; font-size: 0.82rem; margin-bottom: 0.3rem; color: #1e293b;">
-                                    Nomor WhatsApp Tujuan:
-                                </label>
-                                <div style="position: relative;">
-                                    <input type="tel" id="swalTargetWaNumber" class="swal2-input" 
-                                        style="margin: 0; width: 100%; box-sizing: border-box; font-size: 0.92rem; height: 42px; font-weight: 600; padding-left: 2.2rem;"
-                                        value="${cleanPhone}" 
-                                        placeholder="Contoh: 6281326488542">
-                                    <i class="fa-solid fa-phone" style="position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem;"></i>
-                                </div>
-                                <small style="color: #64748b; font-size: 0.76rem; display: block; margin-top: 0.25rem;">
-                                    *Nomor default diambil dari konfigurasi Admin/Deputy Regional. Anda dapat menyesuaikannya bila perlu.
-                                </small>
-                            </div>
 
-                            <details style="background: #f1f5f9; border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.82rem; color: #475569;">
-                                <summary style="cursor: pointer; font-weight: 700; color: #00B7CD;">
-                                    <i class="fa-regular fa-eye me-1"></i> Pratinjau Teks Pesan (${waMessage.length} karakter)
-                                </summary>
-                                <pre style="white-space: pre-wrap; word-break: break-word; max-height: 160px; overflow-y: auto; margin-top: 0.5rem; font-size: 0.78rem; font-family: monospace; background: #ffffff; padding: 0.5rem; border-radius: 6px; border: 1px solid #cbd5e1; line-height: 1.4;">${escapeHtml(waMessage)}</pre>
-                            </details>
                         </div>
                     `,
                     showCancelButton: true,
@@ -7100,20 +7079,12 @@
                     confirmButtonColor: '#16a34a',
                     denyButtonColor: '#0284c7',
                     cancelButtonColor: '#64748b',
-                    didOpen: () => {
-                        const inp = document.getElementById('swalTargetWaNumber');
-                        if (inp && !cleanPhone) {
-                            inp.focus();
-                        }
-                    },
                     preConfirm: () => {
-                        const inp = document.getElementById('swalTargetWaNumber');
-                        const targetNum = (inp ? inp.value : '').replace(/\D/g, '');
-                        if (!targetNum) {
-                            Swal.showValidationMessage('Nomor WhatsApp tujuan tidak boleh kosong.');
+                        if (!cleanPhone) {
+                            Swal.showValidationMessage('Nomor WhatsApp Admin Regional belum diatur di konfigurasi.');
                             return false;
                         }
-                        return targetNum;
+                        return cleanPhone;
                     }
                 }).then((choice) => {
                     if (choice.isConfirmed) {
