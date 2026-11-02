@@ -1240,8 +1240,9 @@
     /* ==========================================================================
        EXECUTIVE CORPORATE SWEETALERT & POPUP THEMING (100% UNIFIED)
        ========================================================================== */
-    div:where(.swal2-container).swal2-backdrop-show,
-    .swal2-backdrop-show {
+    /* Modal Backdrop: Hanya aktif pada modal dialog biasa, BUKAN toast notification */
+    div:where(.swal2-container):not(.swal2-top-end):not(.swal2-top-start):not(.swal2-top):not(.swal2-bottom-end):not(.swal2-bottom-start):not(.swal2-bottom):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-toast-shown):not(:has(.swal2-toast)).swal2-backdrop-show,
+    body:not(.swal2-toast-shown) div:where(.swal2-container):not(.swal2-top-end):not(.swal2-top-start):not(.swal2-top):not(.swal2-bottom-end):not(.swal2-bottom-start):not(.swal2-bottom):not(.swal2-center-start):not(.swal2-center-end):not(:has(.swal2-toast)).swal2-backdrop-show {
         background: rgba(15, 23, 42, 0.45) !important;
         backdrop-filter: blur(4px) !important;
         -webkit-backdrop-filter: blur(4px) !important;
@@ -1253,9 +1254,53 @@
         -webkit-backdrop-filter: blur(4px) !important;
     }
 
-    div:where(.swal2-container) .swal2-popup,
-    .swal2-popup,
-    .swal2-popup.swal-corp-popup {
+    /* WAJIB TRANSPARAN 100% UNTUK SEMUA TOAST POPUP (HILANGKAN BACKGROUND GELAP / HITAM) */
+    body.swal2-toast-shown div:where(.swal2-container),
+    body.swal2-toast-shown .swal2-container,
+    div:where(.swal2-container).swal2-toast-shown,
+    div:where(.swal2-container):has(.swal2-toast),
+    .swal2-container:has(.swal2-toast),
+    div:where(.swal2-container).swal2-top-end,
+    div:where(.swal2-container).swal2-top-start,
+    div:where(.swal2-container).swal2-top,
+    div:where(.swal2-container).swal2-bottom-end,
+    div:where(.swal2-container).swal2-bottom-start,
+    div:where(.swal2-container).swal2-bottom,
+    div:where(.swal2-container).swal2-center-start,
+    div:where(.swal2-container).swal2-center-end,
+    .swal2-container.swal2-top-end,
+    .swal2-container.swal2-top-start,
+    .swal2-container.swal2-top,
+    .swal2-container.swal2-bottom-end,
+    .swal2-container.swal2-bottom-start,
+    .swal2-container.swal2-bottom,
+    body.swal2-toast-shown div:where(.swal2-container).swal2-backdrop-show,
+    body.swal2-toast-shown .swal2-container.swal2-backdrop-show,
+    div:where(.swal2-container):has(.swal2-toast).swal2-backdrop-show,
+    div:where(.swal2-container).swal2-top-end.swal2-backdrop-show,
+    div:where(.swal2-container).swal2-top-start.swal2-backdrop-show,
+    div:where(.swal2-container).swal2-top.swal2-backdrop-show,
+    div:where(.swal2-container).swal2-bottom-end.swal2-backdrop-show,
+    div:where(.swal2-container).swal2-bottom-start.swal2-backdrop-show,
+    div:where(.swal2-container).swal2-bottom.swal2-backdrop-show,
+    .swal2-container.swal2-top-end.swal2-backdrop-show,
+    .swal2-container.swal2-top-start.swal2-backdrop-show,
+    .swal2-container.swal2-top.swal2-backdrop-show,
+    .swal2-container.swal2-bottom-end.swal2-backdrop-show,
+    .swal2-container.swal2-bottom-start.swal2-backdrop-show,
+    .swal2-container.swal2-bottom.swal2-backdrop-show {
+        background: transparent !important;
+        background-color: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        pointer-events: none !important;
+    }
+
+    /* Modal Popup Box (Bukan Toast) */
+    div:where(.swal2-container) .swal2-popup:not(.swal2-toast),
+    .swal2-popup:not(.swal2-toast),
+    .swal2-popup.swal-corp-popup:not(.swal2-toast) {
         border-radius: 24px !important;
         padding: 2.25rem 2.25rem 2rem 2.25rem !important;
         box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
@@ -1264,6 +1309,55 @@
         max-width: 460px !important;
         width: 92% !important;
         box-sizing: border-box !important;
+    }
+
+    /* Toast Card Box & Pointer Events */
+    body.swal2-toast-shown .swal2-popup,
+    div:where(.swal2-container) .swal2-popup.swal2-toast,
+    .swal2-popup.swal2-toast {
+        pointer-events: auto !important;
+        border-radius: 16px !important;
+        padding: 0.85rem 1.25rem !important;
+        box-shadow: 0 10px 25px -5px rgba(0, 43, 73, 0.18), 0 8px 10px -6px rgba(0, 43, 73, 0.1), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+        background: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        max-width: 420px !important;
+        width: auto !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    div:where(.swal2-container) .swal2-popup.swal2-toast .swal2-icon,
+    .swal2-popup.swal2-toast .swal2-icon {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        margin: 0 0.75rem 0 0 !important;
+        border-radius: 10px !important;
+        font-size: 1rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    div:where(.swal2-container) .swal2-popup.swal2-toast .swal2-title,
+    .swal2-popup.swal2-toast .swal2-title {
+        font-size: 0.88rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        text-align: left !important;
+        font-weight: 600 !important;
+        color: #0f172a !important;
+        line-height: 1.35 !important;
+    }
+
+    div:where(.swal2-container) .swal2-popup.swal2-toast .swal2-close,
+    .swal2-popup.swal2-toast .swal2-close {
+        position: static !important;
+        margin-left: auto !important;
+        padding: 0 0 0 0.5rem !important;
+        font-size: 1.1rem !important;
+        color: #94a3b8 !important;
     }
 
     /* Strictly hide swal2-icon if SweetAlert hides it or if it lacks an icon type */
