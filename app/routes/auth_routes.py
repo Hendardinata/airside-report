@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from app.models.airport_profiles import USERS, verify_user_password
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
+from app.models.airport_profiles import USERS, verify_user_password, update_user_profile
 import time
 import secrets
+import os
 
 bp = Blueprint('auth', __name__)
 
@@ -149,6 +150,88 @@ def logout():
     session.clear()
     session['_csrf_token'] = secrets.token_hex(32)
     return redirect(url_for('auth.index'))
+
+@bp.route('/api/user/profile', methods=['GET', 'POST'])
+def api_user_profile():
+    """
+    Endpoint pembaruan profil mandiri:
+    - Staff: bisa ganti foto profil dan nama Pengguna (name), nama akun (username) terkunci.
+    - DH: HANYA bisa ganti foto profil saja.
+    - Admin: bisa ganti foto profil dan nama pengguna dia sendiri.
+    """
+    if 'user_id' not in session:
+        return jsonify({"success": False, "error": "Sesi Anda telah berakhir. Silakan login kembali."}), 401
+    
+    current_username = session['user_id']
+    user = USERS.get(current_username)
+    if not user:
+        return jsonify({"success": False, "error": "Pengguna tidak ditemukan."}), 404
+
+    if request.method == 'GET':
+        return jsonify({
+            "success": True,
+            "user": {
+                "username": user['username'],
+                "name": user['name'],
+                "role": user['role'],
+                "airport": user.get('airport') or '',
+                "avatar": user.get('avatar') or ''
+            }
+        })
+
+    # POST: Update profile
+    role = user.get('role', 'staff')
+    
+    avatar_url = None
+    if 'avatar' in request.files:
+        file = request.files['avatar']
+        if file and file.filename:
+            from app.services.photo_service import UPLOADS_ROOT
+            allowed_extensions = {'png', 'jpg', 'jpeg', 'webp', 'gif'}
+            ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
+            if ext not in allowed_extensions:
+                return jsonify({"success": False, "error": "Format foto tidak didukung. Harap gunakan format PNG, JPG, JPEG, atau WEBP."}), 400
+            
+            avatars_dir = os.path.join(UPLOADS_ROOT, 'avatars')
+            os.makedirs(avatars_dir, exist_ok=True)
+            
+            safe_filename = f"avatar_{current_username}_{int(time.time())}.{ext}"
+            file_dest = os.path.join(avatars_dir, safe_filename)
+            file.save(file_dest)
+            avatar_url = f"/static/uploads/avatars/{safe_filename}"
+            
+    if request.form.get('remove_avatar') == 'true':
+        avatar_url = ''
+
+    # Role specific update permissions:
+    # 1. Staff: can change foto and nama Pengguna saja, NOT nama akun (username)
+    # 2. DH: ONLY change foto profile saja
+    # 3. Admin: can change foto profile and nama pengguna dia sendiri
+    new_name = None
+    if role in ('staff', 'admin'):
+        req_name = request.form.get('name')
+        if req_name is not None and req_name.strip():
+            new_name = req_name.strip()
+
+    try:
+        updated_user = update_user_profile(
+            username=current_username,
+            name=new_name,
+            avatar=avatar_url
+        )
+        return jsonify({
+            "success": True,
+            "message": "Profil berhasil diperbarui.",
+            "user": {
+                "username": updated_user['username'],
+                "name": updated_user['name'],
+                "role": updated_user['role'],
+                "airport": updated_user.get('airport') or '',
+                "avatar": updated_user.get('avatar') or ''
+            }
+        })
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 400
 
 
 def _format_tanggal_indo(d_str):

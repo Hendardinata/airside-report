@@ -63,10 +63,17 @@ def init_db():
             is_active INTEGER DEFAULT 1,
             is_system INTEGER DEFAULT 0,
             is_legacy_alias INTEGER DEFAULT 0,
+            avatar TEXT DEFAULT '',
             created_at TEXT,
             updated_at TEXT
         );
         """)
+
+        # Migrasi kolom avatar pada users jika belum ada
+        cursor.execute("PRAGMA table_info(users);")
+        user_cols = [r['name'] for r in cursor.fetchall()]
+        if 'avatar' not in user_cols:
+            cursor.execute("ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT '';")
 
         # 2. Tabel Notifications
         cursor.execute("""

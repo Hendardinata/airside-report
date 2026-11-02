@@ -49,3 +49,4 @@ else:
 with open(path, 'w', encoding='utf-8') as f:
     f.write(content)
 print("Buttons moved to top header successfully!")
+

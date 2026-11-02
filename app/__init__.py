@@ -16,7 +16,14 @@ def create_app():
 
     @app.context_processor
     def inject_csrf_token():
-        return dict(csrf_token=generate_csrf_token)
+        user = None
+        if 'user_id' in session:
+            try:
+                from app.models.airport_profiles import USERS
+                user = USERS.get(session.get('user_id'))
+            except Exception:
+                user = None
+        return dict(csrf_token=generate_csrf_token, current_user=user)
 
     # 2. CSRF Protection Middleware
     @app.before_request
@@ -45,7 +52,7 @@ def create_app():
             expected_token = session.get('_csrf_token')
 
             if not token or not expected_token or not hmac.compare_digest(str(token), str(expected_token)):
-                if request.is_json or request.path.startswith(('/admin/', '/staff/', '/gm/')):
+                if request.is_json or request.path.startswith(('/admin/', '/staff/', '/gm/', '/api/')):
                     return jsonify({
                         "status": "error",
                         "success": False,
@@ -56,7 +63,7 @@ def create_app():
     # Graceful 403 Forbidden handler
     @app.errorhandler(403)
     def handle_forbidden(e):
-        if request.is_json or request.path.startswith(('/admin/', '/staff/', '/gm/')):
+        if request.is_json or request.path.startswith(('/admin/', '/staff/', '/gm/', '/api/')):
             return jsonify({
                 "status": "error",
                 "success": False,

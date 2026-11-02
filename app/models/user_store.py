@@ -155,6 +155,7 @@ DEFAULT_USERS = {
 def _row_to_user_dict(row):
     if not row:
         return None
+    r_keys = row.keys() if hasattr(row, 'keys') else []
     return {
         'username': row['username'],
         'name': row['name'],
@@ -164,6 +165,7 @@ def _row_to_user_dict(row):
         'is_active': bool(row['is_active']),
         'is_system': bool(row['is_system']),
         'is_legacy_alias': bool(row['is_legacy_alias']),
+        'avatar': row['avatar'] if ('avatar' in r_keys and row['avatar']) else '',
         'created_at': row['created_at'],
         'updated_at': row['updated_at']
     }
@@ -389,6 +391,44 @@ def update_user(username, name=None, role=None, airport=None, password=None, is_
     existing['is_active'] = new_active
     existing['updated_at'] = now_str
     return existing
+
+def update_user_profile(username, name=None, avatar=None):
+    """
+    Memperbarui profil mandiri pengguna (nama lengkap dan/atau foto avatar).
+    """
+    clean_username = (username or '').strip().lower()
+    existing = get_user(clean_username)
+    if not existing:
+        raise ValueError(f"Pengguna '{clean_username}' tidak ditemukan.")
+
+    now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    updates = []
+    params = []
+
+    if name is not None:
+        clean_name = str(name).strip()
+        if not clean_name:
+            raise ValueError("Nama Pengguna tidak boleh kosong.")
+        updates.append("name = ?")
+        params.append(clean_name)
+
+    if avatar is not None:
+        updates.append("avatar = ?")
+        params.append(str(avatar).strip())
+
+    if not updates:
+        return existing
+
+    updates.append("updated_at = ?")
+    params.append(now_str)
+    params.append(clean_username)
+
+    sql = f"UPDATE users SET {', '.join(updates)} WHERE username = ?;"
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute(sql, tuple(params))
+
+    return get_user(clean_username)
 
 def delete_user(username):
     """

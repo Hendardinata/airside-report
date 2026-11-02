@@ -616,6 +616,7 @@ def api_get_users():
             "name": u.get('name'),
             "role": u.get('role'),
             "airport": u.get('airport'),
+            "avatar": u.get('avatar', ''),
             "is_active": u.get('is_active', True),
             "is_system": u.get('is_system', False),
             "created_at": u.get('created_at', ''),

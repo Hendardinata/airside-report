@@ -12,6 +12,7 @@ from app.models.user_store import (
     add_user,
     update_user_status,
     update_user,
+    update_user_profile,
     delete_user,
     verify_user_password
 )
