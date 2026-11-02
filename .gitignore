@@ -7,6 +7,9 @@ credentials.json
 *.db
 *.db-wal
 *.db-shm
+*.log
 debug_staging.log
+scratch/
+*.tmp*
 app/static/uploads/*
 !app/static/uploads/.gitkeep
