@@ -8973,8 +8973,11 @@
                     function vClean(val) {
                         if (val === null || val === undefined || val === "") return "-";
                         let s = String(val).trim();
-                        if (s.startsWith("'") && s.length > 1 && ['=', '+', '-', '@', '\t', '\r'].includes(s[1])) {
-                            s = s.slice(1).trim();
+                        if (s.startsWith("'")) {
+                            let rem = s.slice(1).trimStart();
+                            if (rem && ['=', '+', '-', '@', '\t', '\r'].includes(rem[0])) {
+                                s = s.slice(1).trim();
+                            }
                         }
                         return s || "-";
                     }
@@ -9094,11 +9097,22 @@
                                 const rd = info.raw_data;
                                 const fd = info.fields || {};
                                 const gf = (key, fallbackIdx) => (fd[key] !== undefined && fd[key] !== null) ? fd[key] : (fallbackIdx !== undefined ? rd[fallbackIdx] : "");
+                                const formatIndent = (prefix, val) => {
+                                    let c = vClean(val);
+                                    if (!c || c === "-" || c.toLowerCase() === "nihil") return `${prefix}-\n`;
+                                    const lines = String(c).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                                    if (lines.length === 0) return `${prefix}-\n`;
+                                    const indent = ' '.repeat(prefix.length);
+                                    return `${prefix}${lines.join('\n' + indent)}\n`;
+                                };
                                 const fmtJenis = (val, label = "Jenis kerusakan") => {
                                     const c = vClean(val);
-                                    if (c === "-" || c.toLowerCase() === "nihil") return `    ${label} : -\n`;
-                                    if (c.includes("\n")) return `    ${label} :\n${c}\n`;
-                                    return `    ${label} : ${c}\n`;
+                                    if (!c || c === "-" || c.toLowerCase() === "nihil") return `    ${label} : -\n`;
+                                    const prefix = `    ${label} : `;
+                                    const indent = ' '.repeat(prefix.length);
+                                    const lines = String(c).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                                    if (lines.length === 0) return `${prefix}-\n`;
+                                    return `${prefix}${lines.join('\n' + indent)}\n`;
                                 };
 
                                 branchText += `${index + 1}. ${code}\n`;
@@ -9114,7 +9128,7 @@
                                 branchText += fmtJenis(gf("RUNWAY_JENIS_BERULANG"), "Jenis kerusakan titik rusak berulang");
                                 branchText += `•  Marka :\n`;
                                 branchText += `       Standar : ${vClean(gf("RUNWAY_MARKA_STD", 16))}\n`;
-                                branchText += `       Realisasi : ${vClean(gf("RUNWAY_MARKA_REALISASI", 17))}\n`;
+                                branchText += formatIndent("       Realisasi : ", gf("RUNWAY_MARKA_REALISASI", 17));
                                 const rwyMarkaPct = vClean(gf("RUNWAY_MARKA_PERSENTASE"));
                                 if (rwyMarkaPct !== "-") {
                                     branchText += `       Persentase : ${fPercent(rwyMarkaPct)}\n`;
@@ -9125,7 +9139,7 @@
                                 branchText += `       Performance : ${fPercent(gf("RUNWAY_WATER_PERF", 20))}\n`;
                                 branchText += `•  Rubber Removal :  \n`;
                                 branchText += `       Standar ketentuan : ${vClean(gf("RUNWAY_RUBBER_STD", 21))}\n`;
-                                branchText += `       Realisasi : ${vClean(gf("RUNWAY_RUBBER_REAL", 22))}\n`;
+                                branchText += formatIndent("       Realisasi : ", gf("RUNWAY_RUBBER_REAL", 22));
                                 const rwyRubProg = vClean(gf("RUNWAY_RUBBER_PROGRES"));
                                 if (rwyRubProg !== "-") {
                                     branchText += `       Progres : ${fPercent(rwyRubProg)}\n`;
@@ -9151,7 +9165,7 @@
                                 branchText += fmtJenis(gf("TWY_JENIS_BERULANG"), "Jenis kerusakan titik rusak berulang");
                                 branchText += `•  Marka :\n`;
                                 branchText += `      Standar : ${vClean(gf("TWY_MARKA_STD", 33))}\n`;
-                                branchText += `      Realisasi : ${vClean(gf("TWY_MARKA_REALISASI", 34))}\n`;
+                                branchText += formatIndent("      Realisasi : ", gf("TWY_MARKA_REALISASI", 34));
                                 const twyMarkaPct = vClean(gf("TWY_MARKA_PERSENTASE"));
                                 if (twyMarkaPct !== "-") {
                                     branchText += `      Persentase : ${fPercent(twyMarkaPct)}\n`;
@@ -9177,7 +9191,7 @@
                                 branchText += fmtJenis(gf("APN_JENIS_BERULANG"), "Jenis kerusakan titik rusak berulang");
                                 branchText += `•  Marka :\n`;
                                 branchText += `      Standar : ${vClean(gf("APN_MARKA_STD", 46))}\n`;
-                                branchText += `      Realisasi : ${vClean(gf("APN_MARKA_REALISASI", 47))}\n`;
+                                branchText += formatIndent("      Realisasi : ", gf("APN_MARKA_REALISASI", 47));
                                 const apnMarkaPct = vClean(gf("APN_MARKA_PERSENTASE"));
                                 if (apnMarkaPct !== "-") {
                                     branchText += `      Persentase : ${fPercent(apnMarkaPct)}\n`;
@@ -9193,7 +9207,7 @@
 
                                 branchText += `D. Pemeliharaan Potong Rumput\n`;
                                 branchText += `      Standar : ${vClean(gf("RUMPUT_STD", 51))}\n`;
-                                branchText += `      Realisasi : ${vClean(gf("RUMPUT_REALISASI", 52))}\n`;
+                                branchText += formatIndent("      Realisasi : ", gf("RUMPUT_REALISASI", 52));
                                 branchText += `      Performance : ${fPercent(gf("RUMPUT_PERF", 53))}\n\n`;
 
                                 let catList = [];
@@ -9218,7 +9232,12 @@
                                 branchText += `Catatan Khusus : \n`;
                                 if (catList.length > 0) {
                                     catList.forEach((c, cIdx) => {
-                                        branchText += `${cIdx + 1}. ${c}\n`;
+                                        const catPrefix = `${cIdx + 1}. `;
+                                        const catIndent = ' '.repeat(catPrefix.length);
+                                        const cLines = String(c).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                                        if (cLines.length > 0) {
+                                            branchText += `${catPrefix}${cLines.join('\n' + catIndent)}\n`;
+                                        }
                                     });
                                 } else {
                                     branchText += `- (Nihil)\n`;

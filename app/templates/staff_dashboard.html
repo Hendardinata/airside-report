@@ -4330,10 +4330,21 @@
             const el = document.getElementById('input-' + id) || document.querySelector(`[name="${id}"]`);
             if (!el) return '-';
             let val = (el.value || '').trim();
-            if (val.startsWith("'") && val.length > 1 && ['=', '+', '-', '@', '\t', '\r'].includes(val[1])) {
-                val = val.slice(1).trim();
+            if (val.startsWith("'")) {
+                let rem = val.slice(1).trimStart();
+                if (rem && ['=', '+', '-', '@', '\t', '\r'].includes(rem[0])) {
+                    val = val.slice(1).trim();
+                }
             }
             return val || '-';
+        };
+
+        const formatIndent = (prefix, val) => {
+            if (!val || val === '-' || val.trim().toLowerCase() === 'nihil') return `${prefix}-\n`;
+            const lines = String(val).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if (lines.length === 0) return `${prefix}-\n`;
+            const indent = ' '.repeat(prefix.length);
+            return `${prefix}${lines.join('\n' + indent)}\n`;
         };
 
         const f_titik = (val) => {
@@ -4390,17 +4401,24 @@
         for (let i = 1; i <= 7; i++) {
             const c = v('CATATAN_' + i);
             if (c && c !== '-' && c.toLowerCase() !== 'nihil') {
-                catatanStr += `${cIdx}. ${c}\n`;
-                cIdx++;
+                const prefix = `${cIdx}. `;
+                const indent = ' '.repeat(prefix.length);
+                const lines = String(c).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                if (lines.length > 0) {
+                    catatanStr += `${prefix}${lines.join('\n' + indent)}\n`;
+                    cIdx++;
+                }
             }
         }
         if (!catatanStr) catatanStr = '- (Nihil)\n';
 
         const formatJenis = (val, label = 'Jenis kerusakan') => {
             if (!val || val === '-' || val.trim().toLowerCase() === 'nihil') return `    ${label} : -\n`;
-            const cleaned = val.trim();
-            if (cleaned.includes('\n')) return `    ${label} :\n${cleaned}\n`;
-            return `    ${label} : ${cleaned}\n`;
+            const prefix = `    ${label} : `;
+            const indent = ' '.repeat(prefix.length);
+            const lines = String(val).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if (lines.length === 0) return `${prefix}-\n`;
+            return `${prefix}${lines.join('\n' + indent)}\n`;
         };
 
         const optLine = (indent, label, val, isPct = false) => {
@@ -4430,14 +4448,14 @@ ${formatJenis(v('RUNWAY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki
 ${formatJenis(v('RUNWAY_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : ${f_titik(v('RUNWAY_TITIK_BERULANG'))}
 ${formatJenis(v('RUNWAY_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
        Standar : ${v('RUNWAY_MARKA_STD')}
-       Realisasi : ${v('RUNWAY_MARKA_REALISASI')}
+${formatIndent('       Realisasi : ', v('RUNWAY_MARKA_REALISASI'))}
 ${optLine('       ', 'Persentase', v('RUNWAY_MARKA_PERSENTASE'), true)}       Performance : ${f_percent(v('RUNWAY_MARKA_PERF'))}
 •  Standing Water :
        Pengukuran : ${v('RUNWAY_STANDING_WATER')}
        Performance : ${f_percent(v('RUNWAY_WATER_PERF'))}
 •  Rubber Removal :  
        Standar ketentuan : ${v('RUNWAY_RUBBER_STD')}
-       Realisasi : ${v('RUNWAY_RUBBER_REAL')}
+${formatIndent('       Realisasi : ', v('RUNWAY_RUBBER_REAL'))}
 ${optLine('       ', 'Progres', v('RUNWAY_RUBBER_PROGRES'), true)}       Nilai Skid : ${v('RUNWAY_RUBBER_SKID')}
 ${optLine('       ', 'Performance', v('RUNWAY_RUBBER_PERF'), true)}
 B. TAXIWAY
@@ -4449,7 +4467,7 @@ ${formatJenis(v('TWY_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : 
 ${formatJenis(v('TWY_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : ${f_titik(v('TWY_TITIK_BERULANG'))}
 ${formatJenis(v('TWY_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
       Standar : ${v('TWY_MARKA_STD')}
-      Realisasi : ${v('TWY_MARKA_REALISASI')}
+${formatIndent('      Realisasi : ', v('TWY_MARKA_REALISASI'))}
 ${optLine('      ', 'Persentase', v('TWY_MARKA_PERSENTASE'), true)}      Performance : ${f_percent(v('TWY_MARKA_PERF'))}
 •  Standing Water : 
       Pengukuran : ${v('TWY_STANDING_WATER')}
@@ -4464,7 +4482,7 @@ ${formatJenis(v('APN_JENIS_DIPERBAIKI'))}•  Jml titik yang belum diperbaiki : 
 ${formatJenis(v('APN_JENIS_BELUM'), 'Jenis kerusakan yang belum diperbaiki')}•  Jml titik rusak berulang > 1x : ${f_titik(v('APN_TITIK_BERULANG'))}
 ${formatJenis(v('APN_JENIS_BERULANG'), 'Jenis kerusakan titik rusak berulang')}•  Marka :
       Standar : ${v('APN_MARKA_STD')}
-      Realisasi : ${v('APN_MARKA_REALISASI')}
+${formatIndent('      Realisasi : ', v('APN_MARKA_REALISASI'))}
 ${optLine('      ', 'Persentase', v('APN_MARKA_PERSENTASE'), true)}      Performance : ${f_percent(v('APN_MARKA_PERF'))}
 •  Standing Water :
       Pengukuran : ${v('APN_STANDING_WATER')}
@@ -4472,7 +4490,7 @@ ${optLine('      ', 'Prosentase DRY', v('APN_WATER_DRY'), true)}      Performanc
 
 D. Pemeliharaan Potong Rumput
       Standar : ${v('RUMPUT_STD')}
-      Realisasi : ${v('RUMPUT_REALISASI')}
+${formatIndent('      Realisasi : ', v('RUMPUT_REALISASI'))}
       Performance : ${f_percent(v('RUMPUT_PERF'))}
 
 Catatan Khusus : 

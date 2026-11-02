@@ -40,8 +40,10 @@ def unsanitize_sheet_value(val):
     if val is None:
         return ''
     s = str(val)
-    if s.startswith("'") and len(s) > 1 and s[1] in ('=', '+', '-', '@', '\t', '\r'):
-        return s[1:]
+    if s.startswith("'"):
+        rem = s[1:].lstrip()
+        if rem and rem[0] in ('=', '+', '-', '@', '\t', '\r'):
+            return s[1:]
     return s
 
 def get_client():
@@ -574,7 +576,7 @@ def get_daily_summary(date_str):
                 row_data = sheet.row_values(match_index)
                 summary[code]["status"] = "Sudah Mengirim"
                 summary[code]["is_submitted"] = True
-                summary[code]["pci"] = str(row_data[pci_col_idx]) if len(row_data) > pci_col_idx else "-"
+                summary[code]["pci"] = unsanitize_sheet_value(str(row_data[pci_col_idx]).strip() if len(row_data) > pci_col_idx else "-")
                 summary[code]["raw_data"] = row_data
 
                 # --- PEMETAAN FIELD BERBASIS NAMA KOLOM (ANTI-GESER) ---
@@ -583,12 +585,12 @@ def get_daily_summary(date_str):
                     for idx_col, h_name in enumerate(header_row):
                         c_key = str(h_name).strip()
                         if c_key and idx_col < len(row_data):
-                            field_dict[c_key] = str(row_data[idx_col]).strip()
+                            field_dict[c_key] = unsanitize_sheet_value(str(row_data[idx_col]).strip())
                 for idx_std, std_key in enumerate(STANDARD_CORE_FIELDS):
                     if std_key not in field_dict:
                         pos = idx_std + 1
                         if pos < len(row_data):
-                            field_dict[std_key] = str(row_data[pos]).strip()
+                            field_dict[std_key] = unsanitize_sheet_value(str(row_data[pos]).strip())
                 summary[code]["fields"] = field_dict
 
                 # --- EXTRACT DATA TAMBAHAN UNTUK WA ---
@@ -623,7 +625,7 @@ def get_daily_summary(date_str):
                             col_key = str(header_row[i]).strip()
                             if not col_key or col_key in known_inline_fields:
                                 continue
-                            col_val = str(row_data[i]).strip()
+                            col_val = unsanitize_sheet_value(str(row_data[i]).strip())
                             if col_val and col_val != "-":
                                 nice_label = name_to_label.get(col_key, col_key)
                                 sec_title = name_to_section.get(col_key, "Data Tambahan")

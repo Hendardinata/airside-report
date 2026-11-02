@@ -5535,8 +5535,11 @@
                         }
                         let s = String(val).trim();
                         // Bersihkan petik satu escape formula spreadsheet jika ada di awal string
-                        if (s.startsWith("'") && s.length > 1 && ['=', '+', '-', '@', '\t', '\r'].includes(s[1])) {
-                            s = s.slice(1).trim();
+                        if (s.startsWith("'")) {
+                            let rem = s.slice(1).trimStart();
+                            if (rem && ['=', '+', '-', '@', '\t', '\r'].includes(rem[0])) {
+                                s = s.slice(1).trim();
+                            }
                         }
                         return escapeHtml(s);
                     }
@@ -5669,14 +5672,8 @@
                     ${revisiBannerHtml}
 
                     <div class="a4-document-page">
-                        <!-- TOP ACTION BAR (CETAK PDF, ALERT WA & TUTUP) -->
+                        <!-- TOP ACTION BAR (CETAK PDF & TUTUP) -->
                         <div class="doc-header-actions no-print">
-                            ${isApproved ? `
-                            <button type="button" class="btn-doc-wa-action" onclick="sendRegionalWaAlert('${rep.report_id}')" title="Kirim alert ringkasan laporan ke WhatsApp Admin Regional II">
-                                <i class="fa-brands fa-whatsapp"></i>
-                                <span>Alert WA</span>
-                            </button>
-                            ` : ''}
                             <button type="button" class="btn-doc-print-action" onclick="window.print()" title="Cetak atau simpan laporan sebagai dokumen PDF resmi">
                                 <i class="fa-solid fa-print"></i>
                                 <span>Cetak PDF</span>
@@ -6138,15 +6135,9 @@
                                 </div>
                             </div>
                             ` : `
-                            <div class="doc-gm-status-badge-box app no-print" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-                                <div>
-                                    <i class="fa-solid fa-circle-check me-2"></i>
-                                    <span>Laporan telah disetujui secara resmi dan tercatat di Spreadsheet Produksi Utama.</span>
-                                </div>
-                                <button type="button" class="btn-sign-approve" style="background: #16a34a; border-color: #15803d; padding: 0.45rem 0.95rem; font-size: 0.85rem;" onclick="sendRegionalWaAlert('${rep.report_id}')">
-                                    <i class="fa-brands fa-whatsapp me-1"></i>
-                                    <span>Kirim Alert WA Regional</span>
-                                </button>
+                            <div class="doc-gm-status-badge-box app no-print">
+                                <i class="fa-solid fa-circle-check me-2"></i>
+                                <span>Laporan telah disetujui secara resmi dan tercatat di Spreadsheet Produksi Utama.</span>
                             </div>
                             `}
                         </div>
@@ -6234,8 +6225,11 @@
                     const safe = (v) => {
                         if (v === undefined || v === null || String(v).trim() === '-') return '';
                         let s = String(v);
-                        if (s.startsWith("'") && s.length > 1 && ['=', '+', '-', '@', '\t', '\r'].includes(s[1])) {
-                            s = s.slice(1);
+                        if (s.startsWith("'")) {
+                            let rem = s.slice(1).trimStart();
+                            if (rem && ['=', '+', '-', '@', '\t', '\r'].includes(rem[0])) {
+                                s = s.slice(1);
+                            }
                         }
                         return s.replace(/"/g, '&quot;');
                     };
@@ -6243,8 +6237,11 @@
                     const fmt = (val, fallback = '-') => {
                         if (val === undefined || val === null || String(val).trim() === '') return fallback;
                         let s = String(val).trim();
-                        if (s.startsWith("'") && s.length > 1 && ['=', '+', '-', '@', '\t', '\r'].includes(s[1])) {
-                            s = s.slice(1).trim();
+                        if (s.startsWith("'")) {
+                            let rem = s.slice(1).trimStart();
+                            if (rem && ['=', '+', '-', '@', '\t', '\r'].includes(rem[0])) {
+                                s = s.slice(1).trim();
+                            }
                         }
                         return s;
                     };
@@ -6252,8 +6249,11 @@
                     function renderDocField(name, currentVal, fallback = '', maxWidth = '280px', placeholder = '') {
                         const isTextarea = (schemaFieldTypes[name] === 'textarea') || (currentVal && String(currentVal).includes('\n'));
                         let val = (currentVal !== undefined && currentVal !== null && String(currentVal).trim() !== '-') ? String(currentVal) : fallback;
-                        if (val.startsWith("'") && val.length > 1 && ['=', '+', '-', '@', '\t', '\r'].includes(val[1])) {
-                            val = val.slice(1);
+                        if (val.startsWith("'")) {
+                            let rem = val.slice(1).trimStart();
+                            if (rem && ['=', '+', '-', '@', '\t', '\r'].includes(rem[0])) {
+                                val = val.slice(1);
+                            }
                         }
                         if (isTextarea) {
                             return `<textarea name="${name}" class="doc-inline-input doc-inline-textarea" placeholder="${placeholder}">${escapeHtml(val)}</textarea>`;
