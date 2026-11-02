@@ -3076,6 +3076,60 @@
             transform: scale(0.98);
         }
     }
+
+    /* ==========================================================================
+       BALINESE CULTURAL CORNER ORNAMENT (BOTTOM-LEFT CONTAINER WATERMARK)
+       ========================================================================== */
+    .form-workspace-card {
+        position: relative !important;
+        overflow: hidden !important;
+        isolation: isolate;
+    }
+
+    .form-workspace-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-workspace-card > .bali-corner-ornament {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 220px !important;
+        max-width: 26vw !important;
+        height: auto !important;
+        pointer-events: none !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        z-index: 0 !important;
+        opacity: 0.16 !important;
+        mix-blend-mode: multiply !important;
+        transition: opacity 0.3s ease !important;
+    }
+
+    @media (max-width: 992px) {
+        .form-workspace-card > .bali-corner-ornament {
+            width: 170px !important;
+            max-width: 30vw !important;
+            opacity: 0.14 !important;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .form-workspace-card > .bali-corner-ornament {
+            width: 130px !important;
+            max-width: 35vw !important;
+            opacity: 0.12 !important;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .form-workspace-card > .bali-corner-ornament {
+            width: 105px !important;
+            max-width: 38vw !important;
+            opacity: 0.10 !important;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -3264,6 +3318,12 @@
 
     <!-- MAIN FORM WORKSPACE CARD -->
     <div class="form-workspace-card form-main-card">
+        <!-- Balinese Cultural Corner Ornament (Bottom-Left Watermark) -->
+        <img src="{{ url_for('static', filename='img/bali-corner-ornament.webp') }}" 
+             alt="" 
+             class="bali-corner-ornament" 
+             aria-hidden="true" 
+             loading="lazy">
         <!-- Edit Mode Active Indicator Banner -->
         <div id="editModeBanner" class="edit-mode-alert">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">

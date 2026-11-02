@@ -4585,6 +4585,60 @@
             min-height: 44px;
         }
     }
+
+    /* ==========================================================================
+       BALINESE CULTURAL CORNER ORNAMENT (BOTTOM-LEFT CONTAINER WATERMARK)
+       ========================================================================== */
+    .gm-table-card {
+        position: relative !important;
+        overflow: hidden !important;
+        isolation: isolate;
+    }
+
+    .gm-table-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .gm-table-card > .bali-corner-ornament {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 220px !important;
+        max-width: 26vw !important;
+        height: auto !important;
+        pointer-events: none !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        z-index: 0 !important;
+        opacity: 0.16 !important;
+        mix-blend-mode: multiply !important;
+        transition: opacity 0.3s ease !important;
+    }
+
+    @media (max-width: 992px) {
+        .gm-table-card > .bali-corner-ornament {
+            width: 170px !important;
+            max-width: 30vw !important;
+            opacity: 0.14 !important;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .gm-table-card > .bali-corner-ornament {
+            width: 130px !important;
+            max-width: 35vw !important;
+            opacity: 0.12 !important;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .gm-table-card > .bali-corner-ornament {
+            width: 105px !important;
+            max-width: 38vw !important;
+            opacity: 0.10 !important;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -4712,6 +4766,12 @@
 
     <!-- MAIN TABLE CARD -->
     <div class="gm-table-card">
+        <!-- Balinese Cultural Corner Ornament (Bottom-Left Watermark) -->
+        <img src="{{ url_for('static', filename='img/bali-corner-ornament.webp') }}" 
+             alt="" 
+             class="bali-corner-ornament" 
+             aria-hidden="true" 
+             loading="lazy">
         <div class="gm-table-header">
             <div class="table-header-left">
                 <div class="table-header-icon-tile">
