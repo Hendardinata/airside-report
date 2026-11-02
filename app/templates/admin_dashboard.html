@@ -10062,22 +10062,10 @@ REGION II`;
                 </div>
 
                 <!-- Sticky Action Footer -->
-                <div class="vfb-sticky-footer">
-                    <div id="vfbStatusIndicator" class="vfb-footer-status">
-                        ${isSchemaDirty ? `
-                            <span class="vfb-dot-amber"></span>
-                            <span>Perubahan belum disimpan</span>
-                        ` : `
-                            <i class="fa-solid fa-circle-check text-success"></i>
-                            <span>Semua perubahan tersimpan</span>
-                        `}
-                    </div>
-                    <div class="vfb-footer-right">
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="button" class="vfb-btn-discard" onclick="discardSchemaChanges()">Batalkan Perubahan</button>
-                            <button type="button" class="vfb-btn-save" id="vfbBtnSave" onclick="saveSchema()">Simpan Perubahan</button>
-                        </div>
-                        <div class="vfb-footer-help">Setelah disimpan, formulir petugas dan susunan kolom spreadsheet akan diperbarui.</div>
+                <div class="vfb-sticky-footer" style="justify-content: flex-end;">
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="vfb-btn-discard" onclick="discardSchemaChanges()">Batalkan Perubahan</button>
+                        <button type="button" class="vfb-btn-save" id="vfbBtnSave" onclick="saveSchema()">Simpan Perubahan</button>
                     </div>
                 </div>
             </div>
