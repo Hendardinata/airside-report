@@ -128,6 +128,15 @@ def init_db():
         );
         """)
 
+        # 5. Tabel System Config (Penyimpanan Konfigurasi & Schema Anti-Reset Git)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS system_config (
+            config_key TEXT PRIMARY KEY,
+            config_value TEXT NOT NULL,
+            updated_at TEXT
+        );
+        """)
+
         # Indeks untuk query cepat
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_staging_airport_status ON staging_reports(airport_code, status);")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_staging_airport_tanggal ON staging_reports(airport_code, tanggal);")

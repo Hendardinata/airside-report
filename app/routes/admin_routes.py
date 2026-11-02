@@ -303,26 +303,22 @@ def api_list_sheets():
 
 @bp.route('/api/schema', methods=['GET'])
 def get_schema():
-    import os, json
-    schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
+    from app.models.config_store import load_schema
     try:
-        with open(schema_path, 'r') as f:
-            schema = json.load(f)
-            return jsonify({"success": True, "data": schema})
+        schema = load_schema()
+        return jsonify({"success": True, "data": schema})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
 @bp.route('/api/schema/update', methods=['POST'])
 def update_schema():
-    import os, json
+    from app.models.config_store import save_schema
     try:
         schema_data = request.json
         if not schema_data or 'steps' not in schema_data:
             return jsonify({"success": False, "error": "Invalid schema data"})
             
-        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
-        with open(schema_path, 'w') as f:
-            json.dump(schema_data, f, indent=2)
+        save_schema(schema_data)
             
         # SINKRONISASI OTOMATIS KE SELURUH GOOGLE SPREADSHEET
         from app.services.gsheets_service import sync_schema_to_all_sheets

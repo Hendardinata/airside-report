@@ -46,9 +46,8 @@ def dashboard():
     import os, json
     schema = {}
     try:
-        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
-        with open(schema_path, 'r') as f:
-            schema = json.load(f)
+        from app.models.config_store import load_schema
+        schema = load_schema()
     except Exception as e:
         print(f"Error loading schema in gm_routes: {e}")
 

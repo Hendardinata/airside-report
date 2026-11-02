@@ -785,9 +785,8 @@ def sync_sheets_to_rekap(sheet_url):
 def get_schema_field_names(schema=None):
     """Mengambil seluruh nama field (KODE_KOLOM) dari form_schema.json secara berurutan."""
     if schema is None:
-        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
-        with open(schema_path, 'r') as f:
-            schema = json.load(f)
+        from app.models.config_store import load_schema
+        schema = load_schema()
     names = []
     for step in schema.get('steps', []):
         for sec in step.get('sections', []):
@@ -807,9 +806,8 @@ def sync_schema_to_sheets(sheet_url, schema=None):
         return {"success": False, "error": "URL Spreadsheet kosong"}
         
     if schema is None:
-        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
-        with open(schema_path, 'r') as f:
-            schema = json.load(f)
+        from app.models.config_store import load_schema
+        schema = load_schema()
             
     client = get_client()
     spreadsheet = client.open_by_url(sheet_url)
@@ -968,9 +966,8 @@ def sync_sheets_to_schema(sheet_url):
     if not sheet_headers:
         raise Exception("Header baris 1 di DATABASE_REKAP kosong.")
         
-    schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
-    with open(schema_path, 'r') as f:
-        schema = json.load(f)
+    from app.models.config_store import load_schema, save_schema
+    schema = load_schema()
         
     # Kumpulkan seluruh field yang ada di schema saat ini
     existing_schema_fields = {} # name -> (step_idx, sec_idx, field_idx, field_dict)
@@ -1079,8 +1076,7 @@ def sync_sheets_to_schema(sheet_url):
         
     # Simpan ke form_schema.json jika ada penambahan / penghapusan
     if added_fields or removed_fields:
-        with open(schema_path, 'w') as f:
-            json.dump(schema, f, indent=2)
+        save_schema(schema)
             
     return {
         "success": True,

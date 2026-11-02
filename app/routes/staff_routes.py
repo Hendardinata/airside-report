@@ -256,9 +256,8 @@ def dashboard():
     
     schema = {}
     try:
-        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
-        with open(schema_path, 'r') as f:
-            schema = json.load(f)
+        from app.models.config_store import load_schema
+        schema = load_schema()
     except Exception as e:
         print(f"Error loading schema: {e}")
         
@@ -347,19 +346,18 @@ def submit():
     # Filter data agar hanya field yang sah di schema aktif yang diproses
     import os, json
     try:
-        schema_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'form_schema.json')
-        with open(schema_path, 'r') as f:
-            schema_data = json.load(f)
-            allowed = set()
-            for step in schema_data.get('steps', []):
-                for sec in step.get('sections', []):
-                    for f_item in sec.get('fields', []):
-                        allowed.add(f_item.get('name'))
-            filtered_data = {k: v for k, v in data.items() if k in allowed}
-            # Simpan juga tanggal jika terfilter
-            if 'TANGGAL' in data:
-                filtered_data['TANGGAL'] = data['TANGGAL']
-            data = filtered_data
+        from app.models.config_store import load_schema
+        schema_data = load_schema()
+        allowed = set()
+        for step in schema_data.get('steps', []):
+            for sec in step.get('sections', []):
+                for f_item in sec.get('fields', []):
+                    allowed.add(f_item.get('name'))
+        filtered_data = {k: v for k, v in data.items() if k in allowed}
+        # Simpan juga tanggal jika terfilter
+        if 'TANGGAL' in data:
+            filtered_data['TANGGAL'] = data['TANGGAL']
+        data = filtered_data
     except Exception as err:
         print("Warning filter submit data:", err)
     

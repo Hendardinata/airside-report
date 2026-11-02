@@ -1,7 +1,9 @@
 import json
 import os
+from datetime import datetime
 
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), '..', '..', 'app_config.json')
+SCHEMA_FILE = os.path.join(os.path.dirname(__file__), '..', 'form_schema.json')
 
 DEFAULT_CONFIG = {
     "active_month": "",
@@ -19,60 +21,158 @@ DEFAULT_CONFIG = {
 }
 
 def load_config():
-    if not os.path.exists(CONFIG_FILE):
-        save_config(DEFAULT_CONFIG)
-        return DEFAULT_CONFIG
-    with open(CONFIG_FILE, 'r') as f:
-        config = json.load(f)
-        # Migrasi config lama jika field baru belum ada
-        modified = False
-        if 'active_month' not in config:
-            config['active_month'] = ""
-            modified = True
+    """
+    Memuat konfigurasi aplikasi dari SQLite (prioritas utama yang kebal terhadap git pull/reset)
+    atau fallback ke app_config.json jika belum tersimpan di SQLite.
+    """
+    config = None
+    try:
+        from app.models.db import get_db
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT config_value FROM system_config WHERE config_key = 'app_config';")
+            row = cursor.fetchone()
+            if row and row['config_value']:
+                config = json.loads(row['config_value'])
+    except Exception:
+        config = None
 
-        if 'active_year' not in config:
-            config['active_year'] = config.get('active_month', '').split('-')[0] if config.get('active_month') else "2026"
-            modified = True
-
-        if 'active_month_label' not in config:
-            config['active_month_label'] = "Bulan NOV 2026"
-            modified = True
-
-        for code in config.get('airports', {}):
-            if 'sheet_name' not in config['airports'][code]:
-                config['airports'][code]['sheet_name'] = ""
-                modified = True
-            if 'active_month' not in config['airports'][code]:
-                config['airports'][code]['active_month'] = ""
-                modified = True
-            if 'pic_phone' not in config['airports'][code]:
-                config['airports'][code]['pic_phone'] = ""
-                modified = True
-            if 'gm_phone' not in config['airports'][code]:
-                config['airports'][code]['gm_phone'] = ""
-                modified = True
-            if 'dh_phone' not in config['airports'][code]:
-                config['airports'][code]['dh_phone'] = config['airports'][code].get('gm_phone', "")
-                modified = True
-        
-        if 'admin' not in config:
-            config['admin'] = {"master_sheet_url": "", "deputy_phone": "", "admin_phone": ""}
-            modified = True
+    if not config:
+        if os.path.exists(CONFIG_FILE):
+            try:
+                with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+            except Exception:
+                config = DEFAULT_CONFIG.copy()
         else:
-            if 'deputy_phone' not in config['admin']:
-                config['admin']['deputy_phone'] = ""
-                modified = True
-            if 'admin_phone' not in config['admin']:
-                config['admin']['admin_phone'] = ""
-                modified = True
-                
-        if modified:
-            save_config(config)
-        return config
+            config = DEFAULT_CONFIG.copy()
+
+    # Migrasi config lama jika field baru belum ada
+    modified = False
+    if 'active_month' not in config:
+        config['active_month'] = ""
+        modified = True
+
+    if 'active_year' not in config:
+        config['active_year'] = config.get('active_month', '').split('-')[0] if config.get('active_month') else "2026"
+        modified = True
+
+    if 'active_month_label' not in config:
+        config['active_month_label'] = "Bulan NOV 2026"
+        modified = True
+
+    for code in config.get('airports', {}):
+        if 'sheet_name' not in config['airports'][code]:
+            config['airports'][code]['sheet_name'] = ""
+            modified = True
+        if 'active_month' not in config['airports'][code]:
+            config['airports'][code]['active_month'] = ""
+            modified = True
+        if 'pic_phone' not in config['airports'][code]:
+            config['airports'][code]['pic_phone'] = ""
+            modified = True
+        if 'gm_phone' not in config['airports'][code]:
+            config['airports'][code]['gm_phone'] = ""
+            modified = True
+        if 'dh_phone' not in config['airports'][code]:
+            config['airports'][code]['dh_phone'] = config['airports'][code].get('gm_phone', "")
+            modified = True
+    
+    if 'admin' not in config:
+        config['admin'] = {"master_sheet_url": "", "deputy_phone": "", "admin_phone": ""}
+        modified = True
+    else:
+        if 'deputy_phone' not in config['admin']:
+            config['admin']['deputy_phone'] = ""
+            modified = True
+        if 'admin_phone' not in config['admin']:
+            config['admin']['admin_phone'] = ""
+            modified = True
+            
+    # Pastikan data tersimpan di SQLite
+    save_config(config)
+    return config
 
 def save_config(config_data):
-    with open(CONFIG_FILE, 'w') as f:
-        json.dump(config_data, f, indent=4)
+    """
+    Menyimpan konfigurasi secara permanen ke SQLite (tidak akan ter-reset oleh git pull)
+    serta menulis cadangan ke app_config.json.
+    """
+    now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # 1. Simpan permanen ke SQLite
+    try:
+        from app.models.db import get_db
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT OR REPLACE INTO system_config (config_key, config_value, updated_at)
+            VALUES (?, ?, ?);
+            """, ('app_config', json.dumps(config_data, indent=4), now_str))
+    except Exception as e:
+        print(f"Warning simpan konfigurasi ke SQLite: {e}")
+
+    # 2. Cadangan ke file JSON
+    try:
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(config_data, f, indent=4)
+    except Exception as e:
+        print(f"Warning simpan konfigurasi ke file: {e}")
+
+def load_schema():
+    """
+    Memuat kustomisasi schema form builder dari SQLite (kebal git pull/reset)
+    atau fallback ke app/form_schema.json.
+    """
+    schema = None
+    try:
+        from app.models.db import get_db
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT config_value FROM system_config WHERE config_key = 'form_schema';")
+            row = cursor.fetchone()
+            if row and row['config_value']:
+                schema = json.loads(row['config_value'])
+    except Exception:
+        schema = None
+
+    if not schema:
+        if os.path.exists(SCHEMA_FILE):
+            try:
+                with open(SCHEMA_FILE, 'r', encoding='utf-8') as f:
+                    schema = json.load(f)
+            except Exception:
+                schema = {}
+        else:
+            schema = {}
+
+        if schema:
+            save_schema(schema)
+
+    return schema
+
+def save_schema(schema_data):
+    """
+    Menyimpan schema form builder ke SQLite (permanen) dan cadangan ke app/form_schema.json.
+    """
+    now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    try:
+        from app.models.db import get_db
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT OR REPLACE INTO system_config (config_key, config_value, updated_at)
+            VALUES (?, ?, ?);
+            """, ('form_schema', json.dumps(schema_data, indent=2), now_str))
+    except Exception as e:
+        print(f"Warning simpan schema ke SQLite: {e}")
+
+    try:
+        with open(SCHEMA_FILE, 'w', encoding='utf-8') as f:
+            json.dump(schema_data, f, indent=2)
+    except Exception as e:
+        print(f"Warning simpan schema ke file: {e}")
 
 def get_airport_config(airport_code):
     config = load_config()
