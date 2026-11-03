@@ -1411,135 +1411,7 @@
     /* ==========================================================================
        5. CLEAN CORPORATE PAGE HEADER (ADMIN DASHBOARD)
        ========================================================================== */
-    .admin-hero-banner {
-        position: relative;
-        border-radius: 18px;
-        overflow: hidden;
-        background-color: #ffffff;
-        background-image: url("{{ url_for('static', filename='img/staff-hero-bg.webp') }}");
-        background-size: cover;
-        background-position: right center;
-        background-repeat: no-repeat;
-        min-height: 180px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 2.25rem 2.6rem;
-        border: 1px solid rgba(226, 232, 240, 0.95);
-        box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
-        box-sizing: border-box;
-        gap: 1.5rem;
-        margin-bottom: 1.4rem;
-    }
-
-    .admin-hero-banner::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: 
-            linear-gradient(180deg, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 0.5) 100%),
-            linear-gradient(90deg, 
-                #ffffff 0%, 
-                rgba(255, 255, 255, 0.98) 28%, 
-                rgba(255, 255, 255, 0.88) 45%, 
-                rgba(255, 255, 255, 0.35) 68%, 
-                rgba(255, 255, 255, 0) 86%);
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .hero-info-col {
-        position: relative;
-        z-index: 2;
-        max-width: 680px;
-    }
-
-    .hero-pill-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid #bfdbfe;
-        border-radius: 9999px;
-        padding: 0.28rem 0.85rem;
-        font-size: 0.725rem;
-        font-weight: 700;
-        color: #00B7CD;
-        letter-spacing: 0.45px;
-        text-transform: uppercase;
-        margin-bottom: 0.65rem;
-        box-shadow: 0 1px 4px rgba(0, 183, 205, 0.08);
-    }
-
-    .hero-dot-marker,
-    .hero-badge-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background-color: #00B7CD;
-    }
-
-    .hero-heading {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 2.1rem;
-        font-weight: 800;
-        color: var(--theme-navy);
-        letter-spacing: -0.5px;
-        margin: 0 0 0.45rem 0;
-        line-height: 1.2;
-    }
-
-    .hero-subtext {
-        font-size: 0.925rem;
-        color: var(--theme-slate-600);
-        line-height: 1.5;
-        margin: 0;
-    }
-
-    /* Hero Actions Cluster */
-    .hero-actions-cluster {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        gap: 0.65rem;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
-
-    .btn-hero-action {
-        background: #ffffff;
-        border: 1px solid var(--theme-border-strong);
-        color: var(--theme-slate-700);
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        font-size: 0.825rem;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
-        white-space: nowrap;
-    }
-
-    .btn-hero-action:hover {
-        background-color: #f8fafc;
-        border-color: #94a3b8;
-        color: var(--theme-navy);
-    }
-
-    .btn-hero-action.btn-primary-sync {
-        background: var(--theme-navy);
-        color: #ffffff;
-        border: 1px solid var(--theme-navy);
-    }
-
-    .btn-hero-action.btn-primary-sync:hover {
-        background: var(--theme-navy-dark);
-        border-color: var(--theme-navy-dark);
-    }
+    /* HERO BANNER CARD (Standardized via main.css: .injourney-hero-banner) */
 
     /* ==========================================================================
        6. KPI SUMMARY METRIC CARDS (CLEAN & BALANCED)
@@ -4743,48 +4615,7 @@
             border-radius: 14px !important;
         }
 
-        /* Hero Banner */
-        .admin-hero-banner {
-            padding: 1.25rem 1rem;
-            min-height: auto;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 1rem;
-            border-radius: 14px;
-            margin-bottom: 1rem;
-            background-position: center right;
-        }
-
-        .hero-info-col {
-            max-width: 100%;
-        }
-
-        .hero-heading {
-            font-size: 1.45rem;
-            line-height: 1.25;
-            margin-bottom: 0.35rem;
-        }
-
-        .hero-subtext {
-            font-size: 0.825rem;
-            line-height: 1.45;
-        }
-
-        .hero-actions-cluster {
-            width: 100%;
-            justify-content: stretch;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-        }
-
-        .btn-hero-action {
-            width: 100%;
-            justify-content: center;
-            padding: 0.55rem 0.75rem;
-            font-size: 0.78rem;
-            min-height: 40px;
-        }
+        /* Hero banner handled by main.css */
 
         /* KPI Metric Summary Cards */
         .kpi-grid {
@@ -5274,13 +5105,7 @@
     }
 
     @media (max-width: 480px) {
-        .hero-actions-cluster {
-            grid-template-columns: 1fr;
-        }
-
-        .hero-heading {
-            font-size: 1.3rem;
-        }
+        /* Hero banner handled by main.css */
 
         .users-kpi-grid {
             grid-template-columns: 1fr;
@@ -5980,7 +5805,7 @@
                  ================================================================== -->
             <section class="content-view-panel active-view" id="view-rekap">
                 <!-- HERO BANNER CARD (Aircraft on Runway Tarmac) -->
-                <div class="admin-hero-banner">
+                <div class="injourney-hero-banner admin-hero-banner">
                     <div class="hero-info-col">
                         <h1 class="hero-heading">Rekapitulasi Laporan Harian Airside</h1>
                         <p class="hero-subtext">

@@ -16,7 +16,7 @@
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/logo-kawung.png') }}?v=20261019">
 
     <!-- CSS with Cache Buster -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v=20260929_v4">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v=20261103_hero_v1">
     
     <!-- Navbar Essential & Bulletproof Mobile Styling -->
     <style>
@@ -1302,6 +1302,9 @@
             }
         };
     </script>
+
+    <!-- Global Dynamic Form Input Validator -->
+    <script src="{{ url_for('static', filename='js/input-validator.js') }}?v=1"></script>
 
     {% block scripts %}{% endblock %}
 

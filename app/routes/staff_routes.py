@@ -361,6 +361,16 @@ def submit():
     except Exception as err:
         print("Warning filter submit data:", err)
     
+    # --- Validasi Backend Dinamis Berdasarkan Tipe Data Pertanyaan Schema ---
+    try:
+        from app.services.validator_service import validate_form_data
+        is_valid, validation_err, cleaned_data = validate_form_data(data)
+        if not is_valid:
+            return jsonify({"status": "error", "message": f"DITOLAK: {validation_err}"})
+        data = cleaned_data
+    except Exception as val_err:
+        print("Warning validasi data submit:", val_err)
+    
     tgl_str = data.get('TANGGAL', '').strip()
     if not tgl_str:
         return jsonify({"status": "error", "message": "Tanggal laporan wajib diisi!"})

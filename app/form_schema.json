@@ -106,7 +106,7 @@
               "name": "RUNWAY_TITIK_RUSAK",
               "placeholder": "Contoh: 28",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -114,7 +114,7 @@
               "name": "RUNWAY_TITIK_DIPERBAIKI",
               "placeholder": "Contoh: 27",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -129,7 +129,7 @@
               "name": "RUNWAY_TITIK_BELUM",
               "placeholder": "Contoh: 1 atau 0",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -142,9 +142,9 @@
             {
               "label": "Jml titik rusak berulang > 1x",
               "name": "RUNWAY_TITIK_BERULANG",
-              "placeholder": "Contoh: 0 atau 1 titik (deflection TH 09)",
+              "placeholder": "Contoh: 0 atau 1",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -272,15 +272,15 @@
               "name": "TWY_TITIK_RUSAK",
               "placeholder": "Contoh: 12 atau 1",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
               "label": "Jml titik yang sudah diperbaiki",
               "name": "TWY_TITIK_DIPERBAIKI",
-              "placeholder": "Contoh: 12 atau -",
+              "placeholder": "Contoh: 12 atau 0",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -295,7 +295,7 @@
               "name": "TWY_TITIK_BELUM",
               "placeholder": "Contoh: 0",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -308,9 +308,9 @@
             {
               "label": "Jml titik rusak berulang > 1x",
               "name": "TWY_TITIK_BERULANG",
-              "placeholder": "Contoh: 0, -, atau 3 titik (rutting/deflection)",
+              "placeholder": "Contoh: 0 atau 3",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -403,7 +403,7 @@
               "name": "APN_TITIK_RUSAK",
               "placeholder": "Contoh: 26 atau 58",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -411,7 +411,7 @@
               "name": "APN_TITIK_DIPERBAIKI",
               "placeholder": "Contoh: 26 atau 32",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -426,7 +426,7 @@
               "name": "APN_TITIK_BELUM",
               "placeholder": "Contoh: 0 atau 26",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {
@@ -441,7 +441,7 @@
               "name": "APN_TITIK_BERULANG",
               "placeholder": "Contoh: 0",
               "required": true,
-              "type": "text",
+              "type": "number",
               "unit": "titik"
             },
             {

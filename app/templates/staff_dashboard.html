@@ -1682,172 +1682,8 @@
     }
 
     /* ==========================================================================
-       3. HERO BANNER CARD (Aircraft on Tarmac Runway)
+       3. HERO BANNER CARD (Standardized via main.css: .injourney-hero-banner)
        ========================================================================== */
-    .staff-hero-banner {
-        position: relative;
-        border-radius: 22px;
-        overflow: hidden;
-        background-color: #ffffff;
-        background-image: url("{{ url_for('static', filename='img/staff-hero-bg.webp') }}");
-        background-size: cover;
-        background-position: right 45%;
-        background-repeat: no-repeat;
-        min-height: 270px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 3rem 3.25rem;
-        border: 1px solid rgba(226, 232, 240, 0.9);
-        box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
-        box-sizing: border-box;
-    }
-
-    /* Smooth Gradient Light White Mist Overlay for pristine typography readability & seamless integration */
-    .staff-hero-banner::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-            linear-gradient(90deg,
-                #ffffff 0%,
-                #ffffff 22%,
-                rgba(255, 255, 255, 0.96) 32%,
-                rgba(255, 255, 255, 0.78) 44%,
-                rgba(255, 255, 255, 0.42) 58%,
-                rgba(0, 183, 205, 0.15) 70%,
-                rgba(0, 183, 205, 0.05) 80%,
-                rgba(255, 255, 255, 0) 90%);
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .hero-info-col {
-        position: relative;
-        z-index: 2;
-        max-width: 490px;
-    }
-
-    .hero-pill-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.45rem;
-        background: rgba(255, 255, 255, 0.88);
-        border: 1px solid #bfdbfe;
-        border-radius: 9999px;
-        padding: 0.28rem 0.85rem;
-        font-size: 0.725rem;
-        font-weight: 700;
-        color: #00B7CD;
-        letter-spacing: 0.45px;
-        text-transform: uppercase;
-        margin-bottom: 0.65rem;
-    }
-
-    .hero-dot-marker {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background-color: #00B7CD;
-    }
-
-    .hero-heading {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: var(--theme-navy);
-        letter-spacing: -0.65px;
-        margin: 0 0 0.4rem 0;
-        line-height: 1.2;
-    }
-
-    .hero-subtext {
-        font-size: 0.925rem;
-        color: var(--theme-slate-600);
-        line-height: 1.5;
-        margin: 0;
-    }
-
-    /* Floating Status Quick Card */
-    .hero-status-widget {
-        position: relative;
-        z-index: 2;
-        background: rgba(255, 255, 255, 0.96);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(226, 232, 240, 0.95);
-        border-radius: 18px;
-        padding: 1.15rem 1.75rem;
-        display: flex;
-        align-items: center;
-        gap: 1.65rem;
-        box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
-        flex-shrink: 0;
-    }
-
-    .status-col-item {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        min-width: 82px;
-    }
-
-    .status-col-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
-        margin-bottom: 0.55rem;
-    }
-
-    .status-col-icon.icon-plane {
-        background: #00B7CD;
-        color: #002b49;
-        box-shadow: 0 2px 6px rgba(0, 183, 205, 0.45);
-    }
-
-    .status-col-icon.icon-sheet {
-        background-color: #ecfdf5;
-        border: 1px solid #a7f3d0;
-        color: #16a34a;
-    }
-
-    .status-col-icon.icon-calendar {
-        background-color: #f0f9ff;
-        border: 1px solid #bae6fd;
-        color: #00B7CD;
-    }
-
-    .status-col-kicker {
-        font-size: 0.68rem;
-        font-weight: 700;
-        color: var(--theme-slate-500);
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin-bottom: 2px;
-        line-height: 1;
-    }
-
-    .status-col-value {
-        font-size: 1.12rem;
-        font-weight: 800;
-        color: var(--theme-navy);
-        line-height: 1.1;
-    }
-
-    .status-col-value.text-green {
-        color: #16a34a;
-    }
-
-    .status-col-separator {
-        width: 1px;
-        height: 48px;
-        background-color: #e2e8f0;
-        flex-shrink: 0;
-    }
 
     /* ==========================================================================
        4. STAGING STATUS BAR (Menunggu Review DH)
@@ -2441,19 +2277,7 @@
 
     /* Responsive Adjustments */
     @media (max-width: 992px) {
-        .staff-hero-banner {
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: flex-start;
-            padding: 2.25rem 2rem;
-            min-height: 300px;
-            background-position: right 45%;
-        }
-
-        .hero-status-widget {
-            width: 100%;
-            justify-content: space-around;
-        }
+        /* Hero banner handled by main.css */
 
         .stepper-nav-container {
             overflow-x: auto;
@@ -2928,60 +2752,7 @@
             max-width: calc(100vw - 1.5rem) !important;
         }
 
-        /* 2. HERO BANNER ON MOBILE (Compact Centered Architecture) */
-        .staff-hero-banner {
-            padding: 1.35rem 1.15rem;
-            border-radius: 16px;
-            margin-bottom: 0.85rem;
-            min-height: 145px;
-            background-position: center 40%;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .staff-hero-banner::before {
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.96) 0%, 
-                rgba(255, 255, 255, 0.90) 50%, 
-                rgba(255, 255, 255, 0.82) 80%, 
-                rgba(0, 183, 205, 0.22) 100%) !important;
-        }
-
-        .hero-info-col {
-            width: 100% !important;
-            max-width: 100% !important;
-            margin: 0 auto !important;
-            text-align: center !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
-
-        .hero-heading {
-            font-size: 1.25rem;
-            font-weight: 800;
-            line-height: 1.25;
-            letter-spacing: -0.3px;
-            margin: 0 0 0.35rem 0;
-            color: #002b49;
-            text-align: center !important;
-            width: 100%;
-        }
-
-        .hero-subtext {
-            font-size: 0.82rem;
-            line-height: 1.45;
-            color: #334155;
-            text-align: center !important;
-            max-width: 92%;
-            margin: 0 auto;
-        }
-
+        /* Hero banner handled by main.css */
         /* 3. STEPPER ON MOBILE */
         .stepper-nav-container {
             display: flex !important;
@@ -3464,7 +3235,7 @@
 <div class="staff-layout-canvas">
 
     <!-- HERO BANNER CARD (Runway Tarmac Airliner Photo) -->
-    <div class="staff-hero-banner">
+    <div class="injourney-hero-banner staff-hero-banner">
         <div class="hero-info-col">
             <h1 class="hero-heading">Input Laporan Harian Airside</h1>
             <p class="hero-subtext">
@@ -3640,8 +3411,58 @@
                     </div>
                 </div>
 
+                {% elif field.type == 'number' %}
+                <!-- Input Khusus Angka (Number / Jumlah - Validasi 0-9 Ketat) -->
+                <div class="report-table-row">
+                    <div class="report-label-cell">
+                        <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span
+                                class="text-danger">*</span>{% endif %}</label>
+                    </div>
+                    <div class="report-colon-cell">:</div>
+                    <div class="report-input-cell">
+                        {% if field.unit %}
+                        <div class="d-inline-flex align-items-center gap-2">
+                            <input type="number"
+                                class="report-clean-input input-compact field-number-input"
+                                name="{{ field.name }}"
+                                id="input-{{ field.name }}"
+                                value=""
+                                placeholder="{{ field.placeholder | default('') }}"
+                                {% if field.required %}required{% endif %}
+                                data-type="number"
+                                data-allow-decimal="{{ 'true' if field.allow_decimal else 'false' }}"
+                                data-allow-negative="{{ 'true' if field.allow_negative else 'false' }}"
+                                inputmode="{{ 'decimal' if field.allow_decimal else 'numeric' }}"
+                                pattern="{{ '^-?\\d*([.,]\\d+)?$' if field.allow_decimal else ('^-?\\d+$' if field.allow_negative else '[0-9]*') }}"
+                                {% if field.allow_decimal %}step="any"{% else %}step="1"{% endif %}
+                                {% if not field.allow_negative %}min="{{ field.min if (field.min is defined and field.min is not none and field.min != '') else '0' }}"{% elif (field.min is defined and field.min is not none and field.min != '') %}min="{{ field.min }}"{% endif %}
+                                {% if field.max is defined and field.max is not none and field.max != '' %}max="{{ field.max }}"{% endif %}
+                                autocomplete="off">
+                            <span class="report-unit-suffix">{{ field.unit }}</span>
+                        </div>
+                        {% else %}
+                        <input type="number"
+                            class="report-clean-input field-number-input"
+                            name="{{ field.name }}"
+                            id="input-{{ field.name }}"
+                            value=""
+                            placeholder="{{ field.placeholder | default('') }}"
+                            {% if field.required %}required{% endif %}
+                            data-type="number"
+                            data-allow-decimal="{{ 'true' if field.allow_decimal else 'false' }}"
+                            data-allow-negative="{{ 'true' if field.allow_negative else 'false' }}"
+                            inputmode="{{ 'decimal' if field.allow_decimal else 'numeric' }}"
+                            pattern="{{ '^-?\\d*([.,]\\d+)?$' if field.allow_decimal else ('^-?\\d+$' if field.allow_negative else '[0-9]*') }}"
+                            {% if field.allow_decimal %}step="any"{% else %}step="1"{% endif %}
+                            {% if not field.allow_negative %}min="{{ field.min if (field.min is defined and field.min is not none and field.min != '') else '0' }}"{% elif (field.min is defined and field.min is not none and field.min != '') %}min="{{ field.min }}"{% endif %}
+                            {% if field.max is defined and field.max is not none and field.max != '' %}max="{{ field.max }}"{% endif %}
+                            autocomplete="off">
+                        {% endif %}
+                    </div>
+                </div>
+
                 {% elif field.unit %}
-                <!-- Input dengan Satuan/Unit -->
+                <!-- Input Teks dengan Satuan/Unit -->
                 <div class="report-table-row">
                     <div class="report-label-cell">
                         <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span
@@ -3650,7 +3471,7 @@
                     <div class="report-colon-cell">:</div>
                     <div class="report-input-cell">
                         <div class="d-inline-flex align-items-center gap-2">
-                            <input type="text" class="report-clean-input input-compact" name="{{ field.name }}"
+                            <input type="{{ field.type | default('text') }}" class="report-clean-input input-compact" name="{{ field.name }}"
                                 id="input-{{ field.name }}" value="" placeholder="{{ field.placeholder | default('') }}"
                                 {% if field.required %}required{% endif %}>
                             <span class="report-unit-suffix">{{ field.unit }}</span>
@@ -3674,7 +3495,7 @@
                 </div>
 
                 {% else %}
-                <!-- Standard Input Field (Text / Number / dsb.) -->
+                <!-- Standard Input Field (Text / Short Answer) -->
                 <div class="report-table-row">
                     <div class="report-label-cell">
                         <label for="input-{{ field.name }}">{{ field.label }}{% if field.required %} <span
@@ -3799,7 +3620,10 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
-<script src="{{ url_for('static', filename='js/wizard.js') }}?v=9"></script>
+<script>
+    window.ACTIVE_SCHEMA = {{ schema | tojson | safe if schema else '{}' }};
+</script>
+<script src="{{ url_for('static', filename='js/wizard.js') }}?v=10"></script>
 <script>
     // Cek apakah halaman sedang dimuat ulang setelah pengiriman laporan
     (function () {
