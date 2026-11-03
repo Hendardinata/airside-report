@@ -316,8 +316,34 @@ def update_schema():
     try:
         schema_data = request.json
         if not schema_data or 'steps' not in schema_data:
-            return jsonify({"success": False, "error": "Invalid schema data"})
+            return jsonify({"success": False, "error": "Format data schema tidak valid"})
             
+        steps = schema_data.get('steps', [])
+        if not isinstance(steps, list) or len(steps) == 0:
+            return jsonify({"success": False, "error": "Formulir harus memiliki minimal 1 bagian (step)"})
+
+        # Validasi struktur data setiap step dan field untuk mencegah inkonsistensi
+        seen_col_names = set()
+        for idx, step in enumerate(steps):
+            if not step.get('title') or not str(step['title']).strip():
+                return jsonify({"success": False, "error": f"Bagian ke-{idx + 1} belum memiliki nama/judul bagian"})
+            
+            sections = step.get('sections', [])
+            for sec in sections:
+                fields = sec.get('fields', [])
+                for f in fields:
+                    field_label = str(f.get('label', '')).strip()
+                    if not field_label:
+                        return jsonify({"success": False, "error": f"Terdapat pertanyaan pada '{step.get('title')}' yang belum memiliki nama pertanyaan"})
+                    
+                    col_name = str(f.get('name', '')).strip().upper()
+                    if not col_name:
+                        return jsonify({"success": False, "error": f"Pertanyaan '{field_label}' belum memiliki kode kolom spreadsheet"})
+                    
+                    if col_name in seen_col_names:
+                        return jsonify({"success": False, "error": f"Ditemukan kode kolom duplikat '{col_name}'. Setiap pertanyaan harus memiliki kode kolom unik agar data tidak tumpang tindih."})
+                    seen_col_names.add(col_name)
+
         save_schema(schema_data)
             
         # SINKRONISASI OTOMATIS KE SELURUH GOOGLE SPREADSHEET

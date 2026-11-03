@@ -4268,16 +4268,43 @@
         gap: 0.25rem;
     }
 
+    /* Header layout for Visual Form Builder - Matching Manajemen Pengguna */
+    #view-schema .config-view-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: nowrap;
+        margin-bottom: 1.5rem;
+    }
+
+    #view-schema .config-view-header > div:first-child {
+        flex: 1;
+        min-width: 0;
+    }
+
+    #view-schema #vfbHeaderActions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
     .vfb-btn-discard {
-        padding: 0.55rem 1.25rem;
+        height: 38px;
+        padding: 0 1.25rem;
         background: #ffffff;
         border: 1.5px solid var(--theme-border-strong, #cbd5e1);
         border-radius: 10px;
         color: var(--theme-navy, #002b49);
         font-weight: 700;
-        font-size: 0.875rem;
+        font-size: 0.84rem;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
         transition: all 0.2s ease;
+        white-space: nowrap;
     }
 
     .vfb-btn-discard:hover {
@@ -4286,20 +4313,26 @@
     }
 
     .vfb-btn-save {
-        padding: 0.55rem 1.5rem;
-        background: var(--theme-blue, #00B7CD);
+        height: 38px;
+        padding: 0 1.25rem;
+        background: var(--theme-btn-gradient, #00B7CD);
         border: none;
         border-radius: 10px;
         color: #ffffff;
         font-weight: 700;
-        font-size: 0.875rem;
+        font-size: 0.84rem;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
         box-shadow: 0 2px 8px rgba(0, 183, 205, 0.25);
         transition: all 0.2s ease;
+        white-space: nowrap;
     }
 
     .vfb-btn-save:hover {
-        background: var(--theme-blue-hover, #009cb0);
+        background: var(--theme-btn-gradient-hover, #009cb0);
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.38);
         transform: translateY(-1px);
     }
 
@@ -4307,6 +4340,97 @@
         font-size: 0.75rem;
         color: var(--theme-slate-500, #64748b);
         text-align: right;
+    }
+
+    /* Edit Mode and View Mode Controls & Enhancements */
+    .vfb-btn-edit {
+        height: 38px;
+        padding: 0 1.25rem;
+        background: var(--theme-btn-gradient, #00B7CD);
+        border: none;
+        border-radius: 10px;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.84rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        box-shadow: 0 2px 8px rgba(0, 183, 205, 0.25);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        white-space: nowrap;
+    }
+
+    .vfb-btn-edit:hover {
+        background: var(--theme-btn-gradient-hover, #009cb0);
+        box-shadow: 0 4px 14px rgba(0, 183, 205, 0.38);
+        transform: translateY(-1px);
+    }
+
+    .vfb-mode-badge {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.25rem 0.7rem;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        vertical-align: middle;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+        transition: all 0.2s ease;
+    }
+
+    .vfb-mode-badge-view {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #cbd5e1;
+    }
+
+    .vfb-mode-badge-edit {
+        background: #ecfeff;
+        color: #0891b2;
+        border: 1px solid #a5f3fc;
+        box-shadow: 0 0 0 3px rgba(0, 183, 205, 0.12);
+    }
+
+    .vfb-required-tag {
+        display: inline-block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #b91c1c;
+        background: #fee2e2;
+        padding: 0.12rem 0.45rem;
+        border-radius: 4px;
+        margin-left: 0.35rem;
+        vertical-align: middle;
+    }
+
+    .vfb-opt-count-pill {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #0284c7;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        padding: 0.25rem 0.65rem;
+        border-radius: 20px;
+    }
+
+    .vfb-container.is-view-mode .vfb-q-card {
+        cursor: default;
+    }
+
+    .vfb-container.is-view-mode .vfb-step-item {
+        cursor: pointer;
+    }
+
+    .vfb-container.is-edit-mode .vfb-q-card:not(.is-editing) {
+        cursor: grab;
+    }
+
+    .vfb-container.is-edit-mode .vfb-q-card:active:not(.is-editing) {
+        cursor: grabbing;
     }
 
     /* Modal Overlay (Clean & High-Contrast) */
@@ -6415,15 +6539,29 @@
             <section class="content-view-panel" id="view-schema">
                 <div class="config-view-header">
                     <div>
-                        <h2 class="console-title mb-1">Visual Form Builder</h2>
-                        <p class="console-subtitle">Desain struktur form laporan dengan mudah. Perubahan akan langsung disinkronkan ke aplikasi petugas dan Google Sheets.</p>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h2 class="console-title mb-0">Visual Form Builder</h2>
+                            <span id="vfbModeBadge" class="vfb-mode-badge vfb-mode-badge-view">
+                                <i class="fa-solid fa-eye me-1"></i> Mode Tinjauan (Read-only)
+                            </span>
+                        </div>
+                        <p class="console-subtitle mb-0">Desain struktur form laporan dengan mudah. Perubahan akan langsung disinkronkan ke aplikasi petugas dan Google Sheets.</p>
                     </div>
-                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                    <div class="d-flex gap-2" id="vfbHeaderActions">
                         <button type="button" class="btn-outline-action" onclick="syncFromSheet()" title="Tarik perubahan kolom/baris dari Google Sheets">
                             <i class="fa-solid fa-arrows-rotate me-1 text-primary"></i> Tarik dari Spreadsheet
                         </button>
-                        <button type="button" class="vfb-btn-discard" onclick="discardSchemaChanges()">Batalkan Perubahan</button>
-                        <button type="button" class="vfb-btn-save" id="vfbBtnSave" onclick="saveSchema()">Simpan Perubahan</button>
+                        <!-- View Mode Main Button -->
+                        <button type="button" class="vfb-btn-edit" id="vfbBtnEditMode" onclick="enableEditMode()" title="Aktifkan Mode Edit untuk mulai mengubah formulir">
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit Form
+                        </button>
+                        <!-- Edit Mode Action Buttons (Hidden by default in View Mode) -->
+                        <button type="button" class="vfb-btn-discard" id="vfbBtnDiscard" onclick="discardSchemaChanges()" style="display: none;" title="Batalkan seluruh perubahan yang belum disimpan">
+                            Batalkan Perubahan
+                        </button>
+                        <button type="button" class="vfb-btn-save" id="vfbBtnSave" onclick="saveSchema()" style="display: none;" title="Simpan seluruh perubahan ke sistem dan spreadsheet">
+                            Simpan Perubahan
+                        </button>
                     </div>
                 </div>
 
@@ -6852,6 +6990,33 @@
 <script>
     // --- SIDEBAR & VIEW MANAGEMENT ---
     function switchAdminView(viewId) {
+        const currentActivePanel = document.querySelector('.content-view-panel.active-view');
+        if (currentActivePanel && currentActivePanel.id === 'view-schema' && typeof isEditMode !== 'undefined' && isEditMode && typeof isSchemaDirty !== 'undefined' && isSchemaDirty && viewId !== 'schema') {
+            Swal.fire({
+                title: 'Perubahan Belum Disimpan!',
+                text: 'Anda sedang berada dalam Mode Edit dan terdapat perubahan formulir yang belum disimpan. Yakin ingin meninggalkan halaman ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Tinggalkan Tanpa Menyimpan',
+                cancelButtonText: 'Tetap di Form Builder',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    if (typeof initialSchema !== 'undefined' && initialSchema) {
+                        currentSchema = JSON.parse(JSON.stringify(initialSchema));
+                    }
+                    if (typeof isSchemaDirty !== 'undefined') isSchemaDirty = false;
+                    if (typeof isEditMode !== 'undefined') isEditMode = false;
+                    performSwitchAdminView(viewId);
+                }
+            });
+            return;
+        }
+        performSwitchAdminView(viewId);
+    }
+
+    function performSwitchAdminView(viewId) {
         // Hide all views
         document.querySelectorAll('.content-view-panel').forEach(panel => {
             panel.classList.remove('active-view');
@@ -6890,6 +7055,13 @@
         // Scroll to top smoothly
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    window.addEventListener('beforeunload', function (e) {
+        if (typeof isEditMode !== 'undefined' && isEditMode && typeof isSchemaDirty !== 'undefined' && isSchemaDirty) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
 
     // --- GLOBAL FLEET DATA & CACHE ---
     const FULL_CONFIG = (function() {
@@ -9572,7 +9744,7 @@ REGION II`;
         });
     }
 
-    // --- VISUAL FORM BUILDER LOGIC (MODERN 2-COLUMN UX) ---
+    // --- VISUAL FORM BUILDER LOGIC (MODERN 2-COLUMN UX WITH EDIT MODE) ---
     let currentSchema = { steps: [] };
     let initialSchema = null;
     let activeStepIdx = 0;
@@ -9580,6 +9752,8 @@ REGION II`;
     let advancedOpenKeys = {};
     let expandedSections = {};
     let isSchemaDirty = false;
+    let isEditMode = false; // Default: View Mode (read-only)
+    let vfbSortableInstances = [];
 
     function openSchemaModal() {
         switchAdminView('schema');
@@ -9610,14 +9784,61 @@ REGION II`;
         if (!statusEl) return;
         if (isSchemaDirty) {
             statusEl.innerHTML = `
-                <span class="vfb-dot-amber"></span>
-                <span>Perubahan belum disimpan</span>
+                <span class="vfb-dot-amber me-1"></span>
+                <span style="font-size:0.8rem; font-weight:700; color:#b45309;">Ada perubahan belum disimpan</span>
             `;
         } else {
             statusEl.innerHTML = `
-                <i class="fa-solid fa-circle-check text-success"></i>
-                <span>Semua perubahan tersimpan</span>
+                <span style="font-size:0.8rem; font-weight:600; color:#16a34a;"><i class="fa-solid fa-check me-1"></i>Belum ada perubahan</span>
             `;
+        }
+    }
+
+    function updateHeaderButtons() {
+        const btnEdit = document.getElementById('vfbBtnEditMode');
+        const btnDiscard = document.getElementById('vfbBtnDiscard');
+        const btnSave = document.getElementById('vfbBtnSave');
+        const badge = document.getElementById('vfbModeBadge');
+
+        if (isEditMode) {
+            if (btnEdit) btnEdit.style.display = 'none';
+            if (btnDiscard) btnDiscard.style.display = 'inline-flex';
+            if (btnSave) btnSave.style.display = 'inline-flex';
+            if (badge) {
+                badge.className = 'vfb-mode-badge vfb-mode-badge-edit';
+                badge.innerHTML = '<i class="fa-solid fa-pen-to-square me-1"></i> Mode Edit Aktif';
+            }
+        } else {
+            if (btnEdit) btnEdit.style.display = 'inline-flex';
+            if (btnDiscard) btnDiscard.style.display = 'none';
+            if (btnSave) btnSave.style.display = 'none';
+            if (badge) {
+                badge.className = 'vfb-mode-badge vfb-mode-badge-view';
+                badge.innerHTML = '<i class="fa-solid fa-eye me-1"></i> Mode Tinjauan (Read-only)';
+            }
+        }
+    }
+
+    function enableEditMode() {
+        isEditMode = true;
+        if (!initialSchema) {
+            initialSchema = JSON.parse(JSON.stringify(currentSchema));
+        }
+        editingFieldKey = null;
+        renderVisualBuilder();
+
+        if (typeof Swal !== 'undefined' && Swal.mixin) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+            Toast.fire({
+                icon: 'info',
+                title: 'Mode Edit Aktif'
+            });
         }
     }
 
@@ -9637,6 +9858,7 @@ REGION II`;
                     advancedOpenKeys = {};
                     expandedSections = {};
                     isSchemaDirty = false;
+                    isEditMode = false; // Selalu mulai dari View Mode (read-only)
                     renderVisualBuilder();
                 } else {
                     Swal.fire('Error', 'Gagal memuat schema: ' + data.error, 'error');
@@ -9648,6 +9870,8 @@ REGION II`;
     }
 
     function renderVisualBuilder() {
+        updateHeaderButtons();
+
         const container = document.getElementById('visualBuilderContainer');
         if (!container) return;
 
@@ -9656,10 +9880,16 @@ REGION II`;
                 <div class="hub-card text-center p-5">
                     <i class="fa-solid fa-folder-open text-muted mb-3" style="font-size: 2.5rem;"></i>
                     <h4 class="text-navy font-weight-bold mb-2">Belum Ada Struktur Formulir</h4>
-                    <p class="text-muted mb-4">Mulai bangun formulir laporan dengan menambahkan bagian pertama.</p>
+                    <p class="text-muted mb-4">${isEditMode ? 'Mulai bangun formulir laporan dengan menambahkan bagian pertama.' : 'Belum ada bagian formulir yang tersimpan. Aktifkan Mode Edit untuk membuat bagian baru.'}</p>
+                    ${isEditMode ? `
                     <button type="button" class="btn-primary-action px-4 py-2" onclick="addStep()">
                         <i class="fa-solid fa-plus me-1"></i> Buat Bagian Baru
                     </button>
+                    ` : `
+                    <button type="button" class="vfb-btn-edit px-4 py-2" onclick="enableEditMode()">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit Form
+                    </button>
+                    `}
                 </div>
             `;
             return;
@@ -9707,7 +9937,7 @@ REGION II`;
             const fieldCount = sec.fields ? sec.fields.length : 0;
 
             if (isSubSection && !isExpanded) {
-                // Collapsed Sub-section Card (Matches mockup: 👥 Penerima Laporan, 4 pertanyaan, Tampilkan v)
+                // Collapsed Sub-section Card
                 contentSectionsHtml += `
                     <div class="vfb-subsec-card" onclick="toggleSectionCard(${activeStepIdx}, ${secIdx})">
                         <div class="d-flex align-items-center gap-3">
@@ -9737,7 +9967,7 @@ REGION II`;
                                 <span class="badge bg-light text-muted border ms-1" style="font-size: 0.72rem;">${fieldCount} pertanyaan</span>
                             </div>
                             <div class="d-flex align-items-center gap-2">
-                                ${!sec.badge ? `
+                                ${isEditMode && !sec.badge ? `
                                 <button type="button" class="btn text-danger btn-sm p-0 me-2" onclick="deleteSection(${secIdx})" title="Hapus Sub-bab ini">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>` : ''}
@@ -9763,18 +9993,18 @@ REGION II`;
                 if (!sec.fields || sec.fields.length === 0) {
                     fieldsHtml = `
                         <div class="p-3 text-center text-muted bg-light rounded-12 mb-2" style="font-size: 0.85rem; border: 1px dashed #cbd5e1;">
-                            Belum ada pertanyaan pada ${escapeHtml(sec.title || 'bagian ini')}. Klik tombol di bawah untuk menambahkan.
+                            ${isEditMode ? 'Belum ada pertanyaan pada ' + escapeHtml(sec.title || 'bagian ini') + '. Klik tombol di bawah untuk menambahkan.' : 'Belum ada pertanyaan pada ' + escapeHtml(sec.title || 'bagian ini') + '.'}
                         </div>
                     `;
                 } else {
                     sec.fields.forEach((field, fIdx) => {
                         const fieldKey = `${secIdx}_${fIdx}`;
-                        const isEditing = editingFieldKey === fieldKey;
+                        const isEditing = isEditMode && (editingFieldKey === fieldKey);
                         const qNumber = fIdx + 1;
                         const typeLabel = getTypeLabel(field.type);
 
                         if (isEditing) {
-                            // --- EXPANDED CARD (SEDANG DIUBAH) ---
+                            // --- EXPANDED CARD (HANYA DALAM EDIT MODE) ---
                             let choicesHtml = '';
                             if (field.type === 'select') {
                                 const optionsList = field.options || [];
@@ -9909,24 +10139,40 @@ REGION II`;
                                 </div>
                             `;
                         } else {
-                            // --- COLLAPSED CARD ---
+                            // --- COLLAPSED CARD (VIEW & EDIT UNEXPANDED) ---
                             fieldsHtml += `
                                 <div class="vfb-q-card" data-sec-idx="${secIdx}" data-field-idx="${fIdx}">
                                     <div class="d-flex align-items-center gap-2">
+                                        ${isEditMode ? `
                                         <div class="vfb-drag-handle" title="Tahan dan geser untuk memindahkan urutan pertanyaan">
                                             <i class="fa-solid fa-grip-vertical"></i>
                                         </div>
+                                        ` : ''}
                                         <div class="vfb-q-num">${qNumber}</div>
                                         <div class="ms-1">
-                                            <div class="vfb-q-label">${escapeHtml(field.label || 'Pertanyaan Tanpa Judul')}</div>
+                                            <div class="vfb-q-label">
+                                                ${escapeHtml(field.label || 'Pertanyaan Tanpa Judul')}
+                                                ${field.required ? '<span class="vfb-required-tag">Wajib</span>' : ''}
+                                            </div>
                                             <div class="vfb-q-type">${typeLabel}</div>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center gap-2">
+                                        ${isEditMode ? `
                                         <button type="button" class="vfb-btn-ubah" onclick="toggleEditField(${secIdx}, ${fIdx})">
                                             <span>Ubah</span>
                                             <i class="fa-solid fa-chevron-down" style="font-size: 0.72rem;"></i>
                                         </button>
+                                        ` : `
+                                        ${field.type === 'select' && field.options && field.options.length > 0 ? `
+                                            <span class="vfb-opt-count-pill" title="${escapeHtml(field.options.join(', '))}">
+                                                <i class="fa-solid fa-list-check me-1"></i>${field.options.length} Pilihan
+                                            </span>
+                                        ` : ''}
+                                        ${field.unit ? `
+                                            <span class="badge bg-light text-muted border" style="font-size:0.75rem;">${escapeHtml(field.unit)}</span>
+                                        ` : ''}
+                                        `}
                                     </div>
                                 </div>
                             `;
@@ -9940,37 +10186,43 @@ REGION II`;
                         <div class="vfb-fields-list" data-sec-idx="${secIdx}" id="fieldsList-${secIdx}">
                             ${fieldsHtml}
                         </div>
+                        ${isEditMode ? `
                         <button type="button" class="vfb-btn-add-q" onclick="addFieldToSection(${secIdx})">
                             <i class="fa-solid fa-plus"></i> Tambah Pertanyaan
                         </button>
+                        ` : ''}
                     </div>
                 `;
             }
         });
 
-        // Add section button at the bottom of right pane if they want to group questions
-        contentSectionsHtml += `
-            <div class="mt-4 pt-2 text-center">
-                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addSectionToCurrentStep()" style="border-radius: 8px; font-weight: 600; font-size: 0.8rem;">
-                    <i class="fa-solid fa-folder-plus me-1"></i> Tambah Sub-bab (Section) Baru
-                </button>
-            </div>
-        `;
+        // Add section button at the bottom of right pane in Edit Mode
+        if (isEditMode) {
+            contentSectionsHtml += `
+                <div class="mt-4 pt-2 text-center">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addSectionToCurrentStep()" style="border-radius: 8px; font-weight: 600; font-size: 0.8rem;">
+                        <i class="fa-solid fa-folder-plus me-1"></i> Tambah Sub-bab (Section) Baru
+                    </button>
+                </div>
+            `;
+        }
 
-        // --- ASSEMBLE 2-COLUMN WORKSPACE AND STICKY FOOTER ---
+        // --- ASSEMBLE 2-COLUMN WORKSPACE ---
         container.innerHTML = `
-            <div class="vfb-container">
+            <div class="vfb-container ${isEditMode ? 'is-edit-mode' : 'is-view-mode'}">
                 <div class="vfb-layout">
                     <!-- Left: Bagian Formulir -->
                     <div class="vfb-steps-panel">
                         <div class="vfb-panel-title">Bagian Formulir</div>
-                        <div class="vfb-panel-subtitle">Pilih bagian yang ingin diubah.</div>
+                        <div class="vfb-panel-subtitle">${isEditMode ? 'Pilih bagian yang ingin diubah.' : 'Pilih bagian untuk melihat daftar pertanyaan.'}</div>
                         <div class="vfb-steps-list">
                             ${stepsHtml}
                         </div>
+                        ${isEditMode ? `
                         <button type="button" class="vfb-btn-add-step" onclick="addStep()">
                             <i class="fa-solid fa-plus"></i> Tambah Bagian
                         </button>
+                        ` : ''}
                     </div>
 
                     <!-- Right: Pertanyaan pada bagian ini -->
@@ -9980,6 +10232,7 @@ REGION II`;
                                 <h3 class="vfb-step-header-title">${escapeHtml(activeStep.title || 'Informasi Umum')}</h3>
                                 <div class="vfb-step-header-subtitle">Pertanyaan pada bagian ini.</div>
                             </div>
+                            ${isEditMode ? `
                             <div class="d-flex align-items-center">
                                 <button type="button" class="vfb-btn-rename-step" onclick="editCurrentStepName()">
                                     <i class="fa-solid fa-pencil"></i> Ubah Nama Bagian
@@ -9990,13 +10243,12 @@ REGION II`;
                                     </button>
                                 ` : ''}
                             </div>
+                            ` : ''}
                         </div>
 
                         ${contentSectionsHtml}
                     </div>
                 </div>
-
-
             </div>
         `;
 
@@ -10008,7 +10260,23 @@ REGION II`;
     // ==============================================================================
     // DRAG AND DROP REORDERING (SORTABLE) FOR FORM BUILDER
     // ==============================================================================
+    function destroyFormBuilderSortable() {
+        if (vfbSortableInstances && vfbSortableInstances.length > 0) {
+            vfbSortableInstances.forEach(inst => {
+                try { inst.destroy(); } catch (e) {}
+            });
+            vfbSortableInstances = [];
+        }
+    }
+
     function initFormBuilderSortable() {
+        destroyFormBuilderSortable();
+
+        if (!isEditMode) {
+            // SANGAT PENTING: Drag and Drop dinonaktifkan total saat View Mode (read-only)
+            return;
+        }
+
         if (typeof Sortable === 'undefined') {
             console.warn('SortableJS library belum termuat');
             return;
@@ -10017,7 +10285,7 @@ REGION II`;
         // 1. Sortable untuk Pertanyaan (Cards) pada setiap Sub-bab (Section)
         const questionLists = document.querySelectorAll('.vfb-fields-list');
         questionLists.forEach(listEl => {
-            new Sortable(listEl, {
+            const inst = new Sortable(listEl, {
                 group: 'vfb-questions-group',
                 animation: 200,
                 ghostClass: 'vfb-sortable-ghost',
@@ -10041,7 +10309,6 @@ REGION II`;
                         return;
                     }
 
-                    // Lacak objek field yang sedang aktif diubah jika ada
                     let editingFieldObj = null;
                     if (editingFieldKey) {
                         const parts = editingFieldKey.split('_');
@@ -10052,12 +10319,10 @@ REGION II`;
                         }
                     }
 
-                    // Pindahkan posisi field di dalam data model schema
                     const movedField = step.sections[fromSecIdx].fields.splice(oldIdx, 1)[0];
                     if (!movedField) return;
                     step.sections[toSecIdx].fields.splice(newIdx, 0, movedField);
 
-                    // Sinkronkan kembali editingFieldKey ke posisi baru
                     if (editingFieldObj) {
                         let updatedKey = null;
                         step.sections.forEach((s, sI) => {
@@ -10074,12 +10339,13 @@ REGION II`;
                     renderVisualBuilder();
                 }
             });
+            vfbSortableInstances.push(inst);
         });
 
         // 2. Sortable untuk Bagian Formulir (Left Steps Panel)
         const stepsListEl = document.querySelector('.vfb-steps-list');
         if (stepsListEl) {
-            new Sortable(stepsListEl, {
+            const instSteps = new Sortable(stepsListEl, {
                 animation: 200,
                 ghostClass: 'vfb-sortable-ghost',
                 chosenClass: 'vfb-sortable-chosen',
@@ -10103,6 +10369,7 @@ REGION II`;
                     renderVisualBuilder();
                 }
             });
+            vfbSortableInstances.push(instSteps);
         }
     }
 
@@ -10113,6 +10380,8 @@ REGION II`;
     }
 
     function addStep() {
+        if (!isEditMode) return;
+
         Swal.fire({
             title: 'Tambah Bagian Baru',
             html: `
@@ -10161,6 +10430,8 @@ REGION II`;
     }
 
     function editCurrentStepName() {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step) return;
 
@@ -10199,6 +10470,8 @@ REGION II`;
     }
 
     function deleteCurrentStep() {
+        if (!isEditMode) return;
+
         if (currentSchema.steps.length <= 1) {
             return Swal.fire('Perhatian', 'Formulir harus memiliki minimal 1 bagian.', 'warning');
         }
@@ -10225,6 +10498,8 @@ REGION II`;
     }
 
     function addSectionToCurrentStep() {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step) return;
 
@@ -10256,6 +10531,8 @@ REGION II`;
     }
 
     function deleteSection(secIdx) {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step || !step.sections) return;
         if (step.sections.length <= 1) {
@@ -10287,6 +10564,8 @@ REGION II`;
     }
 
     function toggleEditField(secIdx, fIdx) {
+        if (!isEditMode) return;
+
         const key = `${secIdx}_${fIdx}`;
         if (editingFieldKey === key) {
             editingFieldKey = null;
@@ -10297,6 +10576,8 @@ REGION II`;
     }
 
     function updateFieldProp(secIdx, fIdx, key, val) {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
         const f = step.sections[secIdx].fields[fIdx];
@@ -10320,6 +10601,8 @@ REGION II`;
     }
 
     function updateFieldOption(secIdx, fIdx, optIdx, val) {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
         const f = step.sections[secIdx].fields[fIdx];
@@ -10330,6 +10613,8 @@ REGION II`;
     }
 
     function addFieldOption(secIdx, fIdx) {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
         const f = step.sections[secIdx].fields[fIdx];
@@ -10340,6 +10625,8 @@ REGION II`;
     }
 
     function removeFieldOption(secIdx, fIdx, optIdx) {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
         const f = step.sections[secIdx].fields[fIdx];
@@ -10377,6 +10664,8 @@ REGION II`;
     }
 
     function addFieldToSection(secIdx) {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step) return;
         if (!step.sections || step.sections.length === 0) {
@@ -10398,6 +10687,8 @@ REGION II`;
     }
 
     function deleteField(secIdx, fIdx) {
+        if (!isEditMode) return;
+
         const step = currentSchema.steps[activeStepIdx];
         if (!step || !step.sections[secIdx] || !step.sections[secIdx].fields[fIdx]) return;
         const fieldName = step.sections[secIdx].fields[fIdx].label || 'pertanyaan ini';
@@ -10421,29 +10712,144 @@ REGION II`;
     }
 
     function discardSchemaChanges() {
+        if (!isEditMode) return;
+
         if (!isSchemaDirty) {
-            return Swal.fire('Informasi', 'Tidak ada perubahan yang belum disimpan.', 'info');
+            // Jika belum ada perubahan, langsung kembali ke View Mode
+            isEditMode = false;
+            editingFieldKey = null;
+            renderVisualBuilder();
+            return;
         }
+
         Swal.fire({
             title: 'Batalkan Perubahan?',
-            text: 'Semua perubahan yang belum disimpan akan dikembalikan ke kondisi awal saat terakhir dibuka atau disimpan.',
-            icon: 'question',
+            text: 'Semua perubahan yang belum disimpan akan dibuang dan struktur formulir dikembalikan ke kondisi terakhir yang tersimpan.',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Ya, Batalkan Perubahan',
-            cancelButtonText: 'Kembali Mengedit',
-            confirmButtonColor: '#ef4444'
+            cancelButtonText: 'Lanjut Mengedit',
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b'
         }).then(result => {
             if (result.isConfirmed) {
                 currentSchema = JSON.parse(JSON.stringify(initialSchema));
                 isSchemaDirty = false;
                 editingFieldKey = null;
+                isEditMode = false; // Otomatis kembali ke View Mode
                 renderVisualBuilder();
-                Swal.fire('Dibatalkan', 'Perubahan telah dibatalkan.', 'success');
+                Swal.fire({
+                    title: 'Perubahan Dibatalkan',
+                    text: 'Struktur formulir telah dikembalikan ke kondisi semula.',
+                    icon: 'info',
+                    timer: 1800,
+                    showConfirmButton: false
+                });
             }
         });
     }
 
+    function validateSchemaBeforeSave() {
+        if (!currentSchema || !Array.isArray(currentSchema.steps) || currentSchema.steps.length === 0) {
+            return { valid: false, message: 'Formulir harus memiliki minimal 1 bagian (step).' };
+        }
+
+        const seenFieldNames = new Set();
+
+        for (let sIdx = 0; sIdx < currentSchema.steps.length; sIdx++) {
+            const step = currentSchema.steps[sIdx];
+            const stepNum = sIdx + 1;
+            if (!step.title || !step.title.trim()) {
+                return { valid: false, message: `Bagian ke-${stepNum} belum memiliki nama/judul bagian.` };
+            }
+
+            if (!step.sections || !Array.isArray(step.sections)) continue;
+
+            for (let secIdx = 0; secIdx < step.sections.length; secIdx++) {
+                const sec = step.sections[secIdx];
+                if (!sec.fields || !Array.isArray(sec.fields)) continue;
+
+                for (let fIdx = 0; fIdx < sec.fields.length; fIdx++) {
+                    const f = sec.fields[fIdx];
+                    const qNum = fIdx + 1;
+                    const fieldLabel = (f.label || '').trim();
+
+                    if (!fieldLabel) {
+                        return { 
+                            valid: false, 
+                            message: `Pertanyaan ke-${qNum} pada "${step.title}" belum memiliki nama pertanyaan.` 
+                        };
+                    }
+
+                    let colName = (f.name || '').trim().toUpperCase();
+                    if (!colName) {
+                        colName = fieldLabel.toUpperCase().replace(/[^A-Z0-9_]/g, '_').slice(0, 30);
+                        if (!colName) colName = 'FIELD_' + Date.now().toString().slice(-4);
+                        f.name = colName;
+                    }
+
+                    if (seenFieldNames.has(colName)) {
+                        return {
+                            valid: false,
+                            message: `Ditemukan kode kolom ganda "${colName}" pada pertanyaan "${fieldLabel}". Setiap pertanyaan harus memiliki Kode Kolom Spreadsheet yang unik agar data laporan tidak tumpang tindih.`
+                        };
+                    }
+                    seenFieldNames.add(colName);
+
+                    if (f.type === 'select') {
+                        if (!f.options || !Array.isArray(f.options) || f.options.length === 0) {
+                            return {
+                                valid: false,
+                                message: `Pertanyaan "${fieldLabel}" bertipe Pilihan tetapi belum memiliki opsi jawaban.`
+                            };
+                        }
+                        const validOptions = f.options.map(o => (o || '').trim()).filter(Boolean);
+                        if (validOptions.length === 0) {
+                            return {
+                                valid: false,
+                                message: `Pertanyaan "${fieldLabel}" memiliki opsi jawaban yang kosong.`
+                            };
+                        }
+                        f.options = validOptions;
+                    }
+                }
+            }
+        }
+
+        return { valid: true };
+    }
+
     function saveSchema() {
+        if (!isEditMode) return;
+
+        const validation = validateSchemaBeforeSave();
+        if (!validation.valid) {
+            Swal.fire({
+                title: 'Periksa Formulir',
+                text: validation.message,
+                icon: 'warning',
+                confirmButtonColor: '#00B7CD'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Simpan Perubahan Formulir?',
+            text: 'Seluruh pembaruan struktur formulir akan disimpan dan disinkronkan ke aplikasi petugas serta Google Sheets.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Simpan Perubahan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#00B7CD',
+            cancelButtonColor: '#94a3b8'
+        }).then(result => {
+            if (result.isConfirmed) {
+                executeSaveSchema();
+            }
+        });
+    }
+
+    function executeSaveSchema() {
         const btnSave = document.getElementById('vfbBtnSave');
         const originalBtnHtml = btnSave ? btnSave.innerHTML : 'Simpan Perubahan';
         if (btnSave) {
@@ -10480,14 +10886,17 @@ REGION II`;
             if (data.success) {
                 initialSchema = JSON.parse(JSON.stringify(currentSchema));
                 setSchemaDirty(false);
+                editingFieldKey = null;
+                isEditMode = false; // Otomatis kembali ke View Mode
+                renderVisualBuilder();
                 Swal.fire({
                     title: 'Berhasil Disimpan!',
-                    text: data.message || 'Formulir berhasil diperbarui dan disinkronkan ke spreadsheet.',
+                    text: data.message || 'Formulir berhasil diperbarui dan disinkronkan ke spreadsheet serta aplikasi petugas.',
                     icon: 'success',
                     confirmButtonColor: '#00B7CD'
                 });
             } else {
-                Swal.fire('Gagal Menyimpan', data.error, 'error');
+                Swal.fire('Gagal Menyimpan', data.error || 'Terjadi kesalahan sistem', 'error');
             }
         })
         .catch(err => {
@@ -10501,14 +10910,36 @@ REGION II`;
     }
 
     function syncFromSheet() {
+        if (isEditMode && isSchemaDirty) {
+            Swal.fire({
+                title: 'Perubahan Belum Disimpan!',
+                text: 'Terdapat perubahan formulir yang belum disimpan. Menarik struktur dari Spreadsheet akan menimpa seluruh perubahan saat ini. Lanjutkan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Tarik dari Spreadsheet',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    executeSyncFromSheet();
+                }
+            });
+            return;
+        }
+        executeSyncFromSheet();
+    }
+
+    function executeSyncFromSheet() {
         Swal.fire({
             title: 'Tarik Schema dari Spreadsheet?',
-            text: 'Sistem akan membaca header kolom dari Google Spreadsheet aktif dan mengkonversikannya menjadi field form.',
+            text: 'Sistem akan membaca header kolom dari Google Spreadsheet aktif dan mengonversikannya menjadi field form.',
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Ya, Tarik Sekarang',
             cancelButtonText: 'Batal',
-            confirmButtonColor: '#00B7CD'
+            confirmButtonColor: '#00B7CD',
+            cancelButtonColor: '#94a3b8'
         }).then(result => {
             if (result.isConfirmed) {
                 if (typeof showKawungLoading === 'function') {

@@ -1152,7 +1152,12 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
 /* ==========================================================================
    INJOURNEY AIRPORTS - STANDARDIZED HERO BANNER CARD COMPONENT
    Unified across Staff Dashboard, GM/DH Dashboard, and Admin Dashboard.
-   Ensures 100% visual parity: exact height, padding, typography, illustration.
+   Crafted to match Gambar 1 Reference:
+   - Navy Gelap Title (#16334B)
+   - Abu-abu Kebiruan Subtitle (#647B8E)
+   - Natural White-to-Cyan (#00B7CD / #087F96) Gradient Overlay (Zero bottom fog)
+   - Prominent Indonesian Batik Aircraft Illustration
+   - Premium 22px border radius, overflow hidden, subtle shadow
    ========================================================================== */
 
 .injourney-hero-banner,
@@ -1161,25 +1166,25 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
 .admin-hero-banner {
     position: relative;
     width: 100%;
-    min-height: 186px;
-    border-radius: 20px;
+    min-height: 180px;
+    border-radius: 22px;
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: #f0f9fb;
     background-image: url('../img/staff-hero-bg.webp');
     background-size: cover;
-    background-position: right center;
+    background-position: right 52%;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 2.25rem 2.75rem;
-    border: 1px solid rgba(226, 232, 240, 0.95);
-    box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
     box-sizing: border-box;
     margin-bottom: 1.25rem;
 }
 
-/* Pristine Gradient White Mist Overlay for High-Contrast Typography & Seamless Aircraft Transition */
+/* Natural White-to-Cyan Gradient Overlay (Matching Gambar 1 Reference) */
 .injourney-hero-banner::before,
 .staff-hero-banner::before,
 .gm-hero-banner::before,
@@ -1187,14 +1192,14 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
     content: '';
     position: absolute;
     inset: 0;
-    background: 
-        linear-gradient(180deg, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 0.45) 100%),
-        linear-gradient(90deg, 
-            #ffffff 0%, 
-            rgba(255, 255, 255, 0.98) 28%, 
-            rgba(255, 255, 255, 0.88) 45%, 
-            rgba(255, 255, 255, 0.35) 68%, 
-            rgba(255, 255, 255, 0) 86%);
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.98) 0%, 
+        rgba(255, 255, 255, 0.95) 24%, 
+        rgba(255, 255, 255, 0.82) 36%, 
+        rgba(255, 255, 255, 0.38) 50%, 
+        rgba(0, 183, 205, 0.12) 62%, 
+        rgba(8, 127, 150, 0.04) 74%, 
+        transparent 85%);
     pointer-events: none;
     z-index: 1;
 }
@@ -1205,7 +1210,7 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
 .admin-hero-banner .hero-info-col {
     position: relative;
     z-index: 2;
-    max-width: 620px;
+    max-width: 580px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1216,10 +1221,10 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
 .gm-hero-banner .hero-heading,
 .admin-hero-banner .hero-heading {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 2.05rem;
+    font-size: 1.95rem;
     font-weight: 800;
-    color: #002b49;
-    letter-spacing: -0.5px;
+    color: #16334B !important;
+    letter-spacing: -0.4px;
     margin: 0 0 0.45rem 0;
     line-height: 1.25;
 }
@@ -1229,11 +1234,12 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
 .gm-hero-banner .hero-subtext,
 .admin-hero-banner .hero-subtext {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 0.925rem;
-    color: #64748b;
-    line-height: 1.5;
+    font-size: 0.935rem;
+    font-weight: 400;
+    color: #647B8E !important;
+    line-height: 1.55;
     margin: 0;
-    max-width: 580px;
+    max-width: 550px;
 }
 
 /* Responsive: Tablet Viewport (max-width: 992px) */
@@ -1242,16 +1248,30 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
     .staff-hero-banner,
     .gm-hero-banner,
     .admin-hero-banner {
-        min-height: 175px;
+        min-height: 170px;
         padding: 1.75rem 2rem;
-        background-position: right center;
+        background-position: right 52%;
+        border-radius: 20px;
+    }
+
+    .injourney-hero-banner::before,
+    .staff-hero-banner::before,
+    .gm-hero-banner::before,
+    .admin-hero-banner::before {
+        background: linear-gradient(90deg, 
+            rgba(255, 255, 255, 0.98) 0%, 
+            rgba(255, 255, 255, 0.95) 28%, 
+            rgba(255, 255, 255, 0.84) 44%, 
+            rgba(255, 255, 255, 0.42) 58%, 
+            rgba(0, 183, 205, 0.12) 70%, 
+            transparent 88%) !important;
     }
 
     .injourney-hero-banner .hero-info-col,
     .staff-hero-banner .hero-info-col,
     .gm-hero-banner .hero-info-col,
     .admin-hero-banner .hero-info-col {
-        max-width: 540px;
+        max-width: 490px;
     }
 
     .injourney-hero-banner .hero-heading,
@@ -1266,6 +1286,7 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
     .gm-hero-banner .hero-subtext,
     .admin-hero-banner .hero-subtext {
         font-size: 0.875rem;
+        line-height: 1.5;
     }
 }
 
@@ -1276,9 +1297,9 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
     .gm-hero-banner,
     .admin-hero-banner {
         padding: 1.35rem 1.15rem !important;
-        border-radius: 16px !important;
+        border-radius: 18px !important;
         margin-bottom: 0.85rem !important;
-        min-height: 145px !important;
+        min-height: 140px !important;
         background-position: center 40% !important;
         background-size: cover !important;
         display: flex !important;
@@ -1295,8 +1316,8 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
         background: linear-gradient(135deg, 
             rgba(255, 255, 255, 0.96) 0%, 
             rgba(255, 255, 255, 0.90) 50%, 
-            rgba(255, 255, 255, 0.82) 80%, 
-            rgba(0, 183, 205, 0.22) 100%) !important;
+            rgba(255, 255, 255, 0.80) 80%, 
+            rgba(0, 183, 205, 0.18) 100%) !important;
     }
 
     .injourney-hero-banner .hero-info-col,
@@ -1322,7 +1343,7 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
         line-height: 1.25 !important;
         letter-spacing: -0.3px !important;
         margin: 0 0 0.35rem 0 !important;
-        color: #002b49 !important;
+        color: #16334B !important;
         text-align: center !important;
         width: 100% !important;
     }
@@ -1333,9 +1354,10 @@ div:where(.swal2-container) .swal2-timer-progress-bar,
     .admin-hero-banner .hero-subtext {
         font-size: 0.825rem !important;
         line-height: 1.45 !important;
-        color: #475569 !important;
+        color: #647B8E !important;
         text-align: center !important;
         max-width: 95% !important;
         margin: 0 auto !important;
     }
 }
+

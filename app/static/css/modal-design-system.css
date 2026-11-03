@@ -1,0 +1,1075 @@
+/**
+ * ==============================================================================
+ * INJOURNEY AIRPORTS - STANDARDIZED MODAL & UI DIALOG DESIGN SYSTEM
+ * ==============================================================================
+ * Standardized UI/UX design specifications for:
+ *   - SweetAlert2 Popups, Alerts, Prompts & Confirmation Dialogs
+ *   - Clean Modals (.clean-modal-overlay, .clean-modal-card)
+ *   - Executive Custom Modals (.custom-modal-backdrop, .custom-modal-content)
+ *   - Profile Modal (.clean-modal-card #modalUserProfile)
+ *   - Standardized Form Inputs, Textareas, Selects, and Labels
+ * 
+ * Based directly on InJourney Airports Design Reference:
+ *   - 28px Large Rounded Corners
+ *   - Pure White Solid Container Background (#FFFFFF)
+ *   - Translucent Dark Backdrop with Rich Blur (blur(10px) saturate(140%))
+ *   - Soft Multi-Layered Elevation Shadows
+ *   - Consistent Top-Right 'X' Close Button with Circular Hover
+ *   - Centered Status/Illustration Squircle Badges (64px, 20px radius)
+ *   - Bold Plus Jakarta Sans Typography
+ *   - Uniform 48px-52px Height Action Buttons with 16px Radius
+ *   - Cyan / Turquoise Flagship Brand Color (#00B7CD / #47B3C4)
+ *   - Fully Mobile, Tablet & Desktop Responsive
+ * ==============================================================================
+ */
+
+:root {
+    /* Brand & Accent Colors */
+    --modal-primary: #00B7CD;
+    --modal-primary-hover: #009eb2;
+    --modal-primary-active: #008899;
+    --modal-primary-light: #e0f7fa;
+    --modal-primary-glow: rgba(0, 183, 205, 0.35);
+
+    --modal-cyan-ref: #47B3C4;
+    --modal-cyan-ref-hover: #3ba3b3;
+
+    /* Semantic Status Colors */
+    --modal-warning-bg: #FEF3C7;
+    --modal-warning-border: #FDE68A;
+    --modal-warning-icon: #D97706;
+    --modal-warning-shadow: rgba(217, 119, 6, 0.16);
+
+    --modal-success-bg: #ECFDF5;
+    --modal-success-border: #A7F3D0;
+    --modal-success-icon: #059669;
+    --modal-success-shadow: rgba(16, 185, 129, 0.16);
+
+    --modal-error-bg: #FFF1F2;
+    --modal-error-border: #FECDD3;
+    --modal-error-icon: #E11D48;
+    --modal-error-shadow: rgba(225, 29, 72, 0.16);
+
+    --modal-info-bg: #E0F2FE;
+    --modal-info-border: #BAE6FD;
+    --modal-info-icon: #00B7CD;
+    --modal-info-shadow: rgba(0, 183, 205, 0.16);
+
+    --modal-question-bg: #EFF6FF;
+    --modal-question-border: #BFDBFE;
+    --modal-question-icon: #2563EB;
+    --modal-question-shadow: rgba(37, 99, 235, 0.16);
+
+    /* Text & Neutral Colors */
+    --modal-title-color: #002B49;
+    --modal-body-color: #475569;
+    --modal-muted-color: #94A3B8;
+    --modal-border-color: rgba(226, 232, 240, 0.85);
+
+    /* Secondary Context Button (Pink/Peach with Deep Red Text) */
+    --modal-deny-bg: #FEEAEA;
+    --modal-deny-hover: #FCDCDC;
+    --modal-deny-border: #FCD4D4;
+    --modal-deny-text: #B91C1C;
+
+    /* Tertiary / Cancel Neutral Button */
+    --modal-cancel-bg: #FFFFFF;
+    --modal-cancel-hover: #F8FAFC;
+    --modal-cancel-border: #CBD5E1;
+    --modal-cancel-border-hover: #94A3B8;
+    --modal-cancel-text: #334155;
+
+    /* Dimensions & Geometry */
+    --modal-card-radius: 28px;
+    --modal-btn-radius: 16px;
+    --modal-icon-radius: 20px;
+    --modal-input-radius: 12px;
+    --modal-btn-height: 50px;
+
+    /* Typography */
+    --modal-font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ==============================================================================
+   1. SWEETALERT2 INTEGRATION & GLOBAL POPUP THEMING
+   ============================================================================== */
+
+/* Modal Backdrop Blur (Applies strictly to dialogs, NEVER to toast notifications) */
+div:where(.swal2-container):not(.swal2-top-end):not(.swal2-top-start):not(.swal2-top):not(.swal2-bottom-end):not(.swal2-bottom-start):not(.swal2-bottom):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-toast-shown):not(:has(.swal2-toast)).swal2-backdrop-show,
+body:not(.swal2-toast-shown) div:where(.swal2-container):not(.swal2-top-end):not(.swal2-top-start):not(.swal2-top):not(.swal2-bottom-end):not(.swal2-bottom-start):not(.swal2-bottom):not(.swal2-center-start):not(.swal2-center-end):not(:has(.swal2-toast)).swal2-backdrop-show {
+    background: rgba(15, 23, 42, 0.50) !important;
+    backdrop-filter: blur(10px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+    transition: all 0.25s ease-out !important;
+}
+
+/* Toast Transparency: Guarantee toast notifications never get dark background */
+body.swal2-toast-shown div:where(.swal2-container),
+body.swal2-toast-shown .swal2-container,
+div:where(.swal2-container).swal2-toast-shown,
+div:where(.swal2-container):has(.swal2-toast),
+.swal2-container:has(.swal2-toast),
+div:where(.swal2-container).swal2-top-end,
+div:where(.swal2-container).swal2-top-start,
+div:where(.swal2-container).swal2-top,
+div:where(.swal2-container).swal2-bottom-end,
+div:where(.swal2-container).swal2-bottom-start,
+div:where(.swal2-container).swal2-bottom,
+div:where(.swal2-container).swal2-center-start,
+div:where(.swal2-container).swal2-center-end,
+.swal2-container.swal2-top-end,
+.swal2-container.swal2-top-start,
+.swal2-container.swal2-top,
+.swal2-container.swal2-bottom-end,
+.swal2-container.swal2-bottom-start,
+.swal2-container.swal2-bottom,
+body.swal2-toast-shown div:where(.swal2-container).swal2-backdrop-show,
+body.swal2-toast-shown .swal2-container.swal2-backdrop-show,
+div:where(.swal2-container):has(.swal2-toast).swal2-backdrop-show,
+div:where(.swal2-container).swal2-top-end.swal2-backdrop-show,
+div:where(.swal2-container).swal2-top-start.swal2-backdrop-show,
+div:where(.swal2-container).swal2-top.swal2-backdrop-show,
+div:where(.swal2-container).swal2-bottom-end.swal2-backdrop-show,
+div:where(.swal2-container).swal2-bottom-start.swal2-backdrop-show,
+div:where(.swal2-container).swal2-bottom.swal2-backdrop-show,
+.swal2-container.swal2-top-end.swal2-backdrop-show,
+.swal2-container.swal2-top-start.swal2-backdrop-show,
+.swal2-container.swal2-top.swal2-backdrop-show,
+.swal2-container.swal2-bottom-end.swal2-backdrop-show,
+.swal2-container.swal2-bottom-start.swal2-backdrop-show,
+.swal2-container.swal2-bottom.swal2-backdrop-show {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+}
+
+/* Modal Popup Box (Design Reference: Pure White, Rounded-28px, Soft Elevation Shadow) */
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast),
+.swal2-popup:not(.swal2-toast),
+.swal2-popup.swal-corp-popup:not(.swal2-toast) {
+    background: #ffffff !important;
+    border-radius: var(--modal-card-radius) !important;
+    padding: 2.25rem 2rem 2rem 2rem !important;
+    box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 1px 1px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid var(--modal-border-color) !important;
+    font-family: var(--modal-font-family) !important;
+    max-width: 440px !important;
+    width: 92% !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    overflow: hidden !important;
+    animation: swalStandardPop 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes swalStandardPop {
+    0% { transform: scale(0.94); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Close Button (X) - Consistent Top-Right Positioning & Clean Icon */
+div:where(.swal2-container) .swal2-close,
+.swal2-close,
+.modal-close-btn,
+.custom-modal-header .modal-close-btn {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    color: #0f172a !important;
+    font-size: 1.25rem !important;
+    font-family: var(--modal-font-family) !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    z-index: 10 !important;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    outline: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+div:where(.swal2-container) .swal2-close:hover,
+.swal2-close:hover,
+.modal-close-btn:hover,
+.custom-modal-header .modal-close-btn:hover {
+    background: rgba(15, 23, 42, 0.06) !important;
+    color: #000000 !important;
+    transform: scale(1.05) !important;
+}
+
+div:where(.swal2-container) .swal2-close:active,
+.swal2-close:active,
+.modal-close-btn:active {
+    transform: scale(0.95) !important;
+}
+
+/* Strictly hide swal2-icon if SweetAlert hides it or if it lacks an icon type */
+div:where(.swal2-container) .swal2-icon[style*="display: none"],
+div:where(.swal2-container) .swal2-icon:not(.swal2-warning):not(.swal2-success):not(.swal2-error):not(.swal2-info):not(.swal2-question),
+.swal2-icon[style*="display: none"] {
+    display: none !important;
+}
+
+/* ==============================================================================
+   2. TOP SQUIRCLE ICON BADGES (64px, 20px radius)
+   ============================================================================== */
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-warning:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-success:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-error:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-info:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon.swal2-question:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal-corp-icon-tile,
+.swal-corp-icon-tile,
+.modal-icon-badge-standard {
+    width: 64px !important;
+    height: 64px !important;
+    min-width: 64px !important;
+    min-height: 64px !important;
+    margin: 0 auto 1.25rem auto !important;
+    border-radius: var(--modal-icon-radius) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    border-width: 1.5px !important;
+    border-style: solid !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Hide ALL default fragile Swal2 internal line artifacts, spans, and rings */
+div:where(.swal2-container) .swal2-icon *,
+.swal2-icon * {
+    display: none !important;
+}
+
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast) .swal2-icon::after {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    margin: 0 auto !important;
+}
+
+/* 1. Warning Icon (Amber Squircle Badge - Exact Match Design Reference) */
+div:where(.swal2-container) .swal2-icon.swal2-warning,
+.swal2-icon.swal2-warning,
+.swal-corp-icon-tile.icon-warning-corp,
+.modal-icon-badge-standard.warning {
+    background: var(--modal-warning-bg) !important;
+    border-color: var(--modal-warning-border) !important;
+    box-shadow: 0 6px 18px var(--modal-warning-shadow) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-warning::after,
+.modal-icon-badge-standard.warning::after {
+    content: "" !important;
+    display: block !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23d97706' d='M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .3-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z'/%3E%3C/svg%3E") !important;
+}
+
+/* 2. Success Icon (Emerald Squircle Badge) */
+div:where(.swal2-container) .swal2-icon.swal2-success,
+.swal2-icon.swal2-success,
+.swal-corp-icon-tile.icon-success-corp,
+.modal-icon-badge-standard.success {
+    background: var(--modal-success-bg) !important;
+    border-color: var(--modal-success-border) !important;
+    box-shadow: 0 6px 18px var(--modal-success-shadow) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-success::after,
+.modal-icon-badge-standard.success::after {
+    content: "" !important;
+    display: block !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23059669' d='M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/%3E%3C/svg%3E") !important;
+}
+
+/* 3. Error Icon (Rose Squircle Badge) */
+div:where(.swal2-container) .swal2-icon.swal2-error,
+.swal2-icon.swal2-error,
+.swal-corp-icon-tile.icon-error-corp,
+.modal-icon-badge-standard.error {
+    background: var(--modal-error-bg) !important;
+    border-color: var(--modal-error-border) !important;
+    box-shadow: 0 6px 18px var(--modal-error-shadow) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-error::after,
+.modal-icon-badge-standard.error::after {
+    content: "" !important;
+    display: block !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23e11d48' d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3E%3C/svg%3E") !important;
+}
+
+/* 4. Info Icon (Cyan Squircle Badge) */
+div:where(.swal2-container) .swal2-icon.swal2-info,
+.swal2-icon.swal2-info,
+.swal-corp-icon-tile.icon-info-corp,
+.modal-icon-badge-standard.info {
+    background: var(--modal-info-bg) !important;
+    border-color: var(--modal-info-border) !important;
+    box-shadow: 0 6px 18px var(--modal-info-shadow) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-info::after,
+.modal-icon-badge-standard.info::after {
+    content: "" !important;
+    display: block !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%2300B7CD' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+}
+
+/* 5. Question Icon (Sky Blue Squircle Badge) */
+div:where(.swal2-container) .swal2-icon.swal2-question,
+.swal2-icon.swal2-question,
+.swal-corp-icon-tile.icon-question-corp,
+.modal-icon-badge-standard.question {
+    background: var(--modal-question-bg) !important;
+    border-color: var(--modal-question-border) !important;
+    box-shadow: 0 6px 18px var(--modal-question-shadow) !important;
+}
+div:where(.swal2-container) .swal2-icon.swal2-question::after,
+.modal-icon-badge-standard.question::after {
+    content: "" !important;
+    display: block !important;
+    width: 30px !important;
+    height: 30px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%232563eb' d='M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6s-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.3-6.7-15.1-15.1-15.1H222.6c-5.7 0-10.8 3.6-12.7 9l-7.7 21.6c-4.4 12.5-18.1 19.1-30.6 14.6s-19.1-18.1-14.6-30.6l12.8-35.9zM256 336a32 32 0 1 1 0 64 32 32 0 1 1 0-64z'/%3E%3C/svg%3E") !important;
+}
+
+/* ==============================================================================
+   3. TYPOGRAPHY & BODY TEXT
+   ============================================================================== */
+
+/* Modal Title */
+div:where(.swal2-container) .swal2-title,
+.swal2-title,
+.swal-corp-title,
+.modal-standard-title {
+    font-family: var(--modal-font-family) !important;
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    color: var(--modal-title-color) !important;
+    margin: 0 0 0.45rem 0 !important;
+    padding: 0 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.3 !important;
+    text-align: center !important;
+}
+
+/* Modal Subtitle / Prompt */
+.swal-corp-sub,
+.swal-corp-subtitle,
+.modal-standard-subtitle {
+    font-family: var(--modal-font-family) !important;
+    font-size: 0.84rem !important;
+    font-weight: 500 !important;
+    color: var(--modal-muted-color) !important;
+    margin: 0.25rem 0 1rem 0 !important;
+    text-align: center !important;
+}
+
+/* Body Text & HTML Container */
+div:where(.swal2-container) .swal2-html-container,
+.swal2-html-container,
+.modal-standard-body {
+    font-family: var(--modal-font-family) !important;
+    font-size: 0.94rem !important;
+    color: var(--modal-body-color) !important;
+    line-height: 1.55 !important;
+    text-align: center !important;
+    margin: 0.5rem 0 1.25rem 0 !important;
+    padding: 0 !important;
+    font-weight: 400 !important;
+}
+
+div:where(.swal2-container) .swal2-html-container strong,
+.swal2-html-container strong {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+
+/* ==============================================================================
+   4. ACTION BUTTONS (Uniform 50px Height, 16px Radius)
+   ============================================================================== */
+
+/* Hide buttons or actions that SweetAlert marks as display:none */
+div:where(.swal2-container) .swal2-actions[style*="display: none"],
+div:where(.swal2-container) .swal2-actions:not(:has(button:not([style*="display: none"]))),
+div:where(.swal2-container) .swal2-actions button[style*="display: none"],
+div:where(.swal2-container) .swal2-actions button.swal2-hide,
+div:where(.swal2-container) .swal2-actions button[aria-hidden="true"],
+.swal2-actions[style*="display: none"],
+.swal2-actions button[style*="display: none"],
+.swal2-actions button[aria-hidden="true"] {
+    display: none !important;
+}
+
+/* Actions Container */
+div:where(.swal2-container) .swal2-actions,
+.swal2-actions,
+.swal-corp-actions-bar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    margin: 1.25rem 0 0 0 !important;
+    padding: 0 !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+}
+
+/* Base button styling for all action buttons */
+div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+.swal-corp-btn-primary,
+.swal-corp-btn-secondary,
+.modal-standard-btn {
+    height: var(--modal-btn-height) !important;
+    min-height: var(--modal-btn-height) !important;
+    max-height: var(--modal-btn-height) !important;
+    padding: 0 1.25rem !important;
+    border-radius: var(--modal-btn-radius) !important;
+    font-family: var(--modal-font-family) !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    text-decoration: none !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    flex: 1 1 0px !important;
+    min-width: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.65rem !important;
+    white-space: nowrap !important;
+    outline: none !important;
+}
+
+/* Single-button alert: confirm button spans 100% width symmetrically */
+div:where(.swal2-container) .swal2-actions:not(:has(button.swal2-cancel:not([style*="display: none"]))):not(:has(button.swal2-deny:not([style*="display: none"]))) button.swal2-confirm:not([style*="display: none"]),
+div:where(.swal2-container) .swal2-actions > button.swal2-styled:only-of-type,
+.swal-corp-actions-bar:not(:has(.swal-corp-btn-secondary)) .swal-corp-btn-primary {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Primary / Confirm Button (InJourney Flagship Cyan #00B7CD / #47B3C4) */
+div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+.swal-corp-btn-primary,
+.modal-standard-btn-primary {
+    background: var(--modal-primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px var(--modal-primary-glow) !important;
+}
+
+div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):hover,
+.swal-corp-btn-primary:hover,
+.modal-standard-btn-primary:hover {
+    background: var(--modal-primary-hover) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45) !important;
+    transform: translateY(-1px) !important;
+}
+
+div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]):active,
+.swal-corp-btn-primary:active,
+.modal-standard-btn-primary:active {
+    transform: translateY(0) !important;
+    background: var(--modal-primary-active) !important;
+}
+
+/* Secondary / Cancel Button (Crisp White Card with Outline - Design Reference) */
+div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+.swal-corp-btn-secondary,
+.modal-standard-btn-cancel {
+    background: var(--modal-cancel-bg) !important;
+    color: var(--modal-cancel-text) !important;
+    border: 1.8px solid var(--modal-cancel-border) !important;
+    box-shadow: none !important;
+}
+
+div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):hover,
+.swal-corp-btn-secondary:hover,
+.modal-standard-btn-cancel:hover {
+    background: var(--modal-cancel-hover) !important;
+    color: #0f172a !important;
+    border-color: var(--modal-cancel-border-hover) !important;
+    transform: translateY(-1px) !important;
+}
+
+div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]):active,
+.swal-corp-btn-secondary:active,
+.modal-standard-btn-cancel:active {
+    transform: translateY(0) !important;
+}
+
+/* Deny Button (Contextual / Soft Peach-Rose with Deep Red Text - Design Reference) */
+div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+.modal-standard-btn-deny {
+    background: var(--modal-deny-bg) !important;
+    color: var(--modal-deny-text) !important;
+    border: 1.5px solid var(--modal-deny-border) !important;
+    box-shadow: none !important;
+}
+
+div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]):hover,
+.modal-standard-btn-deny:hover {
+    background: var(--modal-deny-hover) !important;
+    color: #991b1b !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Destructive / Danger Confirm Button */
+div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"],
+div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"],
+div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"],
+div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"],
+div:where(.swal2-container) button.swal2-confirm[style*="#d33"],
+.modal-standard-btn-danger {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
+}
+div:where(.swal2-container) button.swal2-confirm[style*="rgb(220, 38, 38)"]:hover,
+div:where(.swal2-container) button.swal2-confirm[style*="rgb(239, 68, 68)"]:hover,
+div:where(.swal2-container) button.swal2-confirm[style*="#dc2626"]:hover,
+div:where(.swal2-container) button.swal2-confirm[style*="#ef4444"]:hover,
+div:where(.swal2-container) button.swal2-confirm[style*="#d33"]:hover,
+.modal-standard-btn-danger:hover {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ==============================================================================
+   5. DEDICATED EXECUTIVE ACTION SHEET (.swal-branch-action-sheet)
+   Exact replica of Design Reference Image:
+     - Warning squircle badge at top
+     - Tindakan Cepat - DPS
+     - Button 1: WhatsApp DH (Cyan solid)
+     - Button 2: WhatsApp PIC (Soft peach-red outline/tint)
+     - Button 3: Tarik Data (White card with slate border)
+   ============================================================================== */
+.swal-branch-action-sheet .swal2-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.75rem !important;
+    margin: 1.25rem 0 0 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.swal-branch-action-sheet .swal2-actions button {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    height: var(--modal-btn-height) !important;
+    min-height: var(--modal-btn-height) !important;
+    max-height: var(--modal-btn-height) !important;
+    border-radius: var(--modal-btn-radius) !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    padding: 0 1.25rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.65rem !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: pointer !important;
+}
+
+/* Button 1: WhatsApp DH */
+.swal-branch-action-sheet button.swal2-confirm {
+    background: var(--modal-cyan-ref) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(71, 179, 196, 0.35) !important;
+    order: 1 !important;
+}
+.swal-branch-action-sheet button.swal2-confirm:hover {
+    background: var(--modal-cyan-ref-hover) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 18px rgba(71, 179, 196, 0.45) !important;
+}
+
+/* Button 2: WhatsApp PIC */
+.swal-branch-action-sheet button.swal2-deny {
+    background: var(--modal-deny-bg) !important;
+    color: var(--modal-deny-text) !important;
+    border: 1.5px solid var(--modal-deny-border) !important;
+    box-shadow: none !important;
+    order: 2 !important;
+}
+.swal-branch-action-sheet button.swal2-deny:hover {
+    background: var(--modal-deny-hover) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Button 3: Tarik Data */
+.swal-branch-action-sheet button.swal2-cancel {
+    background: var(--modal-cancel-bg) !important;
+    color: var(--modal-cancel-text) !important;
+    border: 1.8px solid var(--modal-cancel-border) !important;
+    box-shadow: none !important;
+    order: 3 !important;
+}
+.swal-branch-action-sheet button.swal2-cancel:hover {
+    background: var(--modal-cancel-hover) !important;
+    border-color: var(--modal-cancel-border-hover) !important;
+    color: #0f172a !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ==============================================================================
+   6. STANDARDIZED FORM INPUTS, TEXTAREAS & SELECTS
+   Universal across all modal dialogs, popup forms, and pages.
+   ============================================================================== */
+
+/* Inputs & Textareas inside Swal Containers */
+div:where(.swal2-container) .swal2-input,
+div:where(.swal2-container) .swal2-textarea,
+div:where(.swal2-container) .swal2-select,
+.modal-standard-input,
+.clean-modal-card input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.clean-modal-card select,
+.clean-modal-card textarea,
+.custom-modal-content input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.custom-modal-content select,
+.custom-modal-content textarea {
+    font-family: var(--modal-font-family) !important;
+    font-size: 0.92rem !important;
+    color: #0f172a !important;
+    background-color: #ffffff !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: var(--modal-input-radius) !important;
+    padding: 0.65rem 0.95rem !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease !important;
+    width: 100% !important;
+    outline: none !important;
+}
+
+div:where(.swal2-container) .swal2-input:focus,
+div:where(.swal2-container) .swal2-textarea:focus,
+div:where(.swal2-container) .swal2-select:focus,
+.modal-standard-input:focus,
+.clean-modal-card input:focus,
+.clean-modal-card select:focus,
+.clean-modal-card textarea:focus,
+.custom-modal-content input:focus,
+.custom-modal-content select:focus,
+.custom-modal-content textarea:focus {
+    border-color: var(--modal-primary) !important;
+    box-shadow: 0 0 0 3.5px var(--modal-primary-glow) !important;
+    outline: none !important;
+}
+
+div:where(.swal2-container) .swal2-input::placeholder,
+div:where(.swal2-container) .swal2-textarea::placeholder,
+.clean-modal-card input::placeholder,
+.clean-modal-card textarea::placeholder,
+.custom-modal-content textarea::placeholder {
+    color: #94a3b8 !important;
+    font-family: var(--modal-font-family) !important;
+}
+
+/* Monospace inputs (Airside codes, usernames) */
+.monospace,
+input.monospace {
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important;
+}
+
+/* Form Group & Label Styling in Modals */
+.form-group-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-label-modern {
+    font-family: var(--modal-font-family) !important;
+    font-size: 0.84rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+}
+
+.input-with-icon {
+    position: relative;
+    width: 100%;
+}
+
+.input-with-icon .input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.input-with-icon input.with-icon,
+.input-with-icon .table-input.with-icon {
+    padding-left: 2.5rem !important;
+}
+
+/* ==============================================================================
+   7. CUSTOM MODAL FRAMEWORK (.clean-modal-overlay, .custom-modal-backdrop)
+   Standardized to 100% align with Design Reference.
+   ============================================================================== */
+
+/* Backdrop Overlay */
+.clean-modal-overlay,
+.custom-modal-backdrop,
+.modal-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(15, 23, 42, 0.50) !important;
+    backdrop-filter: blur(10px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+    z-index: 99990 !important;
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1.25rem !important;
+    box-sizing: border-box !important;
+    transition: opacity 0.2s ease !important;
+}
+
+/* Modal Card Box */
+.clean-modal-card,
+.custom-modal-content,
+.modal-window {
+    background: #ffffff !important;
+    border-radius: var(--modal-card-radius) !important;
+    box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 1px 1px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid var(--modal-border-color) !important;
+    font-family: var(--modal-font-family) !important;
+    max-width: 540px;
+    width: 100% !important;
+    max-height: 90vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    position: relative !important;
+    box-sizing: border-box !important;
+    animation: modalScaleUp 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes modalScaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Modal Header */
+.clean-modal-card .modal-head,
+.custom-modal-content .custom-modal-header,
+.modal-window .modal-header {
+    padding: 1.35rem 1.75rem !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background: #ffffff !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+}
+
+.modal-title-group,
+.modal-header-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.85rem !important;
+    flex: 1 !important;
+}
+
+.modal-icon-badge,
+.modal-title-icon-box {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 14px !important;
+    background: var(--modal-primary-light) !important;
+    color: var(--modal-primary) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.15rem !important;
+    border: 1px solid #bae6fd !important;
+    flex-shrink: 0 !important;
+}
+
+.modal-title,
+.modal-header-heading {
+    font-family: var(--modal-font-family) !important;
+    font-size: 1.18rem !important;
+    font-weight: 800 !important;
+    color: var(--modal-title-color) !important;
+    margin: 0 !important;
+    line-height: 1.3 !important;
+}
+
+.modal-subtitle {
+    font-family: var(--modal-font-family) !important;
+    font-size: 0.8rem !important;
+    color: var(--modal-muted-color) !important;
+    margin: 0.2rem 0 0 0 !important;
+}
+
+/* Modal Body */
+.clean-modal-card .modal-body,
+.custom-modal-content .custom-modal-body,
+.modal-window .modal-body {
+    padding: 1.5rem 1.75rem !important;
+    overflow-y: auto !important;
+    max-height: calc(85vh - 140px) !important;
+    background-color: #ffffff !important;
+    font-family: var(--modal-font-family) !important;
+    color: var(--modal-body-color) !important;
+    box-sizing: border-box !important;
+}
+
+/* Modal Footer */
+.clean-modal-card .modal-footer,
+.custom-modal-content .custom-modal-footer,
+.modal-window .modal-footer {
+    padding: 1.15rem 1.75rem !important;
+    background: #f8fafc !important;
+    border-top: 1px solid #e2e8f0 !important;
+    border-radius: 0 0 var(--modal-card-radius) var(--modal-card-radius) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.75rem !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Buttons in Custom Modal Footers */
+.modal-btn-save,
+.btn-rev-submit,
+.btn-modal-approve {
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 0 1.35rem !important;
+    border-radius: 14px !important;
+    background: var(--modal-primary) !important;
+    color: #ffffff !important;
+    font-family: var(--modal-font-family) !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    box-shadow: 0 4px 14px var(--modal-primary-glow) !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.modal-btn-save:hover,
+.btn-rev-submit:hover,
+.btn-modal-approve:hover {
+    background: var(--modal-primary-hover) !important;
+    box-shadow: 0 6px 20px rgba(0, 183, 205, 0.45) !important;
+    transform: translateY(-1px) !important;
+}
+
+.btn-outline-action,
+.btn-rev-cancel,
+.btn-modal-close {
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 0 1.25rem !important;
+    border-radius: 14px !important;
+    background: #ffffff !important;
+    color: var(--modal-cancel-text) !important;
+    font-family: var(--modal-font-family) !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    border: 1.8px solid var(--modal-cancel-border) !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-outline-action:hover,
+.btn-rev-cancel:hover,
+.btn-modal-close:hover {
+    background: var(--modal-cancel-hover) !important;
+    border-color: var(--modal-cancel-border-hover) !important;
+    color: #0f172a !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Document Viewer Modal Override (Detail Modal) */
+.custom-modal-content.modal-doc-viewer {
+    max-width: 960px !important;
+    max-height: 92vh !important;
+    border-radius: var(--modal-card-radius) !important;
+}
+
+/* Sleek Scrollbar for Modal Bodies */
+.clean-modal-card .modal-body::-webkit-scrollbar,
+.custom-modal-content .custom-modal-body::-webkit-scrollbar,
+div:where(.swal2-container) .swal2-html-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.clean-modal-card .modal-body::-webkit-scrollbar-track,
+.custom-modal-content .custom-modal-body::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+.clean-modal-card .modal-body::-webkit-scrollbar-thumb,
+.custom-modal-content .custom-modal-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+.clean-modal-card .modal-body::-webkit-scrollbar-thumb:hover,
+.custom-modal-content .custom-modal-body::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ==============================================================================
+   8. RESPONSIVE OPTIMIZATION (MOBILE & TABLET)
+   ============================================================================== */
+@media (max-width: 640px) {
+    /* SweetAlert Mobile */
+    div:where(.swal2-container) .swal2-popup:not(.swal2-toast),
+    .swal2-popup:not(.swal2-toast) {
+        width: 94% !important;
+        max-width: 94% !important;
+        padding: 2rem 1.5rem 1.75rem 1.5rem !important;
+        border-radius: 24px !important;
+    }
+
+    div:where(.swal2-container) .swal2-title,
+    .swal2-title {
+        font-size: 1.22rem !important;
+    }
+
+    div:where(.swal2-container) .swal2-actions,
+    .swal2-actions {
+        flex-direction: column !important;
+        gap: 0.65rem !important;
+        margin-top: 1.15rem !important;
+    }
+
+    div:where(.swal2-container) button.swal2-confirm:not([style*="display: none"]),
+    div:where(.swal2-container) button.swal2-cancel:not([style*="display: none"]),
+    div:where(.swal2-container) button.swal2-deny:not([style*="display: none"]),
+    .swal-corp-btn-primary,
+    .swal-corp-btn-secondary {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+        height: 48px !important;
+    }
+
+    /* Custom Modals Mobile */
+    .clean-modal-overlay,
+    .custom-modal-backdrop,
+    .modal-overlay {
+        padding: 0.5rem !important;
+        align-items: flex-end !important;
+    }
+
+    .clean-modal-card,
+    .custom-modal-content,
+    .modal-window {
+        max-height: 92vh !important;
+        border-radius: 24px 24px 14px 14px !important;
+        width: 100% !important;
+    }
+
+    .clean-modal-card .modal-head,
+    .custom-modal-content .custom-modal-header {
+        padding: 1.15rem 1.25rem !important;
+    }
+
+    .clean-modal-card .modal-body,
+    .custom-modal-content .custom-modal-body {
+        padding: 1.15rem 1.25rem !important;
+    }
+
+    .clean-modal-card .modal-footer,
+    .custom-modal-content .custom-modal-footer {
+        padding: 1rem 1.25rem !important;
+        flex-direction: column-reverse !important;
+        gap: 0.65rem !important;
+    }
+
+    .clean-modal-card .modal-footer button,
+    .custom-modal-content .custom-modal-footer button {
+        width: 100% !important;
+    }
+}
