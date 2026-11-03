@@ -3,7 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import hmac
 from app.models.db import get_db
 
-# Akun bawaan (Default Seed Users)
+# Akun bawaan (Default Admin User)
+# Pengguna lain (Staff, Department Head, dsb) tidak dibuat otomatis, melainkan dikelola mandiri via Database Utama (SQLite).
 DEFAULT_USERS = {
     'admin': {
         'username': 'admin',
@@ -13,140 +14,6 @@ DEFAULT_USERS = {
         'password_hash': generate_password_hash('123'),
         'is_active': True,
         'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'lop': {
-        'username': 'lop',
-        'name': 'Petugas LOP',
-        'role': 'staff',
-        'airport': 'LOP',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'dps': {
-        'username': 'dps',
-        'name': 'Petugas DPS',
-        'role': 'staff',
-        'airport': 'DPS',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'bwx': {
-        'username': 'bwx',
-        'name': 'Petugas BWX',
-        'role': 'staff',
-        'airport': 'BWX',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'koe': {
-        'username': 'koe',
-        'name': 'Petugas KOE',
-        'role': 'staff',
-        'airport': 'KOE',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    # Akun Department Head (DH)
-    'dh_lop': {
-        'username': 'dh_lop',
-        'name': 'Department Head LOP',
-        'role': 'dh',
-        'airport': 'LOP',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'dh_dps': {
-        'username': 'dh_dps',
-        'name': 'Department Head DPS',
-        'role': 'dh',
-        'airport': 'DPS',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'dh_bwx': {
-        'username': 'dh_bwx',
-        'name': 'Department Head BWX',
-        'role': 'dh',
-        'airport': 'BWX',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'dh_koe': {
-        'username': 'dh_koe',
-        'name': 'Department Head KOE',
-        'role': 'dh',
-        'airport': 'KOE',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_system': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    # Kompatibilitas mundur untuk username login lama (gm_*)
-    'gm_lop': {
-        'username': 'gm_lop',
-        'name': 'Department Head LOP',
-        'role': 'dh',
-        'airport': 'LOP',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_legacy_alias': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'gm_dps': {
-        'username': 'gm_dps',
-        'name': 'Department Head DPS',
-        'role': 'dh',
-        'airport': 'DPS',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_legacy_alias': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'gm_bwx': {
-        'username': 'gm_bwx',
-        'name': 'Department Head BWX',
-        'role': 'dh',
-        'airport': 'BWX',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_legacy_alias': True,
-        'created_at': '2026-10-01 00:00:00',
-        'updated_at': '2026-10-01 00:00:00'
-    },
-    'gm_koe': {
-        'username': 'gm_koe',
-        'name': 'Department Head KOE',
-        'role': 'dh',
-        'airport': 'KOE',
-        'password_hash': generate_password_hash('123'),
-        'is_active': True,
-        'is_legacy_alias': True,
         'created_at': '2026-10-01 00:00:00',
         'updated_at': '2026-10-01 00:00:00'
     }
@@ -392,9 +259,9 @@ def update_user(username, name=None, role=None, airport=None, password=None, is_
     existing['updated_at'] = now_str
     return existing
 
-def update_user_profile(username, name=None, avatar=None):
+def update_user_profile(username, name=None, avatar=None, password=None):
     """
-    Memperbarui profil mandiri pengguna (nama lengkap dan/atau foto avatar).
+    Memperbarui profil mandiri pengguna (nama lengkap, foto avatar, dan/atau kata sandi baru).
     """
     clean_username = (username or '').strip().lower()
     existing = get_user(clean_username)
@@ -415,6 +282,13 @@ def update_user_profile(username, name=None, avatar=None):
     if avatar is not None:
         updates.append("avatar = ?")
         params.append(str(avatar).strip())
+
+    if password is not None and str(password).strip():
+        clean_pw = str(password).strip()
+        if len(clean_pw) < 3:
+            raise ValueError("Kata sandi baru minimal 3 karakter.")
+        updates.append("password_hash = ?")
+        params.append(generate_password_hash(clean_pw))
 
     if not updates:
         return existing

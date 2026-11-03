@@ -84,15 +84,25 @@ def login():
         flash(f"Akun '{username.upper()}' ditangguhkan sementara karena 5 kali percobaan login gagal. Silakan coba lagi dalam {remaining_min} menit.", "danger")
         return redirect(url_for('auth.index'))
 
+    # Ambil pengguna langsung dari Database Utama (SQLite airside.db)
     user = USERS.get(username)
 
+    if not user:
+        record_failed_attempt(username)
+        sisa = get_remaining_attempts(username)
+        if sisa > 0:
+            flash(f"Nama pengguna atau kata sandi tidak valid. Sisa percobaan: {sisa} kali.", "danger")
+        else:
+            flash(f"Akun '{username.upper()}' kini ditangguhkan sementara selama 15 menit.", "danger")
+        return redirect(url_for('auth.index'))
+
     # Validasi apakah akun sedang dinonaktifkan oleh Administrator
-    if user and not user.get('is_active', True):
+    if not user.get('is_active', True):
         flash(f"Login ditolak: Akun '{username.upper()}' saat ini berstatus NONAKTIF (pindah tugas atau berhenti). Silakan hubungi Administrator Regional II.", "danger")
         return redirect(url_for('auth.index'))
 
-    # Verifikasi Password menggunakan hash aman
-    if user and verify_user_password(user, password):
+    # Verifikasi Password menggunakan hash aman dari database
+    if verify_user_password(user, password):
         # Validasi role jika dipilih
         if selected_role:
             sel_norm = 'dh' if selected_role in ('gm', 'dh') else selected_role
@@ -133,7 +143,7 @@ def login():
         else:
             return redirect(url_for('staff.dashboard'))
 
-    # Catat kegagalan login khusus untuk username ini
+    # Catat kegagalan login jika password salah
     record_failed_attempt(username)
     sisa = get_remaining_attempts(username)
 
@@ -213,11 +223,26 @@ def api_user_profile():
         if req_name is not None and req_name.strip():
             new_name = req_name.strip()
 
+    # Kata Sandi (Password) Update
+    new_password = (request.form.get('new_password') or request.form.get('password') or '').strip()
+    if new_password:
+        current_password = (request.form.get('current_password') or '').strip()
+        confirm_password = (request.form.get('confirm_password') or '').strip()
+        if not current_password:
+            return jsonify({"success": False, "error": "Kata sandi saat ini wajib diisi untuk verifikasi keamanan."}), 400
+        if not verify_user_password(user, current_password):
+            return jsonify({"success": False, "error": "Kata sandi saat ini yang Anda masukkan tidak sesuai."}), 400
+        if confirm_password and new_password != confirm_password:
+            return jsonify({"success": False, "error": "Konfirmasi kata sandi baru tidak cocok."}), 400
+        if len(new_password) < 3:
+            return jsonify({"success": False, "error": "Kata sandi baru minimal 3 karakter."}), 400
+
     try:
         updated_user = update_user_profile(
             username=current_username,
             name=new_name,
-            avatar=avatar_url
+            avatar=avatar_url,
+            password=new_password if new_password else None
         )
         return jsonify({
             "success": True,

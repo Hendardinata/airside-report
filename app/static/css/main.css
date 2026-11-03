@@ -45,6 +45,31 @@ body {
   flex-direction: column;
 }
 
+/* ==========================================================================
+   RESPONSIVE DYNAMIC BACKGROUND SYSTEM (BASE)
+   - Desktop / Laptop / PC (>= 768px): background-desktop.webp (fixed, center)
+   - Mobile / Smartphone (<= 767px): background.webp (scroll, center top)
+   ========================================================================== */
+@media (min-width: 768px) {
+  body {
+    background-image: url('../img/background-desktop.webp');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    background-image: url('../img/background.webp');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+  }
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--primary-color);

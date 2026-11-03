@@ -36,9 +36,14 @@
         --theme-orange-border: #fed7aa;
     }
 
+    /* ==========================================================================
+       RESPONSIVE DYNAMIC BACKGROUND SYSTEM (DH/GM DASHBOARD)
+       - Desktop / Laptop / PC (>= 768px): background-desktop.webp (fixed, center)
+       - Mobile / Smartphone (<= 767px): background.webp (scroll, center top)
+       ========================================================================== */
     body {
         background-color: var(--theme-page-bg, #f8fafc) !important;
-        background-image: url("{{ url_for('static', filename='img/background.webp') }}") !important;
+        background-image: url("{{ url_for('static', filename='img/background-desktop.webp') }}") !important;
         background-size: cover !important;
         background-position: center center !important;
         background-repeat: no-repeat !important;
@@ -50,6 +55,16 @@
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
         min-height: 100vh;
+    }
+
+    @media (max-width: 767px) {
+        body {
+            background-image: url("{{ url_for('static', filename='img/background.webp') }}") !important;
+            background-size: cover !important;
+            background-position: center top !important;
+            background-repeat: no-repeat !important;
+            background-attachment: scroll !important;
+        }
     }
 
     /* ==========================================================================
@@ -3823,10 +3838,13 @@
         }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         body {
-            background-attachment: scroll !important;
+            background-image: url("{{ url_for('static', filename='img/background.webp') }}") !important;
+            background-size: cover !important;
             background-position: center top !important;
+            background-repeat: no-repeat !important;
+            background-attachment: scroll !important;
         }
 
         .gm-layout-canvas {

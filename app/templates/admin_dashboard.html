@@ -42,8 +42,18 @@
         --sidebar-width: 270px;
     }
 
+    /* ==========================================================================
+       RESPONSIVE DYNAMIC BACKGROUND SYSTEM (ADMIN DASHBOARD)
+       - Desktop / Laptop / PC (>= 768px): background-desktop.webp (fixed, center)
+       - Mobile / Smartphone (<= 767px): background.webp (scroll, center top)
+       ========================================================================== */
     body {
         background-color: var(--theme-page-bg, #f8fafc) !important;
+        background-image: url("{{ url_for('static', filename='img/background-desktop.webp') }}") !important;
+        background-size: cover !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
         margin: 0 !important;
         padding: 0 !important;
         font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
@@ -51,6 +61,16 @@
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
         min-height: 100vh;
+    }
+
+    @media (max-width: 767px) {
+        body {
+            background-image: url("{{ url_for('static', filename='img/background.webp') }}") !important;
+            background-size: cover !important;
+            background-position: center top !important;
+            background-repeat: no-repeat !important;
+            background-attachment: scroll !important;
+        }
     }
 
     /* ==========================================================================
@@ -830,7 +850,7 @@
         display: flex;
         flex-direction: column;
         background-color: var(--theme-page-bg, #f8fafc);
-        background-image: url("{{ url_for('static', filename='img/background.webp') }}");
+        background-image: url("{{ url_for('static', filename='img/background-desktop.webp') }}");
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -4617,12 +4637,20 @@
         .admin-main-viewport {
             margin-left: 0;
             width: 100%;
-            background-attachment: scroll;
-            background-position: center top;
         }
 
         .btn-sidebar-toggle {
             display: flex;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .admin-main-viewport {
+            background-image: url("{{ url_for('static', filename='img/background.webp') }}") !important;
+            background-size: cover !important;
+            background-position: center top !important;
+            background-repeat: no-repeat !important;
+            background-attachment: scroll !important;
         }
     }
 

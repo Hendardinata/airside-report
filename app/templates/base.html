@@ -16,7 +16,7 @@
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/logo-kawung.png') }}?v=20261019">
 
     <!-- CSS with Cache Buster -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v=20261103_hero_v2">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v=20261103_bg_v1">
     
     <!-- Navbar Essential & Bulletproof Mobile Styling -->
     <style>
@@ -1448,6 +1448,55 @@
                         {% endif %}
                     </div>
 
+                    <!-- Ganti Kata Sandi (Collapsible Section) -->
+                    <div style="border-top: 1px dashed #cbd5e1; padding-top: 0.75rem;">
+                        <button type="button" onclick="toggleProfilePasswordSection()" style="width: 100%; display: flex; align-items: center; justify-content: space-between; background: none; border: none; padding: 0.4rem 0; color: #087F96; font-size: 0.84rem; font-weight: 700; cursor: pointer; text-align: left;">
+                            <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-key" style="color: #00B7CD;"></i>
+                                <span>Ganti Kata Sandi (Opsional)</span>
+                            </span>
+                            <i id="chevronPwProfile" class="fa-solid fa-chevron-down" style="font-size: 0.8rem; transition: transform 0.2s;"></i>
+                        </button>
+
+                        <div id="sectionProfilePassword" style="display: none; flex-direction: column; gap: 0.85rem; margin-top: 0.75rem; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+                            <div>
+                                <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">
+                                    Kata Sandi Saat Ini
+                                </label>
+                                <div style="position: relative;">
+                                    <input type="password" id="profile_current_password" name="current_password" placeholder="Masukkan kata sandi lama" style="width: 100%; box-sizing: border-box; padding: 0.55rem 2.4rem 0.55rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #0f172a; outline: none;">
+                                    <button type="button" onclick="toggleInputVisibility('profile_current_password', this)" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px;">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">
+                                    Kata Sandi Baru (Minimal 3 Karakter)
+                                </label>
+                                <div style="position: relative;">
+                                    <input type="password" id="profile_new_password" name="new_password" placeholder="Masukkan kata sandi baru" style="width: 100%; box-sizing: border-box; padding: 0.55rem 2.4rem 0.55rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #0f172a; outline: none;">
+                                    <button type="button" onclick="toggleInputVisibility('profile_new_password', this)" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px;">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">
+                                    Konfirmasi Kata Sandi Baru
+                                </label>
+                                <div style="position: relative;">
+                                    <input type="password" id="profile_confirm_password" name="confirm_password" placeholder="Ulangi kata sandi baru" style="width: 100%; box-sizing: border-box; padding: 0.55rem 2.4rem 0.55rem 0.85rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #0f172a; outline: none;">
+                                    <button type="button" onclick="toggleInputVisibility('profile_confirm_password', this)" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px;">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Modal Footer -->
@@ -1474,12 +1523,66 @@
                 if (fileInp) fileInp.value = '';
                 const removeFlag = document.getElementById('profile_remove_avatar');
                 if (removeFlag) removeFlag.value = 'false';
+                
+                // Reset password fields
+                const cur = document.getElementById('profile_current_password');
+                const nxt = document.getElementById('profile_new_password');
+                const cnf = document.getElementById('profile_confirm_password');
+                if (cur) cur.value = '';
+                if (nxt) nxt.value = '';
+                if (cnf) cnf.value = '';
+                const sec = document.getElementById('sectionProfilePassword');
+                const chv = document.getElementById('chevronPwProfile');
+                if (sec) sec.style.display = 'none';
+                if (chv) chv.style.transform = 'rotate(0deg)';
             }
         };
 
         window.closeProfileModal = function() {
             const modal = document.getElementById('modalUserProfile');
             if (modal) modal.style.display = 'none';
+            const cur = document.getElementById('profile_current_password');
+            const nxt = document.getElementById('profile_new_password');
+            const cnf = document.getElementById('profile_confirm_password');
+            if (cur) cur.value = '';
+            if (nxt) nxt.value = '';
+            if (cnf) cnf.value = '';
+            const sec = document.getElementById('sectionProfilePassword');
+            const chv = document.getElementById('chevronPwProfile');
+            if (sec) sec.style.display = 'none';
+            if (chv) chv.style.transform = 'rotate(0deg)';
+        };
+
+        window.toggleProfilePasswordSection = function() {
+            const sec = document.getElementById('sectionProfilePassword');
+            const chv = document.getElementById('chevronPwProfile');
+            if (!sec) return;
+            if (sec.style.display === 'none' || !sec.style.display) {
+                sec.style.display = 'flex';
+                if (chv) chv.style.transform = 'rotate(180deg)';
+            } else {
+                sec.style.display = 'none';
+                if (chv) chv.style.transform = 'rotate(0deg)';
+                const cur = document.getElementById('profile_current_password');
+                const nxt = document.getElementById('profile_new_password');
+                const cnf = document.getElementById('profile_confirm_password');
+                if (cur) cur.value = '';
+                if (nxt) nxt.value = '';
+                if (cnf) cnf.value = '';
+            }
+        };
+
+        window.toggleInputVisibility = function(inputId, btn) {
+            const inp = document.getElementById(inputId);
+            if (!inp) return;
+            const icon = btn.querySelector('i');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                if (icon) icon.className = 'fa-regular fa-eye-slash';
+            } else {
+                inp.type = 'password';
+                if (icon) icon.className = 'fa-regular fa-eye';
+            }
         };
 
         window.previewProfileAvatar = function(e) {

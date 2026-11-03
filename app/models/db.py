@@ -145,40 +145,30 @@ def init_db():
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_photos_airport_tanggal ON report_photos(airport_code, tanggal);")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_photos_created_at ON report_photos(created_at);")
 
-        # --- SEEDING USERS ---
-        cursor.execute("SELECT COUNT(*) FROM users;")
+        # --- SEEDING DEFAULT ADMIN USER ONLY ---
+        # Akun staff, DH, dan pengguna lainnya dikelola dan diinput secara manual melalui database utama (SQLite),
+        # tidak dibuat otomatis atau disimpan di users.json.
+        cursor.execute("SELECT COUNT(*) FROM users WHERE username = 'admin';")
         if cursor.fetchone()[0] == 0:
-            users_json_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'users.json'))
-            seed_data = {}
-            if os.path.exists(users_json_path):
-                try:
-                    with open(users_json_path, 'r', encoding='utf-8') as f:
-                        seed_data = json.load(f)
-                except Exception as e:
-                    print(f"Warning reading users.json for seed: {e}")
-
-            if not seed_data:
-                from app.models.user_store import DEFAULT_USERS
-                seed_data = DEFAULT_USERS
-
-            for uname, u in seed_data.items():
-                cursor.execute("""
-                INSERT OR REPLACE INTO users (
-                    username, name, role, airport, password_hash, is_active, is_system, is_legacy_alias, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-                """, (
-                    uname.lower(),
-                    u.get('name', ''),
-                    u.get('role', 'staff'),
-                    u.get('airport'),
-                    u.get('password_hash', ''),
-                    1 if u.get('is_active', True) else 0,
-                    1 if u.get('is_system', False) else 0,
-                    1 if u.get('is_legacy_alias', False) else 0,
-                    u.get('created_at', datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
-                    u.get('updated_at', datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                ))
-            print("Database initialized: Users seeded into SQLite.")
+            from werkzeug.security import generate_password_hash
+            now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            cursor.execute("""
+            INSERT OR REPLACE INTO users (
+                username, name, role, airport, password_hash, is_active, is_system, is_legacy_alias, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, (
+                'admin',
+                'Administrator Regional',
+                'admin',
+                None,
+                generate_password_hash('123'),
+                1,
+                1,
+                0,
+                now_str,
+                now_str
+            ))
+            print("Database initialized: Default Admin user ensured in SQLite.")
 
         # --- SEEDING NOTIFICATIONS ---
         cursor.execute("SELECT COUNT(*) FROM notifications;")
