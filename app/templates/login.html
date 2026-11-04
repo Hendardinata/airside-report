@@ -1240,18 +1240,22 @@
     /* ==========================================================================
        EXECUTIVE CORPORATE SWEETALERT & POPUP THEMING (100% UNIFIED)
        ========================================================================== */
-    /* Modal Backdrop: Hanya aktif pada modal dialog biasa, BUKAN toast notification */
-    div:where(.swal2-container):not(.swal2-top-end):not(.swal2-top-start):not(.swal2-top):not(.swal2-bottom-end):not(.swal2-bottom-start):not(.swal2-bottom):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-toast-shown):not(:has(.swal2-toast)).swal2-backdrop-show,
-    body:not(.swal2-toast-shown) div:where(.swal2-container):not(.swal2-top-end):not(.swal2-top-start):not(.swal2-top):not(.swal2-bottom-end):not(.swal2-bottom-start):not(.swal2-bottom):not(.swal2-center-start):not(.swal2-center-end):not(:has(.swal2-toast)).swal2-backdrop-show {
+    /* Modal Backdrop: Hanya aktif pada modal dialog biasa, BUKAN toast notification & BUKAN loading */
+    div:where(.swal2-container):not(.swal2-top-end):not(.swal2-top-start):not(.swal2-top):not(.swal2-bottom-end):not(.swal2-bottom-start):not(.swal2-bottom):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-toast-shown):not(:has(.swal2-toast)):not(:has(.swal2-loading)):not(.swal2-loading).swal2-backdrop-show,
+    body:not(.swal2-toast-shown) div:where(.swal2-container):not(.swal2-top-end):not(.swal2-top-start):not(.swal2-top):not(.swal2-bottom-end):not(.swal2-bottom-start):not(.swal2-bottom):not(.swal2-center-start):not(.swal2-center-end):not(:has(.swal2-toast)):not(:has(.swal2-loading)):not(.swal2-loading).swal2-backdrop-show {
         background: rgba(15, 23, 42, 0.45) !important;
         backdrop-filter: blur(4px) !important;
         -webkit-backdrop-filter: blur(4px) !important;
     }
 
-    div:where(.swal2-container):has(.swal2-loading) {
-        background: rgba(15, 23, 42, 0.45) !important;
-        backdrop-filter: blur(4px) !important;
-        -webkit-backdrop-filter: blur(4px) !important;
+    /* Loading Backdrop: Frosted Glass Light Blur (Sesuai Desain InJourney) */
+    div:where(.swal2-container):has(.swal2-loading),
+    div:where(.swal2-container).swal2-loading,
+    body div:where(.swal2-container):has(.swal2-loading),
+    body div:where(.swal2-container).swal2-loading {
+        background: rgba(248, 250, 252, 0.72) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
     }
 
     /* WAJIB TRANSPARAN 100% UNTUK SEMUA TOAST POPUP (HILANGKAN BACKGROUND GELAP / HITAM) */
@@ -1297,10 +1301,10 @@
         pointer-events: none !important;
     }
 
-    /* Modal Popup Box (Bukan Toast) */
-    div:where(.swal2-container) .swal2-popup:not(.swal2-toast),
-    .swal2-popup:not(.swal2-toast),
-    .swal2-popup.swal-corp-popup:not(.swal2-toast) {
+    /* Modal Popup Box (Bukan Toast & Bukan Loading) */
+    div:where(.swal2-container) .swal2-popup:not(.swal2-toast):not(.swal2-loading):not([data-loading="true"]),
+    .swal2-popup:not(.swal2-toast):not(.swal2-loading):not([data-loading="true"]),
+    .swal2-popup.swal-corp-popup:not(.swal2-toast):not(.swal2-loading):not([data-loading="true"]) {
         border-radius: 24px !important;
         padding: 2.25rem 2.25rem 2rem 2.25rem !important;
         box-shadow: 0 25px 60px -15px rgba(0, 43, 73, 0.22), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
@@ -1595,13 +1599,13 @@
         box-sizing: border-box !important;
     }
 
-    /* Strictly hide buttons or actions that SweetAlert marks as display:none or hidden */
-    div:where(.swal2-container) .swal2-actions[style*="display: none"],
-    div:where(.swal2-container) .swal2-actions:not(:has(button:not([style*="display: none"]))),
+    /* Strictly hide buttons or actions that SweetAlert marks as display:none or hidden (EXCEPT when loading) */
+    div:where(.swal2-container):not(:has(.swal2-loading)) .swal2-actions:not(.swal2-loading)[style*="display: none"],
+    div:where(.swal2-container):not(:has(.swal2-loading)) .swal2-actions:not(.swal2-loading):not(:has(button:not([style*="display: none"]))),
     div:where(.swal2-container) .swal2-actions button[style*="display: none"],
     div:where(.swal2-container) .swal2-actions button.swal2-hide,
     div:where(.swal2-container) .swal2-actions button[aria-hidden="true"],
-    .swal2-actions[style*="display: none"],
+    .swal2-actions:not(.swal2-loading)[style*="display: none"],
     .swal2-actions button[style*="display: none"],
     .swal2-actions button[aria-hidden="true"] {
         display: none !important;

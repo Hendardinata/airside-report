@@ -146,10 +146,10 @@ div:where(.swal2-container).swal2-bottom.swal2-backdrop-show,
     pointer-events: none !important;
 }
 
-/* Modal Popup Box (Design Reference: Pure White, Rounded-28px, Soft Elevation Shadow) */
-div:where(.swal2-container) .swal2-popup:not(.swal2-toast),
-.swal2-popup:not(.swal2-toast),
-.swal2-popup.swal-corp-popup:not(.swal2-toast) {
+/* Modal Popup Box (Bukan Toast & Bukan Loading) */
+div:where(.swal2-container) .swal2-popup:not(.swal2-toast):not(.swal2-loading):not([data-loading="true"]),
+.swal2-popup:not(.swal2-toast):not(.swal2-loading):not([data-loading="true"]),
+.swal2-popup.swal-corp-popup:not(.swal2-toast):not(.swal2-loading):not([data-loading="true"]) {
     background: #ffffff !important;
     border-radius: var(--modal-card-radius) !important;
     padding: 2.25rem 2rem 2rem 2rem !important;
@@ -425,15 +425,119 @@ div:where(.swal2-container) .swal2-html-container strong,
    4. ACTION BUTTONS (Uniform 50px Height, 16px Radius)
    ============================================================================== */
 
-/* Hide buttons or actions that SweetAlert marks as display:none */
-div:where(.swal2-container) .swal2-actions[style*="display: none"],
-div:where(.swal2-container) .swal2-actions:not(:has(button:not([style*="display: none"]))),
+/* Hide buttons or actions that SweetAlert marks as display:none (EXCEPT when loading) */
+div:where(.swal2-container):not(:has(.swal2-loading)) .swal2-actions:not(.swal2-loading)[style*="display: none"],
+div:where(.swal2-container):not(:has(.swal2-loading)) .swal2-actions:not(.swal2-loading):not(:has(button:not([style*="display: none"]))),
 div:where(.swal2-container) .swal2-actions button[style*="display: none"],
 div:where(.swal2-container) .swal2-actions button.swal2-hide,
 div:where(.swal2-container) .swal2-actions button[aria-hidden="true"],
-.swal2-actions[style*="display: none"],
+.swal2-actions:not(.swal2-loading)[style*="display: none"],
 .swal2-actions button[style*="display: none"],
 .swal2-actions button[aria-hidden="true"] {
+    display: none !important;
+}
+
+/* SweetAlert2 Loading State - Seamless Blend (No Card Frame, Frosted Glass Backdrop, Centered Kawung Emblem) */
+div:where(.swal2-container):has(.swal2-loading),
+div:where(.swal2-container).swal2-loading {
+    background: rgba(248, 250, 252, 0.72) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+div:where(.swal2-container) .swal2-popup.swal2-loading,
+div:where(.swal2-container) .swal2-popup[data-loading="true"],
+.swal2-popup.swal2-loading,
+.swal2-popup[data-loading="true"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+    padding: 0 !important;
+    margin: auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+
+div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-actions,
+div:where(.swal2-container) .swal2-actions.swal2-loading,
+div:where(.swal2-container):has(.swal2-loading) .swal2-actions,
+.swal2-popup.swal2-loading .swal2-actions,
+.swal2-actions.swal2-loading {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+}
+
+div:where(.swal2-container) .swal2-actions.swal2-loading button,
+div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-actions button,
+.swal2-actions.swal2-loading button,
+.swal2-popup.swal2-loading .swal2-actions button {
+    display: none !important;
+}
+
+div:where(.swal2-container) .swal2-loader,
+.swal2-loader {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 82px !important;
+    height: 82px !important;
+    min-width: 82px !important;
+    min-height: 82px !important;
+    border: none !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+    background: url('/static/img/logo-kawung.png') no-repeat center center !important;
+    background-size: contain !important;
+    animation: injourney-spin 2s linear infinite !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    filter: drop-shadow(0 6px 16px rgba(0, 43, 73, 0.14)) !important;
+}
+
+div:where(.swal2-container) .swal2-loader::before,
+div:where(.swal2-container) .swal2-loader::after,
+.swal2-loader::before,
+.swal2-loader::after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+}
+
+div:where(.swal2-container) .swal2-actions.swal2-loading .swal2-loader,
+div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-loader,
+div:where(.swal2-container).swal2-loading .swal2-loader,
+.swal2-actions.swal2-loading .swal2-loader,
+.swal2-popup.swal2-loading .swal2-loader,
+.swal2-loading .swal2-loader {
+    display: flex !important;
+}
+
+div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-title,
+div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-html-container,
+div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-icon,
+div:where(.swal2-container) .swal2-popup.swal2-loading .swal2-close,
+.swal2-popup.swal2-loading .swal2-title,
+.swal2-popup.swal2-loading .swal2-html-container,
+.swal2-popup.swal2-loading .swal2-icon,
+.swal2-popup.swal2-loading .swal2-close {
     display: none !important;
 }
 
