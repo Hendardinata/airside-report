@@ -59,9 +59,9 @@ def save_uploaded_photos(airport_code, tanggal, report_id, uploaded_files, areas
     areas = areas or []
     captions = captions or []
 
-    # 1. Kelola foto lama jika keep_photo_ids diberikan atau sedang mode edit
-    if keep_photo_ids is not None or is_edit:
-        keep_set = set(str(pid).strip() for pid in (keep_photo_ids or []) if str(pid).strip())
+    # 1. Kelola foto lama HANYA jika keep_photo_ids diberikan secara eksplisit
+    if keep_photo_ids is not None:
+        keep_set = set(str(pid).strip() for pid in keep_photo_ids if str(pid).strip())
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute("""

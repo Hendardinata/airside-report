@@ -114,16 +114,17 @@ def _clean_superseded_notifications(notif_list):
 
 def create_notification(airport_code, recipient_role, notif_type, title, message, report_id=None, tanggal=None, notes=None, recipient_username=None, sender_username=None, sender_name=None):
     """
-    Menambahkan notifikasi baru ke database SQLite.
+    Menambahkan notifikasi baru ke database SQLite secara atomic.
     """
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     clean_recip_u = (recipient_username or '').strip().lower()
     notif_id = f"notif_{int(datetime.now().timestamp())}_{uuid.uuid4().hex[:6]}"
+    airport = (airport_code or 'LOP').upper()
     
     notif = {
         "id": notif_id,
-        "airport": (airport_code or 'LOP').upper(),
-        "recipient_role": recipient_role,
+        "airport": airport,
+        "recipient_role": (recipient_role or 'staff').lower(),
         "recipient_username": clean_recip_u,
         "sender_username": (sender_username or '').strip().lower(),
         "sender_name": sender_name or '',
@@ -138,31 +139,56 @@ def create_notification(airport_code, recipient_role, notif_type, title, message
     }
 
     with _lock:
-        data = _load_raw_notifications()
+        with get_db() as conn:
+            cursor = conn.cursor()
+            # 1. Hapus superseded notifications untuk report_id ini jika ada
+            if report_id:
+                if notif_type == 'revisi':
+                    cursor.execute("""
+                    DELETE FROM notifications 
+                    WHERE report_id = ? AND UPPER(airport) = ? AND notif_type = 'pending';
+                    """, (report_id, airport))
+                elif notif_type == 'approved':
+                    cursor.execute("""
+                    DELETE FROM notifications 
+                    WHERE report_id = ? AND UPPER(airport) = ? AND notif_type IN ('pending', 'revisi');
+                    """, (report_id, airport))
+                elif notif_type == 'pending':
+                    cursor.execute("""
+                    DELETE FROM notifications 
+                    WHERE report_id = ? AND UPPER(airport) = ? AND notif_type IN ('pending', 'revisi');
+                    """, (report_id, airport))
 
-        if report_id:
-            def matches_recipient(existing_n):
-                ex_role = (existing_n.get('recipient_role') or '').strip().lower()
-                cur_role = (recipient_role or '').strip().lower()
-                ex_norm = 'dh' if ex_role in ('dh', 'gm') else ex_role
-                cur_norm = 'dh' if cur_role in ('dh', 'gm') else cur_role
-                if ex_norm != cur_norm:
-                    return False
-                ex_u = (existing_n.get('recipient_username') or '').strip().lower()
-                return not clean_recip_u or not ex_u or ex_u == clean_recip_u
+            # 2. Insert notifikasi baru
+            cursor.execute("""
+            INSERT OR REPLACE INTO notifications (
+                id, airport, recipient_role, recipient_username, sender_username, sender_name,
+                notif_type, title, message, report_id, tanggal, notes, created_at, is_read
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, (
+                notif["id"],
+                notif["airport"],
+                notif["recipient_role"],
+                notif["recipient_username"],
+                notif["sender_username"],
+                notif["sender_name"],
+                notif["notif_type"],
+                notif["title"],
+                notif["message"],
+                notif["report_id"],
+                notif["tanggal"],
+                notif["notes"],
+                notif["created_at"],
+                0
+            ))
 
-            if notif_type == 'revisi':
-                data = [n for n in data if not (n.get('report_id') == report_id and n.get('notif_type') == 'pending' and matches_recipient(n))]
-            elif notif_type == 'approved':
-                data = [n for n in data if not (n.get('report_id') == report_id and n.get('notif_type') in ('pending', 'revisi') and matches_recipient(n))]
-            elif notif_type == 'pending':
-                data = [n for n in data if not (n.get('report_id') == report_id and n.get('notif_type') in ('revisi', 'pending') and matches_recipient(n))]
-
-        data.insert(0, notif)
-        data = _clean_superseded_notifications(data)
-        if len(data) > 100:
-            data = data[:100]
-        _save_raw_notifications(data)
+            # 3. Pangkas notifikasi lama jika lebih dari 150
+            cursor.execute("""
+            DELETE FROM notifications 
+            WHERE id NOT IN (
+                SELECT id FROM notifications ORDER BY created_at DESC LIMIT 150
+            );
+            """)
 
     return notif
 
@@ -231,8 +257,13 @@ def get_notifications(airport_code, role='staff', username=None, active_month=No
 
     cleaned_list = _clean_superseded_notifications(raw_list)
     if len(cleaned_list) != len(raw_list):
-        with _lock:
-            _save_raw_notifications(cleaned_list)
+        cleaned_ids = {n['id'] for n in cleaned_list}
+        stale_ids = [n['id'] for n in raw_list if n['id'] not in cleaned_ids]
+        if stale_ids:
+            with _lock:
+                with get_db() as conn:
+                    cursor = conn.cursor()
+                    cursor.executemany("DELETE FROM notifications WHERE id = ?;", [(sid,) for sid in stale_ids])
         raw_list = cleaned_list
 
     target_roles = {'all', role}
@@ -280,10 +311,10 @@ def get_notifications(airport_code, role='staff', username=None, active_month=No
                         recipient_username=rep_user or u_filter,
                         notif_type='revisi',
                         title='Catatan Koreksi DH',
-                        message=f'Pesan DH: "{srep.get("catatan_gm") or "Periksa kembali data inspeksi."}"',
+                        message=f'Pesan DH: "{srep.get("catatan_gm") or srep.get("catatan_dh") or "Periksa kembali data inspeksi."}"',
                         report_id=rid,
                         tanggal=srep.get('tanggal'),
-                        notes=srep.get('catatan_gm')
+                        notes=srep.get('catatan_gm') or srep.get('catatan_dh')
                     )
                     filtered.insert(0, auto_notif)
                     existing_revisi_rids.add(rid)
@@ -297,6 +328,10 @@ def get_notifications(airport_code, role='staff', username=None, active_month=No
 
             if rid and ntype in ('pending', 'revisi'):
                 if rid not in active_staging_ids:
+                    orphan_notif_ids.add(n.get('id'))
+                    continue
+                if ntype == 'revisi' and staging_status_map.get(rid) != 'REVISI':
+                    # Laporan telah diperbaiki / diajukan ulang / disetujui, notifikasi revisi usang dibersihkan
                     orphan_notif_ids.add(n.get('id'))
                     continue
                 if ntype == 'pending':
@@ -322,6 +357,8 @@ def get_notifications(airport_code, role='staff', username=None, active_month=No
 def clear_notifications(airport_code, role='staff', username=None, active_month=None):
     """
     Menghapus seluruh notifikasi untuk bandara, role, username, dan bulan aktif tertentu.
+    Pengecualian Mutlak: Notifikasi bertipe 'revisi' yang laporannya masih aktif berstatus REVISI
+    TIDAK BOLEH dihapus secara permanen sampai laporan direvisi dan diselesaikan.
     """
     airport = (airport_code or 'LOP').upper()
     target_roles = {'all', role}
@@ -336,10 +373,23 @@ def clear_notifications(airport_code, role='staff', username=None, active_month=
         except Exception:
             active_month = None
 
+    # Cari report_id aktif yang berstatus REVISI
+    active_revisi_rids = set()
+    try:
+        from app.services.staging_service import get_staging_reports
+        active_stg = get_staging_reports(airport)
+        active_revisi_rids = {s.get('report_id') for s in active_stg if s.get('status') == 'REVISI' and s.get('report_id')}
+    except Exception as err:
+        print("Warning check active revisi rids:", err)
+
     with _lock:
-        data = _load_raw_notifications()
-        new_data = []
-        for n in data:
+        raw_list = _load_raw_notifications()
+        ids_to_delete = []
+        for n in raw_list:
+            # Pengecualian proteksi: jangan hapus notifikasi revisi yang masih aktif
+            if n.get('notif_type') == 'revisi' and n.get('report_id') in active_revisi_rids:
+                continue
+
             apt_match = (n.get('airport', '').upper() == airport)
             role_match = (n.get('recipient_role', 'all') in target_roles)
             user_match = True
@@ -351,53 +401,89 @@ def clear_notifications(airport_code, role='staff', username=None, active_month=
             month_match = _matches_active_month(n, active_month) if active_month else True
 
             if apt_match and role_match and user_match and month_match:
-                continue
-            new_data.append(n)
+                ids_to_delete.append(n.get('id'))
 
-        _save_raw_notifications(new_data)
+        if ids_to_delete:
+            with get_db() as conn:
+                cursor = conn.cursor()
+                cursor.executemany("DELETE FROM notifications WHERE id = ?;", [(nid,) for nid in ids_to_delete])
 
 def delete_single_notification(notif_id):
     """
     Menghapus satu notifikasi spesifik berdasarkan ID notifikasi di SQLite.
+    Pengecualian: Notifikasi bertipe 'revisi' yang laporannya masih aktif berstatus REVISI
+    TIDAK BOLEH dihapus.
     """
     if not notif_id:
-        return
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM notifications WHERE id = ?;", (notif_id,))
+        return False
+    with _lock:
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT report_id, notif_type, airport FROM notifications WHERE id = ?;", (notif_id,))
+            row = cursor.fetchone()
+            if not row:
+                return False
+
+            if (row['notif_type'] or '').lower() == 'revisi' and row['report_id']:
+                try:
+                    from app.services.staging_service import get_staging_reports
+                    stg = get_staging_reports(row['airport'])
+                    active_revisi_rids = {s.get('report_id') for s in stg if s.get('status') == 'REVISI'}
+                    if row['report_id'] in active_revisi_rids:
+                        # Ditolak karena revisi masih aktif
+                        return False
+                except Exception:
+                    pass
+
+            cursor.execute("DELETE FROM notifications WHERE id = ?;", (notif_id,))
+            return True
 
 def set_notification_read_status(notif_id, is_read=True):
     """
-    Mengubah status baca (is_read: True/False) untuk satu notifikasi spesifik di SQLite.
+    Mengubah status baca (is_read: True/False) untuk satu notifikasi spesifik di SQLite secara atomic.
     """
     if not notif_id:
         return
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute("UPDATE notifications SET is_read = ? WHERE id = ?;", (1 if is_read else 0, notif_id))
+    with _lock:
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("UPDATE notifications SET is_read = ? WHERE id = ?;", (1 if is_read else 0, notif_id))
 
 def mark_notification_as_read(notif_id):
     set_notification_read_status(notif_id, is_read=True)
 
 def mark_all_as_read(airport_code, role='staff', username=None):
     """
-    Menandai semua notifikasi untuk bandara dan role tertentu telah dibaca di SQLite.
+    Menandai semua notifikasi untuk bandara dan role tertentu telah dibaca di SQLite secara atomic.
     """
     airport = (airport_code or 'LOP').upper()
-    target_roles = {'all', role}
-    if role in ('dh', 'gm'):
-        target_roles.update({'dh', 'gm'})
     u_filter = (username or '').strip().lower()
-    
+
     with _lock:
-        data = _load_raw_notifications()
-        for n in data:
-            if n.get('airport', '').upper() == airport:
-                r = n.get('recipient_role', 'all')
-                if r in target_roles:
-                    recip_user = (n.get('recipient_username') or '').strip().lower()
-                    if role == 'staff' and u_filter:
-                        if recip_user and recip_user != u_filter:
-                            continue
-                    n['is_read'] = True
-        _save_raw_notifications(data)
+        with get_db() as conn:
+            cursor = conn.cursor()
+            if role == 'staff' and u_filter:
+                cursor.execute("""
+                UPDATE notifications 
+                SET is_read = 1 
+                WHERE UPPER(airport) = ? 
+                  AND recipient_role IN ('staff', 'all')
+                  AND (recipient_username = '' OR LOWER(recipient_username) = ?)
+                  AND notif_type != 'revisi';
+                """, (airport, u_filter))
+            elif role in ('dh', 'gm'):
+                cursor.execute("""
+                UPDATE notifications 
+                SET is_read = 1 
+                WHERE UPPER(airport) = ? 
+                  AND recipient_role IN ('dh', 'gm', 'all')
+                  AND notif_type != 'revisi';
+                """, (airport,))
+            else:
+                cursor.execute("""
+                UPDATE notifications 
+                SET is_read = 1 
+                WHERE UPPER(airport) = ? 
+                  AND recipient_role IN (?, 'all')
+                  AND notif_type != 'revisi';
+                """, (airport, role))

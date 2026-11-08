@@ -1312,7 +1312,7 @@
     <!-- ==========================================================================
          GLOBAL USER PROFILE MODAL
          ========================================================================== -->
-    <div class="clean-modal-overlay" id="modalUserProfile" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 1rem;">
+    <div class="clean-modal-overlay" id="modalUserProfile" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); z-index: 1050; align-items: center; justify-content: center; padding: 1rem;">
         <div class="clean-modal-card" style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 480px; box-shadow: 0 20px 40px rgba(0, 43, 73, 0.18); overflow: hidden; animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
             <!-- Modal Head -->
             <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; background: #ffffff;">
@@ -1649,6 +1649,8 @@
                     btnSave.innerHTML = origHtml;
                 }
                 if (res.success) {
+                    // Tutup modal profil terlebih dahulu agar tidak menumpuk
+                    closeProfileModal();
                     Swal.fire({
                         icon: 'success',
                         title: 'Profil Berhasil Diperbarui',

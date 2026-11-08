@@ -264,10 +264,30 @@ def dashboard():
     staging_reports = get_staging_reports(airport_code)
     
     from app.services.notification_service import get_notifications
-    user_notifs = get_notifications(airport_code, role='staff', username=user.get('username'))
-    unread_notifs = sum(1 for n in user_notifs if not n.get('is_read'))
+    from app.models.config_store import get_active_month
+    active_m = get_active_month(airport_code)
+    user_notifs = get_notifications(airport_code, role='staff', username=user.get('username'), active_month=active_m)
+    
+    # Hitung laporan unik yang masih membutuhkan tindakan revisi (status REVISI)
+    curr_u = (user.get('username') or '').strip().lower()
+    active_revisi_rids = set()
+    for s in staging_reports:
+        if s.get('status') == 'REVISI':
+            sub_u = (s.get('submitted_by_username') or '').strip().lower()
+            if not sub_u or not curr_u or sub_u == curr_u:
+                active_revisi_rids.add(s.get('report_id'))
+
+    for n in user_notifs:
+        if n.get('notif_type') == 'revisi' and n.get('report_id'):
+            rid = n.get('report_id')
+            srep = next((s for s in staging_reports if s.get('report_id') == rid), None)
+            if srep and srep.get('status') == 'REVISI':
+                active_revisi_rids.add(rid)
+
+    active_revisi_count = len(active_revisi_rids)
+    unread_regular_notifs = sum(1 for n in user_notifs if n.get('notif_type') != 'revisi' and not n.get('is_read'))
     total_notifs = len(user_notifs)
-    notif_badge_num = unread_notifs
+    notif_badge_num = active_revisi_count + unread_regular_notifs
 
     from app.services.gsheets_service import get_airport_sheet_calendar_data
     cal_data = get_airport_sheet_calendar_data(airport_code)
@@ -292,7 +312,7 @@ def dashboard():
         staging_reports=staging_reports,
         config=config,
         notif_badge_num=notif_badge_num,
-        unread_notifs_count=unread_notifs,
+        unread_notifs_count=unread_regular_notifs,
         total_notifs_count=total_notifs,
         active_month_label=active_month_label,
         cal_data=cal_data
@@ -328,6 +348,30 @@ def api_get_staging_report(report_id):
             print("Fallback notification error:", err)
         return jsonify({"success": False, "error": "Laporan draf tidak ditemukan"}), 404
     return jsonify({"success": True, "report": report})
+
+@bp.route('/api/staging-report-by-date/<date_str>')
+def api_get_staging_report_by_date(date_str):
+    user = USERS.get(session['user_id'])
+    airport_code = user['airport']
+    clean_date = (date_str or '').strip()
+    from app.models.db import get_db
+    from app.services.staging_service import get_staging_report_by_id
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        SELECT report_id FROM staging_reports
+        WHERE UPPER(airport_code) = ? AND tanggal = ? AND status != 'APPROVED'
+        ORDER BY CASE WHEN status = 'REVISI' THEN 1 ELSE 2 END, timestamp_update DESC LIMIT 1;
+        """, (airport_code.upper(), clean_date))
+        row = cursor.fetchone()
+
+    if row and row['report_id']:
+        report = get_staging_report_by_id(airport_code, row['report_id'])
+        if report:
+            return jsonify({"success": True, "report": report})
+
+    return jsonify({"success": False, "error": f"Laporan draf untuk tanggal {clean_date} tidak ditemukan"}), 404
 
 @bp.route('/submit', methods=['POST'])
 def submit():
@@ -530,7 +574,8 @@ def submit():
             )
 
         return jsonify({
-            "status": "success", 
+            "status": "success",
+            "success": True,
             "message": f"Data berhasil disimpan ke Database Staging {airport_code} dan dikirim ke Department Head untuk direview!",
             "report_id": staging_res.get('report_id'),
             "dh_phone": dh_phone,
@@ -551,11 +596,36 @@ def api_notifications():
     from app.models.config_store import get_active_month
     active_m = get_active_month(airport_code)
     notifs = get_notifications(airport_code, role='staff', username=user.get('username'), active_month=active_m)
-    unread_count = sum(1 for n in notifs if not n.get('is_read'))
+    
+    from app.services.staging_service import get_staging_reports
+    staging_reps = get_staging_reports(airport_code)
+
+    curr_u = (user.get('username') or '').strip().lower()
+    active_revisi_rids = set()
+    for s in staging_reps:
+        if s.get('status') == 'REVISI':
+            sub_u = (s.get('submitted_by_username') or '').strip().lower()
+            if not sub_u or not curr_u or sub_u == curr_u:
+                active_revisi_rids.add(s.get('report_id'))
+
+    for n in notifs:
+        if n.get('notif_type') == 'revisi' and n.get('report_id'):
+            rid = n.get('report_id')
+            srep = next((s for s in staging_reps if s.get('report_id') == rid), None)
+            if srep and srep.get('status') == 'REVISI':
+                active_revisi_rids.add(rid)
+
+    active_revisi_count = len(active_revisi_rids)
+    unread_regular_count = sum(1 for n in notifs if n.get('notif_type') != 'revisi' and not n.get('is_read'))
+    total_badge_count = active_revisi_count + unread_regular_count
+
     return jsonify({
         "success": True,
         "notifications": notifs,
-        "unread_count": unread_count,
+        "unread_count": total_badge_count,
+        "badge_count": total_badge_count,
+        "active_revisi_count": active_revisi_count,
+        "unread_regular_count": unread_regular_count,
         "active_month": active_m
     })
 
@@ -564,13 +634,14 @@ def api_notifications_mark_read():
     data = request.json or {}
     user = USERS.get(session['user_id'])
     airport_code = user.get('airport', 'LOP')
-    from app.services.notification_service import mark_notification_as_read, mark_all_as_read, set_notification_read_status
+    from app.services.notification_service import mark_notification_as_read, mark_all_as_read
     
+    target_id = data.get('notif_id') or data.get('id')
     if data.get('mark_all'):
         mark_all_as_read(airport_code, role='staff', username=user.get('username'))
-    elif data.get('notif_id'):
-        is_read = data.get('is_read', True)
-        set_notification_read_status(data.get('notif_id'), is_read=is_read)
+    elif target_id:
+        # Selalu tandai sudah dibaca secara permanen (idempotent)
+        mark_notification_as_read(target_id)
     return jsonify({"success": True})
 
 @bp.route('/api/notifications/clear', methods=['POST'])
@@ -584,7 +655,9 @@ def api_notifications_clear():
 
     notif_id = data.get('notif_id')
     if notif_id:
-        delete_single_notification(notif_id)
+        res = delete_single_notification(notif_id)
+        if not res:
+            return jsonify({"success": False, "message": "Notifikasi revisi laporan yang masih aktif tidak dapat dihapus."}), 400
     else:
         clear_notifications(airport_code, role='staff', username=user.get('username'), active_month=active_m)
 
