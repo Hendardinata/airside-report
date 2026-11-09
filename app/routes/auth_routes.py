@@ -278,33 +278,56 @@ def _format_tanggal_indo(d_str):
     return str(d_str)
 
 
+@bp.route('/dokumentasi', methods=['GET'])
+@bp.route('/dokumentasi/', methods=['GET'])
 @bp.route('/dokumentasi/<date_str>', methods=['GET'])
 @bp.route('/dokumentasi/<date_str>/<airport_code>', methods=['GET'])
 @bp.route('/dok/<date_str>', methods=['GET'])
 @bp.route('/dok/<date_str>/<airport_code>', methods=['GET'])
 @bp.route('/d/<date_str>', methods=['GET'])
 @bp.route('/d/<date_str>/<airport_code>', methods=['GET'])
-def public_dokumentasi(date_str, airport_code=None):
+def public_dokumentasi(date_str=None, airport_code=None):
     """
-    Halaman publik (tanpa login) untuk melihat & mencetak PDF dokumentasi foto lapangan
-    yang dikirimkan melalui tautan di laporan WhatsApp ke Deputy / Pimpinan.
+    Halaman korporat untuk melihat, memfilter per cabang, dan mengunduh massal (ZIP)
+    dokumentasi foto lapangan hasil inspeksi fasilitas sisi udara.
     """
-    from app.services.photo_service import get_all_airports_photos_by_date, get_photos_by_date
+    import re
+    from app.services.photo_service import (
+        get_all_airports_photos_by_date,
+        get_latest_documentation_date
+    )
+    from app.models.airport_profiles import AIRPORTS
 
-    clean_date = str(date_str or '').strip()[:10]
-    if airport_code and airport_code.upper() in ('DPS', 'LOP', 'KOE', 'BWX'):
-        code = airport_code.upper()
-        photos_by_airport = {c: ([] if c != code else get_photos_by_date(code, clean_date)) for c in ('DPS', 'LOP', 'KOE', 'BWX')}
+    raw_date = date_str or request.args.get('date') or request.args.get('tanggal')
+    clean_date = str(raw_date or '').strip()[:10]
+    if not re.match(r'^\d{4}-\d{2}-\d{2}$', clean_date):
+        clean_date = get_latest_documentation_date()
+
+    req_branch = airport_code or request.args.get('branch') or request.args.get('airport') or 'ALL'
+    req_branch = str(req_branch).strip().upper()
+    if req_branch in ('', 'ALL', 'SEMUA', 'SEMUA_CABANG'):
+        initial_branch = 'ALL'
     else:
-        photos_by_airport = get_all_airports_photos_by_date(clean_date)
+        initial_branch = req_branch
 
+    photos_by_airport = get_all_airports_photos_by_date(clean_date)
+    if initial_branch != 'ALL' and initial_branch not in photos_by_airport:
+        initial_branch = 'ALL'
+
+    branch_list = list(photos_by_airport.keys())
     total_photos = sum(len(v) for v in photos_by_airport.values())
+    active_branches_count = sum(1 for v in photos_by_airport.values() if len(v) > 0)
+
     airport_names = {
-        "DPS": "Bandara Internasional I Gusti Ngurah Rai — Bali",
-        "LOP": "Bandara Internasional Zainuddin Abdul Madjid — Lombok",
+        "DPS": "Bandara Internasional I Gusti Ngurah Rai",
+        "LOP": "Bandara Internasional Zainuddin Abdul Madjid",
         "BWX": "Bandara Internasional Banyuwangi",
-        "KOE": "Bandara El Tari — Kupang"
+        "KOE": "Bandara El Tari Kupang"
     }
+    for code in branch_list:
+        if code not in airport_names:
+            info = AIRPORTS.get(code, {})
+            airport_names[code] = info.get('name') or f"Bandara Cabang {code}"
 
     og_image_url = url_for('auth.public_dokumentasi_preview', date_str=clean_date, _external=True)
 
@@ -313,10 +336,83 @@ def public_dokumentasi(date_str, airport_code=None):
         date_str=clean_date,
         formatted_date=_format_tanggal_indo(clean_date),
         photos_by_airport=photos_by_airport,
+        branch_list=branch_list,
+        initial_branch=initial_branch,
         total_photos=total_photos,
+        active_branches_count=active_branches_count,
         airport_names=airport_names,
         og_image_url=og_image_url
     )
+
+
+@bp.route('/api/documentation/download', methods=['GET'])
+@bp.route('/dokumentasi/download', methods=['GET'])
+def download_documentation_zip():
+    """
+    Endpoint Bulk Download ZIP dokumentasi foto lapangan berdasarkan tanggal dan filter cabang:
+    - GET /api/documentation/download?date=2026-10-15&branch=all
+      -> Dokumentasi_Airside_2026-10-15_Semua_Cabang.zip
+    - GET /api/documentation/download?date=2026-10-15&branch=LOP
+      -> Dokumentasi_Airside_2026-10-15_LOP.zip
+    """
+    from flask import send_file
+    from app.services.photo_service import build_documentation_zip
+
+    # Jika terdapat sesi login aktif, pastikan akun masih berstatus aktif
+    if 'user_id' in session:
+        user = USERS.get(session.get('user_id'))
+        if user and not user.get('is_active', True):
+            return jsonify({
+                "success": False,
+                "status": "error",
+                "message": "Akses ditolak: Akun pengguna saat ini berstatus nonaktif."
+            }), 403
+
+    date_param = (request.args.get('date') or request.args.get('tanggal') or '').strip()[:10]
+    branch_param = (request.args.get('branch') or request.args.get('airport') or request.args.get('cabang') or 'ALL').strip()
+
+    if not date_param:
+        return jsonify({
+            "success": False,
+            "status": "error",
+            "message": "Parameter tanggal dokumentasi (date) wajib disertakan."
+        }), 400
+
+    try:
+        spool_file, zip_filename, total_files, included_branches = build_documentation_zip(
+            tanggal=date_param,
+            branch=branch_param
+        )
+    except ValueError as val_err:
+        return jsonify({
+            "success": False,
+            "status": "error",
+            "message": str(val_err)
+        }), 400
+    except Exception as err:
+        return jsonify({
+            "success": False,
+            "status": "error",
+            "message": f"Gagal menyiapkan arsip ZIP dokumentasi: {str(err)}"
+        }), 500
+
+    if not spool_file or total_files == 0:
+        return jsonify({
+            "success": False,
+            "status": "empty",
+            "message": "Tidak ada dokumentasi foto yang dapat diunduh untuk pilihan tanggal dan cabang ini."
+        }), 404
+
+    response = send_file(
+        spool_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=zip_filename
+    )
+    response.headers['X-Photo-Count'] = str(total_files)
+    response.headers['X-Included-Branches'] = ",".join(included_branches)
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    return response
 
 
 @bp.route('/dokumentasi/<date_str>/preview.jpg', methods=['GET'])

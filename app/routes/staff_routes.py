@@ -460,6 +460,8 @@ def submit():
         photo_areas = request.form.getlist('photo_areas')
         photo_captions = request.form.getlist('photo_captions')
         keep_photo_ids = request.form.getlist('keep_photo_ids')
+        keep_photo_areas = request.form.getlist('keep_photo_areas')
+        keep_photo_captions = request.form.getlist('keep_photo_captions')
         has_photo_sync_flag = request.form.get('photo_sync_active') == '1'
 
         try:
@@ -472,7 +474,9 @@ def submit():
                 areas=photo_areas,
                 captions=photo_captions,
                 keep_photo_ids=keep_photo_ids if (has_photo_sync_flag or report_id) else None,
-                is_edit=bool(report_id or has_photo_sync_flag)
+                is_edit=bool(report_id or has_photo_sync_flag),
+                keep_photo_areas=keep_photo_areas,
+                keep_photo_captions=keep_photo_captions
             )
             if saved_photos:
                 data['DOKUMENTASI_FOTO'] = ", ".join(p.get('url', '') for p in saved_photos if p.get('url'))

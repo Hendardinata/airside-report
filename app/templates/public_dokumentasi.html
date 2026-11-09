@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dokumentasi Airside Regional II — {{ formatted_date }}</title>
+    <title>Daftar Dokumentasi Kondisi Fasilitas Airside — {{ formatted_date }}</title>
 
     <!-- OpenGraph Meta Tags untuk Rich Preview Gambar Otomatis di WhatsApp -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Dokumentasi Laporan Harian Airside Regional II ({{ formatted_date }})">
-    <meta property="og:description" content="Lampiran {{ total_photos }} foto dokumentasi kondisi fasilitas sisi udara (Runway, Taxiway, Apron) PT Angkasa Pura Indonesia Regional II.">
+    <meta property="og:title" content="Daftar Dokumentasi Kondisi Fasilitas Airside ({{ formatted_date }})">
+    <meta property="og:description" content="Lampiran {{ total_photos }} foto dokumentasi hasil inspeksi fasilitas sisi udara dari {{ active_branches_count }} cabang bandara PT Angkasa Pura Indonesia Regional II.">
     <meta property="og:image" content="{{ og_image_url }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -21,10 +21,11 @@
     <style>
         :root {
             --theme-navy: #002b49;
-            --theme-blue: #00B7CD;
-            --theme-blue-hover: #009cb0;
+            --theme-navy-light: #003d66;
             --theme-cyan: #00B7CD;
+            --theme-cyan-dark: #009cb0;
             --theme-slate-900: #0f172a;
+            --theme-slate-800: #1e293b;
             --theme-slate-700: #334155;
             --theme-slate-600: #475569;
             --theme-slate-500: #64748b;
@@ -42,7 +43,7 @@
         }
 
         body {
-            background-color: var(--theme-page-bg, #f8fafc);
+            background-color: var(--theme-page-bg);
             background-image: url("{{ url_for('static', filename='img/background.webp') }}");
             background-size: cover;
             background-position: center center;
@@ -57,19 +58,19 @@
         }
 
         /* ==========================================================================
-           1. TOP EXECUTIVE APP BAR (Identical to Staff / DH / Admin Dashboard)
+           1. TOP EXECUTIVE APP BAR
            ========================================================================== */
         .staff-topbar {
             width: 100%;
-            height: 72px;
+            height: 64px;
             background-color: #ffffff;
-            background-image: 
-                linear-gradient(90deg, 
-                    rgba(255, 255, 255, 0.88) 0%, 
-                    rgba(255, 255, 255, 0.72) 15%, 
-                    rgba(255, 255, 255, 0.52) 50%, 
-                    rgba(255, 255, 255, 0.72) 85%, 
-                    rgba(255, 255, 255, 0.88) 100%),
+            background-image:
+                linear-gradient(90deg,
+                    rgba(255, 255, 255, 0.92) 0%,
+                    rgba(255, 255, 255, 0.78) 20%,
+                    rgba(255, 255, 255, 0.65) 50%,
+                    rgba(255, 255, 255, 0.78) 80%,
+                    rgba(255, 255, 255, 0.92) 100%),
                 url("{{ url_for('static', filename='img/navbar-batik-silver.webp') }}");
             background-size: 100% 100%, cover;
             background-position: center center, center center;
@@ -85,7 +86,7 @@
 
         .topbar-inner {
             width: 100%;
-            max-width: 1180px;
+            max-width: 1220px;
             margin: 0 auto;
             padding: 0 1.5rem;
             display: flex;
@@ -97,195 +98,224 @@
         .topbar-brand-link {
             display: inline-flex;
             align-items: center;
-            gap: 0.85rem;
+            gap: 0.75rem;
             text-decoration: none;
             user-select: none;
         }
 
         .topbar-brand-logo {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
             object-fit: contain;
             display: block;
-            filter: drop-shadow(0 2px 6px rgba(0, 43, 73, 0.12));
+            filter: drop-shadow(0 2px 4px rgba(0, 43, 73, 0.1));
         }
 
         .topbar-brand-title {
             font-weight: 800;
-            font-size: 1.35rem;
-            color: #002b49;
-            letter-spacing: -0.35px;
+            font-size: 1.22rem;
+            color: var(--theme-navy);
+            letter-spacing: -0.3px;
             line-height: 1;
             white-space: nowrap;
         }
 
-        /* ==========================================================================
-           2. MAIN CONTENT CANVAS & HERO BANNER CARD
-           ========================================================================== */
-        .gm-layout-canvas {
-            width: 100%;
-            max-width: 1180px;
-            margin: 0 auto;
-            padding: 1.5rem 1.5rem 3.5rem 1.5rem;
-        }
-
-        .gm-hero-banner {
-            position: relative;
-            border-radius: 22px;
-            overflow: hidden;
-            background-color: #ffffff;
-            background-image: url("{{ url_for('static', filename='img/staff-hero-bg.webp') }}");
-            background-size: cover;
-            background-position: right center;
-            background-repeat: no-repeat;
-            min-height: 190px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 2.1rem 2.5rem;
-            border: 1px solid rgba(226, 232, 240, 0.9);
-            box-shadow: 0 4px 20px -3px rgba(15, 23, 42, 0.05);
-            gap: 1.5rem;
-        }
-
-        .gm-hero-banner::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0) 80%, rgba(255, 255, 255, 0.5) 100%),
-                linear-gradient(90deg,
-                    #ffffff 0%,
-                    rgba(255, 255, 255, 0.98) 30%,
-                    rgba(255, 255, 255, 0.9) 48%,
-                    rgba(255, 255, 255, 0.38) 70%,
-                    rgba(255, 255, 255, 0) 88%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .hero-info-col {
-            position: relative;
-            z-index: 2;
-            max-width: 780px;
-        }
-
-        .hero-pill-badge {
+        .topbar-context-pill {
             display: inline-flex;
             align-items: center;
             gap: 0.45rem;
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid #bae6fd;
-            border-radius: 9999px;
-            padding: 0.28rem 0.85rem;
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: #00B7CD;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-bottom: 0.65rem;
-            box-shadow: 0 1px 4px rgba(0, 183, 205, 0.08);
-        }
-
-        .hero-heading {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--theme-navy);
-            letter-spacing: -0.55px;
-            margin: 0 0 0.4rem 0;
-            line-height: 1.2;
-        }
-
-        .hero-subtext {
-            font-size: 0.92rem;
-            color: var(--theme-slate-600);
-            font-weight: 500;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .hero-date-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: #002b49;
-            color: #ffffff;
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             font-weight: 700;
-            padding: 0.22rem 0.7rem;
-            border-radius: 8px;
+            color: var(--theme-slate-600);
+            background: rgba(248, 250, 252, 0.9);
+            border: 1px solid var(--theme-border);
+            padding: 0.32rem 0.75rem;
+            border-radius: 999px;
+        }
+
+        .topbar-context-pill i {
+            color: var(--theme-cyan);
         }
 
         /* ==========================================================================
-           3. MAIN GALLERY CARD & SEGMENTED FILTER BAR
+           2. MAIN CONTENT CONTAINER & COMPACT ENTERPRISE HEADER
            ========================================================================== */
-        .gm-table-card {
-            background-color: #ffffff;
-            border: 1.5px solid var(--theme-border);
-            border-radius: 18px;
-            padding: 1.5rem 1.75rem;
-            margin-top: 1.25rem;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+        .gm-layout-canvas {
             width: 100%;
+            max-width: 1220px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem 3rem 1.5rem;
         }
 
-        .gm-table-header {
+        .doc-header-card {
+            background: #ffffff;
+            border: 1px solid var(--theme-border);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding-bottom: 1.25rem;
-            border-bottom: 1px solid #f1f5f9;
+            justify-content: space-between;
             gap: 1.25rem;
             flex-wrap: wrap;
+            position: relative;
+            overflow: hidden;
         }
 
-        .table-header-left {
-            display: flex;
-            align-items: center;
-            gap: 0.95rem;
+        .doc-header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--theme-navy) 0%, var(--theme-cyan) 100%);
+        }
+
+        .doc-header-main {
+            flex: 1 1 480px;
             min-width: 0;
         }
 
-        .table-header-icon-tile {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background-color: #f0f9ff;
-            border: 1px solid #bae6fd;
-            color: #00B7CD;
-            display: flex;
+        .doc-header-kicker {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--theme-cyan-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 0.25rem;
         }
 
-        .table-header-title {
-            font-size: 1.2rem;
+        .doc-header-title {
+            font-size: 1.4rem;
             font-weight: 800;
             color: var(--theme-navy);
-            letter-spacing: -0.3px;
+            letter-spacing: -0.35px;
+            line-height: 1.25;
+            margin: 0 0 0.25rem 0;
+        }
+
+        .doc-header-desc {
+            font-size: 0.84rem;
+            color: var(--theme-slate-600);
+            font-weight: 500;
             margin: 0;
         }
 
-        .table-header-subtitle {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: var(--theme-slate-500);
-            margin-top: 2px;
+        .doc-header-metrics {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
         }
 
+        .header-metric-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            background: #f8fafc;
+            border: 1px solid var(--theme-border);
+            border-radius: 10px;
+            padding: 0.48rem 0.85rem;
+        }
+
+        .metric-chip-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #f0f9ff;
+            color: var(--theme-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .metric-chip-icon.icon-navy {
+            background: rgba(0, 43, 73, 0.08);
+            color: var(--theme-navy);
+        }
+
+        .metric-chip-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .metric-chip-label {
+            font-size: 0.66rem;
+            font-weight: 700;
+            color: var(--theme-slate-500);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .metric-chip-value {
+            font-size: 0.83rem;
+            font-weight: 800;
+            color: var(--theme-slate-900);
+            white-space: nowrap;
+        }
+
+        /* ==========================================================================
+           3. MAIN WORKSPACE CARD, SEGMENTED FILTER & BULK DOWNLOAD TOOLBAR
+           ========================================================================== */
+        .gm-table-card {
+            background-color: #ffffff;
+            border: 1px solid var(--theme-border);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem 1.75rem 1.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 2px 14px rgba(15, 23, 42, 0.03);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .gm-table-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .gm-table-card > .bali-corner-ornament {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 180px;
+            max-width: 24vw;
+            height: auto;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+            opacity: 0.08;
+            mix-blend-mode: multiply;
+        }
+
+        .doc-toolbar-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Segmented Navigation / Modern Branch Tabs */
         .status-filter-group {
             display: inline-flex;
             align-items: center;
-            background: #f8fafc;
+            background: #f1f5f9;
             padding: 4px;
-            border-radius: 12px;
+            border-radius: 11px;
             gap: 4px;
-            border: 1.5px solid #e2e8f0;
+            border: 1px solid #e2e8f0;
             flex-wrap: wrap;
         }
 
@@ -293,63 +323,113 @@
             display: inline-flex;
             align-items: center;
             gap: 0.45rem;
-            padding: 0.45rem 0.9rem;
-            border-radius: 9px;
+            padding: 0.42rem 0.85rem;
+            border-radius: 8px;
             border: 1px solid transparent;
             background: transparent;
             font-family: inherit;
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--theme-slate-600);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.18s ease;
             white-space: nowrap;
         }
 
         .status-filter-btn:hover {
-            color: #0f172a;
-            background: rgba(255, 255, 255, 0.85);
+            color: var(--theme-slate-900);
+            background: rgba(255, 255, 255, 0.7);
         }
 
         .status-filter-btn.active {
-            background: #ffffff;
-            color: #00B7CD;
-            font-weight: 700;
-            border-color: #bae6fd;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+            background: var(--theme-navy);
+            color: #ffffff;
+            border-color: var(--theme-navy);
+            box-shadow: 0 2px 6px rgba(0, 43, 73, 0.18);
         }
 
         .filter-count-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 22px;
-            height: 20px;
+            min-width: 20px;
+            height: 19px;
             padding: 0 6px;
             border-radius: 9999px;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 800;
             background: #e2e8f0;
-            color: #475569;
+            color: var(--theme-slate-700);
+            transition: all 0.18s ease;
         }
 
         .status-filter-btn.active .filter-count-badge {
-            background: #eff6ff;
-            color: #00B7CD;
-            border: 1px solid #bfdbfe;
+            background: var(--theme-cyan);
+            color: #ffffff;
+        }
+
+        /* Bulk Download Button */
+        .btn-download-docs {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--theme-navy);
+            color: #ffffff;
+            border: 1px solid var(--theme-navy);
+            border-radius: 10px;
+            padding: 0.52rem 1.05rem;
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            box-shadow: 0 2px 8px rgba(0, 43, 73, 0.14);
+            white-space: nowrap;
+        }
+
+        .btn-download-docs i {
+            color: var(--theme-cyan);
+            font-size: 0.88rem;
+            transition: transform 0.18s ease;
+        }
+
+        .btn-download-docs:hover:not(:disabled) {
+            background: var(--theme-navy-light);
+            border-color: var(--theme-navy-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 43, 73, 0.2);
+        }
+
+        .btn-download-docs:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-download-docs:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .download-scope-tag {
+            background: rgba(255, 255, 255, 0.14);
+            color: #e0f2fe;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.12rem 0.48rem;
+            border-radius: 6px;
         }
 
         /* ==========================================================================
-           4. AIRPORT BRANCH SECTIONS & PHOTO CARDS
+           4. AIRPORT BRANCH SECTIONS & COMPACT BRANCH HEADER
            ========================================================================== */
         .branch-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px dashed #e2e8f0;
+            margin-top: 1.35rem;
+            padding-top: 1.35rem;
+            border-top: 1px solid #f1f5f9;
         }
 
-        .branch-section:first-of-type {
-            margin-top: 1.25rem;
+        .branch-section.first-visible-section {
+            margin-top: 1rem;
             padding-top: 0;
             border-top: none;
         }
@@ -360,80 +440,99 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 0.75rem;
-            margin-bottom: 1rem;
-            padding: 0.75rem 1rem;
+            margin-bottom: 0.9rem;
+            padding: 0.65rem 0.95rem;
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            border: 1px solid var(--theme-border);
+            border-radius: 10px;
         }
 
         .branch-header-left {
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            min-width: 0;
         }
 
         .branch-iata-pill {
-            background: linear-gradient(135deg, #002b49 0%, #004b87 100%);
+            background: var(--theme-navy);
             color: #ffffff;
             font-weight: 800;
-            font-size: 0.84rem;
-            padding: 0.32rem 0.75rem;
-            border-radius: 8px;
+            font-size: 0.78rem;
+            padding: 0.28rem 0.65rem;
+            border-radius: 7px;
             letter-spacing: 0.5px;
-            box-shadow: 0 2px 6px rgba(0, 43, 73, 0.18);
+            flex-shrink: 0;
+        }
+
+        .branch-title-block {
+            min-width: 0;
         }
 
         .branch-name-title {
             font-weight: 800;
-            font-size: 0.98rem;
-            color: #002b49;
+            font-size: 0.92rem;
+            color: var(--theme-navy);
             line-height: 1.25;
+        }
+
+        .branch-sub-label {
+            font-size: 0.74rem;
+            color: var(--theme-slate-500);
+            font-weight: 600;
+            margin-top: 1px;
         }
 
         .branch-count-pill {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            background: #ecfeff;
-            border: 1px solid #a5f3fc;
-            color: #0891b2;
-            font-size: 0.75rem;
+            gap: 0.38rem;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0369a1;
+            font-size: 0.74rem;
             font-weight: 700;
-            padding: 0.25rem 0.7rem;
+            padding: 0.24rem 0.68rem;
             border-radius: 999px;
+            white-space: nowrap;
         }
 
+        /* ==========================================================================
+           5. ENTERPRISE PHOTO GALLERY GRID & STRUCTURED PHOTO CARD
+           ========================================================================== */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-            gap: 1.15rem;
+            grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+            gap: 0.95rem;
         }
 
         .photo-card {
-            border: 1.5px solid #e2e8f0;
-            border-radius: 16px;
+            border: 1px solid var(--theme-border);
+            border-radius: 12px;
             overflow: hidden;
             background: #ffffff;
             cursor: pointer;
-            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+            transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
             display: flex;
             flex-direction: column;
             break-inside: avoid;
         }
 
         .photo-card:hover {
-            transform: translateY(-3px);
-            border-color: #bae6fd;
-            box-shadow: 0 12px 28px -6px rgba(0, 43, 73, 0.12);
+            transform: translateY(-2px);
+            border-color: #93c5fd;
+            box-shadow: 0 8px 20px -4px rgba(0, 43, 73, 0.1);
         }
 
         .photo-thumb-wrap {
             position: relative;
-            height: 215px;
+            width: 100%;
+            height: 168px;
+            aspect-ratio: 16 / 10;
             background: #0f172a;
             overflow: hidden;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .photo-thumb-wrap img {
@@ -441,7 +540,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.35s ease;
+            transition: transform 0.28s ease;
         }
 
         .photo-card:hover .photo-thumb-wrap img {
@@ -450,43 +549,55 @@
 
         .area-badge-overlay {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 43, 73, 0.9);
+            top: 8px;
+            left: 8px;
+            background: rgba(0, 43, 73, 0.88);
             backdrop-filter: blur(4px);
             color: #ffffff;
-            font-size: 0.72rem;
+            font-size: 0.69rem;
             font-weight: 700;
-            padding: 0.25rem 0.65rem;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.3rem;
+            max-width: calc(100% - 95px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .area-badge-overlay i {
-            color: #00B7CD;
+            color: var(--theme-cyan);
+            flex-shrink: 0;
         }
 
         .zoom-pill-overlay {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(15, 23, 42, 0.78);
+            bottom: 8px;
+            right: 8px;
+            background: rgba(15, 23, 42, 0.82);
             backdrop-filter: blur(4px);
-            color: #38bdf8;
+            color: #ffffff;
             font-size: 0.68rem;
             font-weight: 700;
-            padding: 0.2rem 0.55rem;
+            padding: 0.22rem 0.55rem;
             border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
+            transition: background-color 0.15s ease;
+        }
+
+        .photo-card:hover .zoom-pill-overlay {
+            background: var(--theme-navy);
+            color: #38bdf8;
         }
 
         .photo-meta {
-            padding: 0.9rem 1.05rem;
+            padding: 0.75rem 0.85rem 0.8rem 0.85rem;
             display: flex;
             flex-direction: column;
             gap: 0.35rem;
@@ -494,31 +605,76 @@
             justify-content: space-between;
         }
 
-        .photo-caption {
+        .photo-card-top-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.22rem;
+        }
+
+        .photo-area-heading {
             font-size: 0.88rem;
-            font-weight: 700;
-            color: var(--theme-slate-900);
-            line-height: 1.45;
+            font-weight: 800;
+            color: var(--theme-navy);
+            line-height: 1.3;
+        }
+
+        .photo-caption {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--theme-slate-600);
+            line-height: 1.42;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .photo-submeta {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.74rem;
+            flex-direction: column;
+            gap: 0.18rem;
+            font-size: 0.73rem;
             font-weight: 600;
-            color: var(--theme-slate-500);
-            padding-top: 0.45rem;
+            color: var(--theme-slate-600);
+            padding-top: 0.5rem;
+            margin-top: 0.25rem;
             border-top: 1px solid #f1f5f9;
         }
 
-        .empty-state-box {
-            padding: 3.5rem 1.5rem;
-            text-align: center;
-            color: var(--theme-slate-500);
+        .photo-submeta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
         }
 
-        /* Lightbox */
+        .submeta-label {
+            color: var(--theme-slate-500);
+            font-weight: 600;
+        }
+
+        .submeta-value {
+            color: var(--theme-slate-800);
+            font-weight: 700;
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .empty-state-box {
+            padding: 2.75rem 1.25rem;
+            text-align: center;
+            color: var(--theme-slate-500);
+            background: #f8fafc;
+            border: 1px dashed var(--theme-border-strong);
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        /* ==========================================================================
+           6. LIGHTBOX & STATUS / DOWNLOAD MODAL
+           ========================================================================== */
         #lightbox {
             display: none;
             position: fixed;
@@ -532,69 +688,200 @@
             padding: 1rem;
         }
 
-        /* Mobile Responsive Adjustments */
+        .status-modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 10050;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .status-modal-card {
+            background: #ffffff;
+            border: 1px solid var(--theme-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 390px;
+            box-shadow: 0 20px 45px rgba(0, 43, 73, 0.18);
+            text-align: center;
+        }
+
+        .status-modal-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            margin: 0 auto 0.9rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+        }
+
+        .status-modal-icon.is-loading {
+            background: #f0f9ff;
+            color: var(--theme-cyan);
+            border: 1px solid #bae6fd;
+        }
+
+        .status-modal-icon.is-success {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-modal-icon.is-warning {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .status-modal-icon.is-error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .status-modal-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--theme-navy);
+            margin-bottom: 0.35rem;
+        }
+
+        .status-modal-msg {
+            font-size: 0.84rem;
+            color: var(--theme-slate-600);
+            line-height: 1.45;
+            margin-bottom: 1.1rem;
+        }
+
+        .status-modal-btn {
+            background: var(--theme-navy);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.55rem 1.25rem;
+            font-family: inherit;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .status-modal-btn:hover {
+            background: var(--theme-navy-light);
+        }
+
+        /* ==========================================================================
+           7. RESPONSIVE BREAKPOINTS (TABLET & SMARTPHONE)
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             body {
                 background-attachment: scroll;
                 background-position: center top;
             }
+
             .staff-topbar {
-                height: 62px;
-                background-size: 100% 100%, cover;
-                background-position: center center, center center;
+                height: 58px;
             }
+
             .topbar-inner {
                 padding: 0 0.9rem;
             }
+
             .topbar-brand-logo {
-                width: 32px;
-                height: 32px;
-                min-width: 32px;
+                width: 30px;
+                height: 30px;
+                min-width: 30px;
             }
+
             .topbar-brand-title {
-                font-size: 1.08rem;
+                font-size: 1.05rem;
             }
+
+            .topbar-context-pill {
+                display: none;
+            }
+
             .gm-layout-canvas {
-                padding: 0.85rem 0.75rem 2.5rem 0.75rem;
+                padding: 0.85rem 0.75rem 2.25rem 0.75rem;
             }
-            .gm-hero-banner {
-                padding: 1.35rem 1.15rem;
-                border-radius: 16px;
-                min-height: auto;
+
+            .doc-header-card {
+                padding: 1rem 1.1rem;
+                gap: 0.9rem;
             }
-            .gm-hero-banner::before {
-                background: linear-gradient(135deg,
-                    rgba(255, 255, 255, 0.97) 0%,
-                    rgba(255, 255, 255, 0.92) 58%,
-                    rgba(255, 255, 255, 0.8) 100%);
+
+            .doc-header-title {
+                font-size: 1.18rem;
             }
-            .hero-heading {
-                font-size: 1.38rem;
+
+            .doc-header-desc {
+                font-size: 0.79rem;
             }
-            .hero-subtext {
-                font-size: 0.82rem;
+
+            .doc-header-metrics {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 0.5rem;
             }
+
             .gm-table-card {
-                padding: 1.1rem 0.95rem;
-                border-radius: 16px;
+                padding: 1rem 0.95rem 1.35rem 0.95rem;
+                border-radius: 14px;
             }
-            .gm-table-header {
+
+            .doc-toolbar-bar {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 0.85rem;
+                gap: 0.75rem;
             }
+
             .status-filter-group {
                 width: 100%;
                 display: flex;
                 overflow-x: auto;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
             }
+
+            .status-filter-group::-webkit-scrollbar {
+                display: none;
+            }
+
             .status-filter-btn {
-                flex: 1 1 auto;
+                flex: 1 0 auto;
                 justify-content: center;
                 font-size: 0.76rem;
-                padding: 0.45rem 0.65rem;
+                padding: 0.42rem 0.7rem;
             }
+
+            .btn-download-docs {
+                width: 100%;
+                min-height: 42px;
+                font-size: 0.84rem;
+            }
+        }
+
+        @media (max-width: 600px) {
             .photo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .doc-header-metrics {
                 grid-template-columns: 1fr;
             }
         }
@@ -609,163 +896,465 @@
                 <img src="{{ url_for('static', filename='img/logo-kawung.png') }}" alt="InJourney Airports" class="topbar-brand-logo">
                 <span class="topbar-brand-title">InJourney Airports</span>
             </a>
+            <div class="topbar-context-pill">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Regional II &bull; Dokumentasi Fasilitas Airside</span>
+            </div>
         </div>
     </header>
 
     <!-- 2. MAIN CONTENT LAYOUT -->
-    <div class="gm-layout-canvas">
+    <main class="gm-layout-canvas">
 
-        <!-- HERO BANNER CARD (Identical to Staff & DH Dashboard) -->
-        <div class="gm-hero-banner">
-            <div class="hero-info-col">
-                <div class="hero-pill-badge">
-                    <i class="fa-solid fa-camera-retro"></i>
-                    <span>LAMPIRAN VISUAL LAPORAN HARIAN SISI UDARA</span>
+        <!-- COMPACT ENTERPRISE PAGE HEADER -->
+        <section class="doc-header-card">
+            <div class="doc-header-main">
+                <div class="doc-header-kicker">
+                    <i class="fa-solid fa-camera"></i>
+                    <span>Inspeksi Fasilitas Sisi Udara &bull; Regional II</span>
                 </div>
-                <h1 class="hero-heading">Dokumentasi Foto Lapangan Regional II</h1>
-                <div class="hero-subtext">
-                    <span class="hero-date-chip">
+                <h1 class="doc-header-title">Daftar Dokumentasi Kondisi Fasilitas Airside</h1>
+                <p class="doc-header-desc">
+                    Dokumentasi hasil inspeksi fasilitas sisi udara berdasarkan tanggal pelaporan dan cabang bandara.
+                </p>
+            </div>
+
+            <div class="doc-header-metrics">
+                <div class="header-metric-chip">
+                    <div class="metric-chip-icon icon-navy">
                         <i class="fa-regular fa-calendar-check"></i>
-                        {{ formatted_date }}
-                    </span>
-                    <span>&bull; Kantor Regional II PT Angkasa Pura Indonesia</span>
+                    </div>
+                    <div class="metric-chip-text">
+                        <span class="metric-chip-label">Tanggal Dokumentasi</span>
+                        <span class="metric-chip-value">{{ formatted_date }}</span>
+                    </div>
+                </div>
+
+                <div class="header-metric-chip">
+                    <div class="metric-chip-icon">
+                        <i class="fa-regular fa-images"></i>
+                    </div>
+                    <div class="metric-chip-text">
+                        <span class="metric-chip-label">Total Foto Tersedia</span>
+                        <span class="metric-chip-value">{{ total_photos }} Foto Dokumentasi</span>
+                    </div>
+                </div>
+
+                <div class="header-metric-chip">
+                    <div class="metric-chip-icon">
+                        <i class="fa-solid fa-plane-departure"></i>
+                    </div>
+                    <div class="metric-chip-text">
+                        <span class="metric-chip-label">Cabang Melaporkan</span>
+                        <span class="metric-chip-value">{{ active_branches_count | default(0) }} Cabang Bandara</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- MAIN GALLERY CARD -->
+        <!-- MAIN GALLERY WORKSPACE CARD -->
         <div class="gm-table-card">
-            <div class="gm-table-header">
-                <div class="table-header-left">
-                    <div class="table-header-icon-tile">
-                        <i class="fa-solid fa-images"></i>
-                    </div>
-                    <div>
-                        <h2 class="table-header-title">Daftar Dokumentasi Kondisi Fasilitas Airside</h2>
-                        <div class="table-header-subtitle">
-                            Menampilkan <strong>{{ total_photos }} foto dokumentasi</strong> yang dilaporkan pada {{ formatted_date }}
-                        </div>
-                    </div>
-                </div>
+            <img src="{{ url_for('static', filename='img/bali-corner-ornament.webp') }}" alt="" class="bali-corner-ornament" aria-hidden="true">
 
-                {% if total_photos > 0 %}
-                <div class="status-filter-group no-print">
-                    <button type="button" class="status-filter-btn active" onclick="filterBranch('ALL', this)">
+            {% set branches_order = branch_list if branch_list is defined and branch_list else ['DPS', 'LOP', 'KOE', 'BWX'] %}
+            {% set init_branch = initial_branch if initial_branch is defined and initial_branch else 'ALL' %}
+
+            <!-- FILTER CABANG & BULK DOWNLOAD TOOLBAR -->
+            <div class="doc-toolbar-bar no-print">
+                <div class="status-filter-group" role="tablist" aria-label="Filter Cabang Bandara">
+                    <button type="button"
+                        class="status-filter-btn {% if init_branch == 'ALL' %}active{% endif %}"
+                        data-filter-branch="ALL"
+                        data-photo-count="{{ total_photos }}"
+                        onclick="filterBranch('ALL', this)">
                         <i class="fa-solid fa-layer-group"></i>
                         <span>Semua Cabang</span>
                         <span class="filter-count-badge">{{ total_photos }}</span>
                     </button>
-                    {% for code in ['DPS', 'LOP', 'KOE', 'BWX'] %}
+                    {% for code in branches_order %}
                         {% set b_photos = photos_by_airport.get(code, []) %}
-                        {% if b_photos %}
-                        <button type="button" class="status-filter-btn" onclick="filterBranch('{{ code }}', this)">
-                            <i class="fa-solid fa-plane-departure"></i>
+                        <button type="button"
+                            class="status-filter-btn {% if init_branch == code %}active{% endif %}"
+                            data-filter-branch="{{ code }}"
+                            data-photo-count="{{ b_photos|length }}"
+                            onclick="filterBranch('{{ code }}', this)">
+                            <i class="fa-solid fa-plane-up"></i>
                             <span>{{ code }}</span>
                             <span class="filter-count-badge">{{ b_photos|length }}</span>
                         </button>
-                        {% endif %}
                     {% endfor %}
                 </div>
-                {% endif %}
+
+                <button type="button"
+                    id="btnDownloadDocumentation"
+                    class="btn-download-docs"
+                    onclick="handleBulkDownload()">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Dokumentasi</span>
+                    <span class="download-scope-tag" id="downloadScopeBadge">
+                        {% if init_branch == 'ALL' %}Semua Cabang{% else %}{{ init_branch }}{% endif %}
+                    </span>
+                </button>
             </div>
 
+            <!-- DAFTAR SECTION PER CABANG -->
             {% if total_photos > 0 %}
-                {% for code in ['DPS', 'LOP', 'KOE', 'BWX'] %}
+                {% for code in branches_order %}
                     {% set b_photos = photos_by_airport.get(code, []) %}
                     {% if b_photos %}
-                    <section class="branch-section" data-branch="{{ code }}">
+                    <section class="branch-section"
+                        data-branch="{{ code }}"
+                        data-has-photos="true"
+                        style="{% if init_branch != 'ALL' and init_branch != code %}display: none;{% endif %}">
                         <div class="branch-header">
                             <div class="branch-header-left">
                                 <span class="branch-iata-pill">{{ code }}</span>
-                                <div>
-                                    <div class="branch-name-title">{{ airport_names.get(code, code) }}</div>
-                                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
-                                        Inspeksi Fasilitas Sisi Udara (Runway, Taxiway, Apron)
-                                    </div>
+                                <div class="branch-title-block">
+                                    <div class="branch-name-title">{{ code }} &mdash; {{ airport_names.get(code, code) }}</div>
+                                    <div class="branch-sub-label">Inspeksi Fasilitas Sisi Udara</div>
                                 </div>
                             </div>
                             <span class="branch-count-pill">
-                                <i class="fa-solid fa-camera"></i>
-                                {{ b_photos|length }} Foto Terlampir
+                                <i class="fa-regular fa-images"></i>
+                                <span>{{ b_photos|length }} Foto Dokumentasi</span>
                             </span>
                         </div>
 
                         <div class="photo-grid">
                             {% for p in b_photos %}
-                            <div class="photo-card" onclick="openLightbox('{{ p.url }}', '{{ code }} • Area {{ p.area_tag or 'Umum' }}', '{{ p.caption|e }}')">
+                            {% set raw_area = (p.area_tag or 'Umum')|trim %}
+                            {% set loc_label = raw_area if raw_area.lower().startswith('area') else ('Area ' ~ raw_area) %}
+                            {% set cap_text = (p.caption|trim) if p.caption and (p.caption|trim) else 'Foto kondisi fasilitas sisi udara.' %}
+                            <article class="photo-card"
+                                onclick="openLightbox('{{ p.url }}', '{{ code }} — {{ raw_area|e }}', '{{ cap_text|e }}', '{{ code }}', '{{ loc_label|e }}')">
                                 <div class="photo-thumb-wrap">
-                                    <img src="{{ p.url }}" alt="Foto {{ code }} {{ loop.index }}" loading="lazy">
+                                    <img src="{{ p.url }}" alt="Dokumentasi {{ code }} - {{ raw_area }}" loading="lazy">
                                     <span class="area-badge-overlay">
                                         <i class="fa-solid fa-location-dot"></i>
-                                        <span>{{ p.area_tag or 'Umum' }}</span>
+                                        <span>{{ raw_area }}</span>
                                     </span>
-                                    <span class="zoom-pill-overlay no-print">
+                                    <span class="zoom-pill-overlay no-print" title="Perbesar Foto">
                                         <i class="fa-solid fa-magnifying-glass-plus"></i>
                                         <span>Perbesar</span>
                                     </span>
                                 </div>
                                 <div class="photo-meta">
-                                    <div class="photo-caption">
-                                        {{ p.caption if p.caption else 'Dokumentasi pemeriksaan rutin kondisi fasilitas sisi udara' }}
+                                    <div class="photo-card-top-info">
+                                        <h3 class="photo-area-heading">{{ raw_area }}</h3>
+                                        <div class="photo-caption">{{ cap_text }}</div>
                                     </div>
                                     <div class="photo-submeta">
-                                        <span><i class="fa-solid fa-building-shield" style="color: #00B7CD; margin-right: 4px;"></i>Cabang {{ code }}</span>
-                                        <span>Area {{ p.area_tag or 'Umum' }}</span>
+                                        <div class="photo-submeta-row">
+                                            <span class="submeta-label">Cabang:</span>
+                                            <span class="submeta-value">{{ code }}</span>
+                                        </div>
+                                        <div class="photo-submeta-row">
+                                            <span class="submeta-label">Lokasi:</span>
+                                            <span class="submeta-value">{{ loc_label }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </article>
                             {% endfor %}
                         </div>
                     </section>
                     {% endif %}
                 {% endfor %}
+
+                <!-- Empty State ketika filter cabang tertentu dipilih namun cabang tersebut belum memiliki foto -->
+                <div id="branchFilterEmptyState" class="empty-state-box" style="display: none;">
+                    <div style="width: 52px; height: 52px; border-radius: 50%; background: #e2e8f0; display: inline-flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.35rem; margin-bottom: 0.7rem;">
+                        <i class="fa-regular fa-folder-open"></i>
+                    </div>
+                    <h3 id="branchEmptyTitle" style="font-size: 0.98rem; font-weight: 800; color: #1e293b; margin-bottom: 0.25rem;">
+                        Belum Ada Dokumentasi Cabang
+                    </h3>
+                    <p id="branchEmptyDesc" style="font-size: 0.82rem; color: #64748b;">
+                        Tidak ditemukan dokumentasi foto untuk cabang yang dipilih pada tanggal {{ formatted_date }}.
+                    </p>
+                </div>
             {% else %}
                 <div class="empty-state-box">
-                    <div style="width: 60px; height: 60px; border-radius: 50%; background: #f1f5f9; display: inline-flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.6rem; margin-bottom: 0.85rem;">
+                    <div style="width: 56px; height: 56px; border-radius: 50%; background: #f1f5f9; display: inline-flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem; margin-bottom: 0.75rem;">
                         <i class="fa-regular fa-images"></i>
                     </div>
-                    <h3 style="font-size: 1.05rem; font-weight: 800; color: #334155; margin-bottom: 0.3rem;">Belum Ada Lampiran Foto</h3>
-                    <p style="font-size: 0.85rem; color: #64748b;">Tidak ditemukan dokumentasi foto lapangan untuk tanggal {{ formatted_date }}.</p>
+                    <h3 style="font-size: 1.02rem; font-weight: 800; color: #334155; margin-bottom: 0.25rem;">Belum Ada Lampiran Foto</h3>
+                    <p style="font-size: 0.84rem; color: #64748b;">Tidak ditemukan dokumentasi foto lapangan untuk tanggal {{ formatted_date }}.</p>
                 </div>
             {% endif %}
         </div>
-    </div>
+    </main>
 
     <!-- Lightbox Modal -->
     <div id="lightbox" class="no-print" onclick="closeLightbox()">
-        <button type="button" onclick="closeLightbox()" style="position: absolute; top: 18px; right: 20px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; cursor: pointer;">
+        <button type="button" onclick="closeLightbox()" title="Tutup Pratinjau" style="position: absolute; top: 18px; right: 20px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; cursor: pointer;">
             <i class="fa-solid fa-xmark"></i>
         </button>
-        <img id="lbImg" src="" alt="Preview" style="max-width: 94vw; max-height: 80vh; border-radius: 12px; object-fit: contain; box-shadow: 0 16px 45px rgba(0,0,0,0.55);">
-        <div style="margin-top: 0.9rem; text-align: center; color: #fff; max-width: 680px; padding: 0 1rem;">
-            <div id="lbTitle" style="font-weight: 800; font-size: 0.98rem; color: #38bdf8;"></div>
-            <div id="lbCap" style="font-size: 0.86rem; color: #e2e8f0; margin-top: 0.25rem;"></div>
+        <img id="lbImg" src="" alt="Preview Dokumentasi" onclick="event.stopPropagation()" style="max-width: 94vw; max-height: 78vh; border-radius: 12px; object-fit: contain; box-shadow: 0 16px 45px rgba(0,0,0,0.55);">
+        <div onclick="event.stopPropagation()" style="margin-top: 0.9rem; text-align: center; color: #fff; max-width: 680px; padding: 0 1rem;">
+            <div id="lbTitle" style="font-weight: 800; font-size: 1rem; color: #38bdf8;"></div>
+            <div id="lbCap" style="font-size: 0.86rem; color: #f1f5f9; margin-top: 0.25rem;"></div>
+            <div id="lbMeta" style="font-size: 0.76rem; color: #94a3b8; margin-top: 0.3rem; font-weight: 600;"></div>
+        </div>
+    </div>
+
+    <!-- Bulk Download Progress & Notification Modal -->
+    <div id="downloadStatusModal" class="status-modal-backdrop no-print" onclick="closeStatusModalIfAllowed(event)">
+        <div class="status-modal-card" onclick="event.stopPropagation()">
+            <div id="statusModalIcon" class="status-modal-icon is-loading">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+            <h3 id="statusModalTitle" class="status-modal-title">Menyiapkan Dokumentasi</h3>
+            <p id="statusModalMsg" class="status-modal-msg">Mengumpulkan dokumentasi...</p>
+            <button type="button" id="statusModalBtn" class="status-modal-btn" onclick="closeStatusModal()" style="display: none;">
+                Tutup
+            </button>
         </div>
     </div>
 
     <script>
+        window.DOC_PAGE_DATE = "{{ date_str }}";
+        window.DOC_FORMATTED_DATE = "{{ formatted_date }}";
+        window.currentActiveBranch = "{{ initial_branch if initial_branch is defined and initial_branch else 'ALL' }}";
+        window.isDownloadingZip = false;
+
+        function updateSectionBordersAndEmptyState() {
+            const sections = Array.from(document.querySelectorAll('.branch-section'));
+            let visibleCount = 0;
+            sections.forEach(sec => {
+                sec.classList.remove('first-visible-section');
+                if (sec.style.display !== 'none') {
+                    if (visibleCount === 0) {
+                        sec.classList.add('first-visible-section');
+                    }
+                    visibleCount++;
+                }
+            });
+
+            const emptyBox = document.getElementById('branchFilterEmptyState');
+            if (emptyBox) {
+                if (visibleCount === 0 && window.currentActiveBranch !== 'ALL') {
+                    emptyBox.style.display = 'block';
+                    const titleEl = document.getElementById('branchEmptyTitle');
+                    const descEl = document.getElementById('branchEmptyDesc');
+                    if (titleEl) titleEl.textContent = `Belum Ada Dokumentasi Cabang ${window.currentActiveBranch}`;
+                    if (descEl) descEl.textContent = `Tidak ditemukan dokumentasi foto untuk cabang ${window.currentActiveBranch} pada tanggal ${window.DOC_FORMATTED_DATE}.`;
+                } else {
+                    emptyBox.style.display = 'none';
+                }
+            }
+        }
+
         function filterBranch(code, btn) {
+            const normalized = (code || 'ALL').toUpperCase();
+            window.currentActiveBranch = normalized;
+
             document.querySelectorAll('.status-filter-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
+            if (btn) {
+                btn.classList.add('active');
+            } else {
+                const matchBtn = document.querySelector(`.status-filter-btn[data-filter-branch="${normalized}"]`);
+                if (matchBtn) matchBtn.classList.add('active');
+            }
+
+            const scopeBadge = document.getElementById('downloadScopeBadge');
+            if (scopeBadge) {
+                scopeBadge.textContent = normalized === 'ALL' ? 'Semua Cabang' : normalized;
+            }
+
             document.querySelectorAll('.branch-section').forEach(sec => {
-                if (code === 'ALL' || sec.getAttribute('data-branch') === code) {
+                if (normalized === 'ALL' || sec.getAttribute('data-branch') === normalized) {
                     sec.style.display = 'block';
                 } else {
                     sec.style.display = 'none';
                 }
             });
+
+            updateSectionBordersAndEmptyState();
         }
-        function openLightbox(url, title, cap) {
+
+        function showStatusModal(type, title, message, allowClose) {
+            const modal = document.getElementById('downloadStatusModal');
+            const iconBox = document.getElementById('statusModalIcon');
+            const titleEl = document.getElementById('statusModalTitle');
+            const msgEl = document.getElementById('statusModalMsg');
+            const btnEl = document.getElementById('statusModalBtn');
+
+            if (!modal) return;
+            iconBox.className = 'status-modal-icon';
+            if (type === 'loading') {
+                iconBox.classList.add('is-loading');
+                iconBox.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+            } else if (type === 'success') {
+                iconBox.classList.add('is-success');
+                iconBox.innerHTML = '<i class="fa-solid fa-check"></i>';
+            } else if (type === 'warning') {
+                iconBox.classList.add('is-warning');
+                iconBox.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+            } else {
+                iconBox.classList.add('is-error');
+                iconBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            }
+
+            titleEl.textContent = title || '';
+            msgEl.textContent = message || '';
+            btnEl.style.display = allowClose ? 'inline-block' : 'none';
+            modal.style.display = 'flex';
+        }
+
+        function closeStatusModal() {
+            if (window.isDownloadingZip) return;
+            const modal = document.getElementById('downloadStatusModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function closeStatusModalIfAllowed(e) {
+            if (!window.isDownloadingZip && e.target.id === 'downloadStatusModal') {
+                closeStatusModal();
+            }
+        }
+
+        async function handleBulkDownload() {
+            if (window.isDownloadingZip) return;
+
+            const activeBranch = window.currentActiveBranch || 'ALL';
+            const activeBtn = document.querySelector(`.status-filter-btn[data-filter-branch="${activeBranch}"]`);
+            const expectedCount = activeBtn ? parseInt(activeBtn.getAttribute('data-photo-count') || '0', 10) : 0;
+
+            if (expectedCount <= 0) {
+                const targetLabel = activeBranch === 'ALL' ? 'seluruh cabang' : `cabang ${activeBranch}`;
+                showStatusModal(
+                    'warning',
+                    'Tidak Ada Dokumentasi',
+                    `Tidak ada dokumentasi foto yang dapat diunduh untuk ${targetLabel} pada tanggal ${window.DOC_FORMATTED_DATE}.`,
+                    true
+                );
+                return;
+            }
+
+            const btn = document.getElementById('btnDownloadDocumentation');
+            window.isDownloadingZip = true;
+            if (btn) btn.disabled = true;
+
+            showStatusModal('loading', 'Menyiapkan Unduhan', 'Mengumpulkan dokumentasi...', false);
+
+            const stepTimer1 = setTimeout(() => {
+                if (window.isDownloadingZip) {
+                    const msgEl = document.getElementById('statusModalMsg');
+                    if (msgEl) msgEl.textContent = 'Menyiapkan file ZIP...';
+                }
+            }, 350);
+
+            const stepTimer2 = setTimeout(() => {
+                if (window.isDownloadingZip) {
+                    const msgEl = document.getElementById('statusModalMsg');
+                    if (msgEl) msgEl.textContent = 'Download sedang diproses...';
+                }
+            }, 750);
+
+            try {
+                const branchQuery = activeBranch === 'ALL' ? 'all' : activeBranch;
+                const endpoint = `/api/documentation/download?date=${encodeURIComponent(window.DOC_PAGE_DATE)}&branch=${encodeURIComponent(branchQuery)}`;
+                const response = await fetch(endpoint, { method: 'GET', credentials: 'same-origin' });
+
+                clearTimeout(stepTimer1);
+                clearTimeout(stepTimer2);
+
+                if (!response.ok) {
+                    let errMessage = 'Terjadi kesalahan saat menyiapkan file ZIP dokumentasi.';
+                    try {
+                        const errJson = await response.json();
+                        if (errJson && errJson.message) errMessage = errJson.message;
+                    } catch (e) {}
+                    window.isDownloadingZip = false;
+                    if (btn) btn.disabled = false;
+                    showStatusModal(
+                        response.status === 404 ? 'warning' : 'error',
+                        response.status === 404 ? 'Tidak Ada Dokumentasi' : 'Gagal Mengunduh',
+                        errMessage,
+                        true
+                    );
+                    return;
+                }
+
+                const msgEl = document.getElementById('statusModalMsg');
+                if (msgEl) msgEl.textContent = 'Download sedang diproses...';
+
+                const blob = await response.blob();
+                const defaultFilename = activeBranch === 'ALL'
+                    ? `Dokumentasi_Airside_${window.DOC_PAGE_DATE}_Semua_Cabang.zip`
+                    : `Dokumentasi_Airside_${window.DOC_PAGE_DATE}_${activeBranch}.zip`;
+
+                let filename = defaultFilename;
+                const disp = response.headers.get('Content-Disposition');
+                if (disp && disp.indexOf('filename=') !== -1) {
+                    const match = disp.match(/filename\*?=(?:UTF-8'')?["']?([^"';\n]+)["']?/i);
+                    if (match && match[1]) {
+                        filename = match[1].trim();
+                    }
+                }
+
+                const downloadUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(() => URL.revokeObjectURL(downloadUrl), 5000);
+
+                const photoCountHdr = response.headers.get('X-Photo-Count') || expectedCount;
+                const scopeText = activeBranch === 'ALL' ? 'Semua Cabang' : `Cabang ${activeBranch}`;
+
+                window.isDownloadingZip = false;
+                if (btn) btn.disabled = false;
+
+                showStatusModal(
+                    'success',
+                    'Download Dokumentasi Berhasil',
+                    `Berhasil mengunduh ${photoCountHdr} foto dokumentasi (${scopeText}) dalam arsip ${filename}.`,
+                    true
+                );
+            } catch (error) {
+                clearTimeout(stepTimer1);
+                clearTimeout(stepTimer2);
+                window.isDownloadingZip = false;
+                if (btn) btn.disabled = false;
+                showStatusModal(
+                    'error',
+                    'Gagal Mengunduh Dokumentasi',
+                    'Tidak dapat terhubung ke server untuk mengunduh file ZIP dokumentasi. Silakan coba kembali.',
+                    true
+                );
+            }
+        }
+
+        function openLightbox(url, title, cap, branchCode, locLabel) {
             document.getElementById('lbImg').src = url;
-            document.getElementById('lbTitle').textContent = title;
-            document.getElementById('lbCap').textContent = cap || 'Dokumentasi pemeriksaan rutin kondisi fasilitas sisi udara';
+            document.getElementById('lbTitle').textContent = title || 'Dokumentasi Airside';
+            document.getElementById('lbCap').textContent = cap || 'Foto kondisi fasilitas sisi udara.';
+            const metaEl = document.getElementById('lbMeta');
+            if (metaEl) {
+                metaEl.textContent = branchCode && locLabel
+                    ? `Cabang: ${branchCode} • Lokasi: ${locLabel} • Tanggal: ${window.DOC_FORMATTED_DATE}`
+                    : '';
+            }
             document.getElementById('lightbox').style.display = 'flex';
         }
+
         function closeLightbox() {
             document.getElementById('lightbox').style.display = 'none';
         }
+
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'Escape') {
+                closeLightbox();
+                closeStatusModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSectionBordersAndEmptyState();
         });
     </script>
 </body>

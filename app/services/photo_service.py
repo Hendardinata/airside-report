@@ -39,7 +39,7 @@ def _sanitize_slug(val, fallback='umum'):
     return s[:24] if s else fallback
 
 
-def save_uploaded_photos(airport_code, tanggal, report_id, uploaded_files, areas=None, captions=None, keep_photo_ids=None, is_edit=False):
+def save_uploaded_photos(airport_code, tanggal, report_id, uploaded_files, areas=None, captions=None, keep_photo_ids=None, is_edit=False, keep_photo_areas=None, keep_photo_captions=None):
     """
     Menyimpan foto-foto dokumentasi (.webp) untuk bandara & tanggal tertentu.
     Jika is_edit=True (atau sudah ada foto di tanggal tersebut dan keep_photo_ids dikirim),
@@ -61,7 +61,14 @@ def save_uploaded_photos(airport_code, tanggal, report_id, uploaded_files, areas
 
     # 1. Kelola foto lama HANYA jika keep_photo_ids diberikan secara eksplisit
     if keep_photo_ids is not None:
-        keep_set = set(str(pid).strip() for pid in keep_photo_ids if str(pid).strip())
+        keep_list = [str(pid).strip() for pid in keep_photo_ids if str(pid).strip()]
+        keep_set = set(keep_list)
+        keep_meta_map = {}
+        for k_idx, pid in enumerate(keep_list):
+            k_area = str(keep_photo_areas[k_idx]).strip() if keep_photo_areas and k_idx < len(keep_photo_areas) else None
+            k_cap = str(keep_photo_captions[k_idx]).strip() if keep_photo_captions and k_idx < len(keep_photo_captions) else None
+            keep_meta_map[pid] = (k_area, k_cap)
+
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -78,6 +85,13 @@ def save_uploaded_photos(airport_code, tanggal, report_id, uploaded_files, areas
                         except Exception:
                             pass
                     cursor.execute("DELETE FROM report_photos WHERE id = ?;", (row['id'],))
+                elif row['id'] in keep_meta_map:
+                    k_area, k_cap = keep_meta_map[row['id']]
+                    if k_area is not None and k_cap is not None:
+                        cursor.execute(
+                            "UPDATE report_photos SET area_tag = ?, caption = ? WHERE id = ?;",
+                            (k_area or 'Umum', k_cap, row['id'])
+                        )
 
     # 2. Simpan file baru yang diunggah
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -96,7 +110,7 @@ def save_uploaded_photos(airport_code, tanggal, report_id, uploaded_files, areas
         caption = str(captions[idx]).strip() if idx < len(captions) and captions[idx] else ''
         area_slug = _sanitize_slug(area_tag, 'umum')
 
-        photo_id = f"PHO-{airport_code}-{tanggal.replace('-', '')}-{uuid.uuid4().hex[:6].upper()}"
+        photo_id = f"PHO-{airport_code}-{tanggal.replace('-', '')}-{idx + 1:02d}-{uuid.uuid4().hex[:6].upper()}"
         filename = f"{airport_code}_{tanggal}_{area_slug}_{ts_short}_{idx + 1}{ext}"
         abs_file_path = os.path.join(target_dir, filename)
 
@@ -199,15 +213,59 @@ def get_photos_by_date(airport_code, tanggal):
 
 def get_all_airports_photos_by_date(tanggal):
     """
-    Mengambil seluruh foto dari 4 bandara (LOP, DPS, BWX, KOE) pada tanggal tertentu,
-    dikelompokkan per kode bandara.
+    Mengambil seluruh foto dari cabang bandara yang terdaftar di profil maupun
+    yang tercatat di database pada tanggal tertentu, dikelompokkan per kode bandara.
     """
-    result = {"LOP": [], "DPS": [], "BWX": [], "KOE": []}
-    if not tanggal:
+    _ensure_photos_table()
+    try:
+        from app.models.airport_profiles import AIRPORTS
+        branch_codes = [str(c).upper().strip() for c in AIRPORTS.keys() if str(c).strip()]
+    except Exception:
+        branch_codes = ["DPS", "LOP", "KOE", "BWX"]
+
+    if not branch_codes:
+        branch_codes = ["DPS", "LOP", "KOE", "BWX"]
+
+    clean_date = str(tanggal or '').strip()[:10]
+    if clean_date:
+        try:
+            with get_db() as conn:
+                cursor = conn.cursor()
+                cursor.execute(
+                    "SELECT DISTINCT UPPER(airport_code) AS code FROM report_photos WHERE tanggal = ? ORDER BY code ASC;",
+                    (clean_date,)
+                )
+                for row in cursor.fetchall():
+                    db_code = (row['code'] or '').strip().upper()
+                    if db_code and db_code not in branch_codes:
+                        branch_codes.append(db_code)
+        except Exception:
+            pass
+
+    result = {code: [] for code in branch_codes}
+    if not clean_date:
         return result
-    for code in ["LOP", "DPS", "BWX", "KOE"]:
-        result[code] = get_photos_by_date(code, tanggal)
+    for code in branch_codes:
+        result[code] = get_photos_by_date(code, clean_date)
     return result
+
+
+def get_latest_documentation_date():
+    """
+    Mengambil tanggal dokumentasi terbaru yang memiliki foto di database,
+    atau tanggal hari ini jika belum ada foto.
+    """
+    _ensure_photos_table()
+    try:
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT MAX(tanggal) AS latest_date FROM report_photos;")
+            row = cursor.fetchone()
+            if row and row['latest_date']:
+                return str(row['latest_date']).strip()[:10]
+    except Exception:
+        pass
+    return datetime.now().strftime('%Y-%m-%d')
 
 
 def delete_photos_for_report(airport_code, tanggal=None, report_id=None):
@@ -418,5 +476,124 @@ def generate_og_preview_jpeg(tanggal, airport_code=None):
     except Exception as e:
         print(f"Warning generate_og_preview_jpeg: {e}")
         return None
+
+
+def _format_safe_area_filename_prefix(area_tag):
+    """
+    Mengubah nama area/lokasi menjadi prefix nama file yang bersih dan mudah dibaca,
+    misalnya 'Runway 09' -> 'Runway_09', 'Runway' -> 'Runway', 'Apron Utara' -> 'Apron_Utara'.
+    """
+    raw = str(area_tag or 'Umum').strip()
+    if not raw:
+        raw = 'Umum'
+    cleaned = re.sub(r'[\s\-/\\]+', '_', raw)
+    cleaned = re.sub(r'[^a-zA-Z0-9_]', '', cleaned).strip('_')
+    return cleaned[:40] if cleaned else 'Dokumentasi'
+
+
+def build_documentation_zip(tanggal, branch='ALL'):
+    """
+    Membangun arsip ZIP dokumentasi foto untuk tanggal dan filter cabang tertentu.
+    - Jika branch adalah 'ALL' / 'all' / 'SEMUA':
+        Nama ZIP: Dokumentasi_Airside_<YYYY-MM-DD>_Semua_Cabang.zip
+        Struktur: Dokumentasi_Airside_<YYYY-MM-DD>/<BRANCH>/<Area>_<No>.webp
+    - Jika branch adalah kode cabang spesifik (misal 'LOP', 'DPS', 'KOE', 'BWX'):
+        Nama ZIP: Dokumentasi_Airside_<YYYY-MM-DD>_<BRANCH>.zip
+        Struktur: Dokumentasi_Airside_<YYYY-MM-DD>/<BRANCH>/<Area>_<No>.webp
+    Menggunakan SpooledTemporaryFile (5 MB threshold) agar hemat RAM dan tidak meninggalkan file permanen.
+    Mengembalikan tuple: (spool_file, zip_filename, total_added, included_branches)
+    """
+    import zipfile
+    import tempfile
+
+    clean_date = str(tanggal or '').strip()[:10]
+    if not re.match(r'^\d{4}-\d{2}-\d{2}$', clean_date):
+        raise ValueError("Format tanggal dokumentasi tidak valid (harus YYYY-MM-DD).")
+
+    raw_branch = str(branch or 'ALL').strip()
+    upper_branch = raw_branch.upper()
+
+    if upper_branch in ('', 'ALL', 'SEMUA', 'SEMUA_CABANG'):
+        is_all = True
+        grouped = get_all_airports_photos_by_date(clean_date)
+        photos_by_branch = {code: plist for code, plist in grouped.items() if plist}
+        zip_filename = f"Dokumentasi_Airside_{clean_date}_Semua_Cabang.zip"
+    else:
+        if not re.match(r'^[A-Z0-9_-]{2,10}$', upper_branch):
+            raise ValueError("Kode cabang bandara tidak valid.")
+        is_all = False
+        branch_photos = get_photos_by_date(upper_branch, clean_date)
+        photos_by_branch = {upper_branch: branch_photos} if branch_photos else {}
+        zip_filename = f"Dokumentasi_Airside_{clean_date}_{upper_branch}.zip"
+
+    if not photos_by_branch:
+        return None, zip_filename, 0, []
+
+    real_uploads_root = os.path.realpath(UPLOADS_ROOT)
+    root_folder = f"Dokumentasi_Airside_{clean_date}"
+
+    spool = tempfile.SpooledTemporaryFile(max_size=5 * 1024 * 1024, mode='w+b')
+    total_added = 0
+    included_branches = []
+
+    try:
+        with zipfile.ZipFile(spool, mode='w', compression=zipfile.ZIP_DEFLATED) as zf:
+            for code, plist in photos_by_branch.items():
+                safe_code = re.sub(r'[^A-Z0-9_-]', '', str(code).upper()) or 'CABANG'
+                area_counters = {}
+                used_filenames = set()
+                branch_added = 0
+
+                for p in plist:
+                    url_val = str(p.get('url') or '')
+                    rel_part = url_val.replace('/static/uploads/', '').lstrip('/\\').replace('/', os.sep)
+                    if not rel_part:
+                        continue
+
+                    candidate_abs = os.path.realpath(os.path.join(real_uploads_root, rel_part))
+                    # Proteksi ketat terhadap Path Traversal di luar UPLOADS_ROOT
+                    if not (candidate_abs == real_uploads_root or candidate_abs.startswith(real_uploads_root + os.sep)):
+                        continue
+                    if not os.path.isfile(candidate_abs):
+                        continue
+
+                    _, ext = os.path.splitext(candidate_abs)
+                    ext = ext.lower() if ext else '.webp'
+                    if ext not in ALLOWED_EXTENSIONS:
+                        ext = '.webp'
+
+                    area_prefix = _format_safe_area_filename_prefix(p.get('area_tag'))
+                    area_key = area_prefix.lower()
+                    seq = area_counters.get(area_key, 0) + 1
+                    area_counters[area_key] = seq
+
+                    entry_name = f"{area_prefix}_{seq:02d}{ext}"
+                    while entry_name.lower() in used_filenames:
+                        seq += 1
+                        area_counters[area_key] = seq
+                        entry_name = f"{area_prefix}_{seq:02d}{ext}"
+
+                    used_filenames.add(entry_name.lower())
+                    arcname = f"{root_folder}/{safe_code}/{entry_name}"
+                    zf.write(candidate_abs, arcname=arcname)
+                    total_added += 1
+                    branch_added += 1
+
+                if branch_added > 0:
+                    included_branches.append(safe_code)
+
+        if total_added == 0:
+            spool.close()
+            return None, zip_filename, 0, []
+
+        spool.seek(0)
+        return spool, zip_filename, total_added, included_branches
+    except Exception:
+        try:
+            spool.close()
+        except Exception:
+            pass
+        raise
+
 
 
