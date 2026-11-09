@@ -39,17 +39,22 @@
             if (input) input.classList.remove('input-invalid-pulse');
         }, 350);
 
-        // 2. Floating micro-tooltip di dekat input
+        // 2. Floating micro-tooltip di dekat input (menggunakan position: fixed agar presisi di dalam modal/viewport)
         try {
             const hint = getOrCreateHintElement();
-            hint.textContent = message || 'Hanya karakter angka (0–9) yang diperbolehkan';
+            hint.textContent = message || 'Input tidak valid. Field ini hanya menerima angka.';
             
             const rect = input.getBoundingClientRect();
-            const topPos = rect.bottom + window.scrollY + 6;
-            const leftPos = Math.max(12, rect.left + window.scrollX);
+            let topPos = rect.bottom + 6;
+            if (topPos + 32 > window.innerHeight && rect.top > 40) {
+                topPos = Math.max(10, rect.top - 34);
+            }
+            const leftPos = Math.max(12, Math.min(rect.left, window.innerWidth - 260));
 
+            hint.style.position = 'fixed';
             hint.style.top = `${topPos}px`;
             hint.style.left = `${leftPos}px`;
+            hint.style.zIndex = '999999';
             hint.classList.add('show');
 
             if (hintTimeout) clearTimeout(hintTimeout);
@@ -72,23 +77,36 @@
             return false;
         }
 
-        if (el.getAttribute('data-type') === 'number') return true;
+        // Jika secara eksplisit dideklarasikan sebagai tipe non-number
+        const dataType = el.getAttribute('data-type');
+        if (dataType === 'text' || dataType === 'date') return false;
+        if (dataType === 'number' || dataType === 'decimal' || dataType === 'integer') return true;
+
+        const name = el.name;
+        // 1. Cek pemetaan dari metadata Admin schema global (Single Source of Truth)
+        if (name && window.ACTIVE_FIELD_DEFS && window.ACTIVE_FIELD_DEFS[name]) {
+            const t = window.ACTIVE_FIELD_DEFS[name].type;
+            if (t === 'number' || t === 'decimal' || t === 'integer') return true;
+            if (t === 'text' || t === 'textarea' || t === 'select' || t === 'date') return false;
+        }
+
+        if (name && window.schemaFieldTypes && window.schemaFieldTypes[name]) {
+            const t = window.schemaFieldTypes[name];
+            if (t === 'number' || t === 'decimal' || t === 'integer') return true;
+            if (t === 'text' || t === 'textarea' || t === 'select' || t === 'date') return false;
+        }
+
         if (el.classList.contains('field-number-input')) return true;
+        if (el.classList.contains('num-input')) return true;
         if (el.type === 'number') return true;
 
-        // Cek pemetaan tipe dari Form Schema global jika tersedia
-        const name = el.name;
-        if (name) {
-            if (window.schemaFieldTypes && window.schemaFieldTypes[name] === 'number') return true;
-            if (window.ACTIVE_FIELD_TYPES && window.ACTIVE_FIELD_TYPES[name] && window.ACTIVE_FIELD_TYPES[name].type === 'number') return true;
-            if (window.ACTIVE_SCHEMA && window.ACTIVE_SCHEMA.steps) {
-                // Lookup lazy di schema
-                for (let step of window.ACTIVE_SCHEMA.steps) {
-                    for (let sec of (step.sections || [])) {
-                        for (let f of (sec.fields || [])) {
-                            if (f.name === name) {
-                                return f.type === 'number';
-                            }
+        if (name && window.ACTIVE_SCHEMA && window.ACTIVE_SCHEMA.steps) {
+            // Lookup lazy di schema
+            for (let step of window.ACTIVE_SCHEMA.steps) {
+                for (let sec of (step.sections || [])) {
+                    for (let f of (sec.fields || [])) {
+                        if (f.name === name) {
+                            return f.type === 'number' || f.type === 'decimal' || f.type === 'integer';
                         }
                     }
                 }
@@ -102,10 +120,48 @@
      * Mengambil konfigurasi validasi angka untuk input tertentu
      */
     function getNumberConfig(input) {
-        const allowDecimal = input.getAttribute('data-allow-decimal') === 'true';
-        const allowNegative = input.getAttribute('data-allow-negative') === 'true';
-        const minAttr = input.getAttribute('min');
-        const maxAttr = input.getAttribute('max');
+        let allowDecimal = input.getAttribute('data-allow-decimal') === 'true';
+        let allowNegative = input.getAttribute('data-allow-negative') === 'true';
+        let minAttr = input.getAttribute('min');
+        let maxAttr = input.getAttribute('max');
+
+        // Sinkronisasi dengan schema Admin global jika atribut belum terpasang
+        const name = input ? input.name : null;
+        if (name) {
+            let fDef = null;
+            if (window.ACTIVE_FIELD_DEFS && window.ACTIVE_FIELD_DEFS[name]) {
+                fDef = window.ACTIVE_FIELD_DEFS[name];
+            } else if (window.ACTIVE_SCHEMA && window.ACTIVE_SCHEMA.steps) {
+                for (let step of window.ACTIVE_SCHEMA.steps) {
+                    for (let sec of (step.sections || [])) {
+                        for (let f of (sec.fields || [])) {
+                            if (f.name === name) {
+                                fDef = f;
+                                break;
+                            }
+                        }
+                        if (fDef) break;
+                    }
+                    if (fDef) break;
+                }
+            }
+
+            if (fDef) {
+                if (fDef.allow_decimal || fDef.type === 'decimal') {
+                    allowDecimal = true;
+                }
+                if (fDef.allow_negative) {
+                    allowNegative = true;
+                }
+                if ((minAttr === null || minAttr === '') && fDef.min !== null && fDef.min !== undefined && fDef.min !== '') {
+                    minAttr = fDef.min;
+                }
+                if ((maxAttr === null || maxAttr === '') && fDef.max !== null && fDef.max !== undefined && fDef.max !== '') {
+                    maxAttr = fDef.max;
+                }
+            }
+        }
+
         const min = (minAttr !== null && minAttr !== '') ? parseFloat(minAttr) : null;
         const max = (maxAttr !== null && maxAttr !== '') ? parseFloat(maxAttr) : null;
 
@@ -251,13 +307,13 @@
         // SEMUA KARAKTER LAIN DIBLOKIR TOTAL (Huruf, spasi, simbol, e, E, +, *)
         e.preventDefault();
         
-        let hintMsg = 'Hanya karakter angka (0–9) yang diperbolehkan';
+        let hintMsg = 'Input tidak valid. Field ini hanya menerima angka.';
         if (config.allowDecimal && config.allowNegative) {
-            hintMsg = 'Hanya angka, titik desimal, atau minus (-) yang diperbolehkan';
+            hintMsg = 'Input tidak valid. Hanya angka, titik desimal, atau minus (-) yang diperbolehkan.';
         } else if (config.allowDecimal) {
-            hintMsg = 'Hanya angka dan tanda desimal (. atau ,) yang diperbolehkan';
+            hintMsg = 'Input tidak valid. Field ini hanya menerima angka desimal (. atau ,).';
         } else if (config.allowNegative) {
-            hintMsg = 'Hanya angka dan tanda minus (-) yang diperbolehkan';
+            hintMsg = 'Input tidak valid. Field ini hanya menerima angka dan tanda minus (-).';
         }
         showInvalidFeedback(input, hintMsg);
     }
@@ -275,7 +331,7 @@
         if (!config.allowDecimal && !config.allowNegative) {
             if (/[^0-9]/.test(e.data)) {
                 e.preventDefault();
-                showInvalidFeedback(input, 'Hanya karakter angka (0–9) yang diperbolehkan');
+                showInvalidFeedback(input, 'Input tidak valid. Field ini hanya menerima angka.');
             }
         } else {
             // Cek apakah data yang akan disisipkan mengandung karakter ilegal
@@ -284,7 +340,7 @@
                                  (config.allowNegative ? /^[0-9-]+$/ : /^[0-9]+$/));
             if (!allowedRegex.test(e.data)) {
                 e.preventDefault();
-                showInvalidFeedback(input, 'Karakter tidak valid untuk pertanyaan angka ini');
+                showInvalidFeedback(input, 'Input tidak valid. Karakter tidak sesuai dengan format angka ini.');
             }
         }
     }
@@ -306,8 +362,12 @@
         const cleaned = sanitizeNumericString(pastedText, config.allowDecimal, config.allowNegative);
 
         if (!cleaned) {
-            showInvalidFeedback(input, 'Teks yang ditempel bukan angka numerik yang valid');
+            showInvalidFeedback(input, 'Input tidak valid. Field ini hanya menerima angka.');
             return;
+        }
+
+        if (pastedText.trim() !== cleaned.trim()) {
+            showInvalidFeedback(input, 'Input tidak valid. Karakter nonangka otomatis dibersihkan.');
         }
 
         insertTextAtCursor(input, cleaned);
@@ -330,7 +390,7 @@
         const cleaned = sanitizeNumericString(droppedText, config.allowDecimal, config.allowNegative);
 
         if (!cleaned) {
-            showInvalidFeedback(input, 'Teks yang ditarik bukan angka numerik yang valid');
+            showInvalidFeedback(input, 'Input tidak valid. Field ini hanya menerima angka.');
             return;
         }
 
@@ -357,7 +417,7 @@
                     input.setSelectionRange(newPos, newPos);
                 }
             } catch (err) {}
-            showInvalidFeedback(input, 'Karakter nonangka telah otomatis dibersihkan');
+            showInvalidFeedback(input, 'Input tidak valid. Karakter nonangka otomatis dibersihkan.');
         }
     }
 
@@ -416,21 +476,21 @@
 
             /* Floating micro-hint notification */
             .number-input-micro-hint {
-                position: absolute;
+                position: fixed !important;
                 background: #0f172a;
                 color: #f8fafc;
                 font-family: inherit;
                 font-size: 0.73rem;
                 font-weight: 600;
-                padding: 0.3rem 0.65rem;
+                padding: 0.35rem 0.75rem;
                 border-radius: 7px;
-                box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
                 pointer-events: none;
-                z-index: 99999;
+                z-index: 999999 !important;
                 opacity: 0;
                 transform: translateY(4px);
                 transition: opacity 0.16s ease, transform 0.16s ease;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.15);
             }
             .number-input-micro-hint.show {
                 opacity: 1;

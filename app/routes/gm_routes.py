@@ -119,6 +119,15 @@ def api_report_detail(report_id):
         return jsonify({"success": False, "error": "Laporan tidak ditemukan"}), 404
     return jsonify({"success": True, "report": report})
 
+@bp.route('/api/schema', methods=['GET'])
+def api_schema():
+    from app.models.config_store import load_schema
+    try:
+        schema = load_schema()
+        return jsonify({"success": True, "data": schema})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 @bp.route('/api/report/<report_id>/wa-alert', methods=['GET'])
 def api_report_wa_alert(report_id):
     user = USERS.get(session['user_id'])

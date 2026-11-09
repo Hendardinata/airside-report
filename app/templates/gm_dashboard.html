@@ -2852,6 +2852,14 @@
         box-shadow: 0 0 0 2px rgba(0, 183, 205, 0.18);
     }
 
+    .doc-inline-input.field-has-error,
+    .doc-inline-textarea.field-has-error,
+    .field-has-error {
+        border-color: #ef4444 !important;
+        background-color: #fef2f2 !important;
+        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25) !important;
+    }
+
     textarea.doc-inline-input,
     .doc-inline-textarea {
         background-color: transparent;
@@ -5121,18 +5129,39 @@
 
 {% block scripts %}
 <script>
-    const ACTIVE_SCHEMA = {{ schema | tojson | safe if schema else '{}' }};
-    const schemaFieldTypes = {};
-    if (ACTIVE_SCHEMA && ACTIVE_SCHEMA.steps) {
-        ACTIVE_SCHEMA.steps.forEach(st => {
-            (st.sections || []).forEach(sc => {
-                (sc.fields || []).forEach(f => {
-                    if (f && f.name) {
-                        schemaFieldTypes[f.name] = f.type || 'text';
-                    }
+    window.ACTIVE_SCHEMA = {{ schema | tojson | safe if schema else '{}' }};
+    window.getSchemaFieldMap = function(schema) {
+        const map = {};
+        if (schema && schema.steps) {
+            schema.steps.forEach(st => {
+                (st.sections || []).forEach(sc => {
+                    (sc.fields || []).forEach(f => {
+                        if (f && f.name) {
+                            map[f.name] = {
+                                name: f.name,
+                                label: f.label || f.name,
+                                type: f.type || 'text',
+                                required: !!f.required,
+                                allow_decimal: !!(f.allow_decimal || f.type === 'decimal'),
+                                allow_negative: !!f.allow_negative,
+                                min: (f.min !== null && f.min !== undefined && f.min !== '') ? f.min : null,
+                                max: (f.max !== null && f.max !== undefined && f.max !== '') ? f.max : null,
+                                unit: f.unit || '',
+                                placeholder: f.placeholder || '',
+                                options: f.options || []
+                            };
+                        }
+                    });
                 });
             });
-        });
+        }
+        return map;
+    };
+
+    window.ACTIVE_FIELD_DEFS = window.getSchemaFieldMap(window.ACTIVE_SCHEMA);
+    window.schemaFieldTypes = {};
+    for (const [k, v] of Object.entries(window.ACTIVE_FIELD_DEFS)) {
+        window.schemaFieldTypes[k] = v.type;
     }
 
     function escapeHtml(str) {
@@ -6431,9 +6460,21 @@
             </div>
         `;
 
-        fetch(`/gm/api/report/${encodeURIComponent(reportId)}`)
-            .then(r => r.json())
-            .then(res => {
+        // Ambil data laporan dan konfigurasi schema Admin terbaru secara bersamaan
+        Promise.all([
+            fetch(`/gm/api/report/${encodeURIComponent(reportId)}`).then(r => r.json()),
+            fetch('/gm/api/schema').then(r => r.json()).catch(() => ({ success: false }))
+        ])
+            .then(([res, schemaRes]) => {
+                if (schemaRes && schemaRes.success && schemaRes.data) {
+                    window.ACTIVE_SCHEMA = schemaRes.data;
+                    window.ACTIVE_FIELD_DEFS = window.getSchemaFieldMap(window.ACTIVE_SCHEMA);
+                    window.schemaFieldTypes = {};
+                    for (const [k, v] of Object.entries(window.ACTIVE_FIELD_DEFS)) {
+                        window.schemaFieldTypes[k] = v.type;
+                    }
+                }
+
                 if (res.success && res.report) {
                     currentLoadedReportData = res.report;
                     const rep = res.report;
@@ -6463,7 +6504,9 @@
                     };
 
                     function renderDocField(name, currentVal, fallback = '', maxWidth = '100%', placeholder = '') {
-                        const isTextarea = (schemaFieldTypes[name] === 'textarea') || (currentVal && String(currentVal).includes('\n'));
+                        const fDef = (window.ACTIVE_FIELD_DEFS && window.ACTIVE_FIELD_DEFS[name]) ? window.ACTIVE_FIELD_DEFS[name] : {};
+                        const fieldType = fDef.type || (window.schemaFieldTypes ? window.schemaFieldTypes[name] : 'text') || 'text';
+                        const isTextarea = (fieldType === 'textarea') || (currentVal && String(currentVal).includes('\n'));
                         let val = (currentVal !== undefined && currentVal !== null && String(currentVal).trim() !== '-') ? String(currentVal) : fallback;
                         if (val.startsWith("'")) {
                             let rem = val.slice(1).trimStart();
@@ -6471,11 +6514,24 @@
                                 val = val.slice(1);
                             }
                         }
+                        const label = fDef.label || name;
+                        const required = fDef.required ? 'true' : 'false';
+
                         if (isTextarea) {
-                            return `<textarea name="${name}" class="doc-inline-input doc-inline-textarea" placeholder="${placeholder}">${escapeHtml(val)}</textarea>`;
+                            return `<textarea name="${name}" class="doc-inline-input doc-inline-textarea" data-label="${escapeHtml(label)}" data-required="${required}" placeholder="${placeholder}">${escapeHtml(val)}</textarea>`;
                         }
                         const styleAttr = maxWidth ? `style="max-width:${maxWidth};"` : '';
-                        return `<input type="text" name="${name}" class="doc-inline-input" ${styleAttr} value="${safe(val)}" placeholder="${placeholder}">`;
+                        
+                        if (fieldType === 'number' || fieldType === 'decimal' || fieldType === 'integer') {
+                            const allowDec = (fDef.allow_decimal || fieldType === 'decimal') ? 'true' : 'false';
+                            const allowNeg = fDef.allow_negative ? 'true' : 'false';
+                            const minAttr = (fDef.min !== null && fDef.min !== undefined && fDef.min !== '') ? `min="${fDef.min}"` : '';
+                            const maxAttr = (fDef.max !== null && fDef.max !== undefined && fDef.max !== '') ? `max="${fDef.max}"` : '';
+                            const inputMode = (fDef.allow_decimal || fieldType === 'decimal') ? 'decimal' : 'numeric';
+                            return `<input type="text" name="${name}" class="doc-inline-input field-number-input" data-type="number" data-allow-decimal="${allowDec}" data-allow-negative="${allowNeg}" ${minAttr} ${maxAttr} inputmode="${inputMode}" autocomplete="off" data-label="${escapeHtml(label)}" data-required="${required}" ${styleAttr} value="${safe(val)}" placeholder="${placeholder}">`;
+                        }
+
+                        return `<input type="text" name="${name}" class="doc-inline-input" data-type="text" data-label="${escapeHtml(label)}" data-required="${required}" ${styleAttr} value="${safe(val)}" placeholder="${placeholder}">`;
                     }
 
                     // Client-side self-healing jika SAPAAN dan TANGGAL tertukar
@@ -6983,6 +7039,9 @@
                         </div>
                     </form>
                     `;
+                    // Terapkan atribut dan aturan validasi schema Admin secara dinamis ke seluruh elemen form
+                    applySchemaAttributesToForm(contentBox);
+
                     // Auto-resize all inline textareas on load and typing
                     setTimeout(() => {
                         contentBox.querySelectorAll('textarea.doc-inline-input').forEach(ta => {
@@ -7132,10 +7191,222 @@
         });
     }
 
+    // ==============================================================================
+    // SINKRONISASI VALIDASI FORM DH DENGAN KONFIGURASI ADMIN (SINGLE SOURCE OF TRUTH)
+    // ==============================================================================
+    function applySchemaAttributesToForm(container) {
+        if (!container) return;
+        const inputs = container.querySelectorAll('input, select, textarea');
+        const fieldMap = window.ACTIVE_FIELD_DEFS || {};
+
+        inputs.forEach(el => {
+            const name = el.name;
+            if (!name) return;
+            const fDef = fieldMap[name];
+            if (fDef) {
+                el.dataset.label = fDef.label || name;
+                el.dataset.required = fDef.required ? 'true' : 'false';
+                const fType = fDef.type || 'text';
+                el.dataset.type = fType;
+
+                if (fType === 'number' || fType === 'decimal' || fType === 'integer' || fDef.allow_decimal) {
+                    el.classList.add('field-number-input');
+                    el.dataset.type = 'number';
+                    const allowDec = (fDef.allow_decimal || fType === 'decimal') ? 'true' : 'false';
+                    const allowNeg = fDef.allow_negative ? 'true' : 'false';
+                    el.dataset.allowDecimal = allowDec;
+                    el.dataset.allowNegative = allowNeg;
+                    el.setAttribute('inputmode', allowDec === 'true' ? 'decimal' : 'numeric');
+                    el.setAttribute('autocomplete', 'off');
+
+                    if (fDef.min !== null && fDef.min !== undefined && fDef.min !== '') {
+                        el.setAttribute('min', fDef.min);
+                    } else {
+                        el.removeAttribute('min');
+                    }
+                    if (fDef.max !== null && fDef.max !== undefined && fDef.max !== '') {
+                        el.setAttribute('max', fDef.max);
+                    } else {
+                        el.removeAttribute('max');
+                    }
+                } else {
+                    el.classList.remove('field-number-input');
+                    el.removeAttribute('data-allow-decimal');
+                    el.removeAttribute('data-allow-negative');
+                    el.removeAttribute('min');
+                    el.removeAttribute('max');
+                }
+            }
+
+            el.addEventListener('input', function() {
+                this.classList.remove('field-has-error');
+            });
+        });
+
+        if (window.InputValidator && typeof window.InputValidator.attachNumberAttributes === 'function') {
+            window.InputValidator.attachNumberAttributes(container);
+        }
+    }
+
+    function validateDhFormInputs(formElem) {
+        if (!formElem) return { valid: true };
+        const inputs = formElem.querySelectorAll('input, select, textarea');
+        const fieldMap = window.ACTIVE_FIELD_DEFS || {};
+        const invalidList = [];
+
+        inputs.forEach(input => {
+            const name = input.name;
+            if (!name) return;
+            const fDef = fieldMap[name] || {};
+            const label = input.getAttribute('data-label') || fDef.label || name;
+            const val = (input.value || '').trim();
+            const isRequired = input.getAttribute('data-required') === 'true' || fDef.required;
+
+            // 1. Cek Required (abaikan field sistem otomatis)
+            if (isRequired && val === '' && name !== 'csrf_token' && name !== 'REPORT_ID' && name !== 'KANTOR_CABANG') {
+                input.classList.add('field-has-error');
+                invalidList.push({
+                    el: input,
+                    name: name,
+                    label: label,
+                    type: 'required',
+                    reason: `Kolom '${label}' wajib diisi.`
+                });
+                return;
+            }
+
+            // 2. Cek Number / Decimal / Integer
+            const isNum = (window.InputValidator && typeof window.InputValidator.isNumberInput === 'function')
+                ? window.InputValidator.isNumberInput(input)
+                : (input.getAttribute('data-type') === 'number' || input.classList.contains('field-number-input'));
+
+            if (isNum && val !== '' && val !== '-') {
+                const config = (window.InputValidator && typeof window.InputValidator.getNumberConfig === 'function')
+                    ? window.InputValidator.getNumberConfig(input)
+                    : {
+                        allowDecimal: input.getAttribute('data-allow-decimal') === 'true',
+                        allowNegative: input.getAttribute('data-allow-negative') === 'true',
+                        min: input.hasAttribute('min') ? parseFloat(input.getAttribute('min')) : null,
+                        max: input.hasAttribute('max') ? parseFloat(input.getAttribute('max')) : null
+                    };
+
+                let isValid = true;
+                let errorReason = '';
+
+                if (!config.allowDecimal && !config.allowNegative) {
+                    if (!/^\d+$/.test(val)) {
+                        isValid = false;
+                        errorReason = 'Hanya boleh berisi karakter angka bulat numerik (0–9) tanpa huruf, teks, atau simbol.';
+                    }
+                } else {
+                    const normalized = val.replace(',', '.');
+                    let pattern = (config.allowDecimal && config.allowNegative) ? /^-?\d+(\.\d+)?$/ :
+                                  (config.allowDecimal ? /^\d+(\.\d+)?$/ :
+                                  (config.allowNegative ? /^-?\d+$/ : /^\d+$/));
+                    if (!pattern.test(normalized)) {
+                        isValid = false;
+                        errorReason = 'Format angka tidak valid. Gunakan format angka desimal yang benar.';
+                    }
+                }
+
+                if (isValid) {
+                    const num = parseFloat(val.replace(',', '.'));
+                    if (!isNaN(num)) {
+                        if (config.min !== null && !isNaN(config.min) && num < config.min) {
+                            isValid = false;
+                            errorReason = `Nilai tidak boleh lebih kecil dari batas minimum (${config.min}).`;
+                        } else if (config.max !== null && !isNaN(config.max) && num > config.max) {
+                            isValid = false;
+                            errorReason = `Nilai tidak boleh lebih besar dari batas maksimum (${config.max}).`;
+                        }
+                    }
+                }
+
+                if (!isValid) {
+                    input.classList.add('field-has-error');
+                    invalidList.push({
+                        el: input,
+                        name: name,
+                        label: label,
+                        type: 'number_format',
+                        reason: errorReason
+                    });
+                } else {
+                    input.classList.remove('field-has-error');
+                }
+            } else {
+                input.classList.remove('field-has-error');
+            }
+        });
+
+        return {
+            valid: invalidList.length === 0,
+            errors: invalidList,
+            firstError: invalidList[0] || null
+        };
+    }
+
+    function showDhValidationErrorModal(errorItem) {
+        if (!errorItem) return;
+        const input = errorItem.el;
+        const labelText = errorItem.label || input.name || 'Kolom Formulir';
+        const isFormatError = errorItem.type === 'number_format';
+
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+            input.focus();
+            if (window.InputValidator && typeof window.InputValidator.showInvalidFeedback === 'function') {
+                window.InputValidator.showInvalidFeedback(input, errorItem.reason);
+            }
+        }, 250);
+
+        const alertTitle = isFormatError ? 'Format Angka Tidak Sesuai' : 'Kolom Wajib Belum Diisi';
+        const alertSub = isFormatError
+            ? `<i class="fa-solid fa-circle-exclamation text-danger me-1"></i> Pertanyaan Khusus Angka (Number)`
+            : `<i class="fa-solid fa-circle-exclamation text-danger me-1"></i> Data Belum Lengkap`;
+        const alertDesc = isFormatError
+            ? `Kolom <b>${labelText}</b> telah dikonfigurasi bertipe Number/Angka sehingga hanya menerima angka numerik. Huruf, teks, dan karakter nonangka tidak diizinkan.`
+            : `Kolom <b>${labelText}</b> wajib diisi sesuai konfigurasi Admin sebelum koreksi dapat disimpan.`;
+        const alertDetail = `<span>${errorItem.reason}</span>`;
+
+        Swal.fire({
+            customClass: {
+                popup: 'swal-corp-popup',
+                confirmButton: 'swal-corp-btn-primary',
+                actions: 'swal-corp-actions-bar'
+            },
+            buttonsStyling: false,
+            html: `
+                <div class="swal-corp-icon-tile icon-warning-corp">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="swal-corp-title">${alertTitle}</h3>
+                <div class="swal-corp-sub">
+                    ${alertSub}
+                </div>
+                <p style="font-size:0.88rem; color:#475569; margin:0 0 1rem 0; line-height: 1.5;">
+                    ${alertDesc}
+                </p>
+                <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:0.65rem 0.9rem; color:#991b1b; font-size:0.86rem; text-align:left; display:flex; align-items:center; gap:0.5rem;">
+                    <i class="fa-solid fa-arrow-right text-danger"></i>
+                    ${alertDetail}
+                </div>
+            `,
+            confirmButtonText: 'Mengerti, Saya Perbaiki Dulu'
+        });
+    }
+
     // Submit DH Self-Edit
     function submitDhSelfEdit(reportId, autoApprove) {
         const formElem = document.getElementById('dhSelfEditForm');
         if (!formElem) return;
+
+        // Validasi seluruh input formulir terlebih dahulu (Single Source of Truth dari Admin)
+        const validation = validateDhFormInputs(formElem);
+        if (!validation.valid) {
+            showDhValidationErrorModal(validation.firstError);
+            return;
+        }
 
         const inputs = formElem.querySelectorAll('input, select, textarea');
         const formData = {};

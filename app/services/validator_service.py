@@ -28,7 +28,7 @@ def get_schema_field_definitions(schema: Optional[Dict[str, Any]] = None) -> Dic
                     'label': field.get('label', name),
                     'type': field.get('type', 'text'),
                     'required': bool(field.get('required', False)),
-                    'allow_decimal': bool(field.get('allow_decimal', False)),
+                    'allow_decimal': bool(field.get('allow_decimal', False) or field.get('type') == 'decimal'),
                     'allow_negative': bool(field.get('allow_negative', False)),
                     'min': field.get('min'),
                     'max': field.get('max'),
@@ -39,14 +39,14 @@ def get_schema_field_definitions(schema: Optional[Dict[str, Any]] = None) -> Dic
 
 def validate_numeric_value(raw_val: Any, field_def: Dict[str, Any]) -> Tuple[bool, str]:
     """
-    Validasi nilai input khusus untuk field bertipe 'number'.
+    Validasi nilai input khusus untuk field bertipe 'number' atau desimal/integer.
     Mencegah teks, huruf, simbol, dan memastikan hanya angka bulat (0-9) yang masuk,
     kecuali jika konfigurasi mengizinkan desimal (allow_decimal) atau negatif (allow_negative).
     Mengembalikan (is_valid, cleaned_str_or_error_msg).
     """
     label = field_def.get('label') or field_def.get('name') or 'Pertanyaan Angka'
     is_required = bool(field_def.get('required', False))
-    allow_decimal = bool(field_def.get('allow_decimal', False))
+    allow_decimal = bool(field_def.get('allow_decimal', False) or field_def.get('type') == 'decimal')
     allow_negative = bool(field_def.get('allow_negative', False))
 
     if raw_val is None:
@@ -136,8 +136,8 @@ def validate_form_data(form_data: Dict[str, Any], schema: Optional[Dict[str, Any
         f_type = field_def.get('type', 'text')
         label = field_def.get('label') or field_name
 
-        # 1. Validasi khusus field tipe Number
-        if f_type == 'number':
+        # 1. Validasi khusus field tipe Number / Decimal / Integer
+        if f_type in ('number', 'decimal', 'integer') or field_def.get('allow_decimal'):
             if is_present or require_all:
                 ok, res = validate_numeric_value(val, field_def)
                 if not ok:
