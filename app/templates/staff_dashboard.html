@@ -1362,6 +1362,11 @@
         color: #64748b;
     }
 
+    .icon-box-rejected {
+        background: #fee2e2;
+        color: #ef4444;
+    }
+
     .notif-item-content {
         flex: 1;
         min-width: 0;
@@ -1404,6 +1409,18 @@
         background: #f0f9ff;
         color: #009cb0;
         border: 1px solid #bae6fd;
+    }
+
+    .pill-notif-rejected {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+
+    .pill-notif-info {
+        background: #f8fafc;
+        color: #475569;
+        border: 1px solid #e2e8f0;
     }
 
     .notif-item-time {
@@ -1494,15 +1511,25 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .notif-ftr-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-weight: 600;
+        color: #334155;
     }
 
     .status-indicator-dot {
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: #22c55e;
+        background-color: #10b981;
         display: inline-block;
-        margin-right: 0.35rem;
+        flex-shrink: 0;
     }
 
     /* User Profile Pill */
