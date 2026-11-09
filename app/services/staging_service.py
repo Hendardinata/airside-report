@@ -78,11 +78,19 @@ def save_report_to_staging(airport_code, form_data, user_name, report_id=None, u
         with get_db() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-            SELECT timestamp_submit FROM staging_reports 
+            SELECT timestamp_submit, form_data FROM staging_reports 
             WHERE report_id = ? AND UPPER(airport_code) = ?;
             """, (report_id, airport_code))
             existing_row = cursor.fetchone()
-            existing_submit_time = existing_row['timestamp_submit'] if existing_row else now_str
+            if existing_row:
+                existing_submit_time = existing_row['timestamp_submit'] if existing_row['timestamp_submit'] else now_str
+                try:
+                    base_form = json.loads(existing_row['form_data'])
+                except Exception:
+                    base_form = {}
+            else:
+                existing_submit_time = now_str
+                base_form = {}
 
     if user_username:
         clean_u = str(user_username).strip().lower()
@@ -93,8 +101,13 @@ def save_report_to_staging(airport_code, form_data, user_name, report_id=None, u
     else:
         stored_submitted_by = user_name
 
-    # Siapkan full dict untuk disimpan
-    full_data = dict(form_data)
+    # Siapkan full dict untuk disimpan (pertahankan nilai lama jika sedang edit draf/revisi)
+    if report_id and 'base_form' in locals() and base_form:
+        full_data = dict(base_form)
+        full_data.update(form_data)
+    else:
+        full_data = dict(form_data)
+
     full_data['REPORT_ID'] = report_id
     full_data['STATUS'] = 'PENDING_DH'
     full_data['TANGGAL'] = tanggal
@@ -231,27 +244,64 @@ def get_staging_report_by_id(airport_code, report_id):
     from app.services.photo_service import get_photos_by_date
     photos_list = get_photos_by_date(airport_code, r['tanggal'])
 
+    dh_name_val = row_dict.get('DH_NAME') or row_dict.get('REVIEWED_BY_DH') or ''
+    if not dh_name_val:
+        try:
+            with get_db() as conn:
+                cur = conn.cursor()
+                cur.execute("SELECT sender_name FROM notifications WHERE report_id = ? AND notif_type = 'revisi' ORDER BY created_at DESC LIMIT 1;", (r['report_id'],))
+                notif_row = cur.fetchone()
+                if notif_row and notif_row['sender_name']:
+                    dh_name_val = notif_row['sender_name']
+        except Exception:
+            pass
+
+    t_submit = r['timestamp_submit'] if 'timestamp_submit' in r.keys() else ''
+    t_update = r['timestamp_update'] if 'timestamp_update' in r.keys() else ''
+
     return {
         "report_id": r['report_id'],
+        "tanggal": r['tanggal'],
+        "airport_code": r['airport_code'],
+        "submitted_by": sub_name,
+        "submitted_by_username": sub_uname,
         "status": display_status,
         "catatan_gm": catatan_val,
         "catatan_dh": catatan_val,
-        "tanggal": r['tanggal'],
-        "submitted_by": sub_name or raw_sub,
-        "submitted_by_username": sub_uname or "",
-        "submitted_by_raw": raw_sub,
-        "timestamp_submit": r['timestamp_submit'] or '',
-        "timestamp_update": r['timestamp_update'] or '',
-        "pci_runway": row_dict.get('RUNWAY_PCI', '-'),
-        "kondisi_runway": row_dict.get('RUNWAY_KONDISI', '-'),
-        "photos": photos_list,
-        "data": row_dict
+        "keterangan_revisi": catatan_val,
+        "dh_name": dh_name_val or 'Department Head',
+        "reviewed_by_dh": dh_name_val or 'Department Head',
+        "timestamp_created": t_submit,
+        "timestamp_submit": t_submit,
+        "timestamp_update": t_update,
+        "data": row_dict,
+        "photos": photos_list
     }
 
-def gm_request_revision(airport_code, report_id, notes):
+def get_staging_report_by_date(airport_code, date_str):
+    """
+    Mengambil laporan draf staging berdasarkan tanggal operasional.
+    Memprioritaskan status REVISI kemudian PENDING_DH.
+    """
+    airport_code = str(airport_code).upper().strip()
+    clean_date = str(date_str).strip()
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        SELECT report_id FROM staging_reports
+        WHERE UPPER(airport_code) = ? AND tanggal = ? AND status != 'APPROVED'
+        ORDER BY CASE WHEN status = 'REVISI' THEN 1 ELSE 2 END, timestamp_update DESC LIMIT 1;
+        """, (airport_code, clean_date))
+        row = cursor.fetchone()
+
+    if not row:
+        return None
+    return get_staging_report_by_id(airport_code, row['report_id'])
+
+def gm_request_revision(airport_code, report_id, notes, dh_name=None, dh_username=None):
     """
     DH memberikan catatan koreksi.
-    Status diubah menjadi REVISI di SQLite, dan catatan disimpan (0 HIT API Google).
+    Status diubah menjadi REVISI di SQLite, dan catatan serta identitas DH disimpan.
     """
     airport_code = str(airport_code).upper().strip()
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -275,6 +325,10 @@ def gm_request_revision(airport_code, report_id, notes):
         fd['CATATAN_GM'] = notes
         fd['CATATAN_DH'] = notes
         fd['TIMESTAMP_UPDATE'] = now_str
+        if dh_name:
+            fd['DH_NAME'] = dh_name
+        if dh_username:
+            fd['DH_USERNAME'] = dh_username
 
         cursor.execute("""
         UPDATE staging_reports 
@@ -292,13 +346,15 @@ def gm_request_revision(airport_code, report_id, notes):
         "success": True,
         "report_id": report_id,
         "status": "REVISI",
-        "notes": notes
+        "notes": notes,
+        "dh_name": dh_name or ''
     }
 
 def update_staging_report_by_dh(airport_code, report_id, updated_form_data, dh_name=None, dh_username=None):
     """
     Department Head mengoreksi secara mandiri data laporan di SQLite.
     Memperbarui nilai form fields namun mempertahankan data asli pelapor.
+    Field Tanggal Laporan DIKUNCI secara ketat dan tidak dapat diubah oleh DH.
     Status laporan dipastikan tetap/kembali ke PENDING_DH.
     """
     airport_code = str(airport_code).upper().strip()
@@ -321,8 +377,13 @@ def update_staging_report_by_dh(airport_code, report_id, updated_form_data, dh_n
 
         merged_data = dict(old_data)
         for k, v in updated_form_data.items():
-            if k not in ('REPORT_ID', 'TIMESTAMP_SUBMIT', 'SUBMITTED_BY', 'SUBMITTED_BY_USERNAME'):
+            if k not in ('REPORT_ID', 'TIMESTAMP_SUBMIT', 'SUBMITTED_BY', 'SUBMITTED_BY_USERNAME', 'TANGGAL', 'TANGGAL_LAPORAN'):
                 merged_data[k] = v
+
+        # Kunci Tanggal Laporan agar tidak dapat diubah bebas oleh DH
+        merged_data['TANGGAL'] = row['tanggal']
+        if 'TANGGAL_LAPORAN' in merged_data:
+            merged_data['TANGGAL_LAPORAN'] = row['tanggal']
 
         dh_label = dh_name or 'Department Head'
         catatan_koreksi = f"Dikoreksi mandiri oleh DH ({dh_label})"

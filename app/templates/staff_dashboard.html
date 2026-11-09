@@ -783,9 +783,18 @@
     }
 
     .flatpickr-day.day-status-revision {
-        background-color: #fef2f2 !important;
-        color: #b91c1c !important;
-        font-weight: 700 !important;
+        background-color: #fee2e2 !important;
+        border: 2px solid #ef4444 !important;
+        color: #991b1b !important;
+        font-weight: 800 !important;
+        border-radius: 8px !important;
+        position: relative;
+    }
+
+    .flatpickr-day.day-status-revision:hover {
+        background-color: #fca5a5 !important;
+        border-color: #dc2626 !important;
+        color: #7f1d1d !important;
     }
 
     .flatpickr-day.day-status-revision::after {
@@ -794,10 +803,11 @@
         bottom: 3px;
         left: 50%;
         transform: translateX(-50%);
-        width: 5px;
-        height: 5px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
         background-color: #dc2626;
+        box-shadow: 0 0 5px rgba(220, 38, 38, 0.75);
     }
 
     .flatpickr-day.day-status-recommended {
@@ -1043,8 +1053,8 @@
         top: 100%;
         right: 0;
         margin-top: 0.65rem;
-        width: 410px;
-        max-width: 94vw;
+        width: 440px;
+        max-width: min(440px, 94vw);
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 16px;
@@ -1074,16 +1084,19 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 0.75rem;
         padding: 0.85rem 1.15rem;
         background: #f8fafc;
         border-bottom: 1px solid #e2e8f0;
+        flex-wrap: wrap;
     }
 
     .notif-hdr-left {
         display: flex;
         align-items: center;
         gap: 0.65rem;
-        min-width: 0;
+        flex: 1 1 auto;
+        min-width: 170px;
     }
 
     .notif-hdr-icon {
@@ -1104,10 +1117,8 @@
         font-size: 0.88rem;
         font-weight: 700;
         color: #0f172a;
-        line-height: 1.2;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        line-height: 1.25;
+        margin-bottom: 2px;
     }
 
     .notif-hdr-sub {
@@ -1115,14 +1126,28 @@
         font-size: 0.72rem;
         color: #64748b;
         font-weight: 500;
-        white-space: nowrap;
+        line-height: 1.2;
     }
 
     .notif-hdr-actions {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.45rem;
         flex-shrink: 0;
+    }
+
+    @media (max-width: 440px) {
+        .notif-dropdown-header {
+            padding: 0.75rem 0.85rem;
+            gap: 0.5rem;
+        }
+        .notif-hdr-actions {
+            width: 100%;
+            justify-content: flex-end;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 0.4rem;
+            margin-top: 0.15rem;
+        }
     }
 
     .notif-btn-mark-all {
@@ -1233,6 +1258,11 @@
         border-left: 3.5px solid #00B7CD;
     }
 
+    .notif-item.revisi-active {
+        background-color: #fffaf5;
+        border-left: 3.5px solid #ea580c;
+    }
+
     .notif-item.is-read {
         background-color: #ffffff;
         border-left: 3.5px solid transparent;
@@ -1245,6 +1275,10 @@
 
     .notif-item.unread:hover {
         background-color: #e6fffa;
+    }
+
+    .notif-item.revisi-active:hover {
+        background-color: #fff4ea;
     }
 
     .notif-item-bottom {
@@ -1927,12 +1961,12 @@
     /* Active Edit Mode Alert Banner */
     .edit-mode-alert {
         display: none;
-        background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
-        border: 1.5px solid #93c5fd;
-        border-radius: 12px;
-        padding: 1rem 1.25rem;
+        background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);
+        border: 2px solid #f87171;
+        border-radius: 14px;
+        padding: 1.15rem 1.35rem;
         margin-bottom: 1.75rem;
-        box-shadow: 0 4px 12px rgba(0, 183, 205, 0.08);
+        box-shadow: 0 4px 16px rgba(239, 68, 68, 0.1);
     }
 
     /* Step Top Header inside Card */
@@ -3298,23 +3332,46 @@
     <!-- Balinese Cultural Corner Ornament (Bottom-Left Watermark) -->
     <img src="{{ url_for('static', filename='img/bali-corner-ornament.webp') }}" alt="" class="bali-corner-ornament"
         aria-hidden="true" loading="lazy">
-    <!-- Edit Mode Active Indicator Banner -->
+    <!-- Edit / Revision Mode Active Indicator Banner -->
     <div id="editModeBanner" class="edit-mode-alert">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-            <div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span
-                        style="display: inline-block; padding: 0.25rem 0.65rem; background: #00B7CD; color: #ffffff; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
-                        <i class="fas fa-edit me-1"></i> Mode Edit Laporan
-                    </span>
-                    <strong style="color: #002b49; font-size: 0.95rem;" id="editReportLabel">Laporan ID: -</strong>
-                </div>
-                <p style="margin: 0.4rem 0 0 0; font-size: 0.86rem; color: #00B7CD;" id="editGmNotesText"></p>
+        <div class="edit-mode-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px dashed #fca5a5;">
+            <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                <span class="badge-status-revisi" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.75rem; background: #ef4444; color: #ffffff; border-radius: 6px; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);">
+                    <i class="fa-solid fa-circle-exclamation"></i> Status: Perlu Revisi
+                </span>
+                <span class="badge-report-id" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.65rem; background: #ffffff; border: 1.5px solid #cbd5e1; color: #0f172a; border-radius: 6px; font-size: 0.78rem; font-weight: 700;">
+                    <i class="fa-solid fa-hashtag text-secondary"></i> <span id="editReportIdText">-</span>
+                </span>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-danger" onclick="cancelEditMode()"
-                style="font-size: 0.8rem; font-weight: 600; padding: 0.4rem 0.85rem; border-radius: 8px;">
-                <i class="fas fa-times me-1"></i> Batal Edit (Input Baru)
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="cancelEditMode()"
+                style="font-size: 0.78rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 6px; background: #ffffff;">
+                <i class="fas fa-times me-1 text-danger"></i> Batal Revisi (Input Baru)
             </button>
+        </div>
+
+        <div class="edit-mode-meta-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.65rem; margin-bottom: 0.75rem; font-size: 0.82rem;">
+            <div style="background: #ffffff; padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid #fee2e2;">
+                <span style="color: #64748b; font-size: 0.72rem; text-transform: uppercase; font-weight: 700; display: block;">Tanggal Laporan</span>
+                <strong style="color: #0f172a; font-size: 0.88rem;" id="editReportDateText">-</strong>
+            </div>
+            <div style="background: #ffffff; padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid #fee2e2;">
+                <span style="color: #64748b; font-size: 0.72rem; text-transform: uppercase; font-weight: 700; display: block;">Department Head Reviewer</span>
+                <strong style="color: #0f172a; font-size: 0.88rem;" id="editReportDhText">-</strong>
+            </div>
+            <div style="background: #ffffff; padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid #fee2e2;">
+                <span style="color: #64748b; font-size: 0.72rem; text-transform: uppercase; font-weight: 700; display: block;">Waktu Revisi Diminta</span>
+                <strong style="color: #0f172a; font-size: 0.88rem;" id="editReportTimeText">-</strong>
+            </div>
+        </div>
+
+        <!-- DH Revision Notes Callout Box -->
+        <div class="dh-notes-callout" style="background: #fff1f2; border: 1.5px solid #fecdd3; border-left: 4px solid #ef4444; border-radius: 8px; padding: 0.75rem 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.35rem; color: #991b1b; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.3px;">
+                <i class="fa-solid fa-comment-dots fa-lg text-danger"></i> Catatan & Arahan Koreksi dari DH:
+            </div>
+            <div id="editGmNotesText" style="color: #1e293b; font-size: 0.88rem; line-height: 1.5; font-style: normal; font-weight: 500; background: #ffffff; padding: 0.6rem 0.85rem; border-radius: 6px; border: 1px solid #ffe4e6;">
+                -
+            </div>
         </div>
     </div>
 
@@ -3741,7 +3798,7 @@
             .then(r => r.json())
             .then(res => {
                 if (res.success) {
-                    renderNotifications(res.notifications || [], res.unread_count || 0);
+                    renderNotifications(res.notifications || [], res.unread_count || 0, res);
                 }
             })
             .catch(err => {
@@ -3749,7 +3806,7 @@
             });
     }
 
-    function renderNotifications(notifs, unreadCount) {
+    function renderNotifications(notifs, unreadCount, extraData = {}) {
         const badgeCount = document.getElementById('notifBadgeCount');
         const badgeDot = document.getElementById('notifBadgeDot');
         const unreadText = document.getElementById('notifUnreadText');
@@ -3758,17 +3815,32 @@
         const clearBtn = document.getElementById('notifClearBtn');
 
         const totalNotifs = (notifs || []).length;
-        // Angka notifikasi hanya menampilkan jumlah belum dibaca
-        const displayCount = unreadCount || 0;
+        
+        // Pisahkan perhitungan: revisi aktif (harus diselesaikan oleh staff) dan notifikasi reguler belum dibaca
+        const activeRevisiCount = (extraData && typeof extraData.active_revisi_count === 'number')
+            ? extraData.active_revisi_count
+            : (new Set((notifs || []).filter(n => (n.notif_type === 'revisi')).map(n => n.report_id || n.id))).size;
+        
+        const unreadRegularCount = (extraData && typeof extraData.unread_regular_count === 'number')
+            ? extraData.unread_regular_count
+            : (notifs || []).filter(n => n.notif_type !== 'revisi' && !n.is_read).length;
+
+        const displayCount = activeRevisiCount + unreadRegularCount;
 
         if (displayCount > 0) {
             if (badgeCount) {
                 badgeCount.textContent = displayCount > 9 ? '9+' : displayCount;
                 badgeCount.style.display = 'flex';
             }
-            if (badgeDot) badgeDot.style.display = 'block';
+            if (badgeDot) badgeDot.style.display = 'none';
             if (unreadText) {
-                unreadText.textContent = `${displayCount} notifikasi belum dibaca`;
+                if (activeRevisiCount > 0 && unreadRegularCount > 0) {
+                    unreadText.textContent = `${activeRevisiCount} perlu revisi, ${unreadRegularCount} belum dibaca`;
+                } else if (activeRevisiCount > 0) {
+                    unreadText.textContent = `${activeRevisiCount} laporan perlu tindakan revisi`;
+                } else {
+                    unreadText.textContent = `${unreadRegularCount} notifikasi belum dibaca`;
+                }
             }
         } else {
             if (badgeCount) {
@@ -3782,7 +3854,7 @@
         }
 
         if (markAllBtn) {
-            markAllBtn.style.display = displayCount > 0 ? 'inline-flex' : 'none';
+            markAllBtn.style.display = unreadRegularCount > 0 ? 'inline-flex' : 'none';
         }
 
         if (clearBtn) {
@@ -3837,21 +3909,33 @@
                 actionBtnHtml = '';
             }
 
-            const readStatusBtn = isUnread
-                ? `<button type="button" class="notif-status-btn is-unread" onclick="toggleNotifRead(event, '${n.id}', true)" title="Klik untuk tandai sudah dibaca">
-                     <i class="fa-regular fa-circle-check"></i>
-                     <span>Tandai Dibaca</span>
-                   </button>`
-                : `<button type="button" class="notif-status-btn is-read" onclick="toggleNotifRead(event, '${n.id}', false)" title="Telah dibaca. Klik untuk tandai belum dibaca">
-                     <i class="fa-solid fa-check"></i>
-                     <span>Sudah Dibaca</span>
+            // KETENTUAN KHUSUS: Notifikasi PERLU REVISI tidak menampilkan tombol Sudah Dibaca / Tandai Dibaca
+            let readStatusBtn = '';
+            if (nType !== 'revisi') {
+                readStatusBtn = isUnread
+                    ? `<button type="button" class="notif-status-btn is-unread" onclick="markNotifRead(event, '${n.id}')" title="Klik untuk tandai sudah dibaca">
+                         <i class="fa-regular fa-circle-check"></i>
+                         <span>Tandai Dibaca</span>
+                       </button>`
+                    : `<span class="notif-status-btn is-read" title="Notifikasi ini telah dibaca">
+                         <i class="fa-solid fa-check"></i>
+                         <span>Sudah Dibaca</span>
+                       </span>`;
+            }
+
+            const delBtnHtml = (nType === 'revisi')
+                ? ''
+                : `<button type="button" class="notif-item-del-btn" onclick="deleteNotification(event, '${n.id}')" title="Hapus notifikasi ini">
+                       <i class="fa-solid fa-xmark"></i>
                    </button>`;
 
+            const itemClass = (nType === 'revisi')
+                ? 'revisi-active'
+                : (isUnread ? 'unread' : 'is-read');
+
             html += `
-                <div class="notif-item ${isUnread ? 'unread' : 'is-read'}" onclick="handleNotifCardClick(event, '${n.id}', ${isUnread})">
-                    <button type="button" class="notif-item-del-btn" onclick="deleteNotification(event, '${n.id}')" title="Hapus notifikasi ini">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                <div class="notif-item ${itemClass}" onclick="handleNotifCardClick(event, '${n.id}', ${isUnread}, '${nType}')">
+                    ${delBtnHtml}
                     ${iconHtml}
                     <div class="notif-item-content">
                         <div class="notif-item-top">
@@ -3862,7 +3946,7 @@
                         <div class="notif-item-msg">${n.message || ''}</div>
                         ${actionBtnHtml}
                         <div class="notif-item-bottom">
-                            ${n.report_id ? `<span class="notif-item-meta" style="margin-bottom:0;">ID: ${n.report_id}</span>` : '<span></span>'}
+                            ${n.report_id ? `<span class="notif-item-meta" style="margin-bottom:0; font-weight:600; color:#64748b;">ID: ${n.report_id}</span>` : '<span></span>'}
                             ${readStatusBtn}
                         </div>
                     </div>
@@ -3873,15 +3957,17 @@
         body.innerHTML = html;
     }
 
-    function handleNotifCardClick(event, notifId, isUnread) {
+    function handleNotifCardClick(event, notifId, isUnread, nType) {
         if (!notifId) return;
-        // Klik pada kartu notifikasi yang belum dibaca langsung menandainya sudah dibaca
+        if (event && (event.target.closest('button') || event.target.closest('a'))) return;
+        // Notifikasi tipe revisi tidak ditandai read saat kartu diklik
+        if (nType === 'revisi') return;
         if (isUnread) {
-            toggleNotifRead(event, notifId, true);
+            markNotifRead(event, notifId);
         }
     }
 
-    function toggleNotifRead(e, notifId, markAsRead) {
+    function markNotifRead(e, notifId) {
         if (e) e.stopPropagation();
         if (!notifId) return;
         fetch('/staff/api/notifications/mark-read', {
@@ -3889,14 +3975,10 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ notif_id: notifId, is_read: markAsRead })
+            body: JSON.stringify({ notif_id: notifId })
         }).then(() => {
             fetchNotifications();
         });
-    }
-
-    function markNotifRead(notifId) {
-        toggleNotifRead(null, notifId, true);
     }
 
     function markAllNotifsRead(e) {
@@ -4017,8 +4099,103 @@
         if (formCard) formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Load Report For Edit (Revisi Petugas)
+    // Populate Staging / Revisi Report Data into Wizard Form & Show Banner
+    function populateReportIntoForm(rep) {
+        if (!rep) return;
+        const data = rep.data || {};
+
+        const editInput = document.getElementById('editReportId');
+        if (editInput) editInput.value = rep.report_id || '';
+
+        const banner = document.getElementById('editModeBanner');
+        if (banner) {
+            banner.style.display = 'block';
+            const idEl = document.getElementById('editReportIdText');
+            if (idEl) idEl.textContent = rep.report_id || '-';
+
+            const dateEl = document.getElementById('editReportDateText');
+            if (dateEl) dateEl.textContent = formatIndonesianDate(rep.tanggal);
+
+            const dhEl = document.getElementById('editReportDhText');
+            if (dhEl) dhEl.textContent = rep.dh_name || rep.reviewed_by_dh || 'Department Head';
+
+            const timeEl = document.getElementById('editReportTimeText');
+            if (timeEl) timeEl.textContent = rep.timestamp_update || rep.timestamp_created || '-';
+
+            const notesEl = document.getElementById('editGmNotesText');
+            const notes = rep.catatan_dh || rep.catatan_gm || rep.keterangan_revisi;
+            if (notesEl) {
+                if (notes) {
+                    notesEl.innerHTML = `<strong>Pesan Koreksi DH:</strong> ${notes}`;
+                } else {
+                    notesEl.textContent = "Silakan sesuaikan data laporan sebelum dikirim ulang ke Department Head.";
+                }
+            }
+        }
+
+        // Set date in Flatpickr & input
+        const dateInput = document.getElementById('input-TANGGAL');
+        if (rep.tanggal) {
+            if (window.staffDatePicker) {
+                const curMin = window.staffDatePicker.config.minDate;
+                const curMax = window.staffDatePicker.config.maxDate;
+                if (curMin && new Date(rep.tanggal) < new Date(curMin)) {
+                    window.staffDatePicker.set('minDate', rep.tanggal);
+                }
+                if (curMax && new Date(rep.tanggal) > new Date(curMax)) {
+                    window.staffDatePicker.set('maxDate', rep.tanggal);
+                }
+                window.staffDatePicker.setDate(rep.tanggal, false);
+            }
+            if (dateInput) {
+                dateInput.value = rep.tanggal;
+            }
+            updateDateValidationStatus(rep.tanggal, false);
+        }
+
+        // Populate all wizard fields from saved draft data
+        for (const [key, val] of Object.entries(data)) {
+            if (key === 'TANGGAL') continue;
+            const el = document.getElementById(`input-${key}`) || document.querySelector(`[name="${key}"]`);
+            if (el) {
+                el.value = val;
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+
+        // Load existing photos into form
+        if (typeof window.loadExistingPhotosIntoStaffForm === 'function') {
+            window.loadExistingPhotosIntoStaffForm(rep.photos || []);
+        }
+
+        // Update submit button text / style for resubmission
+        const submitBtn = document.getElementById('btnSubmitReport');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> <span>Kirim Ulang ke DH (Hasil Revisi)</span>';
+            submitBtn.title = 'Kirim Ulang ke DH (Hasil Revisi)';
+        }
+
+        // Jump to Step 1
+        if (typeof nextStep === 'function') {
+            nextStep(1);
+        }
+
+        const formCard = document.querySelector('.form-workspace-card');
+        if (formCard) {
+            formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Mode Revisi Aktif',
+            html: `Data laporan tanggal <b>${formatIndonesianDate(rep.tanggal)}</b> dan catatan revisi DH telah dimuat ke dalam formulir.`,
+            confirmButtonColor: '#00B7CD'
+        });
+    }
+
+    // Load Report For Edit (Revisi Petugas) by Report ID
     function loadReportForEdit(reportId) {
+        if (!reportId) return;
         if (typeof showKawungLoading === 'function') {
             showKawungLoading();
         } else {
@@ -4035,60 +4212,7 @@
                 if (typeof hideKawungLoading === 'function') hideKawungLoading();
                 Swal.close();
                 if (res.success && res.report) {
-                    const rep = res.report;
-                    const data = rep.data || {};
-
-                    const editInput = document.getElementById('editReportId');
-                    if (editInput) editInput.value = rep.report_id;
-
-                    const banner = document.getElementById('editModeBanner');
-                    if (banner) {
-                        banner.style.display = 'block';
-                        document.getElementById('editReportLabel').textContent = `Laporan Tanggal: ${rep.tanggal} (ID: ${rep.report_id})`;
-                        const notesP = document.getElementById('editGmNotesText');
-                        if (rep.catatan_gm) {
-                            notesP.innerHTML = `<strong>Pesan Koreksi DH:</strong> <em>"${rep.catatan_gm}"</em>`;
-                        } else {
-                            notesP.textContent = "Silakan sesuaikan data laporan sebelum dikirim ulang ke Department Head.";
-                        }
-                    }
-
-                    for (const [key, val] of Object.entries(data)) {
-                        const el = document.getElementById(`input-${key}`) || document.querySelector(`[name="${key}"]`);
-                        if (el) {
-                            if (key === 'TANGGAL' && window.staffDatePicker) {
-                                window.staffDatePicker.setDate(val, false);
-                            } else {
-                                el.value = val;
-                                el.dispatchEvent(new Event('change', { bubbles: true }));
-                            }
-                        }
-                    }
-                    if (typeof loadExistingPhotosIntoStaffForm === 'function') {
-                        loadExistingPhotosIntoStaffForm(rep.photos || []);
-                    }
-
-                    const submitBtn = document.getElementById('btnSubmitReport');
-                    if (submitBtn) {
-                        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
-                        submitBtn.title = 'Kirim Ulang ke DH (Hasil Revisi)';
-                    }
-
-                    if (typeof nextStep === 'function') {
-                        nextStep(1);
-                    }
-
-                    const formCard = document.querySelector('.form-workspace-card');
-                    if (formCard) {
-                        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Mode Edit Aktif',
-                        text: `Data laporan tanggal ${rep.tanggal} telah dimuat ke dalam formulir.`,
-                        confirmButtonColor: '#00B7CD'
-                    });
+                    populateReportIntoForm(res.report);
                 } else {
                     Swal.fire('Gagal', res.error || 'Data laporan tidak dapat dimuat.', 'error');
                 }
@@ -4097,6 +4221,44 @@
                 if (typeof hideKawungLoading === 'function') hideKawungLoading();
                 Swal.close();
                 Swal.fire('Error', 'Gagal terhubung ke server', 'error');
+            });
+    }
+
+    // Load Report For Edit (Revisi Petugas) by Date String (YYYY-MM-DD)
+    function loadReportForDate(dateStr) {
+        if (!dateStr) return;
+        const revMap = window.ACTIVE_MONTH_DATA?.staging_revision_reports || {};
+        const revInfo = revMap[dateStr];
+        if (revInfo && revInfo.report_id) {
+            loadReportForEdit(revInfo.report_id);
+            return;
+        }
+
+        if (typeof showKawungLoading === 'function') {
+            showKawungLoading();
+        } else {
+            Swal.fire({
+                title: 'Memuat Data Laporan...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+        }
+
+        fetch(`/staff/api/staging-report-by-date/${encodeURIComponent(dateStr)}`)
+            .then(r => r.json())
+            .then(res => {
+                if (typeof hideKawungLoading === 'function') hideKawungLoading();
+                Swal.close();
+                if (res.success && res.report) {
+                    populateReportIntoForm(res.report);
+                } else {
+                    Swal.fire('Info', res.error || 'Data revisi laporan tidak ditemukan untuk tanggal tersebut.', 'warning');
+                }
+            })
+            .catch(err => {
+                if (typeof hideKawungLoading === 'function') hideKawungLoading();
+                Swal.close();
+                console.error("Gagal memuat laporan berdasarkan tanggal:", err);
             });
     }
 
@@ -4109,10 +4271,15 @@
         const submitBtn = document.getElementById('btnSubmitReport');
         if (submitBtn) {
             submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> <span>Kirim Laporan ke Spreadsheet</span>';
+            submitBtn.title = 'Kirim Laporan ke Spreadsheet';
         }
         document.getElementById('reportWizard').reset();
+        if (typeof window.resetStaffPhotos === 'function') {
+            window.resetStaffPhotos();
+        }
+        clearDateField();
         Swal.fire({
-            icon: 'success',
+            icon: 'info',
             title: 'Mode Edit Dibatalkan',
             text: 'Formulir telah di-reset ke mode pengisian baru.',
             timer: 1500,
@@ -4200,7 +4367,7 @@
                         dayElem.title = `Sudah Terisi di Sheet Produksi Utama (${dateIso})`;
                     } else if (data.staging_revision_dates && data.staging_revision_dates.includes(dateIso)) {
                         dayElem.classList.add('day-status-revision');
-                        dayElem.title = `Status: Revisi Draf (${dateIso})`;
+                        dayElem.title = `Status: Perlu Revisi (${dateIso}) - Klik untuk memuat dan memperbaiki laporan`;
                     } else if (data.staging_pending_dates && data.staging_pending_dates.includes(dateIso)) {
                         dayElem.classList.add('day-status-pending');
                         dayElem.title = `Status: Menunggu Persetujuan DH (${dateIso})`;
@@ -4521,11 +4688,24 @@
         } else if (revisionDates.has(dateStr)) {
             alertBox.classList.add('alert-revision');
             alertBox.innerHTML = `
-                <i class="fa-solid fa-pencil text-purple-600 fa-lg"></i>
-                <div>
-                    <strong>Perlu Revisi:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> memiliki catatan perbaikan dari DH. Anda dapat mengedit draf tersebut.
+                <i class="fa-solid fa-triangle-exclamation text-danger fa-lg"></i>
+                <div style="flex: 1;">
+                    <strong>Perlu Revisi:</strong> Laporan tanggal <b>${formatIndonesianDate(dateStr)}</b> memerlukan perbaikan sesuai arahan DH. Data draf dan lampiran foto telah dimuat otomatis ke formulir.
+                    <div style="margin-top: 0.35rem;">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="loadReportForDate('${dateStr}')" style="font-size: 0.78rem; font-weight: 700; border-radius: 6px; padding: 2px 10px;">
+                            <i class="fa-solid fa-rotate-right me-1"></i> Muat Ulang Draf Revisi Ini
+                        </button>
+                    </div>
                 </div>
             `;
+            const currentEditId = document.getElementById('editReportId')?.value;
+            const revMap = window.ACTIVE_MONTH_DATA?.staging_revision_reports || {};
+            const revInfo = revMap[dateStr];
+            const targetRepId = revInfo?.report_id;
+            if (triggerModal && (!currentEditId || (targetRepId && currentEditId !== targetRepId))) {
+                loadReportForDate(dateStr);
+            }
+            return;
         } else {
             alertBox.classList.add('alert-success');
             alertBox.innerHTML = `

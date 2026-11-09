@@ -102,7 +102,6 @@ def normalize_date_str(val):
         return f"{m_day.group(3)}-{int(m_day.group(2)):02d}-{int(m_day.group(1)):02d}"
 
     return None
-
 def get_client():
     if not os.path.exists(CREDENTIALS_FILE):
         raise FileNotFoundError("File credentials.json tidak ditemukan. Harap masukkan kredensial Service Account GCP di root folder.")
@@ -1287,6 +1286,7 @@ def get_airport_sheet_calendar_data(airport_code, force_refresh=False):
             "filled_dates": [],
             "staging_pending_dates": [],
             "staging_revision_dates": [],
+            "staging_revision_reports": {},
             "unfilled_dates": [f"{year}-{month_idx:02d}-{day:02d}" for day in range(1, last_day + 1)],
             "next_recommended_date": f"{year}-{month_idx:02d}-01",
             "counts": {"filled": 0, "staging_pending": 0, "staging_revision": 0, "unfilled": last_day, "total": last_day}
@@ -1373,16 +1373,24 @@ def get_airport_sheet_calendar_data(airport_code, force_refresh=False):
         
         staging_pending_dates = []
         staging_revision_dates = []
+        staging_revision_reports = {}
         
         for sr in staging_reports:
             tgl = sr.get('tanggal', '')
             norm_tgl = normalize_date_str(tgl)
-            if norm_tgl and norm_tgl.startswith(month_prefix):
+            if norm_tgl:
                 status = str(sr.get('status', 'PENDING_DH')).upper().strip()
-                if status in ('PENDING_DH', 'PENDING_GM'):
-                    staging_pending_dates.append(norm_tgl)
-                elif status == 'REVISI':
+                if status == 'REVISI':
                     staging_revision_dates.append(norm_tgl)
+                    staging_revision_reports[norm_tgl] = {
+                        "report_id": sr.get('report_id'),
+                        "status": "REVISI",
+                        "catatan_dh": sr.get('catatan_dh') or sr.get('catatan_gm') or '',
+                        "dh_name": sr.get('dh_name') or sr.get('reviewed_by_dh') or '',
+                        "timestamp_update": sr.get('timestamp_update') or ''
+                    }
+                elif status in ('PENDING_DH', 'PENDING_GM') and norm_tgl.startswith(month_prefix):
+                    staging_pending_dates.append(norm_tgl)
                     
         staging_pending_dates = sorted(list(set(staging_pending_dates)))
         staging_revision_dates = sorted(list(set(staging_revision_dates)))
@@ -1419,6 +1427,7 @@ def get_airport_sheet_calendar_data(airport_code, force_refresh=False):
             "filled_dates": filled_dates,
             "staging_pending_dates": staging_pending_dates,
             "staging_revision_dates": staging_revision_dates,
+            "staging_revision_reports": staging_revision_reports,
             "unfilled_dates": unfilled_dates,
             "next_recommended_date": next_recommended_date,
             "counts": {
@@ -1443,6 +1452,30 @@ def get_airport_sheet_calendar_data(airport_code, force_refresh=False):
         month_idx = now.month
         year = now.year
         last_day = calendar.monthrange(year, month_idx)[1]
+
+        fallback_pending = []
+        fallback_revision = []
+        fallback_reports = {}
+        try:
+            from app.services.staging_service import get_staging_reports
+            for sr in get_staging_reports(airport_code):
+                tgl = normalize_date_str(sr.get('tanggal', ''))
+                if tgl:
+                    st = str(sr.get('status', '')).upper()
+                    if st == 'REVISI':
+                        fallback_revision.append(tgl)
+                        fallback_reports[tgl] = {
+                            "report_id": sr.get('report_id'),
+                            "status": "REVISI",
+                            "catatan_dh": sr.get('catatan_dh') or sr.get('catatan_gm') or '',
+                            "dh_name": sr.get('dh_name') or sr.get('reviewed_by_dh') or '',
+                            "timestamp_update": sr.get('timestamp_update') or ''
+                        }
+                    elif st in ('PENDING_DH', 'PENDING_GM'):
+                        fallback_pending.append(tgl)
+        except Exception:
+            pass
+
         return {
             "success": False,
             "error": str(e),
@@ -1456,11 +1489,12 @@ def get_airport_sheet_calendar_data(airport_code, force_refresh=False):
             "max": f"{year}-{month_idx:02d}-{last_day:02d}",
             "total_days": last_day,
             "filled_dates": [],
-            "staging_pending_dates": [],
-            "staging_revision_dates": [],
+            "staging_pending_dates": sorted(list(set(fallback_pending))),
+            "staging_revision_dates": sorted(list(set(fallback_revision))),
+            "staging_revision_reports": fallback_reports,
             "unfilled_dates": [f"{year}-{month_idx:02d}-{day:02d}" for day in range(1, last_day + 1)],
             "next_recommended_date": f"{year}-{month_idx:02d}-01",
-            "counts": {"filled": 0, "staging_pending": 0, "staging_revision": 0, "unfilled": last_day, "total": last_day}
+            "counts": {"filled": 0, "staging_pending": len(fallback_pending), "staging_revision": len(fallback_revision), "unfilled": last_day, "total": last_day}
         }
 
 

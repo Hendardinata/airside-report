@@ -1684,6 +1684,8 @@
                     btnSave.innerHTML = origHtml;
                 }
                 if (res.success) {
+                    // Tutup modal profil terlebih dahulu agar tidak menumpuk
+                    closeProfileModal();
                     Swal.fire({
                         icon: 'success',
                         title: 'Profil Berhasil Diperbarui',
