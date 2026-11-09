@@ -2,7 +2,8 @@ import sys
 import os
 import unittest
 
-sys.path.insert(0, os.path.abspath('airside-report-flask'))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
 
 from app import create_app
 from app.models.db import get_db

@@ -2,7 +2,8 @@ import sys
 import os
 import unittest
 
-sys.path.insert(0, os.path.abspath('airside-report-flask'))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
 
 from app import create_app
 from app.models.db import get_db
@@ -301,7 +302,7 @@ class TestAirsideFixes(unittest.TestCase):
                 self.assertGreaterEqual(data_after.get('badge_count', 0), 1)
 
                 # 4. Verifikasi template staff_dashboard.html
-                tmpl_path = os.path.join(os.path.abspath('airside-report-flask'), 'app', 'templates', 'staff_dashboard.html')
+                tmpl_path = os.path.join(BASE_DIR, 'app', 'templates', 'staff_dashboard.html')
                 with open(tmpl_path, 'r', encoding='utf-8') as f:
                     tmpl_html = f.read()
 
@@ -349,7 +350,7 @@ class TestAirsideFixes(unittest.TestCase):
         6. Dokumen dengan field terkunci/read-only (Tanggal Laporan).
         """
         with self.app.app_context():
-            tmpl_path = os.path.join(os.path.abspath('airside-report-flask'), 'app', 'templates', 'gm_dashboard.html')
+            tmpl_path = os.path.join(BASE_DIR, 'app', 'templates', 'gm_dashboard.html')
             with open(tmpl_path, 'r', encoding='utf-8') as f:
                 tmpl_html = f.read()
 
